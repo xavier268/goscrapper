@@ -1,0 +1,60 @@
+version: "3"
+
+env:
+  GOOS: # windows or linux ?
+    sh: go env GOOS
+  VERSION: # program version
+    sh: go run ./cli -version
+  EXE: # executable extension (.exe or nothing)
+    sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo ".exe"; else echo ""; fi'
+  BROWSER: # browser to open  page
+    sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo "Powershell Start-Process "; else echo "xdg-open"; fi'
+  DATE: # date string
+    sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo "$(Powershell Get-Date -Format s)"; else echo "$(date -Iseconds)"; fi'
+
+
+tasks:
+
+  default:
+    desc: default task will display task menu
+    cmds:
+      - task --list-all
+
+  version: 
+    desc: display versionning information
+    cmds:
+      - echo Build date ':' {{.DATE}}
+      - echo Last git hash ':' $(git rev-parse HEAD)
+      - task --version
+      - echo "shell :" $0 $SHELL
+      - go run ./cli -version -debug=1
+
+  godoc: 
+    desc: launch godoc viewer and open browser page on windows
+    cmds:     
+      - go install golang.org/x/tools/cmd/godoc@latest
+      - godoc -http=:6060 &     
+      - $( {{.BROWSER }} "http://localhost:6060" )
+
+  build:
+    desc: build program and utilities
+    cmds:
+      - go build -o bin/cli-{{.VERSION}}{{.EXE}} ./cli
+
+  clean: 
+    desc: clean caches and binaries
+    deps : # dependencies tasks will run in parallel
+      - clean-linux
+      - clean-windows
+
+  clean-linux:
+    internal: true
+    platforms: [linux]
+    cmds:
+      - rm -rf bin/
+
+  clean-windows:
+    internal: true
+    platforms: [windows]
+    cmds:
+      - Powershell Remove-Item bin -Recurse

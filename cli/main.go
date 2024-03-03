@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/xavier268/goscrapper"
+	"github.com/xavier268/goscrapper/config"
 )
 
 var (
@@ -24,19 +24,19 @@ func main() {
 	// Parse
 	flag.Parse()
 
-	goscrapper.DEBUG = *flagDebug
+	config.DEBUG = *flagDebug
 	switch {
 	case *flagVersion:
-		if goscrapper.DEBUG == 0 {
+		if config.DEBUG == 0 {
 			// simple version for use in build pipeline.
-			fmt.Println(goscrapper.VERSION)
+			fmt.Println(config.VERSION)
 			return
 		} else {
 			// more verbose info
-			fmt.Printf("goscrapper version: %s\n", goscrapper.VERSION)
-			fmt.Printf("debug level: %d\n", goscrapper.DEBUG)
-			fmt.Printf("last commit: %s\n", goscrapper.GITHASH)
-			fmt.Printf("buildtime: %s\n", goscrapper.BUILDDATE)
+			fmt.Printf("goscrapper version: %s\n", config.VERSION)
+			fmt.Printf("debug level: %d\n", config.DEBUG)
+			fmt.Printf("last commit: %s\n", config.GITHASH)
+			fmt.Printf("buildtime: %s\n", config.BUILDDATE)
 			fmt.Printf("goversion: %s\n", runtime.Version())
 			fmt.Printf("goarch: %s\n", runtime.GOARCH)
 			fmt.Printf("goos: %s\n", runtime.GOOS)

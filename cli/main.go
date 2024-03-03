@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"githib.com/xavier268/goscrapper"
+	"github.com/xavier268/goscrapper"
 )
 
 var (
@@ -35,8 +35,8 @@ func main() {
 			// more verbose info
 			fmt.Printf("goscrapper version: %s\n", goscrapper.VERSION)
 			fmt.Printf("debug level: %d\n", goscrapper.DEBUG)
-			fmt.Printf("githash: %s\n", goscrapper.GITHASH)
-			fmt.Printf("buildtime: %s\n", goscrapper.BUILDTIME)
+			fmt.Printf("last commit: %s\n", goscrapper.GITHASH)
+			fmt.Printf("buildtime: %s\n", goscrapper.BUILDDATE)
 			fmt.Printf("goversion: %s\n", runtime.Version())
 			fmt.Printf("goarch: %s\n", runtime.GOARCH)
 			fmt.Printf("goos: %s\n", runtime.GOOS)

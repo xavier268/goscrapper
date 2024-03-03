@@ -12,7 +12,6 @@ env:
   DATE: # date string
     sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo "$(Powershell Get-Date -Format s)"; else echo "$(date -Iseconds)"; fi'
 
-
 tasks:
 
   default:
@@ -22,12 +21,13 @@ tasks:
 
   version: 
     desc: display versionning information
+    deps: [build]
     cmds:
       - echo Build date ':' {{.DATE}}
       - echo Last git hash ':' $(git rev-parse HEAD)
       - task --version
       - echo "shell :" $0 $SHELL
-      - go run ./cli -version -debug=1
+      - bin/cli-{{.VERSION}}{{.EXE}} -version -debug=1
 
   godoc: 
     desc: launch godoc viewer and open browser page on windows
@@ -38,8 +38,10 @@ tasks:
 
   build:
     desc: build program and utilities
+    sources: # what triggers rebuild
+      - ./*go
     cmds:
-      - go build -o bin/cli-{{.VERSION}}{{.EXE}} ./cli
+      - go build -o bin/cli-{{.VERSION}}{{.EXE}} -ldflags "-X 'github.com/xavier268/goscrapper.BUILDDATE={{.DATE}}' -X 'github.com/xavier268/goscrapper.GITHASH=$(git rev-parse HEAD)'" ./cli
 
   clean: 
     desc: clean caches and binaries
@@ -52,9 +54,11 @@ tasks:
     platforms: [linux]
     cmds:
       - rm -rf bin/
+      - rm -rf .task/
 
   clean-windows:
     internal: true
     platforms: [windows]
     cmds:
       - Powershell Remove-Item bin -Recurse
+      - Powershell Remove-Item .task -Recurse

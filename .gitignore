@@ -19,6 +19,8 @@
 
 # Go workspace file
 go.work
-
 # executable & build repos
 /bin
+
+# tasks checksums & timestamps
+/.task

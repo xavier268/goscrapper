@@ -8,18 +8,22 @@ import "time"
 // Once created, this object is never modified.
 type Configuration struct {
 	// These fields are NOR read from file, but populated directly when parsing file.
-	ErrMessages []string  `yaml:"-"` // Error messages collected while parsing
-	Files       []string  `yaml:"-"` // source file names
-	ParseDate   time.Time `yaml:"-"` // Start of parsing
+	ErrMessages    []string  `yaml:"-"` // Error messages collected while parsing
+	Files          []string  `yaml:"-"` // source file names
+	ParseDate      time.Time `yaml:"-"` // Start of parsing
+	RootDir        string    `yaml:"-"` // main directory where everything happens
+	BrowserDataDir string    `yaml:"-"` // where session data is stored
 
 	// These fields are read from file. Once set, they are never modified.
-	Schema        string            // schema should be "1"
-	Debug         int               // set app debug level
-	Headless      bool              // set app headless mode
-	DoNotDownload []string          // patterns that are never downloaded (ex : *.png) to save bandwidth
-	PagePool      int               // max page pool
-	Run           []string          // States to launch at startup. Same state can be repeated. Multiple States will run concurrently.
-	Env           map[string]string // map parameter name to value. These are NEVER modified once created. Useful for passwords, etc ...
+	Schema            string            // schema should be "1"
+	Name              string            // application name. Used to separate browser data files
+	Debug             int               // set app debug level
+	Headless          bool              // set app headless mode
+	Ignore            []string          // patterns that are never downloaded (ex : *.png) to save bandwidth
+	PagePool          int               // max shared page pool - default to 10
+	PagePoolIncognito int               // max shared page pool for incognito mode - default to 0
+	Run               []string          // States to launch at startup. Same state can be repeated. Multiple States will run concurrently.
+	Env               map[string]string // map parameter name to value. These are NEVER modified once created. Useful for passwords, etc ...
 
 	Buses  map[string]BusDefinition   // map name to definition
 	States map[string]StateDefinition // map name to definition
@@ -28,15 +32,12 @@ type Configuration struct {
 
 type StateDefinition struct {
 	// Conditions to confirm before State can be accepted
-	// If any of these is refused, this Ste cannot be entered into.
-	// Before conditions must be idempotent, they will be called multiple times.
-	Before []ConditionDefinition
+	// If any of these is refused, this State will not be transitionned to.
+	// Conditions must be idempotent, they will be called multiple times to test which state to transition to.
+	Conditions []ConditionDefinition
 
-	// Wait for conditions to confirm before moving on.
-	// If any exit condition cannot be verified, State will ultimately timeout ...
-	After []ConditionDefinition
-
-	// Execute each action, in that order, until an error occur, or a new State is requested
+	// Execute each action, in that order, until an error occur, or a new State is requested.
+	// action can include transitions to a set of other states, selected based on their 'before' conditions.
 	Actions []ActionDefinition
 }
 
@@ -59,12 +60,13 @@ type ActionDefinition struct {
 		Env       string // get url from Env map
 		NewTab    bool   // open in new tab (website MAY open newTabs even if NewTab = false )
 		Fork      string // Fork newTab into a new thread, keep current thread running
-		Incognito bool   // NewTab will be as incognito tab (no cookies are kept when closing)
+		Incognito bool   // load or open new tab in incognito mode
 	}
 
 	// Click
 	Click struct {
-		Right bool // default is left, set to true to right click
+		Selector string // element selector
+		Right    bool   // default is left, set to true to right click
 	}
 
 	// Type input
@@ -89,13 +91,19 @@ type ActionDefinition struct {
 		Selector string   // menu <select> selector
 		Choice   []string // what elements of the menu do we want to select
 	}
-	// Wait for specified time
-	Wait struct {
+
+	// Sleep for specified time
+	Sleep struct {
 		Duration int    // duration in millis
 		Bus      string // wait until something can be retrieved from specified Bus
 		Env      string // read duration from Env map
 	}
 
+	// Log a message to a Bus.
+	Log struct {
+		Message string // message to log
+		Bus     string // log message to specified Bus
+	}
 	// Transition to one of these states if preconditions match.
 	Next []string
 }
@@ -116,8 +124,5 @@ type ConditionDefinition struct {
 // A Bus can send and/or receive data to/from States.
 // There are implemented as go chanels.
 type BusDefinition struct {
-	Bus    string // Unique identifier of communication bus
-	Sink   bool   // Bus can receive data from State
-	Source bool   // Bus can send data to State
-	Limit  int    // Max capacity of underlying channel
+	Limit int // Max capacity of underlying channel
 }

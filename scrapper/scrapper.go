@@ -1,10 +1,9 @@
 package scrapper
 
 import (
+	"context"
 	"log"
-	"os"
-	"path/filepath"
-	"time"
+	"sync"
 
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
@@ -16,63 +15,52 @@ import (
 // There is one and only one browser assicited with each scrapper.
 // Scrapper Name is used to save & reuse contexte (cookies, etc ... ) from previous runs.
 type Scrapper struct {
-	Name string
 
 	// actual physical state
 	browser *rod.Browser
-	// current page pool
-	pool *rod.PagePool
-	// current page
-	page *rod.Page
-	// current base element (or nil, if full tab should be considered)
-	base *rod.Element
+	// current page pools
+	pool    rod.PagePool // shared pool
+	poolinc rod.PagePool // incognito pool
+	// map names to communication buses implementations
+	buses map[string]*Bus
 
-	// configuration default
-	headless       bool
-	ignore         []string // prevent loading from listed patterns (typically:  *.jpg *.png, etc ...)
-	startTime      time.Time
-	debug          int    // default to app level debug value
-	rootDir        string // main directory where everything happens
-	browserDataDir string // where session data is stored
+	// Sync
+	wg     sync.WaitGroup     // to make sure we wait for all separate threads.
+	ctx    context.Context    // global context is only cancellable.
+	cancel context.CancelFunc // cancel function
+
+	// configuration
+	conf *config.Configuration
 }
 
-func NewScrapper(options ...ScrapperOption) *Scrapper {
-	var err error
+func NewScrapper(conf *config.Configuration) *Scrapper {
 
 	// apply default options
 	s := new(Scrapper)
-	s.Name = "noname"
-	s.startTime = time.Now()
-	s.rootDir, err = os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	s.browserDataDir = filepath.Join(s.rootDir, ".browserdata-"+s.Name)
-	s.headless = false
-	s.ignore = []string{}
-	s.debug = config.DEBUG
 
-	// apply provided options
-	for _, opt := range options {
-		if s.debug > 0 {
-			log.Println(opt)
-		}
-		opt.apply(s)
+	// context
+	s.ctx, s.cancel = context.WithCancel(context.Background())
+	// buses
+	s.buses = make(map[string]*Bus)
+
+	if conf == nil {
+		panic("cannot start scrapper without a configuration")
 	}
+	s.conf = conf
 
 	// create and launch browser
 	u := launcher.New().
-		Headless(s.headless).
-		UserDataDir(s.browserDataDir).
+		Headless(conf.Headless).
+		UserDataDir(conf.BrowserDataDir).
 		Set("start-maximized").
 		MustLaunch()
 
 	s.browser = rod.New().ControlURL(u).MustConnect()
 
-	// hijack do not load ...
-	if len(s.ignore) > 0 {
+	// implement hijack do not load at browser level
+	if len(conf.Ignore) > 0 {
 		router := s.browser.HijackRequests()
-		for _, patt := range s.ignore {
+		for _, patt := range conf.Ignore {
 			// hijack all specified resources
 			router.MustAdd(patt,
 				func(ctx *rod.Hijack) {
@@ -81,20 +69,77 @@ func NewScrapper(options ...ScrapperOption) *Scrapper {
 		}
 	}
 
+	// default page pool to 10 if not specified
+	if conf.PagePool != 0 {
+		s.pool = rod.NewPagePool(conf.PagePool)
+	} else {
+		panic("shared PagePool should never be 0")
+	}
+	if conf.PagePoolIncognito != 0 {
+		s.poolinc = rod.NewPagePool(conf.PagePoolIncognito)
+	}
 	return s
 }
 
-// Set the Scrapper to run in the background.
-func (s *Scrapper) SetBackground(b bool) {
-	panic("not implemented")
+// Get a new (shared) tab, loading the specified url in it.
+func (s *Scrapper) GetPage(url ...string) *rod.Page {
+	return s.pool.Get(func() *rod.Page { return s.browser.MustPage(url...) })
 }
 
-// Close Scrapper, releasing all resources.
+// Get a new incognito tab, loading the specific url in it.
+func (s *Scrapper) GetIncognitoPage(url ...string) *rod.Page {
+	if s.poolinc != nil {
+		return s.poolinc.Get(func() *rod.Page { return s.browser.MustIncognito().MustPage(url...) })
+	} else {
+		// no pooling
+		return s.browser.MustIncognito().MustPage(url...)
+	}
+}
+
+// return a shared page not needed anymore
+func (s *Scrapper) PutPage(page *rod.Page) {
+	s.pool.Put(page)
+}
+
+// return an incognito page not needed anymore
+func (s *Scrapper) PutIncognitoPage(page *rod.Page) {
+	if s.poolinc == nil { // if no poolincognito, just close and forget.
+		if page != nil {
+			page.MustClose()
+			return
+		}
+	}
+	s.poolinc.Put(page) // otherwise, return to pool.
+}
+
+// Close everything, releasing all resources.
 func (s *Scrapper) Close() {
 	if s == nil {
 		return
 	}
-	if err := s.browser.Close(); err != nil {
-		log.Printf("error while closing scrapper %s: %v", s.Name, err)
+
+	s.cancel()  // cancel global context
+	s.wg.Wait() // block for threads to finish
+
+	// close buses
+	for _, b := range s.buses {
+		if b != nil {
+			close(b.ch)
+		}
 	}
+	// close browser
+	if err := s.browser.Close(); err != nil {
+		log.Printf("error while closing scrapper %s: %v", s.conf.Name, err)
+	}
+}
+
+// create and run a new job in a separate thread.
+func (s *Scrapper) Run(startstate string) {
+	j := &Job{
+		s:     s,
+		state: startstate,
+		ctx:   s.ctx,
+	}
+	s.wg.Add(1)
+	go j.run()
 }

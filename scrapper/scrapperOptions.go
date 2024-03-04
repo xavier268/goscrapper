@@ -27,20 +27,7 @@ func (s soSetHeadless) String() string {
 
 func (s soSetHeadless) apply(scrapper *Scrapper) { scrapper.headless = s.b }
 
-// Set the scrapper name.
-func SOName(name string) ScrapperOption {
-	return soName{name}
-}
-
-type soName struct {
-	name string
-}
-
-func (s soName) String() string { return "ScrapperOption : set browser name to " + s.name }
-func (s soName) apply(scrapper *Scrapper) {
-	scrapper.Name = s.name
-}
-
+// SOIgnore defines the patterns to ignore.
 func SOIgnore(pattern ...string) ScrapperOption {
 	return soIgnore{pattern}
 }
@@ -51,7 +38,7 @@ type soIgnore struct {
 
 // apply implements ScrapperOption.
 func (so soIgnore) apply(s *Scrapper) {
-	s.doNotLoad = append(s.doNotLoad, so.pattern...)
+	s.ignore = append(s.ignore, so.pattern...)
 }
 
 func (s soIgnore) String() string {

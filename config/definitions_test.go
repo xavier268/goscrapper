@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"strings"
+	"path/filepath"
 	"testing"
 )
 
@@ -41,15 +41,12 @@ func TestParseVersion(t *testing.T) {
 
 func TestParseConfiguration(t *testing.T) {
 
-	testfile := "test.yaml"
+	tf1 := filepath.Join("testfiles", "test1.yml")
+	tf2 := filepath.Join("testfiles", "test2.yml")
 
-	c, err := ParseDefinitions(testfile)
+	c, err := ParseDefinitions(tf1, tf2)
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("\nCaptured the following definitions from file %s\n%s\n%s\n%s\n",
-		testfile,
-		strings.Repeat("=", 40),
-		pretty(c),
-		strings.Repeat("=", 40))
+	fmt.Printf("\nCaptured configuration :\n%s\n", Pretty(c))
 }

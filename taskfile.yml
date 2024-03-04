@@ -37,9 +37,19 @@ tasks:
   build:
     desc: build program and utilities
     sources: # what triggers rebuild
-      - ./*go
+      - ./**/*go
     cmds:
+      - go mod tidy
       - go build -o bin/cli-{{.VERSION}}{{.EXE}} -ldflags "-X 'github.com/xavier268/goscrapper/config.BUILDDATE={{.DATE}}' -X 'github.com/xavier268/goscrapper/config.GITHASH=$(git rev-parse HEAD)'" ./cli
+
+  test:
+    desc: run all tests
+    deps: [build]
+    sources: 
+      - ./**/*.yml
+      - ./**/*.yaml
+    cmds:
+      - go test ./...
 
   clean: 
     desc: clean caches and binaries

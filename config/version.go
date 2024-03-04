@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	VERSION   = "0.0.3"
+	VERSION   = "0.0.4"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
+	SCHEMA    = "1" // required schema in configuration files
 )
 
 // build time variables

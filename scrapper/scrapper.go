@@ -20,11 +20,16 @@ type Scrapper struct {
 
 	// actual physical state
 	browser *rod.Browser
-	// element *rod.Element
+	// current page pool
+	pool *rod.PagePool
+	// current page
+	page *rod.Page
+	// current base element (or nil, if full tab should be considered)
+	base *rod.Element
 
 	// configuration default
 	headless       bool
-	doNotLoad      []string // prevent loading from listed patterns (typically:  *.jpg *.png, etc ...)
+	ignore         []string // prevent loading from listed patterns (typically:  *.jpg *.png, etc ...)
 	startTime      time.Time
 	debug          int    // default to app level debug value
 	rootDir        string // main directory where everything happens
@@ -44,7 +49,7 @@ func NewScrapper(options ...ScrapperOption) *Scrapper {
 	}
 	s.browserDataDir = filepath.Join(s.rootDir, ".browserdata-"+s.Name)
 	s.headless = false
-	s.doNotLoad = []string{}
+	s.ignore = []string{}
 	s.debug = config.DEBUG
 
 	// apply provided options
@@ -65,9 +70,9 @@ func NewScrapper(options ...ScrapperOption) *Scrapper {
 	s.browser = rod.New().ControlURL(u).MustConnect()
 
 	// hijack do not load ...
-	if len(s.doNotLoad) > 0 {
+	if len(s.ignore) > 0 {
 		router := s.browser.HijackRequests()
-		for _, patt := range s.doNotLoad {
+		for _, patt := range s.ignore {
 			// hijack all specified resources
 			router.MustAdd(patt,
 				func(ctx *rod.Hijack) {

@@ -9,7 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Compiler is resposible for generating go source code from the parsed configuration.
+// Compiler is responsible for generating go source code from the parsed configuration.
 type Compiler struct {
 
 	// Internal compiler data

@@ -15,9 +15,9 @@ type Configuration struct {
 	Ignore   map[string]bool // set of patterns that are never downloaded (ex : *.png) to save bandwidth
 	Run      []string        // States to launch at startup. Same state can be repeated. Multiple States will run concurrently.
 
-	Define Parameter                  // constants definitions
-	Buses  map[string]BusDefinition   // map name to definition
-	States map[string]StateDefinition // map name to definition
+	Define ConfigParameters       // constants definitions
+	Buses  map[string]ConfigBus   // map name to definition
+	States map[string]ConfigState // map name to definition
 
 }
 
@@ -26,32 +26,32 @@ func NewConfiguration() *Configuration {
 		Schema: "1",
 		Debug:  0,
 		Ignore: make(map[string]bool),
-		Buses:  make(map[string]BusDefinition),
-		States: make(map[string]StateDefinition),
+		Buses:  make(map[string]ConfigBus),
+		States: make(map[string]ConfigState),
 	}
 }
 
-type Parameter map[string]string
+type ConfigParameters map[string]string
 
-type StateDefinition struct {
+type ConfigState struct {
 	// Assert to confirm before State can be accepted
 	// If any of these is refused, this State will not be transitionned to.
 	// Assert must be idempotent, they will be called multiple times to test which state to transition to.
-	Assert []ConditionDefinition
+	Assert []ConfigCondition
 
 	// Execute each action, in that order, until an error occur, or a new State is requested.
 	// action can include transitions to a set of other states, selected based on their 'before' conditions.
-	Actions []ActionDefinition
+	Actions []ConfigAction
 }
 
-// ActionDefinition defines action to conduct.
+// ConfigAction defines action to conduct.
 // Map action name to parameters.
-type ActionDefinition map[string]Parameter
+type ConfigAction map[string]ConfigParameters
 
-// ConditionDefinition defines condition to be met before State can be accepted
+// ConfigCondition defines condition to be met before State can be accepted
 // or after Action(s) have been done.
 // Conditions will be checked multiple times, so they should be idempotent.
-type ConditionDefinition struct {
+type ConfigCondition struct {
 	// === Only one of these will be set. Check will happen at compile time.
 	Exist struct {
 		Selector string // element selector
@@ -66,6 +66,6 @@ type ConditionDefinition struct {
 
 // A Bus can send and/or receive data to/from States.
 // There are implemented as go chanels.
-type BusDefinition struct {
+type ConfigBus struct {
 	Limit int // Max capacity of underlying channel
 }

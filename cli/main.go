@@ -45,6 +45,17 @@ func main() {
 		return
 
 	default:
+		c := generator.NewCompiler()
+		err := c.Parse(flag.Args()...)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		err = c.Compile()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
 	}
 }

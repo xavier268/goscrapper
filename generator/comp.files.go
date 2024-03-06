@@ -5,34 +5,21 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 )
 
-// get an WriterCloser for the specified (base) name in the target directory.
+// get an WriterCloser for the specified  full file name.
 // remember to close it !
 func (c *Compiler) getWriter(name string) (w io.WriteCloser, err error) {
-
-	// truncate potential paths
-	name = filepath.Base(name)
 
 	// name should not be empty
 	if name == "" {
 		return nil, errors.New("file name cannot be empty")
 	}
 
-	// ensure dir exists
-	if DEBUG_LEVEL >= LEVEL_DEBUG {
-		fmt.Println("Creating/verifying target directory ", c.TargetDir)
-	}
-	err = os.MkdirAll(c.TargetDir, 0755)
-	if err != nil {
-		return nil, err
-	}
-
 	// create file
-	w, err = os.Create(c.TargetDir + name)
+	w, err = os.Create(name)
 	if err != nil {
 		return nil, err
 	}

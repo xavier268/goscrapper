@@ -2,6 +2,7 @@ package generator
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -13,6 +14,7 @@ type TplData struct {
 	AppName        string
 	Package        string
 	TargetDir      string
+	PackageDir     string
 	BrowserDataDir string
 	Imports        []string
 	TplDir         string
@@ -24,11 +26,12 @@ func (c *Compiler) setTplData() (err error) {
 	// (re)set defaults values
 	c.TplData = &TplData{
 		AppName:        "MyApp",
-		Package:        "myapp",
-		TargetDir:      MustAbs("myapp"),
+		Package:        "mypack",
+		TargetDir:      MustAbs("MyApp"),
+		PackageDir:     MustAbs(filepath.Join(MustAbs("MyApp"), "mypack")),
 		BrowserDataDir: ".browserData",
 		Imports:        []string{"fmt", "time"},
-		TplDir:         MustAbs("tpl"),
+		TplDir:         MustAbs(filepath.Join("generator", "tpl")),
 	}
 
 	// apply configuration, if available
@@ -36,7 +39,14 @@ func (c *Compiler) setTplData() (err error) {
 		c.AppName = c.conf.AppName
 		c.Package = strings.ToLower(c.conf.AppName)
 		c.TargetDir = MustAbs(c.conf.AppName)
+		c.PackageDir = filepath.Join(c.TargetDir, c.Package)
 		c.BrowserDataDir = filepath.Join(c.TargetDir, ".browserData-"+c.Package)
+	}
+
+	// ensure dir exists
+	err = os.MkdirAll(c.PackageDir, 0755)
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -53,10 +63,11 @@ func (c *Compiler) Compile() (err error) {
 
 // Generate a go file from the template file with the same name.
 func (c *Compiler) generateTpl(baseName string) error {
-	c.BaseName = baseName
-	baseName = filepath.Base(baseName)
-	targetFile := MustAbs(filepath.Join(c.TargetDir, baseName+".go"))
-	sourceFile := MustAbs(filepath.Join(c.TplDir, baseName+".tpl"))
+
+	c.BaseName = filepath.Base(strings.ToLower(baseName))
+
+	targetFile := filepath.Join(c.PackageDir, c.BaseName+".go")
+	sourceFile := filepath.Join(c.TplDir, c.BaseName+".tpl")
 
 	tpl, err := template.ParseFiles(sourceFile)
 	if err != nil {

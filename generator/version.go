@@ -1,4 +1,4 @@
-package config
+package generator
 
 import (
 	"regexp"
@@ -6,12 +6,18 @@ import (
 )
 
 const (
-	VERSION   = "0.0.4"
+	VERSION   = "0.1.0"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
 	SCHEMA    = "1" // required schema in configuration files
+
+	// Debugging levels
+	LEVEL_SILENT  = 0 // No output
+	LEVEL_INFO    = 1 // only critical output
+	LEVEL_VERBOSE = 2 // Verbose output for end user
+	LEVEL_DEBUG   = 3 // Debugging data
 )
 
-// build time variables
+// build time variables - will be subsituted at build time.
 var (
 	GITHASH   string = "n/a"
 	BUILDDATE string = "n/a"
@@ -19,7 +25,8 @@ var (
 
 // runtime variables (from flags or test configuration)
 var (
-	DEBUG = 0
+	// debugging level during generation process
+	DEBUG_LEVEL int = LEVEL_DEBUG
 )
 
 // Parse the version into its components.

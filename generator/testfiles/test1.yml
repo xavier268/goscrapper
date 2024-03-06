@@ -1,6 +1,7 @@
 # The major version should match with the application.
 # remember, all keys are LOWER CASE !!!
-schema : "1"
+
+schema: "1" # required, in ALL files
 
 debug : 1
 run : 

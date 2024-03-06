@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -9,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/xavier268/goscrapper/generator"
 	"gopkg.in/yaml.v3"
 )
 
@@ -18,7 +18,7 @@ func ParseDefinitions(files ...string) (*Configuration, error) {
 	var err error
 
 	d := &Configuration{}
-	d.Schema = SCHEMA
+	d.Schema = generator.SCHEMA
 	d.ParseDate = time.Now()
 
 	d.RootDir, err = os.Getwd()
@@ -59,8 +59,8 @@ func ParseDefinitions(files ...string) (*Configuration, error) {
 func (d *Configuration) Merge(dd *Configuration) error {
 
 	// Check schema
-	if d.Schema != SCHEMA {
-		d.ErrMessages = append(d.ErrMessages, fmt.Sprintf("schema mismatch : got %q, but expected %q", d.Schema, SCHEMA))
+	if d.Schema != generator.SCHEMA {
+		d.ErrMessages = append(d.ErrMessages, fmt.Sprintf("schema mismatch : got %q, but expected %q", d.Schema, generator.SCHEMA))
 	}
 
 	// handle special case dd == nil
@@ -111,16 +111,4 @@ func (d *Configuration) Merge(dd *Configuration) error {
 	} else {
 		return nil
 	}
-}
-
-// Pretty print an object, using its json format
-func Pretty(st interface{}) string {
-	if st == nil {
-		return "nil"
-	}
-	bb, err := json.MarshalIndent(st, "", "     ")
-	if err != nil {
-		return string(bb) + " **ERROR** " + err.Error()
-	}
-	return string(bb)
 }

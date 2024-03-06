@@ -1,12 +1,16 @@
 package generator
 
 import (
+	"embed"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
 )
+
+//go:embed tpl/*
+var tplFS embed.FS
 
 // Data used to instantiate templates
 // Derived from Compiler configuration, if available.
@@ -17,7 +21,6 @@ type TplData struct {
 	PackageDir     string
 	BrowserDataDir string
 	Imports        []string
-	TplDir         string
 	BaseName       string
 }
 
@@ -31,7 +34,6 @@ func (c *Compiler) setTplData() (err error) {
 		PackageDir:     MustAbs(filepath.Join(MustAbs("MyApp"), "mypack")),
 		BrowserDataDir: ".browserData",
 		Imports:        []string{"fmt", "time"},
-		TplDir:         MustAbs(filepath.Join("generator", "tpl")),
 	}
 
 	// apply configuration, if available
@@ -67,11 +69,10 @@ func (c *Compiler) generateTpl(baseName string) error {
 	c.BaseName = filepath.Base(strings.ToLower(baseName))
 
 	targetFile := filepath.Join(c.PackageDir, c.BaseName+".go")
-	sourceFile := filepath.Join(c.TplDir, c.BaseName+".tpl")
 
-	tpl, err := template.ParseFiles(sourceFile)
+	tpl, err := template.ParseFS(tplFS, "tpl/"+c.BaseName+".tpl")
 	if err != nil {
-		return fmt.Errorf("failed to parse template file %s: %v", sourceFile, err)
+		return fmt.Errorf("failed to parse template file %s: %v", c.BaseName+".tpl", err)
 	}
 	w, err := c.getWriter(targetFile)
 	if err != nil {
@@ -80,7 +81,7 @@ func (c *Compiler) generateTpl(baseName string) error {
 	defer w.Close()
 	err = tpl.Execute(w, c.TplData)
 	if err != nil {
-		return fmt.Errorf("failed to execute template %s: %v", sourceFile, err)
+		return fmt.Errorf("failed to execute template %s: %v", c.BaseName+".tpl", err)
 	}
 
 	if DEBUG_LEVEL >= LEVEL_INFO {

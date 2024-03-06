@@ -27,4 +27,5 @@ go.work
 
 # application dir
 /MyApp
+**/MyApp
 

@@ -24,3 +24,7 @@ go.work
 
 # tasks checksums & timestamps
 /.task
+
+# application dir
+/MyApp
+

@@ -44,13 +44,13 @@ type StateDefinition struct {
 // ActionDefinition defines action to conduct.
 type ActionDefinition struct {
 	// === Only one of these should be set.
+	// If multiple are set , only one will run, unpredictabily.
 
 	// Select an element as the new base element to apply further operations
 	// If empty string, will use full page content of current tab.
-	Base struct {
+	Base struct { // source applied by order of priority - if Selector not set, then Bus.
 		Selector string // selector to the new reference
 		Bus      string // get selector from specified Bus
-		Env      string // get selector from Env map
 	}
 
 	// Load new page
@@ -105,6 +105,8 @@ type ActionDefinition struct {
 		Bus     string // log message to specified Bus
 	}
 	// Transition to one of these states if preconditions match.
+	// No further processing of action.
+	// Should be the last action in the action slice.
 	Next []string
 }
 

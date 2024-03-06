@@ -29,7 +29,7 @@ type Scrapper struct {
 	ctx    context.Context    // global context is only cancellable.
 	cancel context.CancelFunc // cancel function
 
-	// configuration
+	// configuration data
 	conf *config.Configuration
 }
 

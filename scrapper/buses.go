@@ -6,6 +6,7 @@ import (
 	"io"
 )
 
+// The main communication structure accross threads.
 type Bus struct {
 	s   *Scrapper
 	ctx context.Context

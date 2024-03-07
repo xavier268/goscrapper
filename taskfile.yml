@@ -30,9 +30,10 @@ tasks:
   godoc: 
     desc: launch godoc viewer and open browser page on windows
     cmds:     
-      - go install golang.org/x/tools/cmd/godoc@latest
-      - godoc -http=:6060 &     
+      - go install golang.org/x/tools/cmd/godoc@latest     
       - $( {{.BROWSER }} "http://localhost:6060" )
+      - echo "Press Ctrl-c to exit the task" 
+      - godoc -http :6060
 
   build:
     desc: build program and utilities

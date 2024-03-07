@@ -35,12 +35,11 @@ func (s *Scrapper) Close() {
 // Option when creating a new scrapper.
 type ScrapperOption func(s *Scrapper)
 
-// Option to go headless.
-var Headless = func(s *Scrapper) {
-	if s == nil {
-		return
+// Option to go headless. Set to true for headless (default is false).
+func Headless(h bool)ScrapperOption {
+	return func(s *Scrapper) {		
+		s.headless = h	
 	}
-	s.headless = true
 }
 
 // Ignore provided patterns. Can be called multiple times.
@@ -78,32 +77,30 @@ func (s *Scrapper) fork (state State) (error) {
 		return err 
 	}
 	s.wg.Add(1)
-	go state(job)
+	go func () {
+		state(job)
+		s.wg.Done()
+	}()
 	return nil
 }
 
 // ================================================
 
-// A State is just any function that can be applied to a *job
-// Everytime we enter a State, we increment the WaitGroup,
-// everytime we return from a State, we decrement the WaitGroup,
-// even when moving from State to State in the same thread.
-type State func(*job)
+// A State is just any function that can be applied to a *Job
+type State func(*Job)
 
 
-// ==================================================
-
-// a job maintain the context a thread is running in.
-type job struct {
+// a Job maintain the context a thread is running in.
+type Job struct {
 	sc *Scrapper
-	page *rod.Page // the tab associated with the job
+	page *rod.Page // the tab associated with the job. Can be nil if no page loaded yet.
 	// todo
 }
 
 // create a new job, obtaining a new page.
 // no forking is done here.
-func (sc *Scrapper) newJob() (j *job, err error) {
-	j = new(job)
+func (sc *Scrapper) newJob() (j *Job, err error) {
+	j = new(Job)
 	j.sc = sc
 	j.page, err  = sc.newPage()
 	if err != nil {
@@ -111,3 +108,6 @@ func (sc *Scrapper) newJob() (j *job, err error) {
 	}
 	return j, nil
 }
+
+
+

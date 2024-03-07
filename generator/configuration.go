@@ -10,10 +10,7 @@ type Configuration struct {
 	// These fields are read from file. Once set, they are never modified.
 	Schema  string // schema should be "1"
 	AppName string // application name. Used to separate browser data files, and for package name.
-	// Debug    int             // set app debug level.
-	// Headless bool            // set app headless mode
-	// Ignore   map[string]bool // set of patterns that are never downloaded (ex : *.png) to save bandwidth
-	Run string // State to launch at startup.
+	Run     string // State to launch at startup.
 
 	Define ConfigParameters       // constants definitions
 	Buses  map[string]ConfigBus   // map name to definition
@@ -24,8 +21,6 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	return &Configuration{
 		Schema: "1",
-		// Debug:  0,
-		// Ignore: make(map[string]bool),
 		Buses:  make(map[string]ConfigBus),
 		States: make(map[string]ConfigState),
 	}

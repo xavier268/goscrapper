@@ -15,13 +15,12 @@ var tplFS embed.FS
 // Data used to instantiate templates
 // Derived from Compiler configuration, if available.
 type TplData struct {
-	AppName        string
-	TargetDir      string
-	Package        string
-	PackageDir     string
-	BrowserDataDir string // saving browser state, cookies, etc ...
-	// BaseName       string // BaseName of template, if any.
-	ExampleDir string // example of main function
+	AppName        string // Application name. Folder name is derived from this.
+	TargetDir      string // Target dir for the app folder.
+	Package        string // Package name.
+	PackageDir     string // Package dir, inside TargetDir
+	BrowserDataDir string // browser state, cookies, etc ... inside TargetDir
+	ExampleDir     string // example dir inside TargetDir
 }
 
 func (c *Compiler) setTplData() (err error) {
@@ -38,10 +37,19 @@ func (c *Compiler) setTplData() (err error) {
 	c.Package = "auto" + Normalize(c.AppName)
 	c.TargetDir = MustAbs(c.AppName)
 	c.PackageDir = filepath.Join(c.TargetDir, c.Package)
-	c.BrowserDataDir = filepath.Join(c.TargetDir, ".browserData-"+Normalize(c.AppName))
+	c.BrowserDataDir = filepath.Join(c.TargetDir, ".cache"+Normalize(c.AppName))
+	c.ExampleDir = filepath.Join(c.TargetDir, "examples")
 
 	// ensure dir exists
 	err = os.MkdirAll(c.PackageDir, 0755)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(c.PackageDir, 0755)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(c.BrowserDataDir, 0755)
 	if err != nil {
 		return err
 	}

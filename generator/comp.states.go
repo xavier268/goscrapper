@@ -37,8 +37,7 @@ func (c *Compiler) generateState(f io.Writer, sname string) (err error) {
 
 	fmt.Fprintf(f, "\n/***** state : %s *******\n%s\n **********************/\n", sname, PrettyJson(c.conf.States[sname]))
 
-	fmt.Fprintf(f, "func  %s(j *job) {\n", StateName(sname))
-	fmt.Fprintln(f, "defer j.sc.wg.Done()")
+	fmt.Fprintf(f, "func  %s(j *Job) {\n", StateName(sname))
 	err = c.generateActions(f, sname)
 	if err != nil {
 		return fmt.Errorf("failed to generate actions for state %s: %v", sname, err)

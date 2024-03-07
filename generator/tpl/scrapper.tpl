@@ -1,11 +1,12 @@
-
 import (
 	"context"
 	"sync"
 	"time"
+	"github.com/go-rod/rod"
 )
 
 // Scrapper defines the top level object for scrapping.
+// There is typically only one Scrapper instance at a time.
 type Scrapper struct {
 	headless bool               // should we run headless
 	ignore   map[string]bool    // set of requests patterns we hould we ignore ( eg : *.png, *.jpg, ...)
@@ -63,3 +64,50 @@ func (s *Scrapper) Run() error {
 	panic("not implemented")
 }
 
+// Request a new page from browser.
+// todo	 : implement pagePooling ...
+func (s *Scrapper) newPage() (*rod.Page, error) {
+panic("todo")
+}
+
+// Fork a new job from Scrapper.
+// Start to run the specified State with the forked thread.
+func (s *Scrapper) fork (state State) (error) {
+	job, err := s.newJob()
+	if err != nil {
+		return err 
+	}
+	s.wg.Add(1)
+	go state(job)
+	return nil
+}
+
+// ================================================
+
+// A State is just any function that can be applied to a *job
+// Everytime we enter a State, we increment the WaitGroup,
+// everytime we return from a State, we decrement the WaitGroup,
+// even when moving from State to State in the same thread.
+type State func(*job)
+
+
+// ==================================================
+
+// a job maintain the context a thread is running in.
+type job struct {
+	sc *Scrapper
+	page *rod.Page // the tab associated with the job
+	// todo
+}
+
+// create a new job, obtaining a new page.
+// no forking is done here.
+func (sc *Scrapper) newJob() (j *job, err error) {
+	j = new(job)
+	j.sc = sc
+	j.page, err  = sc.newPage()
+	if err != nil {
+		return nil, err
+	}
+	return j, nil
+}

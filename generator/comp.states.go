@@ -21,8 +21,6 @@ func (c Compiler) generateStates() error {
 		return fmt.Errorf("failed to write header to states.go: %v", err)
 	}
 
-	fmt.Fprintln(f, "// A State is just any function that can be applied to *Scrapper")
-	fmt.Fprintln(f, "type State func(*Scrapper) error")
 	fmt.Fprintln(f)
 
 	for sn := range c.conf.States {
@@ -35,14 +33,20 @@ func (c Compiler) generateStates() error {
 }
 
 // generate one state function for the named state
-func (c *Compiler) generateState(f io.Writer, sname string) error {
+func (c *Compiler) generateState(f io.Writer, sname string) (err error) {
 
 	fmt.Fprintf(f, "\n/***** state : %s *******\n%s\n **********************/\n", sname, PrettyJson(c.conf.States[sname]))
-	S := StateName(sname) // Normalized name
 
-	fmt.Fprintf(f, "func  %s(s *Scrapper) error {\n", S)
+	fmt.Fprintf(f, "func  %s(j *job) {\n", StateName(sname))
+	fmt.Fprintln(f, "defer j.sc.wg.Done()")
+	err = c.generateActions(f, sname)
+	if err != nil {
+		return fmt.Errorf("failed to generate actions for state %s: %v", sname, err)
+	}
 	fmt.Fprintln(f, `panic("Not implemented")`)
 	fmt.Fprintln(f, "}")
+	fmt.Fprintln(f, "\n// ensure no compiler warning for stets that are never called")
+	fmt.Fprintf(f, "var _ = %s\n\n", StateName(sname))
 
 	return nil
 }

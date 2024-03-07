@@ -23,7 +23,8 @@ func (c *Compiler) generateBuses() (err error) {
 	fmt.Fprintln(f, "\nvar (")
 
 	fmt.Fprintln(f, "	// Predefined build-in buses")
-	fmt.Fprintln(f, "	Done = make( chan interface{} ) // will be closed upon termination request from scrapper")
+	fmt.Fprintln(f, "	Done = make( chan interface{} ) 	// will be closed upon termination request from scrapper")
+	fmt.Fprintln(f, "	Messages = make( chan string , 30) 	// messages sent. Make sure you read them to avoid blocking !")
 	fmt.Fprintln(f)
 	fmt.Fprintln(f, "	// Buses from configuration files")
 

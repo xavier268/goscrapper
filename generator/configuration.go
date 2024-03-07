@@ -81,6 +81,6 @@ func StateName(s string) string {
 }
 
 // Normalize action name
-func ActionName(s string) string {
-	return "do" + UpFirst(Normalize(s))
+func ActionName(state, action string) string {
+	return "do" + UpFirst(Normalize(state)) + UpFirst(Normalize(action))
 }

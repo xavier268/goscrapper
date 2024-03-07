@@ -15,7 +15,7 @@ func (c *Compiler) generateConfig() (err error) {
 		return fmt.Errorf("failed to create %s: %v", fname, err)
 	}
 	defer f.Close()
-	_, err = fmt.Fprintln(f, "# Loaded configuration\n", PrettyJson(c.conf))
+	_, err = fmt.Fprintln(f, PrettyJson(c.conf))
 	if err != nil {
 		return fmt.Errorf("failed to write %s: %v", fname, err)
 	}
@@ -26,7 +26,7 @@ func (c *Compiler) generateConfig() (err error) {
 		return fmt.Errorf("failed to create %s: %v", fname, err)
 	}
 	defer fc.Close()
-	_, err = fmt.Fprintln(fc, "# Compiler configuration\n", PrettyJson(c))
+	_, err = fmt.Fprintln(fc, PrettyJson(c))
 	if err != nil {
 		return fmt.Errorf("failed to write %s: %v", fname, err)
 	}

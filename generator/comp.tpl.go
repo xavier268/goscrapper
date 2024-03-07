@@ -31,9 +31,9 @@ func (c *Compiler) setTplData() (err error) {
 
 	// apply AppName, if available
 	if c.conf.AppName != "" {
-		c.AppName = UpFirst(c.conf.AppName)
+		c.AppName = UpFirst(Normalize(c.conf.AppName))
 	} else {
-		c.AppName = UpFirst("MyApp")
+		c.AppName = UpFirst(Normalize("MyApp"))
 	}
 	c.Package = "auto" + Normalize(c.AppName)
 	c.TargetDir = MustAbs(c.AppName)

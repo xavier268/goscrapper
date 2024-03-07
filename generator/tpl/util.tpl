@@ -1,7 +1,4 @@
-// This file is generated from the tpl file names {{.BaseName}}.go.tpl. DO NOT EDIT.
-
-
-package {{.Package}}
+// This content was generated from a template. DO NOT EDIT.
 
 
 // bla bla bla ...

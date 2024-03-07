@@ -16,34 +16,29 @@ var tplFS embed.FS
 // Derived from Compiler configuration, if available.
 type TplData struct {
 	AppName        string
-	Package        string
 	TargetDir      string
+	Package        string
 	PackageDir     string
-	BrowserDataDir string
-	Imports        []string
-	BaseName       string
+	BrowserDataDir string // saving browser state, cookies, etc ...
+	// BaseName       string // BaseName of template, if any.
+	ExampleDir string // example of main function
 }
 
 func (c *Compiler) setTplData() (err error) {
 
 	// (re)set defaults values
-	c.TplData = &TplData{
-		AppName:        "MyApp",
-		Package:        "mypack",
-		TargetDir:      MustAbs("MyApp"),
-		PackageDir:     MustAbs(filepath.Join(MustAbs("MyApp"), "mypack")),
-		BrowserDataDir: ".browserData",
-		Imports:        []string{"fmt", "time"},
-	}
+	c.TplData = &TplData{}
 
-	// apply configuration, if available
+	// apply AppName, if available
 	if c.conf.AppName != "" {
-		c.AppName = c.conf.AppName
-		c.Package = strings.ToLower(c.conf.AppName)
-		c.TargetDir = MustAbs(c.conf.AppName)
-		c.PackageDir = filepath.Join(c.TargetDir, c.Package)
-		c.BrowserDataDir = filepath.Join(c.TargetDir, ".browserData-"+c.Package)
+		c.AppName = UpFirst(c.conf.AppName)
+	} else {
+		c.AppName = UpFirst("MyApp")
 	}
+	c.Package = "auto" + Normalize(c.AppName)
+	c.TargetDir = MustAbs(c.AppName)
+	c.PackageDir = filepath.Join(c.TargetDir, c.Package)
+	c.BrowserDataDir = filepath.Join(c.TargetDir, ".browserData-"+Normalize(c.AppName))
 
 	// ensure dir exists
 	err = os.MkdirAll(c.PackageDir, 0755)
@@ -54,34 +49,32 @@ func (c *Compiler) setTplData() (err error) {
 	return nil
 }
 
-func (c *Compiler) Compile() (err error) {
-
-	err = c.generateTpl("util")
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 // Generate a go file from the template file with the same name.
 func (c *Compiler) generateTpl(baseName string) error {
 
-	c.BaseName = filepath.Base(strings.ToLower(baseName))
+	baseName = Normalize(filepath.Base(strings.ToLower(baseName)))
 
-	targetFile := filepath.Join(c.PackageDir, c.BaseName+".go")
+	targetFile := filepath.Join(c.PackageDir, baseName+".go")
 
-	tpl, err := template.ParseFS(tplFS, "tpl/"+c.BaseName+".tpl")
+	tpl, err := template.ParseFS(tplFS, "tpl/"+baseName+".tpl")
 	if err != nil {
-		return fmt.Errorf("failed to parse template file %s: %v", c.BaseName+".tpl", err)
+		return fmt.Errorf("failed to parse template file %s: %v", baseName+".tpl", err)
 	}
 	w, err := c.getWriter(targetFile)
 	if err != nil {
 		return fmt.Errorf("failed to create target file %s: %v", targetFile, err)
 	}
 	defer w.Close()
+
+	// Add a header to the file.
+	err = c.writeHeader(w)
+	if err != nil {
+		return fmt.Errorf("failed to header to target file %s: %v", targetFile, err)
+	}
+
 	err = tpl.Execute(w, c.TplData)
 	if err != nil {
-		return fmt.Errorf("failed to execute template %s: %v", c.BaseName+".tpl", err)
+		return fmt.Errorf("failed to execute template %s: %v", baseName+".tpl", err)
 	}
 
 	if DEBUG_LEVEL >= LEVEL_INFO {

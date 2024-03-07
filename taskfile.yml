@@ -19,8 +19,8 @@ tasks:
     cmds:
       - task --list-all
 
-  version: 
-    desc: display versionning information
+  info: 
+    desc: display various useful information
     deps: [build]
     cmds:
       - task --version
@@ -49,7 +49,8 @@ tasks:
       - ./**/*.yml
       - ./**/*.yaml
     cmds:
-      - go test ./...
+      - go test ./... # unit tests
+      - go run ./cli testfiles/test1.yml testfiles/test2.yml # end-to-end test
 
   clean: 
     desc: clean caches and binaries, and test dirs

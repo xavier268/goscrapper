@@ -8,12 +8,12 @@ type Configuration struct {
 	// These fields are NOR read from file, but populated directly when parsing file.
 
 	// These fields are read from file. Once set, they are never modified.
-	Schema   string          // schema should be "1"
-	AppName  string          // application name. Used to separate browser data files, and for package name.
-	Debug    int             // set app debug level
-	Headless bool            // set app headless mode
-	Ignore   map[string]bool // set of patterns that are never downloaded (ex : *.png) to save bandwidth
-	Run      []string        // States to launch at startup. Same state can be repeated. Multiple States will run concurrently.
+	Schema  string // schema should be "1"
+	AppName string // application name. Used to separate browser data files, and for package name.
+	// Debug    int             // set app debug level.
+	// Headless bool            // set app headless mode
+	// Ignore   map[string]bool // set of patterns that are never downloaded (ex : *.png) to save bandwidth
+	Run string // State to launch at startup.
 
 	Define ConfigParameters       // constants definitions
 	Buses  map[string]ConfigBus   // map name to definition
@@ -24,8 +24,8 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	return &Configuration{
 		Schema: "1",
-		Debug:  0,
-		Ignore: make(map[string]bool),
+		// Debug:  0,
+		// Ignore: make(map[string]bool),
 		Buses:  make(map[string]ConfigBus),
 		States: make(map[string]ConfigState),
 	}
@@ -68,4 +68,19 @@ type ConfigCondition struct {
 // There are implemented as go chanels.
 type ConfigBus struct {
 	Limit int // Max capacity of underlying channel
+}
+
+// Normalized bus name
+func BusName(s string) string {
+	return "Bus" + UpFirst(Normalize(s))
+}
+
+// Normalized state name
+func StateName(s string) string {
+	return "state" + UpFirst(Normalize(s))
+}
+
+// Normalize action name
+func ActionName(s string) string {
+	return "do" + UpFirst(Normalize(s))
 }

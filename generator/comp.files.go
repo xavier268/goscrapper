@@ -39,8 +39,16 @@ func (c *Compiler) writeHeader(w io.Writer) (err error) {
 
 // Package %s is generated. DO NOT EDIT.
 package %s
-`,
-		VERSION, COPYRIGHT, BUILDDATE, GITHASH, time.Now(), strings.Repeat("-", 60), c.Package, c.Package)
 
-	return err
+`,
+		VERSION, COPYRIGHT, BUILDDATE, GITHASH,
+		time.Now(), strings.Repeat("-", 60),
+		c.Package, c.Package)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }

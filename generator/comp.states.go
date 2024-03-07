@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-// generate all states and create file
+// generate enums for all states
 func (c Compiler) generateStates() error {
 
 	f, err := os.Create(filepath.Join(c.PackageDir, "states.go"))
@@ -22,13 +22,19 @@ func (c Compiler) generateStates() error {
 	}
 
 	fmt.Fprintln(f)
-
+	fmt.Fprintln(f, "type State int")
+	fmt.Fprintln(f, "const (")
+	first := true
 	for sn := range c.conf.States {
-		err = c.generateState(f, sn)
-		if err != nil {
-			return fmt.Errorf("failed to write state %s: %v", sn, err)
+		if first {
+			fmt.Fprintf(f, "%s State = iota\n", StateName(sn))
+			first = false
+		} else {
+			fmt.Fprintf(f, "%s\n", StateName(sn))
 		}
 	}
+	fmt.Fprintln(f, ")")
+
 	return nil
 }
 

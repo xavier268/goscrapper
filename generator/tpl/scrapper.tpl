@@ -1,3 +1,4 @@
+
 import (
 	"context"
 	"sync"
@@ -69,32 +70,32 @@ func (s *Scrapper) newPage() (*rod.Page, error) {
 panic("todo")
 }
 
-// Fork a new job from Scrapper.
+// Fork current job to a new job from Scrapper.
 // Start to run the specified State with the forked thread.
-func (s *Scrapper) fork (state State) (error) {
-	job, err := s.newJob()
+// Continue running current job.
+func (j *Job) fork (state State) (error) {
+	j2, err := j.sc.newJob()
 	if err != nil {
 		return err 
 	}
-	s.wg.Add(1)
+	j.sc.wg.Add(1)
 	go func () {
-		state(job)
-		s.wg.Done()
+		j2.Run()
+		j.sc.wg.Done()
 	}()
 	return nil
 }
 
 // ================================================
 
-// A State is just any function that can be applied to a *Job
-type State func(*Job)
-
 
 // a Job maintain the context a thread is running in.
 type Job struct {
-	sc *Scrapper
+	sc *Scrapper	
+	state State // the current state of the job.
 	page *rod.Page // the tab associated with the job. Can be nil if no page loaded yet.
-	// todo
+	sel *rod.Element // the current selected element. Can be nil if no element selected yet.
+	// TO DO
 }
 
 // create a new job, obtaining a new page.
@@ -108,6 +109,8 @@ func (sc *Scrapper) newJob() (j *Job, err error) {
 	}
 	return j, nil
 }
+
+
 
 
 

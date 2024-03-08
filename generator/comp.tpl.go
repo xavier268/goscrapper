@@ -40,12 +40,15 @@ func (c *Compiler) setTplData() (err error) {
 	c.BrowserDataDir = filepath.Join(c.TargetDir, ".cache"+Normalize(c.AppName))
 	c.ExampleDir = filepath.Join(c.TargetDir, "examples")
 
+	// Zap packageDir
+	os.RemoveAll(c.PackageDir)
+
 	// ensure dir exists
 	err = os.MkdirAll(c.PackageDir, 0755)
 	if err != nil {
 		return err
 	}
-	err = os.MkdirAll(c.PackageDir, 0755)
+	err = os.MkdirAll(c.ExampleDir, 0755)
 	if err != nil {
 		return err
 	}

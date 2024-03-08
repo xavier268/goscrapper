@@ -2,7 +2,6 @@ package generator
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 )
@@ -35,23 +34,35 @@ func (c Compiler) generateStates() error {
 	}
 	fmt.Fprintln(f, ")")
 
-	return nil
-}
+	fmt.Fprintln(f)
+	fmt.Fprintf(f, "func (j *Job) Run(state State) error {")
+	fmt.Fprintln(f, `
+	j.state = state
+	for {
+	select{
+	case <- Done :  	// external close request
+		j.sc.Close()
+		return nil
 
-// generate one state function for the named state
-func (c *Compiler) generateState(f io.Writer, sname string) (err error) {
+	case <- j.sc.ctx.Done() : // internal close request
+		j.sc.Close()
+		return nil
 
-	fmt.Fprintf(f, "\n/***** state : %s *******\n%s\n **********************/\n", sname, PrettyJson(c.conf.States[sname]))
+	default: 
+		switch j.state {
 
-	fmt.Fprintf(f, "func  %s(j *Job) {\n", StateName(sname))
-	err = c.generateActions(f, sname)
-	if err != nil {
-		return fmt.Errorf("failed to generate actions for state %s: %v", sname, err)
-	}
-	fmt.Fprintln(f, `panic("Not implemented")`)
-	fmt.Fprintln(f, "}")
-	fmt.Fprintln(f, "\n// ensure no compiler warning for stets that are never called")
-	fmt.Fprintf(f, "var _ = %s\n\n", StateName(sname))
+		
 
+
+	
+	
+	`)
+
+	fmt.Fprintln(f, `
+		} // switch
+	} // select
+	} // for
+} // Run
+	`)
 	return nil
 }

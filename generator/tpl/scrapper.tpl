@@ -80,7 +80,7 @@ func (j *Job) fork (state State) (error) {
 	}
 	j.sc.wg.Add(1)
 	go func () {
-		j2.Run()
+		j2.Run(state)
 		j.sc.wg.Done()
 	}()
 	return nil

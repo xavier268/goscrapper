@@ -26,7 +26,7 @@ var (
 // runtime variables (from flags or test configuration)
 var (
 	// debugging level during generation process
-	DEBUG_LEVEL int = LEVEL_DEBUG
+	DEBUG int = LEVEL_DEBUG
 )
 
 // Parse the version into its components.

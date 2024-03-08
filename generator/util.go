@@ -51,6 +51,7 @@ func Normalize(s string) string {
 }
 
 // Upper the first letter of a string.
+// Does not normalize other letters.
 func UpFirst(s string) string {
 	if s == "" {
 		return s

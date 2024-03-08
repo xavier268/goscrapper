@@ -8,7 +8,7 @@ import (
 )
 
 // generate enums for all states
-func (c Compiler) generateStates() error {
+func (c *Compiler) generateStates() error {
 
 	f, err := os.Create(filepath.Join(c.PackageDir, "states.go"))
 	if err != nil {
@@ -19,6 +19,13 @@ func (c Compiler) generateStates() error {
 	err = c.writeHeader(f)
 	if err != nil {
 		return fmt.Errorf("failed to write header to states.go: %v", err)
+	}
+
+	fmt.Fprintln(f)
+
+	if DEBUG >= LEVEL_DEBUG {
+		fmt.Fprintln(f, "// These templates are only generated when DEBU is set at least at LEVEL_DEBUG")
+		generateActionFunctionTemplates(f)
 	}
 
 	fmt.Fprintln(f)
@@ -57,7 +64,11 @@ func (c Compiler) generateStates() error {
 			case %s :
 			
 	`, StateName(sn))
-		c.generateStateCase(f, sn)
+
+		err := c.generateStateCase(f, sn)
+		if err != nil {
+			return err
+		}
 	}
 
 	fmt.Fprintln(f, `
@@ -69,7 +80,20 @@ func (c Compiler) generateStates() error {
 	return nil
 }
 
-func (c *Compiler) generateStateCase(f io.Writer, stateKey string) {
+func (c *Compiler) generateStateCase(f io.Writer, stateKey string) error {
 	fmt.Fprintf(f, "		// generating state case for %s\n", stateKey)
+	for _, confAct := range c.conf.States[stateKey].Actions {
+		actName, err := confAct.configActionVerify()
+		if err != nil {
+			fmt.Fprintln(f, err)
+			return err
+		}
+		err = c.generateAction(f, actName, confAct)
+		if err != nil {
+			fmt.Fprintln(f, err)
+			return err
+		}
+	}
+	return nil
 
 }

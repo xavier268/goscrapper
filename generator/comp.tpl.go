@@ -88,7 +88,7 @@ func (c *Compiler) generateTpl(baseName string) error {
 		return fmt.Errorf("failed to execute template %s: %v", baseName+".tpl", err)
 	}
 
-	if DEBUG_LEVEL >= LEVEL_INFO {
+	if DEBUG >= LEVEL_INFO {
 		fmt.Println("Generated file: " + targetFile)
 	}
 

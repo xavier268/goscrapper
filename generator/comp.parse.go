@@ -12,7 +12,7 @@ import (
 func parseFile(fileName string) (Configuration, error) {
 
 	conf := Configuration{}
-	if DEBUG_LEVEL > 0 {
+	if DEBUG > 0 {
 		fmt.Println("Parsing file", fileName)
 	}
 	data, err := os.ReadFile(fileName)
@@ -27,7 +27,7 @@ func parseFile(fileName string) (Configuration, error) {
 	if conf.Schema != SCHEMA {
 		return conf, fmt.Errorf("invalid schema in %s", fileName)
 	}
-	if DEBUG_LEVEL >= LEVEL_DEBUG {
+	if DEBUG >= LEVEL_DEBUG {
 		fmt.Println("Loaded :")
 		fmt.Println(PrettyJson(conf))
 	}
@@ -96,7 +96,7 @@ func (c *Compiler) merge(fileName string, conf Configuration) error {
 		}
 	}
 
-	if DEBUG_LEVEL >= LEVEL_DEBUG {
+	if DEBUG >= LEVEL_DEBUG {
 		fmt.Println("Merge is :")
 		fmt.Println(PrettyJson(conf))
 	}
@@ -116,7 +116,7 @@ func (c *Compiler) verifyConfig() error {
 		return fmt.Errorf("run state %s is not defined", c.conf.Run)
 	}
 
-	if DEBUG_LEVEL >= LEVEL_DEBUG {
+	if DEBUG >= LEVEL_DEBUG {
 		fmt.Println("Verified configuration is :")
 		fmt.Println(PrettyJson(c.conf))
 	}

@@ -52,7 +52,7 @@ func (c *Compiler) Parse(fileNames ...string) (err error) {
 	}
 
 	// evrything is ok !
-	if DEBUG_LEVEL >= LEVEL_DEBUG {
+	if DEBUG >= LEVEL_DEBUG {
 		fmt.Println("Loaded configuration :")
 		fmt.Println(PrettyJson(c.conf))
 	}
@@ -69,7 +69,7 @@ func (c *Compiler) Compile() (err error) {
 	}
 
 	// evrything is ok !
-	if DEBUG_LEVEL >= LEVEL_DEBUG {
+	if DEBUG >= LEVEL_DEBUG {
 		fmt.Println("Compiler configuration :")
 		fmt.Println(PrettyJson(c))
 	}

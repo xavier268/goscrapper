@@ -35,6 +35,7 @@ func (c *Compiler) writeHeader(w io.Writer) (err error) {
 // %s
 // Build %s  - Commit %s
 // Generated on %v
+// DEBUG LEVEL = %d
 //%s
 
 // Package %s is generated. DO NOT EDIT.
@@ -42,7 +43,7 @@ package %s
 
 `,
 		VERSION, COPYRIGHT, BUILDDATE, GITHASH,
-		time.Now(), strings.Repeat("-", 60),
+		time.Now(), DEBUG, strings.Repeat("-", 60),
 		c.Package, c.Package)
 
 	if err != nil {

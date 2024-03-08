@@ -15,15 +15,20 @@ var ActionKeys []string = extractStructFields(ConfigAction{})
 type ConfigAction struct {
 	// === Only one of these will be not nil. Check will happen at compile time.
 	Click struct { // click on an element
-		Selector string // element selector, relative to job scope.
-		Left     bool   // left button (right is default)
+		Selector   string   // element selector, relative to job scope.
+		Left       bool     // left button (right is default)
+		Experiment struct { // experiment
+			ex   int
+			peri float64
+			ment []string
+		}
 	}
 	Scope struct { // set the scope
 		Selector string // element selector
 	}
 }
 
-// Verify ONE and only ONE Action is set, and return the corresponding action.
+// Verify ONE and only ONE Action is set per ConfigACtion, and return the corresponding action.
 func (a ConfigAction) configActionVerify() (actionName string, err error) {
 	count := 0
 	for _, f := range ActionKeys {
@@ -33,6 +38,9 @@ func (a ConfigAction) configActionVerify() (actionName string, err error) {
 		}
 	}
 	if count == 1 {
+		if DEBUG >= LEVEL_DEBUG {
+			fmt.Printf("action verification for s %s succeeded\n", actionName)
+		}
 		return actionName, nil
 	}
 	return "", fmt.Errorf("exactly ONE valid action can be set, but found %d", count)

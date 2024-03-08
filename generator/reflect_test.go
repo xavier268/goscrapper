@@ -15,3 +15,13 @@ func TestReflection(t *testing.T) {
 	}
 
 }
+
+func TestFunctionDescription(_ *testing.T) {
+
+	d, e := (ConfigAction{}).getActionFunctionDeclaration("Scope")
+	if e != nil {
+		panic(e)
+	}
+	fmt.Println(d)
+
+}

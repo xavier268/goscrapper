@@ -7,40 +7,33 @@ import (
 
 // Use this to generate all action function templates
 func generateActionFunctionTemplates(f io.Writer) {
+
+	fmt.Fprintln(f) // safety new line ...
+
 	for _, an := range ActionKeys {
 		hdr, err := (ConfigAction{}).getActionFunctionDeclaration(an)
 		if err != nil {
 			fmt.Fprintln(f, err)
 			panic(err)
 		}
-		fmt.Fprintf(f, "\n%s{panic(\"action %s is not implemented\")}", hdr, an)
+		fmt.Fprintf(f, "%s{panic(\"action %s is not implemented\")}\n", hdr, an)
 
 	}
-	fmt.Fprintln(f)
 }
 
 func (c *Compiler) generateAction(f io.Writer, actName string, confAct ConfigAction) error {
 
-	hdr, err := confAct.getActionFunctionDeclaration(actName)
-	if err != nil {
-		return err
-	}
-	fmt.Fprintf(f, "%s {panic(\"to be implemented\")} \n ", hdr)
-
 	// Actually call the function, with the parameters values coming form configAct
-	fmt.Fprintf(f, "j.%s(", getActionFunctionName(actName))
+	fmt.Fprintf(f, "			j.%s(\n", getActionFunctionName(actName))
 	params, err := confAct.getActionParameterList(actName)
 	if err != nil {
 		fmt.Fprintln(f, err)
 		return err
 	}
-	for i, p := range params {
-		if i > 0 {
-			fmt.Fprintf(f, ", ")
-		}
-		fmt.Fprintf(f, "%#v", p.v)
+	for _, p := range params {
+		fmt.Fprintf(f, "				%#v,  //%s %s\n", p.v, p.n, p.t)
 	}
-	fmt.Fprintln(f, ")")
+	fmt.Fprintln(f, "				)")
 
 	return nil
 }

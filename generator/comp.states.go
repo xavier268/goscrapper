@@ -24,7 +24,7 @@ func (c *Compiler) generateStates() error {
 	fmt.Fprintln(f)
 
 	if DEBUG >= LEVEL_DEBUG {
-		fmt.Fprintln(f, "// These templates are only generated when DEBU is set at least at LEVEL_DEBUG")
+		fmt.Fprintln(f, "// These templates are only generated when DEBUG is set at least at LEVEL_DEBUG")
 		generateActionFunctionTemplates(f)
 	}
 

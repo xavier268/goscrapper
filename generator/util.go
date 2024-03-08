@@ -46,7 +46,7 @@ func MustAbs(path string) string {
 func Normalize(s string) string {
 	s = strings.ToLower(s)
 	patt := regexp.MustCompile(`[a-z][a-z0-9]*`)
-	s = patt.FindString(s)
+	s = strings.Join(patt.FindAllString(s, -1), "_")
 	return s
 }
 

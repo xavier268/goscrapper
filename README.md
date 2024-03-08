@@ -47,6 +47,7 @@ Redefine State, Job and Crapper Object
       * There could be multiple fork/move targets associated with a single action : the first meeting its own preconditions will be used, the other will be ignored.
   * When the last Job has finished running, Scrapper ends its Run.
   * Page pooling seems attractive. Careful handling of self created pages by the web site ?
+  * Action parameters as interface{}to allow for nesting (eg : action with conditions, hijack, foreach, oneof, ... => plus besoin de preconditions conditions de Stet ?)
   
 Actions includes :
   * Noop (just use to wait for channel input and discard it)

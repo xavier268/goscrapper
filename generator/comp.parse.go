@@ -23,7 +23,7 @@ func parseFile(fileName string) (Configuration, error) {
 	if err != nil {
 		return conf, fmt.Errorf("cannot load file %s : %v", fileName, err)
 	}
-
+	// EACH file should have a valid schema.
 	if conf.Schema != SCHEMA {
 		return conf, fmt.Errorf("invalid schema in %s", fileName)
 	}
@@ -71,7 +71,7 @@ func (c *Compiler) merge(fileName string, conf Configuration) error {
 	// Actions inside new States should be valid.
 	for statename, state := range conf.States {
 		for i, ca := range state.Actions {
-			_, err := configActionVerify(ca)
+			_, err := ca.configActionVerify()
 			if err != nil {
 				return fmt.Errorf("invalid action n°%d in state %s in file %s :\n %v", i, statename, fileName, err)
 			}
@@ -107,9 +107,7 @@ func (c *Compiler) verifyConfig() error {
 	if c.conf == nil {
 		return fmt.Errorf("configuration is nil")
 	}
-	if c.conf.Schema == "" {
-		return fmt.Errorf("schema is required but was not provided")
-	}
+
 	if c.conf.Run == "" {
 		return fmt.Errorf("no state was specified to run")
 	}

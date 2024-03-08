@@ -8,7 +8,7 @@ import (
 const (
 	VERSION   = "0.1.0"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
-	SCHEMA    = "1" // required schema in configuration files
+	SCHEMA    = 1 // required schema in configuration files
 
 	// Debugging levels
 	LEVEL_SILENT  = 0 // No output

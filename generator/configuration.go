@@ -8,11 +8,11 @@ type Configuration struct {
 	// These fields are NOR read from file, but populated directly when parsing file.
 
 	// These fields are read from file. Once set, they are never modified.
-	Schema  string // schema should be "1"
+	Schema  int    // schema should be 1
 	AppName string // application name. Used to separate browser data files, and for package name.
 	Run     string // State to launch at startup.
 
-	Define ConfigParameters       // constants definitions
+	Define DefineParameters       // constants definitions
 	Buses  map[string]ConfigBus   // map name to definition
 	States map[string]ConfigState // map name to definition
 
@@ -20,13 +20,13 @@ type Configuration struct {
 
 func NewConfiguration() *Configuration {
 	return &Configuration{
-		Schema: "1",
+		Schema: 1,
 		Buses:  make(map[string]ConfigBus),
 		States: make(map[string]ConfigState),
 	}
 }
 
-type ConfigParameters map[string]string
+type DefineParameters map[string]string
 
 type ConfigState struct {
 	// Assert to confirm before State can be accepted

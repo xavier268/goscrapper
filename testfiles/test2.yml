@@ -7,6 +7,6 @@ states:
           selector : "iuy oiuy"
       - click:
           selector : "lkjlkjlkj"
-          button: left
+          #button: left
           
        

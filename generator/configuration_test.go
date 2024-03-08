@@ -18,3 +18,7 @@ func TestParseConfiguration(t *testing.T) {
 	}
 	fmt.Printf("\nCaptured configuration :\n%s\n", PrettyJson(c.conf))
 }
+
+func TestHelpConfiguration(t *testing.T) {
+	fmt.Println(HelpConfiguration())
+}

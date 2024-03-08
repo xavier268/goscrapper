@@ -67,6 +67,17 @@ func (c *Compiler) merge(fileName string, conf Configuration) error {
 			c.conf.Buses[busname] = bus
 		}
 	}
+
+	// Actions inside new States should be valid.
+	for statename, state := range conf.States {
+		for i, ca := range state.Actions {
+			_, err := configActionVerify(ca)
+			if err != nil {
+				return fmt.Errorf("invalid action n°%d in state %s in file %s :\n %v", i, statename, fileName, err)
+			}
+		}
+	}
+
 	// States should not be redefined
 	for statename, state := range conf.States {
 		if _, ok := c.conf.States[statename]; ok {

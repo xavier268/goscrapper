@@ -39,10 +39,6 @@ type ConfigState struct {
 	Actions []ConfigAction
 }
 
-// ConfigAction defines action to conduct.
-// Map action name to parameters.
-type ConfigAction map[string]ConfigParameters
-
 // ConfigCondition defines condition to be met before State can be accepted
 // or after Action(s) have been done.
 // Conditions will be checked multiple times, so they should be idempotent.
@@ -73,9 +69,4 @@ func BusName(s string) string {
 // Normalized state name
 func StateName(s string) string {
 	return "state" + UpFirst(Normalize(s))
-}
-
-// Normalize action name
-func ActionName(state, action string) string {
-	return "do" + UpFirst(Normalize(state)) + UpFirst(Normalize(action))
 }

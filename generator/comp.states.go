@@ -2,6 +2,7 @@ package generator
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 )
@@ -49,20 +50,26 @@ func (c Compiler) generateStates() error {
 		return nil
 
 	default: 
-		switch j.state {
+		switch j.state {`)
 
-		
-
-
-	
-	
-	`)
+	for sn := range c.conf.States {
+		fmt.Fprintf(f, `
+			case %s :
+			
+	`, StateName(sn))
+		c.generateStateCase(f, sn)
+	}
 
 	fmt.Fprintln(f, `
-		} // switch
-	} // select
+			} // switch
+		} // select
 	} // for
 } // Run
 	`)
 	return nil
+}
+
+func (c *Compiler) generateStateCase(f io.Writer, stateKey string) {
+	fmt.Fprintf(f, "		// generating state case for %s\n", stateKey)
+
 }

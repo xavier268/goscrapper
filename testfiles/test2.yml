@@ -3,7 +3,7 @@ schema: "1"
 states:
   toto :
     actions: 
-      - base : 
+      - scope : 
           selector : "iuy oiuy"
       - click:
           selector : "lkjlkjlkj"

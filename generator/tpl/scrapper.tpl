@@ -1,8 +1,10 @@
 
+
 import (
 	"context"
 	"sync"
 	"time"
+	"fmt"
 	"github.com/go-rod/rod"
 )
 
@@ -14,6 +16,8 @@ type Scrapper struct {
 	ctx      context.Context    // global context
 	cancel   context.CancelFunc // cancel to cancel everything
 	wg       sync.WaitGroup     // to monitor pending threads
+	browser  *rod.Browser		// the browser attached to this crapper. Unique for the entire app.
+	pool 	rod.PagePool		// page pagePooling
 	// TO DO
 }
 
@@ -30,7 +34,13 @@ func NewScrapper(options ...ScrapperOption) *Scrapper {
 // Kill all running goroutines and release scrapper resources
 func (s *Scrapper) Close() {
 	s.cancel()
-	s.wg.Wait()
+	// Close all pages in pool if any
+	if s.pool != nil {
+		s.pool.Cleanup(func(p *rod.Page){p.Close()})
+	}
+	if s.browser != nil {
+		s.browser.Close()
+	}	
 }
 
 // Option when creating a new scrapper.
@@ -60,57 +70,21 @@ func Timeout(globalTimeout time.Duration) ScrapperOption {
 }
 
 // Launch the Scrapper. Will block until scrapping is finished or a major error occured.
-func (s *Scrapper) Run() error {
-	panic("not implemented")
-}
-
-// Request a new page from browser.
-// todo	 : implement pagePooling ...
-func (s *Scrapper) newPage() (*rod.Page, error) {
-panic("todo")
-}
-
-// Fork current job to a new job from Scrapper.
-// Start to run the specified State with the forked thread.
-// Continue running current job.
-func (j *Job) fork (state State) (error) {
-	j2, err := j.sc.newJob()
-	if err != nil {
-		return err 
-	}
-	j.sc.wg.Add(1)
-	go func () {
-		j2.Run(state)
-		j.sc.wg.Done()
+// Analysis happens in a separate Job thread.
+func (sc *Scrapper) Run() {
+	j  := sc.newJob()
+	
+	sc.wg.Add(1)
+	go func (){ // run job in a separate thread.
+		defer sc.wg.Done()
+		err := j.Run({{.RunState}})
+		if err != nil {
+			fmt.Println(err)
+		}
 	}()
-	return nil
+
+	sc.wg.Wait()
 }
-
-// ================================================
-
-
-// a Job maintain the context a thread is running in.
-type Job struct {
-	sc *Scrapper	
-	state State // the current state of the job.
-	page *rod.Page // the tab associated with the job. Can be nil if no page loaded yet.
-	sel *rod.Element // the current selected element. Can be nil if no element selected yet.
-	// TO DO
-}
-
-// create a new job, obtaining a new page.
-// no forking is done here.
-func (sc *Scrapper) newJob() (j *Job, err error) {
-	j = new(Job)
-	j.sc = sc
-	j.page, err  = sc.newPage()
-	if err != nil {
-		return nil, err
-	}
-	return j, nil
-}
-
-
 
 
 

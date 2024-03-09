@@ -8,9 +8,11 @@ type Configuration struct {
 	// These fields are NOR read from file, but populated directly when parsing file.
 
 	// These fields are read from file. Once set, they are never modified.
-	Schema  int    // schema should be 1
-	AppName string // application name. Used to separate browser data files, and for package name.
-	Run     string // State to launch at startup.
+	Schema   int    // schema should be 1
+	AppName  string // application name. Used to separate browser data files, and for package name.
+	Run      string // State to launch at startup.
+	Headless bool   // running headless ?
+	PoolSize int    // 0 means no pooling.
 
 	Define DefineParameters       // constants definitions
 	Buses  map[string]ConfigBus   // map name to definition

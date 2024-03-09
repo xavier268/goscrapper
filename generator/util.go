@@ -42,7 +42,7 @@ func MustAbs(path string) string {
 	return abs
 }
 
-// Normalize string to lower,removing all invaloiid chars.
+// Normalize string to lowercase,removing all invalid chars.
 func Normalize(s string) string {
 	s = strings.ToLower(s)
 	patt := regexp.MustCompile(`[a-z][a-z0-9]*`)

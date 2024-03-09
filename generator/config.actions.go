@@ -14,17 +14,27 @@ var ActionKeys []string = extractStructFields(ConfigAction{})
 // There should be only ONE and ONLY ONE field set.
 type ConfigAction struct {
 	// === Only one of these will be not nil. Check will happen at compile time.
+	// It is impossible to select an Action without setting at least one of its fields to a non zero value.
+
+	Load struct {
+		Url   string // url to load
+		Blank bool   // load Blank page if url is empty
+	}
+	Quit struct {
+		Job bool // only quit current job
+		All bool // quit all jobs and stop application
+	}
+	Scope struct { // set the scope
+		Selector string // element selector
+	}
 	Click struct { // click on an element
-		Selector   string   // element selector, relative to job scope.
+		Selector   string   // required element selector, relative to job scope.
 		Left       bool     // left button (right is default)
 		Experiment struct { // experiment
 			ex   int
 			peri float64
 			ment []string
 		}
-	}
-	Scope struct { // set the scope
-		Selector string // element selector
 	}
 }
 

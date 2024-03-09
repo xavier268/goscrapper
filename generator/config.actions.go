@@ -39,7 +39,7 @@ func (a ConfigAction) configActionVerify() (actionName string, err error) {
 	}
 	if count == 1 {
 		if DEBUG >= LEVEL_DEBUG {
-			fmt.Printf("action verification for s %s succeeded\n", actionName)
+			fmt.Printf("action verification for %s succeeded\n", actionName)
 		}
 		return actionName, nil
 	}

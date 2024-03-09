@@ -70,5 +70,5 @@ func BusName(s string) string {
 
 // Normalized state name
 func StateName(s string) string {
-	return "state" + UpFirst(Normalize(s))
+	return "State" + UpFirst(Normalize(s))
 }

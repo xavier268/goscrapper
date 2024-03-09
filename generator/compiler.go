@@ -74,7 +74,7 @@ func (c *Compiler) Compile() (err error) {
 		fmt.Println(PrettyJson(c))
 	}
 
-	err = c.generateTpl("util")
+	err = c.generateTpl("actions")
 	if err != nil {
 		return err
 	}

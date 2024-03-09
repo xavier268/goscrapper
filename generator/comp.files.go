@@ -38,13 +38,12 @@ func (c *Compiler) writeHeader(w io.Writer) (err error) {
 // DEBUG LEVEL = %d
 //%s
 
-// Package %s is generated. DO NOT EDIT.
 package %s
 
 `,
 		VERSION, COPYRIGHT, BUILDDATE, GITHASH,
 		time.Now(), DEBUG, strings.Repeat("-", 60),
-		c.Package, c.Package)
+		c.Package)
 
 	if err != nil {
 		return err

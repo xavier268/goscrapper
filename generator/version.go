@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	VERSION   = "0.1.0"
+	VERSION   = "0.1.1"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
 	SCHEMA    = 1 // required schema in configuration files
 

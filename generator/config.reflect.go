@@ -102,7 +102,7 @@ func (c ConfigAction) getActionParameterList(actname string) (
 
 // Return the function name for an given action name.
 func getActionFunctionName(actname string) string {
-	return "doAction" + UpFirst(Normalize(actname))
+	return "DoAction" + UpFirst(Normalize(actname))
 }
 
 // Return the declaration string for the named action function.
@@ -115,12 +115,12 @@ func (ac ConfigAction) getActionFunctionDeclaration(actname string) (string, err
 	}
 
 	sb := new(strings.Builder)
-	fmt.Fprintf(sb, "func (j *Job)%s( ", getActionFunctionName(actname))
+	fmt.Fprintf(sb, "func (j *Job) %s(", getActionFunctionName(actname))
 	for i, p := range pp {
 		if i > 0 {
 			fmt.Fprintf(sb, ", ")
 		}
-		fmt.Fprintf(sb, "%s %s", p.n, p.t)
+		fmt.Fprintf(sb, "%s %s", Normalize(p.n), p.t)
 	}
 	sb.WriteString(") error")
 

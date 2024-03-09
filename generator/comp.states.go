@@ -23,10 +23,10 @@ func (c *Compiler) generateStates() error {
 
 	fmt.Fprintln(f)
 
-	if DEBUG >= LEVEL_DEBUG {
-		fmt.Fprintln(f, "// These templates are only generated when DEBUG is set at least at LEVEL_DEBUG")
-		generateActionFunctionTemplates(f)
-	}
+	// Print template for actions functions
+	fmt.Fprintln(f, "/* The following action functions should be defined elsewhere")
+	generateActionFunctionTemplates(f)
+	fmt.Fprintln(f, "*/")
 
 	fmt.Fprintln(f)
 	fmt.Fprintln(f, "type State int")

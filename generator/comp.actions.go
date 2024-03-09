@@ -16,7 +16,7 @@ func generateActionFunctionTemplates(f io.Writer) {
 			fmt.Fprintln(f, err)
 			panic(err)
 		}
-		fmt.Fprintf(f, "%s{panic(\"action %s is not implemented\")}\n", hdr, an)
+		fmt.Fprintf(f, "\n// %s\n%s{\n\tpanic(\"action %s is not implemented\")\n}\n\n", getActionFunctionName(an), hdr, an)
 
 	}
 }

@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	VERSION   = "0.1.1"
+	VERSION   = "0.1.2"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
 	SCHEMA    = 1 // required schema in configuration files
 
@@ -17,7 +17,7 @@ const (
 	LEVEL_DEBUG   = 3 // Debugging data
 )
 
-// build time variables - will be subsituted at build time.
+// build time variables - will be substituted at build time.
 var (
 	GITHASH   string = "n/a"
 	BUILDDATE string = "n/a"

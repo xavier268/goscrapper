@@ -10,8 +10,9 @@ import (
 var ActionKeys []string = extractStructFields(ConfigAction{})
 
 // ConfigAction defines action to conduct.
-// It incorporates the syntax for each possible action.
-// There should be only ONE and ONLY ONE field set.
+// It incorporates the syntax for each possible action, like a UNION.
+// There should be only ONE and ONLY ONE first level field set
+// and the second levels fields should not all be the ZeroValue.
 type ConfigAction struct {
 	// === Only one of these will be not nil. Check will happen at compile time.
 	// It is impossible to select an Action without setting at least one of its fields to a non zero value.
@@ -53,5 +54,5 @@ func (a ConfigAction) configActionVerify() (actionName string, err error) {
 		}
 		return actionName, nil
 	}
-	return "", fmt.Errorf("exactly ONE valid action can be set, but found %d", count)
+	return "", fmt.Errorf("exactly ONE valid action should be set, but found %d", count)
 }

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Compiler is responsible for generating go source code from the parsed configuration.
+// Compiler is responsible for generating go source code from the parsed YAML configuration.
 type Compiler struct {
 
 	// Internal compiler data
@@ -60,6 +60,7 @@ func (c *Compiler) Parse(fileNames ...string) (err error) {
 	return nil
 }
 
+// Compile the parsed configuration into a go package.
 func (c *Compiler) Compile() (err error) {
 
 	// prepare template data

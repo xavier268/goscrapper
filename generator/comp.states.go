@@ -46,7 +46,7 @@ func (c *Compiler) generateStates() error {
 	fmt.Fprintf(f, "func (j *Job) Run(state State) error {")
 	fmt.Fprintln(f, `
 	j.state = state
-	for {
+	
 	select{
 	case <- Done :  	// external close request
 		j.sc.Close()
@@ -72,9 +72,10 @@ func (c *Compiler) generateStates() error {
 	}
 
 	fmt.Fprintln(f, `
+			  return nil // all actions sucessfully executed
 			} // switch
 		} // select
-	} // for
+		return nil
 } // Run
 	`)
 	return nil

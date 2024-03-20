@@ -1,0 +1,83 @@
+
+state 0
+	$accept: .expression $end 
+
+	NUMBER  shift 4
+	.  error
+
+	expression  goto 1
+	term  goto 2
+	factor  goto 3
+
+state 1
+	$accept:  expression.$end 
+	expression:  expression.PLUS term 
+
+	$end  accept
+	PLUS  shift 5
+	.  error
+
+
+state 2
+	expression:  term.    (2)
+	term:  term.MULTI factor 
+
+	MULTI  shift 6
+	.  reduce 2 (src line 45)
+
+
+state 3
+	term:  factor.    (4)
+
+	.  reduce 4 (src line 50)
+
+
+state 4
+	factor:  NUMBER.    (5)
+
+	.  reduce 5 (src line 53)
+
+
+state 5
+	expression:  expression PLUS.term 
+
+	NUMBER  shift 4
+	.  error
+
+	term  goto 7
+	factor  goto 3
+
+state 6
+	term:  term MULTI.factor 
+
+	NUMBER  shift 4
+	.  error
+
+	factor  goto 8
+
+state 7
+	expression:  expression PLUS term.    (1)
+	term:  term.MULTI factor 
+
+	MULTI  shift 6
+	.  reduce 1 (src line 43)
+
+
+state 8
+	term:  term MULTI factor.    (3)
+
+	.  reduce 3 (src line 48)
+
+
+72 terminals, 4 nonterminals
+6 grammar rules, 9/16000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+53 working sets used
+memory: parser 5/240000
+0 extra closures
+6 shift entries, 1 exceptions
+5 goto entries
+1 entries saved by goto default
+Optimizer space used: output 11/240000
+11 table entries, 3 zero
+maximum spread: 71, maximum offset: 71

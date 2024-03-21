@@ -35,6 +35,9 @@
 %token BOOL PARAM IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
 // actions
 %token SELECT CLICK DOCUMENT CONTAINS 
+// define DO after DOCUMENT ?
+%token DO
+
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.

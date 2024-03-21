@@ -191,6 +191,20 @@ startLoop:
 	return 0
 }
 
+// try all keywords, returning their code if found.
+func (m *myLexer) tryAllKeywords() (int, error) {
+
+	for i, k := range yyToknames {
+		// fmt.Printf("Trying %d %q\n", i, k)
+		if m.try(k) || m.try(strings.ToLower(k)) { // recognize upper OR lower case keywords
+			// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
+			return i + yyPrivate - 1, nil
+		}
+	}
+
+	return 0, fmt.Errorf("no keyword found")
+}
+
 // Try a keyword, if success, update the lexer position and return true.
 // Otherwise, return false.
 // Keywords are case sensitive.
@@ -201,18 +215,4 @@ func (m *myLexer) try(what string) bool {
 	} else {
 		return false
 	}
-}
-
-// try all keywords, returning their code if found.
-func (m *myLexer) tryAllKeywords() (int, error) {
-
-	for i, k := range yyToknames {
-		// fmt.Printf("Trying %d %q\n", i, k)
-		if m.try(k) {
-			// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
-			return i + yyPrivate - 1, nil
-		}
-	}
-
-	return 0, fmt.Errorf("no keyword found")
 }

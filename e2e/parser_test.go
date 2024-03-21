@@ -16,7 +16,7 @@ func TestParserVisual(t *testing.T) {
 	HEADLESS
 	DOCUMENT "http://www.google.fr"
 	SELECT "input[name=q]"	
-	SELECT "input[name=btnK]"	
+	select "input[name=btnK]"	 // <== Keywords are alse recognized in full lowercase (no mixed case !!)
 	CLICK "input[name=btnK]"
 	RETURN "input[name=btnK]"
 	`

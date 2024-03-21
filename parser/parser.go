@@ -90,6 +90,7 @@ const SELECT = 57417
 const CLICK = 57418
 const DOCUMENT = 57419
 const CONTAINS = 57420
+const DO = 57421
 
 var yyToknames = [...]string{
 	"$end",
@@ -170,6 +171,7 @@ var yyToknames = [...]string{
 	"CLICK",
 	"DOCUMENT",
 	"CONTAINS",
+	"DO",
 }
 
 var yyStatenames = [...]string{}
@@ -178,7 +180,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:185
+//line grammar.y:188
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -288,7 +290,7 @@ var yyTok2 = [...]int8{
 	42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
 	52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
 	62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
-	72, 73, 74, 75, 76, 77, 78,
+	72, 73, 74, 75, 76, 77, 78, 79,
 }
 
 var yyTok3 = [...]int8{

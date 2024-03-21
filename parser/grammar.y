@@ -20,7 +20,7 @@
 // Punctuation
 %token COLON SEMICOLON DOT COMMA LBRACKET RBRACKET LPAREN RPAREN LBRACE RBRACE
 // Bool operators
-%token AND OR
+%token AND OR XOR
 // Other operators
 %token DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
 // Keywords
@@ -31,9 +31,20 @@
 %token EVENT
 // Unary operators
 %token LIKE NOT IN DO WHILE
-
 // litterals
 %token BOOL PARAM IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
+
+// definition des precedences et des associativités
+// les opérateurs definis en dernier ont la précedence la plus élevée.
+%left LTE LT GTE GT EQ NEQ IN
+%left OR
+%left AND
+%left PLUS MINUS
+%left MULTI DIV
+%left MOD
+
+
+
 
 
 %%
@@ -102,23 +113,14 @@ sourceVariable
 loopVariable
     : IDENTIFIER
     ;
+
+variable
+    : IDENTIFIER
+    ;
     
-
-expression // is something that evaluates to a value.
-   : unaryOperator expression
-   | expression OR expression
-   | expression AND expression
-   | predicate
-   ;
-
-unaryOperator
-   : NOT
-   ;
-
-predicate
-    : predicate compareOperator predicate
-    | predicate IN predicate
-    | expressionAtom
+boolOperator
+    : AND
+    | OR
     ;
 
 compareOperator
@@ -130,16 +132,80 @@ compareOperator
     | LTE
     ;
 
+boolOperator
+    : EQ
+    | NEQ
+    | AND
+    | OR
+    | XOR
+    ;
 
-expressionAtom
-    : expressionAtom MULTI expressionAtom
-    | expressionAtom DIV expressionAtom
-    | expressionAtom MOD expressionAtom
-    | expressionAtom PLUS expressionAtom
-    | expressionAtom MINUS expressionAtom
+arithOperator
+    : PLUS
+    | MINUS
+    | MULTI
+    | MOD 
+    | DIV
+    ;
+
+expression // is something that evaluates to a value.
+   : boolExpression
+   | numExpression
+   | arrayExpression
+   | stringExpression
+   | objectExpression
+   | variable
+   | NONE
+   ;
+
+boolExpression
+    : BOOL
+    | boolExpression boolOperator boolExpression
+    | numExpression compareOperator numExpression
+    | arrayExpression compareOperator arrayExpression
+    | objectExpression compareOperator objectExpression
+    | LPAREN boolExpression RPAREN
     | functionCallExpression
-    | litteral
-    | LPAREN expression RPAREN
+    ;
+
+numExpression 
+    : NUMBER
+    | numExpression arithOperator numExpression
+    | MINUS numExpression
+    | expression PLUSPLUS
+    | LPAREN numExpression RPAREN
+    | functionCallExpression
+    ;
+
+arrayExpression
+    : LBRACKET paramList RBRACKET
+    | LPAREN arrayExpression RPAREN
+    | functionCallExpression
+    ;
+
+stringExpression
+    : STRING
+    | stringExpression compareOperator stringExpression
+    ;
+
+objectExpression
+    : objectLitteral
+    | LBRACE objectKeyValueList RBRACE
+    ;
+
+objectKeyValueList 
+    : // can be empty */
+    | nonemptyKeyValueList
+    ;
+
+nonemptyKeyValueList
+    : keyValue
+    | nonemptyKeyValueList COMMA keyValue
+    ;
+
+keyValue
+    : IDENTIFIER COLON expression
+    | IDENTIFIER
     ;
 
 litteral
@@ -147,13 +213,35 @@ litteral
     | BOOL
     | STRING
     | arrayLitteral
-    | LBRACE paramList RBRACE
-    | NONE
+    | objectLitteral
     ;
 
-arrayLitteral   
-    : LBRACKET paramList RBRACKET
+
+arrayLitteral 
+    : LBRACKET litteral RBRACKET
     ;
+
+
+objectLitteral
+    : LBRACE litteralKVList RBRACE
+    ;
+
+litteralKVList
+    : /* can be empty */
+    | nonemptylitteralKVList litteralKVList
+    ;
+
+nonemptylitteralKVList
+    : litteralKV
+    | nonemptylitteralKVList COMMA litteralKV
+    ;
+
+litteralKV
+    : IDENTIFIER COLON litteral
+    ;
+
+
+
 
 
 %%

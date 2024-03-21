@@ -66,6 +66,7 @@ tasks:
     cmds:
       - rm -rf bin/
       - rm -rf .task/
+      - rm parser/y.output
 
   clean-windows:
     internal: true
@@ -73,6 +74,7 @@ tasks:
     cmds:
       - Powershell Remove-Item bin -Recurse
       - Powershell Remove-Item .task -Recurse 
+      - Powershell Remove-Item parser/y.output
 
   generate:
     desc: generate all files

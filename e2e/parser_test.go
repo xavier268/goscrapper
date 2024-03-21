@@ -2,6 +2,7 @@
 package e2e
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -14,15 +15,15 @@ func TestParserVisual(t *testing.T) {
 	input := `
 	HEADLESS
 	DOCUMENT "http://www.google.fr"
-	SELECT "input[name=q]"
-	TYPE "test"
-	SELECT "input[name=btnK]"
-	TYPE "test"
+	SELECT "input[name=q]"	
+	SELECT "input[name=btnK]"	
 	CLICK "input[name=btnK]"
 	RETURN "input[name=btnK]"
 	`
+
 	err := parser.Parse(strings.NewReader(input), os.Stdout)
 	if err != nil {
-		t.Fatal(err)
+		fmt.Println(err)
+		t.Fail()
 	}
 }

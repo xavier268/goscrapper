@@ -30,11 +30,11 @@
 // Wait operaor
 %token EVENT
 // Unary operators
-%token LIKE NOT IN DO WHILE
+%token LIKE NOT IN WHILE
 // litterals
 %token BOOL PARAM IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
 // actions
-%token SELECT CLICK DOCUMENT CONTAINS
+%token SELECT CLICK DOCUMENT CONTAINS 
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.

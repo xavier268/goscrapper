@@ -46,13 +46,15 @@ tasks:
 
   test:
     desc: run all generator tests
-    deps: [build]
+    deps: [generate , build]
     sources: 
       - ./**/*.yml
       - ./**/*.yaml
     cmds:
       - go test ./generator # unit tests
       - go run ./cli testfiles/test1.yml testfiles/test2.yml # end-to-end test
+      - go test ./parser # unit tests
+      - go test ./e2e # end-to-end tests
 
   clean: 
     desc: clean caches and binaries, and test dirs

@@ -36,26 +36,124 @@
 %token BOOL PARAM IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
 
 
-%type <Exp> expression term factor
-
 %%
 
-expression:
-    expression PLUS term
-    | term
+/* NB : preferer recursivité gauche plus facile à implémenter et respecte associativité */
+
+body
+    : bodyStatements bodyExpression
+    | bodyExpression
     ;
 
-term:
-    term MULTI factor
-    | factor
+bodyStatements
+    : bodyStatement
+    | bodyStatements bodyStatement 
     ;
 
-factor:
-    NUMBER {}
+bodyStatement // ne renvoie pas de valeur
+    : variableDeclaration
+    | functionCallExpression
     ;
+
+variableDeclaration
+    : IDENTIFIER ASSIGN expression
+    ;
+
+functionCallExpression
+    : IDENTIFIER LPAREN paramList RPAREN
+    ;
+
+paramList 
+    : /* empty list */
+    | nonemptyParamList
+    ;
+
+nonemptyParamList
+    : expression
+    |  nonemptyParamList COMMA expression
+    ;
+
+
+// A body expression collects return values
+bodyExpression  
+    :  returnExpression
+    | forExpression
+    ;
+
+returnExpression   
+    : RETURN expression
+    | RETURN DISTINCT expression
+    ;
+
+forExpression
+    : FOR loopVariable IN forExpressionSource DO bodyExpression
+    ;
+
+forExpressionSource
+    : functionCallExpression
+    | sourceVariable
+    | arrayLitteral
+    ;
+
+sourceVariable
+    : IDENTIFIER
+    ;
+
+loopVariable
+    : IDENTIFIER
+    ;
+    
+
+expression // is something that evaluates to a value.
+   : unaryOperator expression
+   | expression OR expression
+   | expression AND expression
+   | predicate
+   ;
+
+unaryOperator
+   : NOT
+   ;
+
+predicate
+    : predicate compareOperator predicate
+    | predicate IN predicate
+    | expressionAtom
+    ;
+
+compareOperator
+    : EQ
+    | NEQ
+    | GT
+    | GTE
+    | LT
+    | LTE
+    ;
+
+
+expressionAtom
+    : expressionAtom MULTI expressionAtom
+    | expressionAtom DIV expressionAtom
+    | expressionAtom MOD expressionAtom
+    | expressionAtom PLUS expressionAtom
+    | expressionAtom MINUS expressionAtom
+    | functionCallExpression
+    | litteral
+    | LPAREN expression RPAREN
+    ;
+
+litteral
+    : NUMBER
+    | BOOL
+    | STRING
+    | arrayLitteral
+    | LBRACE paramList RBRACE
+    | NONE
+    ;
+
+arrayLitteral   
+    : LBRACKET paramList RBRACKET
+    ;
+
 
 %%
-
-
-// ========== Lexer implementation ======================
-

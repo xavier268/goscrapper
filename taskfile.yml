@@ -37,6 +37,7 @@ tasks:
 
   build:
     desc: build program and utilities
+    deps: [generate]
     sources: # what triggers rebuild
       - ./**/*go
     cmds:
@@ -72,3 +73,13 @@ tasks:
     cmds:
       - Powershell Remove-Item bin -Recurse
       - Powershell Remove-Item .task -Recurse 
+
+  generate:
+    desc: generate all files
+    sources: 
+      - ./**/*.y   
+    generates: # what triggers rebuild
+      - ./**/y.output
+      - ./**/parser.go
+    cmds:
+      - go generate ./...

@@ -1,83 +1,998 @@
 
 state 0
-	$accept: .expression $end 
+	$accept: .body $end 
 
-	NUMBER  shift 4
+	FOR  shift 10
+	RETURN  shift 9
+	IDENTIFIER  shift 11
 	.  error
 
-	expression  goto 1
-	term  goto 2
-	factor  goto 3
+	body  goto 1
+	bodyStatements  goto 2
+	bodyExpression  goto 3
+	bodyStatement  goto 4
+	variableDeclaration  goto 7
+	functionCallExpression  goto 8
+	returnExpression  goto 5
+	forExpression  goto 6
 
 state 1
-	$accept:  expression.$end 
-	expression:  expression.PLUS term 
+	$accept:  body.$end 
 
 	$end  accept
-	PLUS  shift 5
 	.  error
 
 
 state 2
-	expression:  term.    (2)
-	term:  term.MULTI factor 
+	body:  bodyStatements.bodyExpression 
+	bodyStatements:  bodyStatements.bodyStatement 
 
-	MULTI  shift 6
+	FOR  shift 10
+	RETURN  shift 9
+	IDENTIFIER  shift 11
+	.  error
+
+	bodyExpression  goto 12
+	bodyStatement  goto 13
+	variableDeclaration  goto 7
+	functionCallExpression  goto 8
+	returnExpression  goto 5
+	forExpression  goto 6
+
+state 3
+	body:  bodyExpression.    (2)
+
 	.  reduce 2 (src line 45)
 
 
-state 3
-	term:  factor.    (4)
-
-	.  reduce 4 (src line 50)
-
-
 state 4
-	factor:  NUMBER.    (5)
-
-	.  reduce 5 (src line 53)
-
-
-state 5
-	expression:  expression PLUS.term 
-
-	NUMBER  shift 4
-	.  error
-
-	term  goto 7
-	factor  goto 3
-
-state 6
-	term:  term MULTI.factor 
-
-	NUMBER  shift 4
-	.  error
-
-	factor  goto 8
-
-state 7
-	expression:  expression PLUS term.    (1)
-	term:  term.MULTI factor 
-
-	MULTI  shift 6
-	.  reduce 1 (src line 43)
-
-
-state 8
-	term:  term MULTI factor.    (3)
+	bodyStatements:  bodyStatement.    (3)
 
 	.  reduce 3 (src line 48)
 
 
-72 terminals, 4 nonterminals
-6 grammar rules, 9/16000 states
-0 shift/reduce, 0 reduce/reduce conflicts reported
-53 working sets used
-memory: parser 5/240000
-0 extra closures
-6 shift entries, 1 exceptions
-5 goto entries
-1 entries saved by goto default
-Optimizer space used: output 11/240000
-11 table entries, 3 zero
-maximum spread: 71, maximum offset: 71
+state 5
+	bodyExpression:  returnExpression.    (13)
+
+	.  reduce 13 (src line 78)
+
+
+state 6
+	bodyExpression:  forExpression.    (14)
+
+	.  reduce 14 (src line 80)
+
+
+state 7
+	bodyStatement:  variableDeclaration.    (5)
+
+	.  reduce 5 (src line 53)
+
+
+state 8
+	bodyStatement:  functionCallExpression.    (6)
+
+	.  reduce 6 (src line 55)
+
+
+state 9
+	returnExpression:  RETURN.expression 
+	returnExpression:  RETURN.DISTINCT expression 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	DISTINCT  shift 15
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 14
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 10
+	forExpression:  FOR.loopVariable IN forExpressionSource DO bodyExpression 
+
+	IDENTIFIER  shift 32
+	.  error
+
+	loopVariable  goto 31
+
+state 11
+	variableDeclaration:  IDENTIFIER.ASSIGN expression 
+	functionCallExpression:  IDENTIFIER.LPAREN paramList RPAREN 
+
+	LPAREN  shift 34
+	ASSIGN  shift 33
+	.  error
+
+
+state 12
+	body:  bodyStatements bodyExpression.    (1)
+
+	.  reduce 1 (src line 43)
+
+
+state 13
+	bodyStatements:  bodyStatements bodyStatement.    (4)
+
+	.  reduce 4 (src line 50)
+
+
+state 14
+	returnExpression:  RETURN expression.    (15)
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 15 (src line 83)
+
+
+state 15
+	returnExpression:  RETURN DISTINCT.expression 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 37
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 16
+	expression:  unaryOperator.expression 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 38
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 17
+	expression:  predicate.    (26)
+	predicate:  predicate.compareOperator predicate 
+	predicate:  predicate.IN predicate 
+
+	LTE  shift 46
+	GTE  shift 44
+	LT  shift 45
+	GT  shift 43
+	EQ  shift 41
+	NEQ  shift 42
+	IN  shift 40
+	.  reduce 26 (src line 111)
+
+	compareOperator  goto 39
+
+state 18
+	unaryOperator:  NOT.    (27)
+
+	.  reduce 27 (src line 114)
+
+
+state 19
+	predicate:  expressionAtom.    (30)
+	expressionAtom:  expressionAtom.MULTI expressionAtom 
+	expressionAtom:  expressionAtom.DIV expressionAtom 
+	expressionAtom:  expressionAtom.MOD expressionAtom 
+	expressionAtom:  expressionAtom.PLUS expressionAtom 
+	expressionAtom:  expressionAtom.MINUS expressionAtom 
+
+	MULTI  shift 47
+	DIV  shift 48
+	MOD  shift 49
+	PLUS  shift 50
+	MINUS  shift 51
+	.  reduce 30 (src line 121)
+
+
+state 20
+	expressionAtom:  functionCallExpression.    (42)
+
+	.  reduce 42 (src line 140)
+
+
+state 21
+	expressionAtom:  litteral.    (43)
+
+	.  reduce 43 (src line 141)
+
+
+state 22
+	expressionAtom:  LPAREN.expression RPAREN 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 52
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 23
+	functionCallExpression:  IDENTIFIER.LPAREN paramList RPAREN 
+
+	LPAREN  shift 34
+	.  error
+
+
+state 24
+	litteral:  NUMBER.    (45)
+
+	.  reduce 45 (src line 145)
+
+
+state 25
+	litteral:  BOOL.    (46)
+
+	.  reduce 46 (src line 147)
+
+
+state 26
+	litteral:  STRING.    (47)
+
+	.  reduce 47 (src line 148)
+
+
+state 27
+	litteral:  arrayLitteral.    (48)
+
+	.  reduce 48 (src line 149)
+
+
+state 28
+	litteral:  LBRACE.paramList RBRACE 
+	paramList: .    (9)
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  reduce 9 (src line 66)
+
+	functionCallExpression  goto 20
+	expression  goto 55
+	paramList  goto 53
+	nonemptyParamList  goto 54
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 29
+	litteral:  NONE.    (50)
+
+	.  reduce 50 (src line 151)
+
+
+state 30
+	arrayLitteral:  LBRACKET.paramList RBRACKET 
+	paramList: .    (9)
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  reduce 9 (src line 66)
+
+	functionCallExpression  goto 20
+	expression  goto 55
+	paramList  goto 56
+	nonemptyParamList  goto 54
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 31
+	forExpression:  FOR loopVariable.IN forExpressionSource DO bodyExpression 
+
+	IN  shift 57
+	.  error
+
+
+state 32
+	loopVariable:  IDENTIFIER.    (22)
+
+	.  reduce 22 (src line 102)
+
+
+state 33
+	variableDeclaration:  IDENTIFIER ASSIGN.expression 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 58
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 34
+	functionCallExpression:  IDENTIFIER LPAREN.paramList RPAREN 
+	paramList: .    (9)
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  reduce 9 (src line 66)
+
+	functionCallExpression  goto 20
+	expression  goto 55
+	paramList  goto 59
+	nonemptyParamList  goto 54
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 35
+	expression:  expression OR.expression 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 60
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 36
+	expression:  expression AND.expression 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 61
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 37
+	returnExpression:  RETURN DISTINCT expression.    (16)
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 16 (src line 85)
+
+
+38: shift/reduce conflict (shift 36(0), red'n 23(0)) on AND
+38: shift/reduce conflict (shift 35(0), red'n 23(0)) on OR
+state 38
+	expression:  unaryOperator expression.    (23)
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 23 (src line 107)
+
+
+state 39
+	predicate:  predicate compareOperator.predicate 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	arrayLitteral  goto 27
+	predicate  goto 62
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 40
+	predicate:  predicate IN.predicate 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	arrayLitteral  goto 27
+	predicate  goto 63
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 41
+	compareOperator:  EQ.    (31)
+
+	.  reduce 31 (src line 124)
+
+
+state 42
+	compareOperator:  NEQ.    (32)
+
+	.  reduce 32 (src line 126)
+
+
+state 43
+	compareOperator:  GT.    (33)
+
+	.  reduce 33 (src line 127)
+
+
+state 44
+	compareOperator:  GTE.    (34)
+
+	.  reduce 34 (src line 128)
+
+
+state 45
+	compareOperator:  LT.    (35)
+
+	.  reduce 35 (src line 129)
+
+
+state 46
+	compareOperator:  LTE.    (36)
+
+	.  reduce 36 (src line 130)
+
+
+state 47
+	expressionAtom:  expressionAtom MULTI.expressionAtom 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	arrayLitteral  goto 27
+	expressionAtom  goto 64
+	litteral  goto 21
+
+state 48
+	expressionAtom:  expressionAtom DIV.expressionAtom 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	arrayLitteral  goto 27
+	expressionAtom  goto 65
+	litteral  goto 21
+
+state 49
+	expressionAtom:  expressionAtom MOD.expressionAtom 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	arrayLitteral  goto 27
+	expressionAtom  goto 66
+	litteral  goto 21
+
+state 50
+	expressionAtom:  expressionAtom PLUS.expressionAtom 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	arrayLitteral  goto 27
+	expressionAtom  goto 67
+	litteral  goto 21
+
+state 51
+	expressionAtom:  expressionAtom MINUS.expressionAtom 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	arrayLitteral  goto 27
+	expressionAtom  goto 68
+	litteral  goto 21
+
+state 52
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+	expressionAtom:  LPAREN expression.RPAREN 
+
+	RPAREN  shift 69
+	AND  shift 36
+	OR  shift 35
+	.  error
+
+
+state 53
+	litteral:  LBRACE paramList.RBRACE 
+
+	RBRACE  shift 70
+	.  error
+
+
+state 54
+	paramList:  nonemptyParamList.    (10)
+	nonemptyParamList:  nonemptyParamList.COMMA expression 
+
+	COMMA  shift 71
+	.  reduce 10 (src line 68)
+
+
+state 55
+	nonemptyParamList:  expression.    (11)
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 11 (src line 71)
+
+
+state 56
+	arrayLitteral:  LBRACKET paramList.RBRACKET 
+
+	RBRACKET  shift 72
+	.  error
+
+
+state 57
+	forExpression:  FOR loopVariable IN.forExpressionSource DO bodyExpression 
+
+	LBRACKET  shift 30
+	IDENTIFIER  shift 77
+	.  error
+
+	functionCallExpression  goto 74
+	forExpressionSource  goto 73
+	sourceVariable  goto 75
+	arrayLitteral  goto 76
+
+state 58
+	variableDeclaration:  IDENTIFIER ASSIGN expression.    (7)
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 7 (src line 58)
+
+
+state 59
+	functionCallExpression:  IDENTIFIER LPAREN paramList.RPAREN 
+
+	RPAREN  shift 78
+	.  error
+
+
+60: shift/reduce conflict (shift 36(0), red'n 24(0)) on AND
+60: shift/reduce conflict (shift 35(0), red'n 24(0)) on OR
+state 60
+	expression:  expression.OR expression 
+	expression:  expression OR expression.    (24)
+	expression:  expression.AND expression 
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 24 (src line 109)
+
+
+61: shift/reduce conflict (shift 36(0), red'n 25(0)) on AND
+61: shift/reduce conflict (shift 35(0), red'n 25(0)) on OR
+state 61
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+	expression:  expression AND expression.    (25)
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 25 (src line 110)
+
+
+62: shift/reduce conflict (shift 46(0), red'n 28(0)) on LTE
+62: shift/reduce conflict (shift 44(0), red'n 28(0)) on GTE
+62: shift/reduce conflict (shift 45(0), red'n 28(0)) on LT
+62: shift/reduce conflict (shift 43(0), red'n 28(0)) on GT
+62: shift/reduce conflict (shift 41(0), red'n 28(0)) on EQ
+62: shift/reduce conflict (shift 42(0), red'n 28(0)) on NEQ
+62: shift/reduce conflict (shift 40(0), red'n 28(0)) on IN
+state 62
+	predicate:  predicate.compareOperator predicate 
+	predicate:  predicate compareOperator predicate.    (28)
+	predicate:  predicate.IN predicate 
+
+	LTE  shift 46
+	GTE  shift 44
+	LT  shift 45
+	GT  shift 43
+	EQ  shift 41
+	NEQ  shift 42
+	IN  shift 40
+	.  reduce 28 (src line 118)
+
+	compareOperator  goto 39
+
+63: shift/reduce conflict (shift 46(0), red'n 29(0)) on LTE
+63: shift/reduce conflict (shift 44(0), red'n 29(0)) on GTE
+63: shift/reduce conflict (shift 45(0), red'n 29(0)) on LT
+63: shift/reduce conflict (shift 43(0), red'n 29(0)) on GT
+63: shift/reduce conflict (shift 41(0), red'n 29(0)) on EQ
+63: shift/reduce conflict (shift 42(0), red'n 29(0)) on NEQ
+63: shift/reduce conflict (shift 40(0), red'n 29(0)) on IN
+state 63
+	predicate:  predicate.compareOperator predicate 
+	predicate:  predicate.IN predicate 
+	predicate:  predicate IN predicate.    (29)
+
+	LTE  shift 46
+	GTE  shift 44
+	LT  shift 45
+	GT  shift 43
+	EQ  shift 41
+	NEQ  shift 42
+	IN  shift 40
+	.  reduce 29 (src line 120)
+
+	compareOperator  goto 39
+
+64: shift/reduce conflict (shift 47(0), red'n 37(0)) on MULTI
+64: shift/reduce conflict (shift 48(0), red'n 37(0)) on DIV
+64: shift/reduce conflict (shift 49(0), red'n 37(0)) on MOD
+64: shift/reduce conflict (shift 50(0), red'n 37(0)) on PLUS
+64: shift/reduce conflict (shift 51(0), red'n 37(0)) on MINUS
+state 64
+	expressionAtom:  expressionAtom.MULTI expressionAtom 
+	expressionAtom:  expressionAtom MULTI expressionAtom.    (37)
+	expressionAtom:  expressionAtom.DIV expressionAtom 
+	expressionAtom:  expressionAtom.MOD expressionAtom 
+	expressionAtom:  expressionAtom.PLUS expressionAtom 
+	expressionAtom:  expressionAtom.MINUS expressionAtom 
+
+	MULTI  shift 47
+	DIV  shift 48
+	MOD  shift 49
+	PLUS  shift 50
+	MINUS  shift 51
+	.  reduce 37 (src line 134)
+
+
+65: shift/reduce conflict (shift 47(0), red'n 38(0)) on MULTI
+65: shift/reduce conflict (shift 48(0), red'n 38(0)) on DIV
+65: shift/reduce conflict (shift 49(0), red'n 38(0)) on MOD
+65: shift/reduce conflict (shift 50(0), red'n 38(0)) on PLUS
+65: shift/reduce conflict (shift 51(0), red'n 38(0)) on MINUS
+state 65
+	expressionAtom:  expressionAtom.MULTI expressionAtom 
+	expressionAtom:  expressionAtom.DIV expressionAtom 
+	expressionAtom:  expressionAtom DIV expressionAtom.    (38)
+	expressionAtom:  expressionAtom.MOD expressionAtom 
+	expressionAtom:  expressionAtom.PLUS expressionAtom 
+	expressionAtom:  expressionAtom.MINUS expressionAtom 
+
+	MULTI  shift 47
+	DIV  shift 48
+	MOD  shift 49
+	PLUS  shift 50
+	MINUS  shift 51
+	.  reduce 38 (src line 136)
+
+
+66: shift/reduce conflict (shift 47(0), red'n 39(0)) on MULTI
+66: shift/reduce conflict (shift 48(0), red'n 39(0)) on DIV
+66: shift/reduce conflict (shift 49(0), red'n 39(0)) on MOD
+66: shift/reduce conflict (shift 50(0), red'n 39(0)) on PLUS
+66: shift/reduce conflict (shift 51(0), red'n 39(0)) on MINUS
+state 66
+	expressionAtom:  expressionAtom.MULTI expressionAtom 
+	expressionAtom:  expressionAtom.DIV expressionAtom 
+	expressionAtom:  expressionAtom.MOD expressionAtom 
+	expressionAtom:  expressionAtom MOD expressionAtom.    (39)
+	expressionAtom:  expressionAtom.PLUS expressionAtom 
+	expressionAtom:  expressionAtom.MINUS expressionAtom 
+
+	MULTI  shift 47
+	DIV  shift 48
+	MOD  shift 49
+	PLUS  shift 50
+	MINUS  shift 51
+	.  reduce 39 (src line 137)
+
+
+67: shift/reduce conflict (shift 47(0), red'n 40(0)) on MULTI
+67: shift/reduce conflict (shift 48(0), red'n 40(0)) on DIV
+67: shift/reduce conflict (shift 49(0), red'n 40(0)) on MOD
+67: shift/reduce conflict (shift 50(0), red'n 40(0)) on PLUS
+67: shift/reduce conflict (shift 51(0), red'n 40(0)) on MINUS
+state 67
+	expressionAtom:  expressionAtom.MULTI expressionAtom 
+	expressionAtom:  expressionAtom.DIV expressionAtom 
+	expressionAtom:  expressionAtom.MOD expressionAtom 
+	expressionAtom:  expressionAtom.PLUS expressionAtom 
+	expressionAtom:  expressionAtom PLUS expressionAtom.    (40)
+	expressionAtom:  expressionAtom.MINUS expressionAtom 
+
+	MULTI  shift 47
+	DIV  shift 48
+	MOD  shift 49
+	PLUS  shift 50
+	MINUS  shift 51
+	.  reduce 40 (src line 138)
+
+
+68: shift/reduce conflict (shift 47(0), red'n 41(0)) on MULTI
+68: shift/reduce conflict (shift 48(0), red'n 41(0)) on DIV
+68: shift/reduce conflict (shift 49(0), red'n 41(0)) on MOD
+68: shift/reduce conflict (shift 50(0), red'n 41(0)) on PLUS
+68: shift/reduce conflict (shift 51(0), red'n 41(0)) on MINUS
+state 68
+	expressionAtom:  expressionAtom.MULTI expressionAtom 
+	expressionAtom:  expressionAtom.DIV expressionAtom 
+	expressionAtom:  expressionAtom.MOD expressionAtom 
+	expressionAtom:  expressionAtom.PLUS expressionAtom 
+	expressionAtom:  expressionAtom.MINUS expressionAtom 
+	expressionAtom:  expressionAtom MINUS expressionAtom.    (41)
+
+	MULTI  shift 47
+	DIV  shift 48
+	MOD  shift 49
+	PLUS  shift 50
+	MINUS  shift 51
+	.  reduce 41 (src line 139)
+
+
+state 69
+	expressionAtom:  LPAREN expression RPAREN.    (44)
+
+	.  reduce 44 (src line 142)
+
+
+state 70
+	litteral:  LBRACE paramList RBRACE.    (49)
+
+	.  reduce 49 (src line 150)
+
+
+state 71
+	nonemptyParamList:  nonemptyParamList COMMA.expression 
+
+	LBRACKET  shift 30
+	LPAREN  shift 22
+	LBRACE  shift 28
+	NONE  shift 29
+	NOT  shift 18
+	BOOL  shift 25
+	IDENTIFIER  shift 23
+	STRING  shift 26
+	NUMBER  shift 24
+	.  error
+
+	functionCallExpression  goto 20
+	expression  goto 79
+	arrayLitteral  goto 27
+	unaryOperator  goto 16
+	predicate  goto 17
+	expressionAtom  goto 19
+	litteral  goto 21
+
+state 72
+	arrayLitteral:  LBRACKET paramList RBRACKET.    (51)
+
+	.  reduce 51 (src line 154)
+
+
+state 73
+	forExpression:  FOR loopVariable IN forExpressionSource.DO bodyExpression 
+
+	DO  shift 80
+	.  error
+
+
+state 74
+	forExpressionSource:  functionCallExpression.    (18)
+
+	.  reduce 18 (src line 92)
+
+
+state 75
+	forExpressionSource:  sourceVariable.    (19)
+
+	.  reduce 19 (src line 94)
+
+
+state 76
+	forExpressionSource:  arrayLitteral.    (20)
+
+	.  reduce 20 (src line 95)
+
+
+state 77
+	functionCallExpression:  IDENTIFIER.LPAREN paramList RPAREN 
+	sourceVariable:  IDENTIFIER.    (21)
+
+	LPAREN  shift 34
+	.  reduce 21 (src line 98)
+
+
+state 78
+	functionCallExpression:  IDENTIFIER LPAREN paramList RPAREN.    (8)
+
+	.  reduce 8 (src line 62)
+
+
+state 79
+	nonemptyParamList:  nonemptyParamList COMMA expression.    (12)
+	expression:  expression.OR expression 
+	expression:  expression.AND expression 
+
+	AND  shift 36
+	OR  shift 35
+	.  reduce 12 (src line 73)
+
+
+state 80
+	forExpression:  FOR loopVariable IN forExpressionSource DO.bodyExpression 
+
+	FOR  shift 10
+	RETURN  shift 9
+	.  error
+
+	bodyExpression  goto 81
+	returnExpression  goto 5
+	forExpression  goto 6
+
+state 81
+	forExpression:  FOR loopVariable IN forExpressionSource DO bodyExpression.    (17)
+
+	.  reduce 17 (src line 88)
+
+
+72 terminals, 21 nonterminals
+52 grammar rules, 82/16000 states
+45 shift/reduce, 0 reduce/reduce conflicts reported
+70 working sets used
+memory: parser 180/240000
+42 extra closures
+247 shift entries, 1 exceptions
+44 goto entries
+94 entries saved by goto default
+Optimizer space used: output 114/240000
+114 table entries, 9 zero
+maximum spread: 71, maximum offset: 80

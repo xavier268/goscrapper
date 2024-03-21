@@ -24,7 +24,7 @@
 // Other operators
 %token DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
 // Keywords
-%token FOR RETURN WAITFOR OPTIONS TIMEOUT DISTINCT FILTER CURRENT SORT LIMIT LET COLLECT ASC DESC NONE NULL TRUE FALSE USE
+%token FOR RETURN WAITFOR OPTIONS IGNORE HEADLESS TIMEOUT DISTINCT FILTER CURRENT SORT LIMIT LET COLLECT ASC DESC NONE NULL TRUE FALSE USE
 // Group operators
 %token INTO KEEP WITH COUNT ALL ANY AGGREGATE
 // Wait operaor
@@ -33,12 +33,15 @@
 %token LIKE NOT IN DO WHILE
 // litterals
 %token BOOL PARAM IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
+// actions
+%token SELECT CLICK DOCUMENT CONTAINS
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%left LTE LT GTE GT EQ NEQ IN
-%left OR
+%nonassoc LTE LT GTE GT EQ NEQ IN
+%left OR XOR
 %left AND
+%left NOT
 %left PLUS MINUS
 %left MULTI DIV
 %left MOD
@@ -51,197 +54,132 @@
 
 /* NB : preferer recursivité gauche plus facile à implémenter et respecte associativité */
 
+program
+    : head body
+    | body
+    ;
+
+
+// head defines options
+head 
+    : head options 
+    | options
+    ;
+
+options
+    : HEADLESS
+    | IGNORE stringList
+    ;
+
+stringList
+    : STRING
+    | stringList COMMA STRING
+    ;
+
+// program body contains statements, followed by either RETURN or 
+
 body
-    : bodyStatements bodyExpression
-    | bodyExpression
+    : statements returnExpression
+    | returnExpression
     ;
 
-bodyStatements
-    : bodyStatement
-    | bodyStatements bodyStatement 
+statements
+    : statement
+    | statements statement
     ;
 
-bodyStatement // ne renvoie pas de valeur
-    : variableDeclaration
-    | functionCallExpression
-    ;
-
-variableDeclaration
+statement 
     : IDENTIFIER ASSIGN expression
+    | DOCUMENT stringExpression
+    | SELECT stringExpression
+    | CLICK  stringExpression
     ;
 
-functionCallExpression
-    : IDENTIFIER LPAREN paramList RPAREN
-    ;
-
-paramList 
-    : /* empty list */
-    | nonemptyParamList
-    ;
-
-nonemptyParamList
-    : expression
-    |  nonemptyParamList COMMA expression
-    ;
-
-
-// A body expression collects return values
-bodyExpression  
-    :  returnExpression
-    | forExpression
-    ;
-
-returnExpression   
+returnExpression
     : RETURN expression
-    | RETURN DISTINCT expression
+    | FOR IDENTIFIER IN stringExpression body
     ;
 
-forExpression
-    : FOR loopVariable IN forExpressionSource DO bodyExpression
+
+// expressions ...
+
+expression
+    : stringExpression
+    | numExpression
+    | boolExpression
+    | IDENTIFIER // variable   
     ;
 
-forExpressionSource
-    : functionCallExpression
-    | sourceVariable
-    | arrayLitteral
+stringExpression
+    : string
+    | stringExpression opeString2String string
+    | LPAREN stringExpression RPAREN
     ;
 
-sourceVariable
-    : IDENTIFIER
+string
+    : STRING     // litteral
     ;
 
-loopVariable
-    : IDENTIFIER
+numExpression
+    : number
+    | numExpression opeNum2Num number
+    | numExpression MINUS numExpression
+    | MINUS numExpression
+    | LPAREN numExpression RPAREN
     ;
 
-variable
-    : IDENTIFIER
+number
+    : NUMBER // litteral
     ;
-    
-boolOperator
+
+boolExpression
+    : bool
+    | boolExpression opeBool2Bool bool
+    | NOT boolExpression
+    | stringExpression opeCompareString2Bool stringExpression
+    | numExpression opeCompareNum2Bool numExpression
+    | LPAREN boolExpression RPAREN
+    ;
+
+bool    
+    : BOOL // litteral
+    ;
+
+opeBool2Bool
     : AND
-    | OR
-    ;
-
-compareOperator
-    : EQ
-    | NEQ
-    | GT
-    | GTE
-    | LT
-    | LTE
-    ;
-
-boolOperator
-    : EQ
-    | NEQ
-    | AND
     | OR
     | XOR
     ;
 
-arithOperator
+opeNum2Num // except MINUS because unary
     : PLUS
-    | MINUS
-    | MULTI
-    | MOD 
     | DIV
-    ;
-
-expression // is something that evaluates to a value.
-   : boolExpression
-   | numExpression
-   | arrayExpression
-   | stringExpression
-   | objectExpression
-   | variable
-   | NONE
-   ;
-
-boolExpression
-    : BOOL
-    | boolExpression boolOperator boolExpression
-    | numExpression compareOperator numExpression
-    | arrayExpression compareOperator arrayExpression
-    | objectExpression compareOperator objectExpression
-    | LPAREN boolExpression RPAREN
-    | functionCallExpression
-    ;
-
-numExpression 
-    : NUMBER
-    | numExpression arithOperator numExpression
-    | MINUS numExpression
-    | expression PLUSPLUS
-    | LPAREN numExpression RPAREN
-    | functionCallExpression
-    ;
-
-arrayExpression
-    : LBRACKET paramList RBRACKET
-    | LPAREN arrayExpression RPAREN
-    | functionCallExpression
-    ;
-
-stringExpression
-    : STRING
-    | stringExpression compareOperator stringExpression
-    ;
-
-objectExpression
-    : objectLitteral
-    | LBRACE objectKeyValueList RBRACE
-    ;
-
-objectKeyValueList 
-    : // can be empty */
-    | nonemptyKeyValueList
-    ;
-
-nonemptyKeyValueList
-    : keyValue
-    | nonemptyKeyValueList COMMA keyValue
-    ;
-
-keyValue
-    : IDENTIFIER COLON expression
-    | IDENTIFIER
-    ;
-
-litteral
-    : NUMBER
-    | BOOL
-    | STRING
-    | arrayLitteral
-    | objectLitteral
+    | MULTI
+    | MOD
     ;
 
 
-arrayLitteral 
-    : LBRACKET litteral RBRACKET
+opeString2String
+    : PLUS
     ;
 
-
-objectLitteral
-    : LBRACE litteralKVList RBRACE
+opeCompareNum2Bool
+    : GT
+    | GTE
+    | LT
+    | LTE
+    | EQ
+    | NEQ
     ;
 
-litteralKVList
-    : /* can be empty */
-    | nonemptylitteralKVList litteralKVList
+opeCompareString2Bool
+    : GT
+    | GTE
+    | LT
+    | LTE
+    | EQ
+    | NEQ
+    | CONTAINS
     ;
-
-nonemptylitteralKVList
-    : litteralKV
-    | nonemptylitteralKVList COMMA litteralKV
-    ;
-
-litteralKV
-    : IDENTIFIER COLON litteral
-    ;
-
-
-
-
 
 %%

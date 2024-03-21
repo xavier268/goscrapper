@@ -1,11 +1,14 @@
 package parser
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 // compiler checks
-var _ yyLexer = new(MyLexer)
+var _ yyLexer = new(myLexer)
 
-func ExampleNewLexer() {
+func ExampleParse_lexer() {
 
 	dd := ` 
 	un deux22 // trois quatre
@@ -24,7 +27,11 @@ func ExampleNewLexer() {
 
 	`
 
-	lx := NewLexer([]byte(dd))
+	lx := &myLexer{
+		data: []byte(dd),
+		pos:  0,
+		w:    os.Stdout,
+	}
 
 	for {
 		lval := new(yySymType)

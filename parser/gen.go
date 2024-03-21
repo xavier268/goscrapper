@@ -1,3 +1,4 @@
+// contains lexer, grammar, and parser generation tools
 package parser
 
 //go:generate go install golang.org/x/tools/cmd/goyacc@latest

@@ -3,14 +3,16 @@ package parser
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
-type MyLexer struct {
-	data []byte // entire data to be lexed
-	pos  int    // next position to process
+type myLexer struct {
+	data []byte    // entire data to be lexed
+	pos  int       // next position to process
+	w    io.Writer // where are error messages written to ?
 }
 
 // lexed symbol
@@ -23,21 +25,17 @@ type yySymType struct {
 	yys int
 }
 
-func NewLexer(data []byte) *MyLexer {
-	return &MyLexer{data: data, pos: 0}
-}
-
 // Error implements yyLexer.
-func (m *MyLexer) Error(e string) {
+func (m *myLexer) Error(e string) {
 	bef := max(0, m.pos-20)
 	after := min(len(m.data), m.pos+20)
-	fmt.Print(string(m.data[bef:m.pos]))
-	fmt.Printf("%s<<<%s>>>%s", ColRED, e, RESET)
-	fmt.Println(string(m.data[m.pos:after]))
+	fmt.Fprint(m.w, string(m.data[bef:m.pos]))
+	fmt.Fprintf(m.w, "%s<<<%s>>>%s", ColRED, e, RESET)
+	fmt.Fprintln(m.w, string(m.data[m.pos:after]))
 }
 
 // Lex implements yyLexer.
-func (m *MyLexer) Lex(lval *yySymType) int {
+func (m *myLexer) Lex(lval *yySymType) int {
 
 	var err error
 
@@ -67,7 +65,7 @@ startLoop:
 	}
 
 	// read strings between " "
-	// You can escape an inside " by doubling it.
+	// You can escape inside " by adding one more.
 	if loc := regexp.MustCompile(`(?s)^"(""+|[^"])*"`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.string = string(m.data[m.pos+1 : m.pos+loc[1]-1])    // remove external quotes
 		lval.string = strings.Replace(lval.string, `""`, `"`, -1) // replace all doubled quotes escaped inside.
@@ -76,7 +74,7 @@ startLoop:
 	}
 
 	// read strings between ' '
-	// You can escape an inside ' by doubling it.
+	// You can escape inside ' by adding one more.
 	if loc := regexp.MustCompile(`(?s)^'(''+|[^'])*'`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.string = string(m.data[m.pos+1 : m.pos+loc[1]-1])    // remove external quotes
 		lval.string = strings.Replace(lval.string, `''`, `'`, -1) // replace all doubled quotes escaped inside.
@@ -279,21 +277,11 @@ startLoop:
 // Try a keyword, if success, update the lexer position and return true.
 // Otherwise, return false.
 // Keywords are case sensitive.
-func (m *MyLexer) try(what string) bool {
+func (m *myLexer) try(what string) bool {
 	if bytes.HasPrefix(m.data[m.pos:], []byte(what)) {
 		m.pos += len(what)
 		return true
 	} else {
 		return false
-	}
-}
-
-// Prints a token defined by its constant value as a string.
-func TokenAsString(t int) string {
-	idx := t - yyPrivate + 1 // yyPrivate points to error
-	if idx < len(yyToknames) && idx >= 0 {
-		return yyToknames[idx]
-	} else {
-		return fmt.Sprintf("tok-%d", t)
 	}
 }

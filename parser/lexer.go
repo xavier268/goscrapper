@@ -99,7 +99,7 @@ startLoop:
 		return BOOL
 	}
 
-	// read symbols and keywords
+	// read symbols
 	// start with the multichar operators before single chars.
 	switch {
 
@@ -124,6 +124,10 @@ startLoop:
 		return DOTDOT
 	case m.try("::"):
 		return NAMESPACESEPARATOR
+	case m.try("!~"):
+		return REGEXNOTMATCH
+	case m.try("=~"):
+		return REGEXMATCH
 
 		// single bytes
 	case m.try(":"):
@@ -166,102 +170,15 @@ startLoop:
 		return ASSIGN
 	case m.try("?"):
 		return QUESTION
-	case m.try("!~"):
-		return REGEXNOTMATCH
-	case m.try("=~"):
-		return REGEXMATCH
 
 	case m.try("@"):
 		return PARAM
+	}
 
 	// keywords
-	case m.try("FOR"):
-		return FOR
-	case m.try("RETURN"):
-		return RETURN
-	case m.try("WAITFOR	"):
-		return WAITFOR
-	case m.try("OPTIONS"):
-		return OPTIONS
-	case m.try("TIMEOUT"):
-		return TIMEOUT
-	// distinct
-	case m.try("DISTINCT"):
-		return DISTINCT
-	// filter
-	case m.try("FILTER"):
-		return FILTER
-	// current
-	case m.try("CURRENT"):
-		return CURRENT
-	// sort
-	case m.try("SORT"):
-		return SORT
-	// limit
-	case m.try("LIMIT"):
-		return LIMIT
-		// let
-	case m.try("LET"):
-		return LET
-	// collect
-	case m.try("COLLECT"):
-		return COLLECT
-	// Asc
-	case m.try("ASC"):
-		return ASC
-	// desc
-	case m.try("DESC"):
-		return DESC
-	// none
-	case m.try("NONE"):
-		return NONE
-	// null
-	case m.try("NULL"):
-		return NULL
-		// use
-	case m.try("USE"):
-		return USE
-	// into
-	case m.try("INTO"):
-		return INTO
-	// keep
-	case m.try("KEEP"):
-		return KEEP
-	// WITH
-	case m.try("WITH"):
-		return WITH
-	// count
-	case m.try("COUNT"):
-		return COUNT
-	// all
-	case m.try("ALL"):
-		return ALL
-	// any
-	case m.try("ANY"):
-		return ANY
-		// aggregate
-	case m.try("AGGREGATE"):
-		return AGGREGATE
-
-	// event
-	case m.try("EVENT"):
-		return EVENT
-	// like
-	case m.try("LIKE"):
-		return LIKE
-	// not
-	case m.try("NOT"), m.try("!"):
-		return NOT
-	// in
-	case m.try("IN"):
-		return IN
-	// do
-	case m.try("DO"):
-		return DO
-	// while
-	case m.try("WHILE"):
-		return WHILE
-
+	key, err := m.tryAllKeywords()
+	if err == nil {
+		return key // keyword found
 	}
 
 	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
@@ -284,4 +201,18 @@ func (m *myLexer) try(what string) bool {
 	} else {
 		return false
 	}
+}
+
+// try all keywords, returning their code if found.
+func (m *myLexer) tryAllKeywords() (int, error) {
+
+	for i, k := range yyToknames {
+		// fmt.Printf("Trying %d %q\n", i, k)
+		if m.try(k) {
+			// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
+			return i + yyPrivate - 1, nil
+		}
+	}
+
+	return 0, fmt.Errorf("no keyword found")
 }

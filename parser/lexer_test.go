@@ -8,7 +8,7 @@ import (
 // compiler checks
 var _ yyLexer = new(myLexer)
 
-func ExampleParse_lexer() {
+func Example_lexer() {
 
 	dd := ` 
 	un deux22 // trois quatre
@@ -24,7 +24,6 @@ func ExampleParse_lexer() {
 	"string containing
 	// a comment"
 
-
 	`
 
 	lx := &myLexer{
@@ -36,11 +35,12 @@ func ExampleParse_lexer() {
 	for {
 		lval := new(yySymType)
 		tok := lx.Lex(lval)
+
+		//                TokenTypeAsString,  string value, number value
+		fmt.Printf("%s   %q  %d\n", TokenAsString(tok), lval.string, lval.int)
 		if tok == 0 {
 			break
 		}
-		//                TokenTypeAsString,  string value, number value
-		fmt.Printf("%s   %q  %d\n", TokenAsString(tok), lval.string, lval.int)
 	}
 
 	// Output:
@@ -58,5 +58,6 @@ func ExampleParse_lexer() {
 	// STRING   "dq with escaped \"\" "  0
 	// STRING   "sq with escape ' "  0
 	// STRING   "string containing\n\t// a comment"  0
+	// TOK-0   ""  0
 
 }

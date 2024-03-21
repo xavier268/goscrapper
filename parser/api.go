@@ -38,6 +38,6 @@ func TokenAsString(t int) string {
 	if idx < len(yyToknames) && idx >= 0 {
 		return yyToknames[idx]
 	} else {
-		return fmt.Sprintf("tok-%d", t)
+		return fmt.Sprintf("TOK-%d", t)
 	}
 }

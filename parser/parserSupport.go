@@ -92,8 +92,23 @@ func (m *myLexer) nextRes() {
 
 // set the value of a variable in the current set of output variables.
 func (m *myLexer) setVar(name string, value string, typ string) {
+	if slices.Contains(m.inparams, name+" "+typ) {
+		m.errorf("cannot set variable %s as it is an input parameter", name)
+		return
+	}
 	if !slices.Contains(m.outparams, name+" "+typ) {
 		m.outparams = append(m.outparams, name+" "+typ)
 	}
 	m.addLines(fmt.Sprintf("\t\t_res[len(_res)-1].%s = %s\n", name, value))
+}
+
+func (m *myLexer) getVar(name string) string {
+	if slices.Contains(m.inparams, name) {
+		return name
+	}
+	if slices.Contains(m.outparams, name) {
+		return name
+	}
+	m.errorf("variable %s is not yet defined", name)
+	return name
 }

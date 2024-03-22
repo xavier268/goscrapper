@@ -10,7 +10,7 @@ import (
 
 func TestParserVisual(t *testing.T) {
 
-	err := parser.ParseFiles("e2epack", "test1.sc")
+	err := parser.ParseFiles("e2epack", "test1.sc", "arith.sc")
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()

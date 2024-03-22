@@ -14,9 +14,8 @@ func TestParserVisual(t *testing.T) {
 
 	input := `
 	HEADLESS
-	DOCUMENT "http://www.google.fr"
+	PAGE "http://www.google.fr"
 	SELECT "input[name=q]"	
-	SELECT "input[name=btnK]"	 
 	CLICK "input[name=btnK]"
 	RETURN "input[name=btnK]"
 	`

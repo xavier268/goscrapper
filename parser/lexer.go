@@ -10,6 +10,7 @@ import (
 )
 
 type myLexer struct {
+	name string    // name of the lexer
 	data []byte    // entire data to be lexed
 	pos  int       // next position to process
 	w    io.Writer // where are error messages written to ?
@@ -27,6 +28,7 @@ type yySymType struct {
 
 // Error implements yyLexer.
 func (m *myLexer) Error(e string) {
+	fmt.Fprintf(m.w, "%sError in %s :%s\n", ColRED, m.name, RESET)
 	bef := max(0, m.pos-20)
 	after := min(len(m.data), m.pos+20)
 	fmt.Fprint(m.w, string(m.data[bef:m.pos]))
@@ -170,9 +172,8 @@ startLoop:
 		return ASSIGN
 	case m.try("?"):
 		return QUESTION
-
 	case m.try("@"):
-		return PARAM
+		return AT
 	}
 
 	// keywords

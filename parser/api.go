@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -18,14 +17,18 @@ import (
 
 // Parse from in and write production on out.
 func Parse(out io.Writer, in io.Reader) error {
+	return parse(out, in, "")
+}
+
+func parse(out io.Writer, in io.Reader, name string) error {
 
 	var err error
-	var bb = new(bytes.Buffer) // collect out (errors) from lex.Error()
 
 	lex := &myLexer{
 		data: []byte{},
 		pos:  0,
-		w:    bb,
+		w:    out,
+		name: name,
 	}
 	lex.data, err = io.ReadAll(in)
 	if err != nil {
@@ -33,7 +36,7 @@ func Parse(out io.Writer, in io.Reader) error {
 	}
 
 	if yyParse(lex) != 0 {
-		return fmt.Errorf(bb.String())
+		return fmt.Errorf("parsing error")
 	}
 	return nil
 }
@@ -59,7 +62,7 @@ func ParseFiles(outDir string, inFiles ...string) error {
 			panic(err)
 		}
 		defer in.Close()
-		if err := Parse(out, in); err != nil {
+		if err := parse(out, in, base); err != nil {
 			return err
 		}
 		out.Close()

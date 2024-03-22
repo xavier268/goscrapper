@@ -1,3 +1,4 @@
+// top level package, not much at this level.
 package goscrapper
 
 import (

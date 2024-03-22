@@ -1,4 +1,4 @@
-// Command line for generator
+// command line application
 package main
 
 import (

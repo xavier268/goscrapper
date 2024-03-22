@@ -1,4 +1,4 @@
-package generator
+package goscrapper
 
 import (
 	"regexp"
@@ -6,27 +6,14 @@ import (
 )
 
 const (
-	VERSION   = "0.1.2"
+	VERSION   = "0.2.0"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
-	SCHEMA    = 1 // required schema in configuration files
-
-	// Debugging levels
-	LEVEL_SILENT  = 0 // No output
-	LEVEL_INFO    = 1 // only critical output
-	LEVEL_VERBOSE = 2 // Verbose output for end user
-	LEVEL_DEBUG   = 3 // Debugging data
 )
 
 // build time variables - will be substituted at build time.
 var (
 	GITHASH   string = "n/a"
 	BUILDDATE string = "n/a"
-)
-
-// runtime variables (from flags or test configuration)
-var (
-	// debugging level during generation process
-	DEBUG int = LEVEL_DEBUG
 )
 
 // Parse the version into its components.

@@ -196,7 +196,7 @@ func (m *myLexer) tryAllKeywords() (int, error) {
 
 	for i, k := range yyToknames {
 		// fmt.Printf("Trying %d %q\n", i, k)
-		if m.try(k) || m.try(strings.ToLower(k)) { // recognize upper OR lower case keywords
+		if m.try(k) { // Keywords are always upperCase
 			// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
 			return i + yyPrivate - 1, nil
 		}

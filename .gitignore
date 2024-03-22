@@ -26,8 +26,7 @@ go.work
 /.task
 
 # application dir
-/MyApp
-/Myapp
-**/MyApp
-**/Myapp
+/autoscrapper
+/autoscrapper/**/*
+
 

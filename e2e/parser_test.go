@@ -16,12 +16,12 @@ func TestParserVisual(t *testing.T) {
 	HEADLESS
 	DOCUMENT "http://www.google.fr"
 	SELECT "input[name=q]"	
-	select "input[name=btnK]"	 // <== Keywords are alse recognized in full lowercase (no mixed case !!)
+	SELECT "input[name=btnK]"	 
 	CLICK "input[name=btnK]"
 	RETURN "input[name=btnK]"
 	`
 
-	err := parser.Parse(strings.NewReader(input), os.Stdout)
+	err := parser.Parse(os.Stdout, strings.NewReader(input))
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()

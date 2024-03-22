@@ -42,17 +42,12 @@ tasks:
       - ./**/*go
     cmds:
       - go mod tidy
-      - go build -o bin/cli-{{.VERSION}}{{.EXE}} -ldflags "-X 'github.com/xavier268/goscrapper/generator.BUILDDATE={{.DATE}}' -X 'github.com/xavier268/goscrapper/generator.GITHASH=$(git rev-parse HEAD)'" ./cli
+      - go build -o bin/cli-{{.VERSION}}{{.EXE}} -ldflags "-X 'github.com/xavier268/goscrapper.BUILDDATE={{.DATE}}' -X 'github.com/xavier268/goscrapper.GITHASH=$(git rev-parse HEAD)'" ./cli
 
   test:
     desc: run all generator tests
-    deps: [generate , build]
-    sources: 
-      - ./**/*.yml
-      - ./**/*.yaml
+    deps: [build]
     cmds:
-      - go test ./generator # unit tests
-      - go run ./cli testfiles/test1.yml testfiles/test2.yml # end-to-end test
       - go test ./parser # unit tests
       - go test ./e2e # end-to-end tests
 
@@ -65,16 +60,18 @@ tasks:
   clean-linux:
     internal: true
     platforms: [linux]
-    cmds:
-      - rm -rf bin/
+    ignore_error: true # ignore error if not found
+    cmds:    
+      - rm -rf autoscrapper/
       - rm -rf .task/
       - rm parser/y.output
 
   clean-windows:
     internal: true
     platforms: [windows]
-    cmds:
-      - Powershell Remove-Item bin -Recurse
+    ignore_error: true # ignore error if not found
+    cmds:    
+      - Powershell Remove-Item autoscrapper -Recurse
       - Powershell Remove-Item .task -Recurse 
       - Powershell Remove-Item parser/y.output
 

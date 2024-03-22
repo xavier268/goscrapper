@@ -5,6 +5,6 @@ package parser
 //go:generate goyacc -o parser.go grammar.y
 
 func init() {
-	// set debugging level to max
-	yyDebug = 3
+	// set debugging
+	yyDebug = 1
 }

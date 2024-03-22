@@ -65,6 +65,7 @@ tasks:
       - rm -rf autoscrapper/
       - rm -rf .task/
       - rm parser/y.output
+      - rm -rf e2e/e2epack/
 
   clean-windows:
     internal: true
@@ -74,6 +75,7 @@ tasks:
       - Powershell Remove-Item autoscrapper -Recurse
       - Powershell Remove-Item .task -Recurse 
       - Powershell Remove-Item parser/y.output
+      - Powershell Remove-Item e2e/e2epack -Recurse
 
   generate:
     desc: generate all files

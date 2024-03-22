@@ -3,8 +3,6 @@ package e2e
 
 import (
 	"fmt"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/xavier268/goscrapper/parser"
@@ -12,15 +10,7 @@ import (
 
 func TestParserVisual(t *testing.T) {
 
-	input := `
-	HEADLESS
-	PAGE "http://www.google.fr"
-	SELECT "input[name=q]"	
-	CLICK "input[name=btnK]"
-	RETURN "input[name=btnK]"
-	`
-
-	err := parser.Parse(os.Stdout, strings.NewReader(input))
+	err := parser.ParseFiles("e2epack", "test1.sc")
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()

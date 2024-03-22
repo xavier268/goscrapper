@@ -37,27 +37,26 @@ func Example_lexer() {
 		tok := lx.Lex(lval)
 
 		//                TokenTypeAsString,  string value, number value
-		fmt.Printf("%s   %q  %d\n", TokenAsString(tok), lval.string, lval.int)
+		fmt.Printf("%s   %s\n", TokenAsString(tok), lval.value)
 		if tok == 0 {
 			break
 		}
 	}
 
 	// Output:
-	// IDENTIFIER   "un"  0
-	// IDENTIFIER   "deux22"  0
-	// NUMBER   ""  1
-	// NUMBER   ""  2
-	// IDENTIFIER   "cinq"  0
-	// MINUSMINUS   ""  0
-	// NUMBER   ""  555
-	// DOTDOT   ""  0
-	// DOT   ""  0
-	// STRING   "a dq string\n\taccross the line "  0
-	// STRING   "a sq string"  0
-	// STRING   "dq with escaped \"\" "  0
-	// STRING   "sq with escape ' "  0
-	// STRING   "string containing\n\t// a comment"  0
-	// TOK-0   ""  0
-
+	// IDENTIFIER   un
+	// IDENTIFIER   deux22
+	// NUMBER   1
+	// NUMBER   2
+	// IDENTIFIER   cinq
+	// MINUSMINUS   --
+	// NUMBER   0555
+	// DOTDOT   ..
+	// DOT   .
+	// STRING   "a dq string\n\taccross the line "
+	// STRING   "a sq string"
+	// STRING   "dq with escaped \"\" "
+	// STRING   "sq with escape ' "
+	// STRING   "string containing\n\t// a comment"
+	// TOK-0
 }

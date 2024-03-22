@@ -1,15 +1,9 @@
 %{
     package parser
 
-    import (
-       // runtime used by scrapper
-        _ "github.com/xavier268/goscrapper/rt"
-        )
 
-   
-	
-    // Déclaration d'une interface pour gérer les différents types de noeuds de l'AST
-    type Expr interface {}
+
+
 
 %}
 
@@ -50,9 +44,10 @@
 
 /* NB : preferer recursivité gauche plus facile à implémenter et respecte associativité */
 
+
 program
-    : head body
-    | body
+    : head body { yylex.(*myLexer).finalize() }
+    | body      { yylex.(*myLexer).finalize() }
     ;
 
 
@@ -63,13 +58,17 @@ head
     ;
 
 options
-    : HEADLESS
-    | IGNORE stringList
+    : IGNORE stringList { 
+                            yylex.(*myLexer).addLines( "rt.Ignore(" + $2.value + ")")
+                        }
+    | AT IDENTIFIER  IDENTIFIER { // @ paramName paramType
+                            yylex.(*myLexer).setParam ($2.value,$3.value)
+                        }
     ;
 
 stringList
-    : STRING
-    | stringList COMMA STRING
+    : STRING                    { $$.value =  $1.value }
+    | stringList COMMA STRING   { $$.value = $1.value +  "," + $3.value}
     ;
 
 // program body contains statements, followed by either RETURN or 

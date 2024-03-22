@@ -4,8 +4,8 @@ state 0
 
 	FOR  shift 11
 	RETURN  shift 10
-	IGNORE  shift 8
-	HEADLESS  shift 7
+	IGNORE  shift 7
+	AT  shift 8
 	IDENTIFIER  shift 12
 	SELECT  shift 14
 	CLICK  shift 15
@@ -33,8 +33,8 @@ state 2
 
 	FOR  shift 11
 	RETURN  shift 10
-	IGNORE  shift 8
-	HEADLESS  shift 7
+	IGNORE  shift 7
+	AT  shift 8
 	IDENTIFIER  shift 12
 	SELECT  shift 14
 	CLICK  shift 15
@@ -50,13 +50,13 @@ state 2
 state 3
 	program:  body.    (2)
 
-	.  reduce 2 (src line 55)
+	.  reduce 2 (src line 50)
 
 
 state 4
 	head:  options.    (4)
 
-	.  reduce 4 (src line 62)
+	.  reduce 4 (src line 57)
 
 
 state 5
@@ -77,16 +77,10 @@ state 5
 state 6
 	body:  returnExpression.    (10)
 
-	.  reduce 10 (src line 79)
+	.  reduce 10 (src line 78)
 
 
 state 7
-	options:  HEADLESS.    (5)
-
-	.  reduce 5 (src line 65)
-
-
-state 8
 	options:  IGNORE.stringList 
 
 	STRING  shift 21
@@ -94,761 +88,781 @@ state 8
 
 	stringList  goto 20
 
+state 8
+	options:  AT.IDENTIFIER IDENTIFIER 
+
+	IDENTIFIER  shift 22
+	.  error
+
+
 state 9
 	statements:  statement.    (11)
 
-	.  reduce 11 (src line 82)
+	.  reduce 11 (src line 81)
 
 
 state 10
 	returnExpression:  RETURN.expression 
 
-	MINUS  shift 30
-	LPAREN  shift 28
-	NOT  shift 32
-	BOOL  shift 35
-	IDENTIFIER  shift 26
-	STRING  shift 33
-	NUMBER  shift 34
+	MINUS  shift 31
+	LPAREN  shift 29
+	NOT  shift 33
+	BOOL  shift 36
+	IDENTIFIER  shift 27
+	STRING  shift 34
+	NUMBER  shift 35
 	.  error
 
-	expression  goto 22
-	stringExpression  goto 23
-	numExpression  goto 24
-	boolExpression  goto 25
-	string  goto 27
-	number  goto 29
-	bool  goto 31
+	expression  goto 23
+	stringExpression  goto 24
+	numExpression  goto 25
+	boolExpression  goto 26
+	string  goto 28
+	number  goto 30
+	bool  goto 32
 
 state 11
 	returnExpression:  FOR.IDENTIFIER IN stringExpression body 
 
-	IDENTIFIER  shift 36
+	IDENTIFIER  shift 37
 	.  error
 
 
 state 12
 	statement:  IDENTIFIER.ASSIGN expression 
 
-	ASSIGN  shift 37
+	ASSIGN  shift 38
 	.  error
 
 
 state 13
 	statement:  PAGE.stringExpression 
 
-	LPAREN  shift 39
-	STRING  shift 33
+	LPAREN  shift 40
+	STRING  shift 34
 	.  error
 
-	stringExpression  goto 38
-	string  goto 27
+	stringExpression  goto 39
+	string  goto 28
 
 state 14
 	statement:  SELECT.stringExpression 
 
-	LPAREN  shift 39
-	STRING  shift 33
+	LPAREN  shift 40
+	STRING  shift 34
 	.  error
 
-	stringExpression  goto 40
-	string  goto 27
+	stringExpression  goto 41
+	string  goto 28
 
 state 15
 	statement:  CLICK.stringExpression 
 
-	LPAREN  shift 39
-	STRING  shift 33
+	LPAREN  shift 40
+	STRING  shift 34
 	.  error
 
-	stringExpression  goto 41
-	string  goto 27
+	stringExpression  goto 42
+	string  goto 28
 
 state 16
 	program:  head body.    (1)
 
-	.  reduce 1 (src line 53)
+	.  reduce 1 (src line 48)
 
 
 state 17
 	head:  head options.    (3)
 
-	.  reduce 3 (src line 60)
+	.  reduce 3 (src line 55)
 
 
 state 18
 	body:  statements returnExpression.    (9)
 
-	.  reduce 9 (src line 77)
+	.  reduce 9 (src line 76)
 
 
 state 19
 	statements:  statements statement.    (12)
 
-	.  reduce 12 (src line 84)
+	.  reduce 12 (src line 83)
 
 
 state 20
-	options:  IGNORE stringList.    (6)
+	options:  IGNORE stringList.    (5)
 	stringList:  stringList.COMMA STRING 
 
-	COMMA  shift 42
-	.  reduce 6 (src line 67)
+	COMMA  shift 43
+	.  reduce 5 (src line 60)
 
 
 state 21
 	stringList:  STRING.    (7)
 
-	.  reduce 7 (src line 70)
+	.  reduce 7 (src line 69)
 
 
 state 22
-	returnExpression:  RETURN expression.    (17)
+	options:  AT IDENTIFIER.IDENTIFIER 
 
-	.  reduce 17 (src line 94)
+	IDENTIFIER  shift 44
+	.  error
 
 
 state 23
+	returnExpression:  RETURN expression.    (17)
+
+	.  reduce 17 (src line 93)
+
+
+state 24
 	expression:  stringExpression.    (19)
 	stringExpression:  stringExpression.opeString2String string 
 	boolExpression:  stringExpression.opeCompareString2Bool stringExpression 
 
-	PLUS  shift 45
-	LTE  shift 49
-	GTE  shift 47
-	LT  shift 48
-	GT  shift 46
-	EQ  shift 50
-	NEQ  shift 51
-	CONTAINS  shift 52
-	.  reduce 19 (src line 102)
+	PLUS  shift 47
+	LTE  shift 51
+	GTE  shift 49
+	LT  shift 50
+	GT  shift 48
+	EQ  shift 52
+	NEQ  shift 53
+	CONTAINS  shift 54
+	.  reduce 19 (src line 101)
 
-	opeString2String  goto 43
-	opeCompareString2Bool  goto 44
+	opeString2String  goto 45
+	opeCompareString2Bool  goto 46
 
-state 24
+state 25
 	expression:  numExpression.    (20)
 	numExpression:  numExpression.opeNum2Num number 
 	numExpression:  numExpression.MINUS numExpression 
 	boolExpression:  numExpression.opeCompareNum2Bool numExpression 
 
-	MULTI  shift 58
-	DIV  shift 57
-	MOD  shift 59
-	PLUS  shift 56
-	MINUS  shift 54
-	LTE  shift 63
-	GTE  shift 61
-	LT  shift 62
-	GT  shift 60
-	EQ  shift 64
-	NEQ  shift 65
-	.  reduce 20 (src line 104)
+	MULTI  shift 60
+	DIV  shift 59
+	MOD  shift 61
+	PLUS  shift 58
+	MINUS  shift 56
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	.  reduce 20 (src line 103)
 
-	opeNum2Num  goto 53
-	opeCompareNum2Bool  goto 55
+	opeNum2Num  goto 55
+	opeCompareNum2Bool  goto 57
 
-state 25
+state 26
 	expression:  boolExpression.    (21)
 	boolExpression:  boolExpression.opeBool2Bool bool 
 
-	AND  shift 67
-	OR  shift 68
-	XOR  shift 69
-	.  reduce 21 (src line 105)
+	AND  shift 69
+	OR  shift 70
+	XOR  shift 71
+	.  reduce 21 (src line 104)
 
-	opeBool2Bool  goto 66
-
-state 26
-	expression:  IDENTIFIER.    (22)
-
-	.  reduce 22 (src line 106)
-
+	opeBool2Bool  goto 68
 
 state 27
-	stringExpression:  string.    (23)
+	expression:  IDENTIFIER.    (22)
 
-	.  reduce 23 (src line 109)
+	.  reduce 22 (src line 105)
 
 
 state 28
+	stringExpression:  string.    (23)
+
+	.  reduce 23 (src line 108)
+
+
+state 29
 	stringExpression:  LPAREN.stringExpression RPAREN 
 	numExpression:  LPAREN.numExpression RPAREN 
 	boolExpression:  LPAREN.boolExpression RPAREN 
 
-	MINUS  shift 30
-	LPAREN  shift 28
-	NOT  shift 32
-	BOOL  shift 35
-	STRING  shift 33
-	NUMBER  shift 34
+	MINUS  shift 31
+	LPAREN  shift 29
+	NOT  shift 33
+	BOOL  shift 36
+	STRING  shift 34
+	NUMBER  shift 35
 	.  error
 
-	stringExpression  goto 70
-	numExpression  goto 71
-	boolExpression  goto 72
-	string  goto 27
-	number  goto 29
-	bool  goto 31
-
-state 29
-	numExpression:  number.    (27)
-
-	.  reduce 27 (src line 119)
-
+	stringExpression  goto 72
+	numExpression  goto 73
+	boolExpression  goto 74
+	string  goto 28
+	number  goto 30
+	bool  goto 32
 
 state 30
-	numExpression:  MINUS.numExpression 
+	numExpression:  number.    (27)
 
-	MINUS  shift 30
-	LPAREN  shift 74
-	NUMBER  shift 34
-	.  error
+	.  reduce 27 (src line 118)
 
-	numExpression  goto 73
-	number  goto 29
 
 state 31
-	boolExpression:  bool.    (33)
+	numExpression:  MINUS.numExpression 
 
-	.  reduce 33 (src line 131)
-
-
-state 32
-	boolExpression:  NOT.boolExpression 
-
-	MINUS  shift 30
-	LPAREN  shift 28
-	NOT  shift 32
-	BOOL  shift 35
-	STRING  shift 33
-	NUMBER  shift 34
+	MINUS  shift 31
+	LPAREN  shift 76
+	NUMBER  shift 35
 	.  error
 
-	stringExpression  goto 76
-	numExpression  goto 77
-	boolExpression  goto 75
-	string  goto 27
-	number  goto 29
-	bool  goto 31
+	numExpression  goto 75
+	number  goto 30
+
+state 32
+	boolExpression:  bool.    (33)
+
+	.  reduce 33 (src line 130)
+
 
 state 33
-	string:  STRING.    (26)
+	boolExpression:  NOT.boolExpression 
 
-	.  reduce 26 (src line 115)
+	MINUS  shift 31
+	LPAREN  shift 29
+	NOT  shift 33
+	BOOL  shift 36
+	STRING  shift 34
+	NUMBER  shift 35
+	.  error
 
+	stringExpression  goto 78
+	numExpression  goto 79
+	boolExpression  goto 77
+	string  goto 28
+	number  goto 30
+	bool  goto 32
 
 state 34
-	number:  NUMBER.    (32)
+	string:  STRING.    (26)
 
-	.  reduce 32 (src line 127)
+	.  reduce 26 (src line 114)
 
 
 state 35
-	bool:  BOOL.    (39)
+	number:  NUMBER.    (32)
 
-	.  reduce 39 (src line 140)
+	.  reduce 32 (src line 126)
 
 
 state 36
-	returnExpression:  FOR IDENTIFIER.IN stringExpression body 
+	bool:  BOOL.    (39)
 
-	IN  shift 78
-	.  error
+	.  reduce 39 (src line 139)
 
 
 state 37
-	statement:  IDENTIFIER ASSIGN.expression 
+	returnExpression:  FOR IDENTIFIER.IN stringExpression body 
 
-	MINUS  shift 30
-	LPAREN  shift 28
-	NOT  shift 32
-	BOOL  shift 35
-	IDENTIFIER  shift 26
-	STRING  shift 33
-	NUMBER  shift 34
+	IN  shift 80
 	.  error
 
-	expression  goto 79
-	stringExpression  goto 23
-	numExpression  goto 24
-	boolExpression  goto 25
-	string  goto 27
-	number  goto 29
-	bool  goto 31
 
 state 38
+	statement:  IDENTIFIER ASSIGN.expression 
+
+	MINUS  shift 31
+	LPAREN  shift 29
+	NOT  shift 33
+	BOOL  shift 36
+	IDENTIFIER  shift 27
+	STRING  shift 34
+	NUMBER  shift 35
+	.  error
+
+	expression  goto 81
+	stringExpression  goto 24
+	numExpression  goto 25
+	boolExpression  goto 26
+	string  goto 28
+	number  goto 30
+	bool  goto 32
+
+state 39
 	statement:  PAGE stringExpression.    (14)
 	stringExpression:  stringExpression.opeString2String string 
 
-	PLUS  shift 45
-	.  reduce 14 (src line 89)
+	PLUS  shift 47
+	.  reduce 14 (src line 88)
 
-	opeString2String  goto 43
-
-state 39
-	stringExpression:  LPAREN.stringExpression RPAREN 
-
-	LPAREN  shift 39
-	STRING  shift 33
-	.  error
-
-	stringExpression  goto 80
-	string  goto 27
+	opeString2String  goto 45
 
 state 40
+	stringExpression:  LPAREN.stringExpression RPAREN 
+
+	LPAREN  shift 40
+	STRING  shift 34
+	.  error
+
+	stringExpression  goto 82
+	string  goto 28
+
+state 41
 	statement:  SELECT stringExpression.    (15)
 	stringExpression:  stringExpression.opeString2String string 
 
-	PLUS  shift 45
-	.  reduce 15 (src line 90)
+	PLUS  shift 47
+	.  reduce 15 (src line 89)
 
-	opeString2String  goto 43
+	opeString2String  goto 45
 
-state 41
+state 42
 	statement:  CLICK stringExpression.    (16)
 	stringExpression:  stringExpression.opeString2String string 
 
-	PLUS  shift 45
-	.  reduce 16 (src line 91)
+	PLUS  shift 47
+	.  reduce 16 (src line 90)
 
-	opeString2String  goto 43
-
-state 42
-	stringList:  stringList COMMA.STRING 
-
-	STRING  shift 81
-	.  error
-
+	opeString2String  goto 45
 
 state 43
-	stringExpression:  stringExpression opeString2String.string 
+	stringList:  stringList COMMA.STRING 
 
-	STRING  shift 33
+	STRING  shift 83
 	.  error
 
-	string  goto 82
 
 state 44
-	boolExpression:  stringExpression opeCompareString2Bool.stringExpression 
+	options:  AT IDENTIFIER IDENTIFIER.    (6)
 
-	LPAREN  shift 39
-	STRING  shift 33
-	.  error
+	.  reduce 6 (src line 64)
 
-	stringExpression  goto 83
-	string  goto 27
 
 state 45
-	opeString2String:  PLUS.    (47)
+	stringExpression:  stringExpression opeString2String.string 
 
-	.  reduce 47 (src line 158)
+	STRING  shift 34
+	.  error
 
+	string  goto 84
 
 state 46
-	opeCompareString2Bool:  GT.    (54)
+	boolExpression:  stringExpression opeCompareString2Bool.stringExpression 
 
-	.  reduce 54 (src line 171)
+	LPAREN  shift 40
+	STRING  shift 34
+	.  error
 
+	stringExpression  goto 85
+	string  goto 28
 
 state 47
-	opeCompareString2Bool:  GTE.    (55)
+	opeString2String:  PLUS.    (47)
 
-	.  reduce 55 (src line 173)
+	.  reduce 47 (src line 157)
 
 
 state 48
-	opeCompareString2Bool:  LT.    (56)
+	opeCompareString2Bool:  GT.    (54)
 
-	.  reduce 56 (src line 174)
+	.  reduce 54 (src line 170)
 
 
 state 49
-	opeCompareString2Bool:  LTE.    (57)
+	opeCompareString2Bool:  GTE.    (55)
 
-	.  reduce 57 (src line 175)
+	.  reduce 55 (src line 172)
 
 
 state 50
-	opeCompareString2Bool:  EQ.    (58)
+	opeCompareString2Bool:  LT.    (56)
 
-	.  reduce 58 (src line 176)
+	.  reduce 56 (src line 173)
 
 
 state 51
-	opeCompareString2Bool:  NEQ.    (59)
+	opeCompareString2Bool:  LTE.    (57)
 
-	.  reduce 59 (src line 177)
+	.  reduce 57 (src line 174)
 
 
 state 52
-	opeCompareString2Bool:  CONTAINS.    (60)
+	opeCompareString2Bool:  EQ.    (58)
 
-	.  reduce 60 (src line 178)
+	.  reduce 58 (src line 175)
 
 
 state 53
-	numExpression:  numExpression opeNum2Num.number 
+	opeCompareString2Bool:  NEQ.    (59)
 
-	NUMBER  shift 34
-	.  error
+	.  reduce 59 (src line 176)
 
-	number  goto 84
 
 state 54
-	numExpression:  numExpression MINUS.numExpression 
+	opeCompareString2Bool:  CONTAINS.    (60)
 
-	MINUS  shift 30
-	LPAREN  shift 74
-	NUMBER  shift 34
-	.  error
+	.  reduce 60 (src line 177)
 
-	numExpression  goto 85
-	number  goto 29
 
 state 55
-	boolExpression:  numExpression opeCompareNum2Bool.numExpression 
+	numExpression:  numExpression opeNum2Num.number 
 
-	MINUS  shift 30
-	LPAREN  shift 74
-	NUMBER  shift 34
+	NUMBER  shift 35
 	.  error
 
-	numExpression  goto 86
-	number  goto 29
+	number  goto 86
 
 state 56
-	opeNum2Num:  PLUS.    (43)
+	numExpression:  numExpression MINUS.numExpression 
 
-	.  reduce 43 (src line 150)
+	MINUS  shift 31
+	LPAREN  shift 76
+	NUMBER  shift 35
+	.  error
 
+	numExpression  goto 87
+	number  goto 30
 
 state 57
-	opeNum2Num:  DIV.    (44)
+	boolExpression:  numExpression opeCompareNum2Bool.numExpression 
 
-	.  reduce 44 (src line 152)
+	MINUS  shift 31
+	LPAREN  shift 76
+	NUMBER  shift 35
+	.  error
 
+	numExpression  goto 88
+	number  goto 30
 
 state 58
-	opeNum2Num:  MULTI.    (45)
+	opeNum2Num:  PLUS.    (43)
 
-	.  reduce 45 (src line 153)
+	.  reduce 43 (src line 149)
 
 
 state 59
-	opeNum2Num:  MOD.    (46)
+	opeNum2Num:  DIV.    (44)
 
-	.  reduce 46 (src line 154)
+	.  reduce 44 (src line 151)
 
 
 state 60
-	opeCompareNum2Bool:  GT.    (48)
+	opeNum2Num:  MULTI.    (45)
 
-	.  reduce 48 (src line 162)
+	.  reduce 45 (src line 152)
 
 
 state 61
-	opeCompareNum2Bool:  GTE.    (49)
+	opeNum2Num:  MOD.    (46)
 
-	.  reduce 49 (src line 164)
+	.  reduce 46 (src line 153)
 
 
 state 62
-	opeCompareNum2Bool:  LT.    (50)
+	opeCompareNum2Bool:  GT.    (48)
 
-	.  reduce 50 (src line 165)
+	.  reduce 48 (src line 161)
 
 
 state 63
-	opeCompareNum2Bool:  LTE.    (51)
+	opeCompareNum2Bool:  GTE.    (49)
 
-	.  reduce 51 (src line 166)
+	.  reduce 49 (src line 163)
 
 
 state 64
-	opeCompareNum2Bool:  EQ.    (52)
+	opeCompareNum2Bool:  LT.    (50)
 
-	.  reduce 52 (src line 167)
+	.  reduce 50 (src line 164)
 
 
 state 65
-	opeCompareNum2Bool:  NEQ.    (53)
+	opeCompareNum2Bool:  LTE.    (51)
 
-	.  reduce 53 (src line 168)
+	.  reduce 51 (src line 165)
 
 
 state 66
-	boolExpression:  boolExpression opeBool2Bool.bool 
+	opeCompareNum2Bool:  EQ.    (52)
 
-	BOOL  shift 35
-	.  error
+	.  reduce 52 (src line 166)
 
-	bool  goto 87
 
 state 67
-	opeBool2Bool:  AND.    (40)
+	opeCompareNum2Bool:  NEQ.    (53)
 
-	.  reduce 40 (src line 144)
+	.  reduce 53 (src line 167)
 
 
 state 68
-	opeBool2Bool:  OR.    (41)
+	boolExpression:  boolExpression opeBool2Bool.bool 
 
-	.  reduce 41 (src line 146)
+	BOOL  shift 36
+	.  error
 
+	bool  goto 89
 
 state 69
-	opeBool2Bool:  XOR.    (42)
+	opeBool2Bool:  AND.    (40)
 
-	.  reduce 42 (src line 147)
+	.  reduce 40 (src line 143)
 
 
 state 70
+	opeBool2Bool:  OR.    (41)
+
+	.  reduce 41 (src line 145)
+
+
+state 71
+	opeBool2Bool:  XOR.    (42)
+
+	.  reduce 42 (src line 146)
+
+
+state 72
 	stringExpression:  stringExpression.opeString2String string 
 	stringExpression:  LPAREN stringExpression.RPAREN 
 	boolExpression:  stringExpression.opeCompareString2Bool stringExpression 
 
-	PLUS  shift 45
-	LTE  shift 49
-	GTE  shift 47
-	LT  shift 48
-	GT  shift 46
-	EQ  shift 50
-	NEQ  shift 51
-	RPAREN  shift 88
-	CONTAINS  shift 52
-	.  error
-
-	opeString2String  goto 43
-	opeCompareString2Bool  goto 44
-
-state 71
-	numExpression:  numExpression.opeNum2Num number 
-	numExpression:  numExpression.MINUS numExpression 
-	numExpression:  LPAREN numExpression.RPAREN 
-	boolExpression:  numExpression.opeCompareNum2Bool numExpression 
-
-	MULTI  shift 58
-	DIV  shift 57
-	MOD  shift 59
-	PLUS  shift 56
-	MINUS  shift 54
-	LTE  shift 63
-	GTE  shift 61
-	LT  shift 62
-	GT  shift 60
-	EQ  shift 64
-	NEQ  shift 65
-	RPAREN  shift 89
-	.  error
-
-	opeNum2Num  goto 53
-	opeCompareNum2Bool  goto 55
-
-state 72
-	boolExpression:  boolExpression.opeBool2Bool bool 
-	boolExpression:  LPAREN boolExpression.RPAREN 
-
+	PLUS  shift 47
+	LTE  shift 51
+	GTE  shift 49
+	LT  shift 50
+	GT  shift 48
+	EQ  shift 52
+	NEQ  shift 53
 	RPAREN  shift 90
-	AND  shift 67
-	OR  shift 68
-	XOR  shift 69
+	CONTAINS  shift 54
 	.  error
 
-	opeBool2Bool  goto 66
+	opeString2String  goto 45
+	opeCompareString2Bool  goto 46
 
 state 73
 	numExpression:  numExpression.opeNum2Num number 
 	numExpression:  numExpression.MINUS numExpression 
-	numExpression:  MINUS numExpression.    (30)
+	numExpression:  LPAREN numExpression.RPAREN 
+	boolExpression:  numExpression.opeCompareNum2Bool numExpression 
 
-	MULTI  shift 58
-	DIV  shift 57
-	MOD  shift 59
-	.  reduce 30 (src line 123)
-
-	opeNum2Num  goto 53
-
-state 74
-	numExpression:  LPAREN.numExpression RPAREN 
-
-	MINUS  shift 30
-	LPAREN  shift 74
-	NUMBER  shift 34
+	MULTI  shift 60
+	DIV  shift 59
+	MOD  shift 61
+	PLUS  shift 58
+	MINUS  shift 56
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	RPAREN  shift 91
 	.  error
 
-	numExpression  goto 91
-	number  goto 29
+	opeNum2Num  goto 55
+	opeCompareNum2Bool  goto 57
+
+state 74
+	boolExpression:  boolExpression.opeBool2Bool bool 
+	boolExpression:  LPAREN boolExpression.RPAREN 
+
+	RPAREN  shift 92
+	AND  shift 69
+	OR  shift 70
+	XOR  shift 71
+	.  error
+
+	opeBool2Bool  goto 68
 
 state 75
+	numExpression:  numExpression.opeNum2Num number 
+	numExpression:  numExpression.MINUS numExpression 
+	numExpression:  MINUS numExpression.    (30)
+
+	MULTI  shift 60
+	DIV  shift 59
+	MOD  shift 61
+	.  reduce 30 (src line 122)
+
+	opeNum2Num  goto 55
+
+state 76
+	numExpression:  LPAREN.numExpression RPAREN 
+
+	MINUS  shift 31
+	LPAREN  shift 76
+	NUMBER  shift 35
+	.  error
+
+	numExpression  goto 93
+	number  goto 30
+
+state 77
 	boolExpression:  boolExpression.opeBool2Bool bool 
 	boolExpression:  NOT boolExpression.    (35)
 
-	.  reduce 35 (src line 134)
+	.  reduce 35 (src line 133)
 
-	opeBool2Bool  goto 66
+	opeBool2Bool  goto 68
 
-state 76
+state 78
 	stringExpression:  stringExpression.opeString2String string 
 	boolExpression:  stringExpression.opeCompareString2Bool stringExpression 
 
-	PLUS  shift 45
-	LTE  shift 49
-	GTE  shift 47
-	LT  shift 48
-	GT  shift 46
-	EQ  shift 50
-	NEQ  shift 51
-	CONTAINS  shift 52
+	PLUS  shift 47
+	LTE  shift 51
+	GTE  shift 49
+	LT  shift 50
+	GT  shift 48
+	EQ  shift 52
+	NEQ  shift 53
+	CONTAINS  shift 54
 	.  error
 
-	opeString2String  goto 43
-	opeCompareString2Bool  goto 44
+	opeString2String  goto 45
+	opeCompareString2Bool  goto 46
 
-state 77
+state 79
 	numExpression:  numExpression.opeNum2Num number 
 	numExpression:  numExpression.MINUS numExpression 
 	boolExpression:  numExpression.opeCompareNum2Bool numExpression 
 
-	MULTI  shift 58
-	DIV  shift 57
-	MOD  shift 59
-	PLUS  shift 56
-	MINUS  shift 54
-	LTE  shift 63
-	GTE  shift 61
-	LT  shift 62
-	GT  shift 60
-	EQ  shift 64
-	NEQ  shift 65
+	MULTI  shift 60
+	DIV  shift 59
+	MOD  shift 61
+	PLUS  shift 58
+	MINUS  shift 56
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
 	.  error
 
-	opeNum2Num  goto 53
-	opeCompareNum2Bool  goto 55
-
-state 78
-	returnExpression:  FOR IDENTIFIER IN.stringExpression body 
-
-	LPAREN  shift 39
-	STRING  shift 33
-	.  error
-
-	stringExpression  goto 92
-	string  goto 27
-
-state 79
-	statement:  IDENTIFIER ASSIGN expression.    (13)
-
-	.  reduce 13 (src line 87)
-
+	opeNum2Num  goto 55
+	opeCompareNum2Bool  goto 57
 
 state 80
-	stringExpression:  stringExpression.opeString2String string 
-	stringExpression:  LPAREN stringExpression.RPAREN 
+	returnExpression:  FOR IDENTIFIER IN.stringExpression body 
 
-	PLUS  shift 45
-	RPAREN  shift 88
+	LPAREN  shift 40
+	STRING  shift 34
 	.  error
 
-	opeString2String  goto 43
+	stringExpression  goto 94
+	string  goto 28
 
 state 81
-	stringList:  stringList COMMA STRING.    (8)
+	statement:  IDENTIFIER ASSIGN expression.    (13)
 
-	.  reduce 8 (src line 72)
+	.  reduce 13 (src line 86)
 
 
 state 82
-	stringExpression:  stringExpression opeString2String string.    (24)
+	stringExpression:  stringExpression.opeString2String string 
+	stringExpression:  LPAREN stringExpression.RPAREN 
 
-	.  reduce 24 (src line 111)
+	PLUS  shift 47
+	RPAREN  shift 90
+	.  error
 
+	opeString2String  goto 45
 
 state 83
-	stringExpression:  stringExpression.opeString2String string 
-	boolExpression:  stringExpression opeCompareString2Bool stringExpression.    (36)
+	stringList:  stringList COMMA STRING.    (8)
 
-	PLUS  shift 45
-	.  reduce 36 (src line 135)
+	.  reduce 8 (src line 71)
 
-	opeString2String  goto 43
 
 state 84
-	numExpression:  numExpression opeNum2Num number.    (28)
+	stringExpression:  stringExpression opeString2String string.    (24)
 
-	.  reduce 28 (src line 121)
+	.  reduce 24 (src line 110)
 
 
 state 85
+	stringExpression:  stringExpression.opeString2String string 
+	boolExpression:  stringExpression opeCompareString2Bool stringExpression.    (36)
+
+	PLUS  shift 47
+	.  reduce 36 (src line 134)
+
+	opeString2String  goto 45
+
+state 86
+	numExpression:  numExpression opeNum2Num number.    (28)
+
+	.  reduce 28 (src line 120)
+
+
+state 87
 	numExpression:  numExpression.opeNum2Num number 
 	numExpression:  numExpression.MINUS numExpression 
 	numExpression:  numExpression MINUS numExpression.    (29)
 
-	MULTI  shift 58
-	DIV  shift 57
-	MOD  shift 59
-	.  reduce 29 (src line 122)
+	MULTI  shift 60
+	DIV  shift 59
+	MOD  shift 61
+	.  reduce 29 (src line 121)
 
-	opeNum2Num  goto 53
+	opeNum2Num  goto 55
 
-state 86
+state 88
 	numExpression:  numExpression.opeNum2Num number 
 	numExpression:  numExpression.MINUS numExpression 
 	boolExpression:  numExpression opeCompareNum2Bool numExpression.    (37)
 
-	MULTI  shift 58
-	DIV  shift 57
-	MOD  shift 59
-	PLUS  shift 56
-	MINUS  shift 54
-	.  reduce 37 (src line 136)
+	MULTI  shift 60
+	DIV  shift 59
+	MOD  shift 61
+	PLUS  shift 58
+	MINUS  shift 56
+	.  reduce 37 (src line 135)
 
-	opeNum2Num  goto 53
-
-state 87
-	boolExpression:  boolExpression opeBool2Bool bool.    (34)
-
-	.  reduce 34 (src line 133)
-
-
-state 88
-	stringExpression:  LPAREN stringExpression RPAREN.    (25)
-
-	.  reduce 25 (src line 112)
-
+	opeNum2Num  goto 55
 
 state 89
-	numExpression:  LPAREN numExpression RPAREN.    (31)
+	boolExpression:  boolExpression opeBool2Bool bool.    (34)
 
-	.  reduce 31 (src line 124)
+	.  reduce 34 (src line 132)
 
 
 state 90
-	boolExpression:  LPAREN boolExpression RPAREN.    (38)
+	stringExpression:  LPAREN stringExpression RPAREN.    (25)
 
-	.  reduce 38 (src line 137)
+	.  reduce 25 (src line 111)
 
 
 state 91
+	numExpression:  LPAREN numExpression RPAREN.    (31)
+
+	.  reduce 31 (src line 123)
+
+
+state 92
+	boolExpression:  LPAREN boolExpression RPAREN.    (38)
+
+	.  reduce 38 (src line 136)
+
+
+state 93
 	numExpression:  numExpression.opeNum2Num number 
 	numExpression:  numExpression.MINUS numExpression 
 	numExpression:  LPAREN numExpression.RPAREN 
 
-	MULTI  shift 58
-	DIV  shift 57
-	MOD  shift 59
-	PLUS  shift 56
-	MINUS  shift 54
-	RPAREN  shift 89
+	MULTI  shift 60
+	DIV  shift 59
+	MOD  shift 61
+	PLUS  shift 58
+	MINUS  shift 56
+	RPAREN  shift 91
 	.  error
 
-	opeNum2Num  goto 53
+	opeNum2Num  goto 55
 
-state 92
+state 94
 	returnExpression:  FOR IDENTIFIER IN stringExpression.body 
 	stringExpression:  stringExpression.opeString2String string 
 
-	PLUS  shift 45
+	PLUS  shift 47
 	FOR  shift 11
 	RETURN  shift 10
 	IDENTIFIER  shift 12
@@ -857,27 +871,27 @@ state 92
 	PAGE  shift 13
 	.  error
 
-	body  goto 93
+	body  goto 95
 	statements  goto 5
 	returnExpression  goto 6
 	statement  goto 9
-	opeString2String  goto 43
+	opeString2String  goto 45
 
-state 93
+state 95
 	returnExpression:  FOR IDENTIFIER IN stringExpression body.    (18)
 
-	.  reduce 18 (src line 96)
+	.  reduce 18 (src line 95)
 
 
 79 terminals, 21 nonterminals
-61 grammar rules, 94/16000 states
+61 grammar rules, 96/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 70 working sets used
 memory: parser 84/240000
 39 extra closures
-177 shift entries, 1 exceptions
+179 shift entries, 1 exceptions
 45 goto entries
 48 entries saved by goto default
 Optimizer space used: output 163/240000
-163 table entries, 6 zero
-maximum spread: 79, maximum offset: 92
+163 table entries, 4 zero
+maximum spread: 79, maximum offset: 94

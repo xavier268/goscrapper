@@ -5,34 +5,37 @@ import (
 	"fmt"
 	"io"
 	"regexp"
-	"strconv"
 	"strings"
 )
 
 type myLexer struct {
-	name string    // name of the lexer
-	data []byte    // entire data to be lexed
-	pos  int       // next position to process
-	w    io.Writer // where are error messages written to ?
+	name string // name of the lexer
+	data []byte // entire data to be lexed
+	pos  int    // next position to process
+	// code building support
+	w         io.Writer       // where are error messages written to ?
+	lines     []string        // code lines collected so far
+	inparams  []string        // contains the defnitions for the name type definition of the function input parameters, ex :  "name string"
+	outparams []string        // contains the definitions for the name type definition of the function output parameters, ex :  "name string"
+	imports   map[string]bool // set of imports required
 }
 
 // lexed symbol
 type yySymType struct {
-	// potential values
-	int    int
-	string string
-	bool   bool
+	// value is represented by the golang code used to access it.
+	value string
+
 	// not sure what this yys field is used for ?
 	yys int
 }
 
 // Error implements yyLexer.
 func (m *myLexer) Error(e string) {
-	fmt.Fprintf(m.w, "%sError in %s :%s\n", ColRED, m.name, RESET)
-	bef := max(0, m.pos-20)
-	after := min(len(m.data), m.pos+20)
+	fmt.Fprintf(m.w, "\n%s ********* Error in %s :***************%s\n\n", ColRED, m.name, RESET)
+	bef := max(0, m.pos-80)
+	after := min(len(m.data), m.pos+80)
 	fmt.Fprint(m.w, string(m.data[bef:m.pos]))
-	fmt.Fprintf(m.w, "%s<<<%s>>>%s", ColRED, e, RESET)
+	fmt.Fprintf(m.w, " %s <<<<<<<<<<<<<<<<< %s %s\n", ColRED, e, RESET)
 	fmt.Fprintln(m.w, string(m.data[m.pos:after]))
 }
 
@@ -69,8 +72,9 @@ startLoop:
 	// read strings between " "
 	// You can escape inside " by adding one more.
 	if loc := regexp.MustCompile(`(?s)^"(""+|[^"])*"`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.string = string(m.data[m.pos+1 : m.pos+loc[1]-1])    // remove external quotes
-		lval.string = strings.Replace(lval.string, `""`, `"`, -1) // replace all doubled quotes escaped inside.
+		lval.value = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
+		lval.value = strings.Replace(lval.value, `""`, `"`, -1) // replace all doubled quotes escaped inside.
+		lval.value = fmt.Sprintf(`%q`, lval.value)              // store as a quoted string
 		m.pos += loc[1]
 		return STRING
 	}
@@ -78,25 +82,23 @@ startLoop:
 	// read strings between ' '
 	// You can escape inside ' by adding one more.
 	if loc := regexp.MustCompile(`(?s)^'(''+|[^'])*'`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.string = string(m.data[m.pos+1 : m.pos+loc[1]-1])    // remove external quotes
-		lval.string = strings.Replace(lval.string, `''`, `'`, -1) // replace all doubled quotes escaped inside.
+		lval.value = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
+		lval.value = strings.Replace(lval.value, `''`, `'`, -1) // replace all doubled quotes escaped inside.
+		lval.value = fmt.Sprintf(`%q`, lval.value)              // stored as a back-quoted string
 		m.pos += loc[1]
 		return STRING
 	}
 
 	// read integer number.
 	if loc := regexp.MustCompile(`^[+-]?[0-9]+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.int, err = strconv.Atoi(string(m.data[m.pos : m.pos+loc[1]])) // convert to int
-		if err == nil {
-			m.pos += loc[1]
-			return NUMBER
-		}
-		// continue ...
+		lval.value = string(m.data[m.pos : m.pos+loc[1]])
+		m.pos += loc[1]
+		return NUMBER
 	}
 
 	// read boolean. Use true or false, in lowercase.
 	if loc := regexp.MustCompile(`^true|false`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.bool = (m.data[m.pos] == 't')
+		lval.value = string(m.data[m.pos : m.pos+loc[1]])
 		m.pos += loc[1] // skip
 		return BOOL
 	}
@@ -107,72 +109,104 @@ startLoop:
 
 	// start with mutibyte
 	case m.try("<="):
+		lval.value = "<="
 		return LTE
 	case m.try(">="):
+		lval.value = ">="
 		return GTE
 	case m.try("=="):
+		lval.value = "=="
 		return EQ
 	case m.try("!="):
+		lval.value = "!="
 		return NEQ
 	case m.try("++"):
+		lval.value = "++"
 		return PLUSPLUS
 	case m.try("--"):
+		lval.value = "--"
 		return MINUSMINUS
 	case m.try("&&"), m.try("AND"):
+		lval.value = "&&"
 		return AND
 	case m.try("||"), m.try("OR"):
+		lval.value = "||"
 		return OR
 	case m.try(".."):
+		lval.value = ".."
 		return DOTDOT
 	case m.try("::"):
+		lval.value = "::"
 		return NAMESPACESEPARATOR
 	case m.try("!~"):
+		lval.value = "!~"
 		return REGEXNOTMATCH
 	case m.try("=~"):
+		lval.value = "=~"
 		return REGEXMATCH
 
 		// single bytes
 	case m.try(":"):
+		lval.value = ":"
 		return COLON
 	case m.try(";"):
+		lval.value = ";"
 		return SEMICOLON
 	case m.try("("):
+		lval.value = "("
 		return LPAREN
 	case m.try(")"):
+		lval.value = ")"
 		return RPAREN
 	case m.try("{"):
+		lval.value = "{"
 		return LBRACE
 	case m.try("}"):
+		lval.value = "}"
 		return RBRACE
 	case m.try("["):
+		lval.value = "["
 		return LBRACKET
 	case m.try("]"):
+		lval.value = "]"
 		return RBRACKET
 	case m.try(","):
+		lval.value = ","
 		return COMMA
 	case m.try("."):
+		lval.value = "."
 		return DOT
 
 	case m.try("<"):
+		lval.value = "<"
 		return LT
 	case m.try(">"):
+		lval.value = ">"
 		return GT
 
 	case m.try("*"):
+		lval.value = "*"
 		return MULTI
 	case m.try("/"):
+		lval.value = "/"
 		return DIV
 	case m.try("%"):
+		lval.value = "%"
 		return MOD
 	case m.try("+"):
+		lval.value = "+"
 		return PLUS
 	case m.try("-"):
+		lval.value = "-"
 		return MINUS
 	case m.try("="):
+		lval.value = "="
 		return ASSIGN
 	case m.try("?"):
+		lval.value = "?"
 		return QUESTION
 	case m.try("@"):
+		lval.value = "@"
 		return AT
 	}
 
@@ -183,7 +217,7 @@ startLoop:
 	}
 
 	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.string = string(m.data[m.pos : m.pos+loc[1]])
+		lval.value = string(m.data[m.pos : m.pos+loc[1]])
 		m.pos += loc[1]
 		return IDENTIFIER
 	}

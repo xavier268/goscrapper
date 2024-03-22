@@ -2,7 +2,8 @@
     package parser
 
     import (
-       // "fmt"
+       // runtime used by scrapper
+        _ "github.com/xavier268/goscrapper/rt"
         )
 
    

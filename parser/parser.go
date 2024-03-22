@@ -9,7 +9,8 @@ import __yyfmt__ "fmt"
 //line grammar.y:3
 
 import (
-// "fmt"
+	// runtime used by scrapper
+	_ "github.com/xavier268/goscrapper/rt"
 )
 
 // Déclaration d'une interface pour gérer les différents types de noeuds de l'AST
@@ -180,7 +181,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:188
+//line grammar.y:189
 
 //line yacctab:1
 var yyExca = [...]int8{

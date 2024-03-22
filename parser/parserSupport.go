@@ -38,7 +38,7 @@ func (m *myLexer) finalize() {
 	fmt.Fprintln(m.w, "}")
 	fmt.Fprintln(m.w)
 
-	// wrtite type of output parameters
+	// write type of output parameters
 	fmt.Fprintln(m.w)
 	fmt.Fprintf(m.w, "type %s struct {\n", "Output_"+m.name)
 	for _, l := range m.outparams {
@@ -48,14 +48,17 @@ func (m *myLexer) finalize() {
 	fmt.Fprintln(m.w)
 
 	// write function header, with parameters
-	fmt.Fprintf(m.w, "\nfunc Do_%s(_in Input_%s) (%s, _err error) {\n", m.name, m.name, "_out []Output_"+m.name)
+	fmt.Fprintf(m.w, "\nfunc Do_%s(_in Input_%s) (_res []Output_%s, _err error) {\n", m.name, m.name, m.name)
+
+	// initialize _res
+	m.nextRes()
 
 	// write function body
 	for _, l := range m.lines {
 		fmt.Fprintf(m.w, "%s\n", l)
 	}
 
-	fmt.Fprintln(m.w, "return _out, _err\n}")
+	fmt.Fprintln(m.w, "return _res, _err\n}")
 
 	// save the source function at the bottom of the file
 	m.printCommentedSource()
@@ -66,6 +69,10 @@ func (m *myLexer) setParam(name string, typ string) {
 	m.inparams = append(m.inparams, name+" "+typ)
 }
 
+func (m *myLexer) errorf(format string, args ...interface{}) {
+	m.Error(fmt.Sprintf(format, args...))
+}
+
 // print the data source used to create function, as a comment.
 func (m *myLexer) printCommentedSource() {
 	fmt.Fprintln(m.w)
@@ -74,4 +81,15 @@ func (m *myLexer) printCommentedSource() {
 		fmt.Fprintf(m.w, "// %s\n", d)
 	}
 	fmt.Fprintln(m.w)
+}
+
+// prepare res to accept a new set of output variables,
+// by writing the code to do that.
+func (m *myLexer) nextRes() {
+	fmt.Fprintf(m.w, "\n_res = append(_res, Output_%s{})\n", m.name)
+}
+
+// set the value of a variable in the current set of output variables.
+func (m *myLexer) setRes(name string, value string) {
+	fmt.Fprintf(m.w, "\t\t_res[len(_res)-1].%s = %s\n", name, value)
 }

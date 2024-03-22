@@ -25,6 +25,16 @@
 // actions
             SELECT CLICK DOCUMENT PAGE CONTAINS
 
+%union {            // ceci redéclare yySymType !
+    value string
+}
+
+%type <value> expression stringExpression stringList string 
+%type <value> number numExpression
+%type <value> bool boolExpression
+%type <value> IDENTIFIER NUMBER STRING BOOL
+
+
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
@@ -59,40 +69,40 @@ head
 
 options
     : IGNORE stringList { 
-                            yylex.(*myLexer).addLines( "rt.Ignore(" + $2.value + ")")
+                            yylex.(*myLexer).addLines( "rt.Ignore(" + $2 + ")")
                         }
     | AT IDENTIFIER  IDENTIFIER { // @ paramName paramType
-                            yylex.(*myLexer).setParam ($2.value,$3.value)
+                            yylex.(*myLexer).setParam ($2,$3)
                         }
     ;
 
 stringList
-    : STRING                    { $$.value =  $1.value }
-    | stringList COMMA STRING   { $$.value = $1.value +  "," + $3.value}
+    : STRING                   
+    | stringList COMMA STRING   { $$ = $1 +  "," + $3}
     ;
 
 // program body contains statements, followed by either RETURN or 
 
 body
-    : statements returnExpression
-    | returnExpression
+    : statements returnExpression { /* todo */}
+    | returnExpression { /* todo */}
     ;
 
 statements
-    : statement
-    | statements statement
+    : statement { /* todo */}
+    | statements statement { /* todo */}
     ;
 
 statement 
-    : IDENTIFIER ASSIGN expression
-    | PAGE stringExpression
-    | SELECT stringExpression
-    | CLICK  stringExpression
+    : IDENTIFIER ASSIGN expression { /* todo */}
+    | PAGE stringExpression { /* todo */}
+    | SELECT stringExpression { /* todo */}
+    | CLICK  stringExpression { /* todo */}
     ;
 
 returnExpression
-    : RETURN expression
-    | FOR IDENTIFIER IN stringExpression body
+    : RETURN expression { /* todo */}
+    | FOR IDENTIFIER IN stringExpression body { /* todo */}
     ;
 
 
@@ -102,13 +112,13 @@ expression
     : stringExpression
     | numExpression
     | boolExpression
-    | IDENTIFIER // variable   
+    | IDENTIFIER { /* todo */}
     ;
 
 stringExpression
     : string
-    | stringExpression opeString2String string
-    | LPAREN stringExpression RPAREN
+    | stringExpression opeString2String string { /* todo */}
+    | LPAREN stringExpression RPAREN { $$ = $2}
     ;
 
 string
@@ -116,11 +126,12 @@ string
     ;
 
 numExpression
-    : number
-    | numExpression opeNum2Num number
-    | numExpression MINUS numExpression
-    | MINUS numExpression
-    | LPAREN numExpression RPAREN
+    : number { $$ = $1}
+    // to complete ...  { /* todo */}
+    | numExpression PLUS numExpression { $$ = "("+$1+")+("+ $3 + ")"}
+    | numExpression MINUS numExpression { $$ = "("+$1+")-("+ $3 + ")"}
+    | MINUS numExpression { $$ = "-(" + $2 + ")"}
+    | LPAREN numExpression RPAREN { $$ = "(" + $2 + ")"}
     ;
 
 number
@@ -129,11 +140,11 @@ number
 
 boolExpression
     : bool
-    | boolExpression opeBool2Bool bool
-    | NOT boolExpression
-    | stringExpression opeCompareString2Bool stringExpression
-    | numExpression opeCompareNum2Bool numExpression
-    | LPAREN boolExpression RPAREN
+    | boolExpression opeBool2Bool bool { /* todo */}
+    | NOT boolExpression { $$ = "!("+$2+")"}
+    | stringExpression opeCompareString2Bool stringExpression { /* todo */}
+    | numExpression opeCompareNum2Bool numExpression { /* todo */}
+    | LPAREN boolExpression RPAREN { /* todo */}
     ;
 
 bool    
@@ -145,14 +156,6 @@ opeBool2Bool
     | OR
     | XOR
     ;
-
-opeNum2Num // except MINUS because unary
-    : PLUS
-    | DIV
-    | MULTI
-    | MOD
-    ;
-
 
 opeString2String
     : PLUS

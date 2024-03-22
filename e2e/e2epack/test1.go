@@ -21,9 +21,11 @@ type Output_test1 struct {
 }
 
 
-func Do_test1(_in Input_test1) (_out []Output_test1, _err error) {
+func Do_test1(_in Input_test1) (_res []Output_test1, _err error) {
+
+_res = append(_res, Output_test1{})
 rt.Ignore("*.jpg","*.JPEG")
-return _out, _err
+return _res, _err
 }
 
 // // A go scrapper test function
@@ -35,5 +37,6 @@ return _out, _err
 // PAGE "http://www.google.fr"
 //     SELECT "input[name=q]"	
 //     CLICK "input[name=btnK]"
+//     a = 23 
 //     RETURN "input[name=btnK]"
 

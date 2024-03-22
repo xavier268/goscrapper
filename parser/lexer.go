@@ -18,15 +18,7 @@ type myLexer struct {
 	inparams  []string        // contains the defnitions for the name type definition of the function input parameters, ex :  "name string"
 	outparams []string        // contains the definitions for the name type definition of the function output parameters, ex :  "name string"
 	imports   map[string]bool // set of imports required
-}
 
-// lexed symbol
-type yySymType struct {
-	// value is represented by the golang code used to access it.
-	value string
-
-	// not sure what this yys field is used for ?
-	yys int
 }
 
 // Error implements yyLexer.

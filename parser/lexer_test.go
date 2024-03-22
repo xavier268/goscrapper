@@ -14,7 +14,7 @@ func Example_lexer() {
 	un deux22 // trois quatre
 	// nothing here .. 
 
-	1 2cinq -- /* do not
+	1 2cinq  /* do not
 	print this */ 0555 .. .
 	"a dq string
 	accross the line "
@@ -49,7 +49,6 @@ func Example_lexer() {
 	// NUMBER   1
 	// NUMBER   2
 	// IDENTIFIER   cinq
-	// MINUSMINUS   --
 	// NUMBER   0555
 	// DOTDOT   ..
 	// DOT   .

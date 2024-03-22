@@ -20,76 +20,74 @@ const MOD = 57348
 const PLUS = 57349
 const MINUS = 57350
 const PLUSPLUS = 57351
-const MINUSMINUS = 57352
-const LTE = 57353
-const GTE = 57354
-const LT = 57355
-const GT = 57356
-const EQ = 57357
-const NEQ = 57358
-const COLON = 57359
-const SEMICOLON = 57360
-const DOT = 57361
-const COMMA = 57362
-const LBRACKET = 57363
-const RBRACKET = 57364
-const LPAREN = 57365
-const RPAREN = 57366
-const LBRACE = 57367
-const RBRACE = 57368
-const AND = 57369
-const OR = 57370
-const XOR = 57371
-const DOTDOT = 57372
-const ASSIGN = 57373
-const QUESTION = 57374
-const REGEXMATCH = 57375
-const REGEXNOTMATCH = 57376
-const FOR = 57377
-const RETURN = 57378
-const WAITFOR = 57379
-const OPTIONS = 57380
-const IGNORE = 57381
-const HEADLESS = 57382
-const TIMEOUT = 57383
-const DISTINCT = 57384
-const FILTER = 57385
-const CURRENT = 57386
-const SORT = 57387
-const LIMIT = 57388
-const LET = 57389
-const COLLECT = 57390
-const ASC = 57391
-const DESC = 57392
-const NONE = 57393
-const NULL = 57394
-const TRUE = 57395
-const FALSE = 57396
-const USE = 57397
-const INTO = 57398
-const KEEP = 57399
-const WITH = 57400
-const COUNT = 57401
-const ALL = 57402
-const ANY = 57403
-const AGGREGATE = 57404
-const EVENT = 57405
-const LIKE = 57406
-const NOT = 57407
-const IN = 57408
-const WHILE = 57409
-const BOOL = 57410
-const AT = 57411
-const IDENTIFIER = 57412
-const IGNOREID = 57413
-const STRING = 57414
-const NUMBER = 57415
-const NAMESPACESEPARATOR = 57416
-const SELECT = 57417
-const CLICK = 57418
-const DOCUMENT = 57419
-const PAGE = 57420
-const CONTAINS = 57421
+const LTE = 57352
+const GTE = 57353
+const LT = 57354
+const GT = 57355
+const EQ = 57356
+const NEQ = 57357
+const COLON = 57358
+const SEMICOLON = 57359
+const DOT = 57360
+const COMMA = 57361
+const LBRACKET = 57362
+const RBRACKET = 57363
+const LPAREN = 57364
+const RPAREN = 57365
+const LBRACE = 57366
+const RBRACE = 57367
+const AND = 57368
+const OR = 57369
+const NOT = 57370
+const DOTDOT = 57371
+const ASSIGN = 57372
+const QUESTION = 57373
+const REGEXMATCH = 57374
+const REGEXNOTMATCH = 57375
+const FOR = 57376
+const RETURN = 57377
+const WAITFOR = 57378
+const OPTIONS = 57379
+const IGNORE = 57380
+const HEADLESS = 57381
+const TIMEOUT = 57382
+const DISTINCT = 57383
+const FILTER = 57384
+const CURRENT = 57385
+const SORT = 57386
+const LIMIT = 57387
+const LET = 57388
+const COLLECT = 57389
+const ASC = 57390
+const DESC = 57391
+const NONE = 57392
+const NULL = 57393
+const TRUE = 57394
+const FALSE = 57395
+const USE = 57396
+const INTO = 57397
+const KEEP = 57398
+const WITH = 57399
+const COUNT = 57400
+const ALL = 57401
+const ANY = 57402
+const AGGREGATE = 57403
+const EVENT = 57404
+const LIKE = 57405
+const IN = 57406
+const WHILE = 57407
+const BOOL = 57408
+const AT = 57409
+const IDENTIFIER = 57410
+const IGNOREID = 57411
+const STRING = 57412
+const NUMBER = 57413
+const NAMESPACESEPARATOR = 57414
+const SELECT = 57415
+const CLICK = 57416
+const DOCUMENT = 57417
+const PAGE = 57418
+const CONTAINS = 57419
 
 var yyToknames = [...]string{
 	"$end",
@@ -101,7 +99,6 @@ var yyToknames = [...]string{
 	"PLUS",
 	"MINUS",
 	"PLUSPLUS",
-	"MINUSMINUS",
 	"LTE",
 	"GTE",
 	"LT",
@@ -120,7 +117,7 @@ var yyToknames = [...]string{
 	"RBRACE",
 	"AND",
 	"OR",
-	"XOR",
+	"NOT",
 	"DOTDOT",
 	"ASSIGN",
 	"QUESTION",
@@ -156,7 +153,6 @@ var yyToknames = [...]string{
 	"AGGREGATE",
 	"EVENT",
 	"LIKE",
-	"NOT",
 	"IN",
 	"WHILE",
 	"BOOL",
@@ -179,7 +175,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:185
+//line grammar.y:172
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -190,86 +186,93 @@ var yyExca = [...]int8{
 
 const yyPrivate = 57344
 
-const yyLast = 150
+const yyLast = 186
 
 var yyAct = [...]int8{
-	3, 47, 40, 16, 34, 51, 49, 50, 48, 52,
-	53, 81, 11, 10, 21, 47, 7, 31, 88, 51,
-	49, 50, 48, 52, 53, 44, 37, 24, 22, 36,
-	76, 47, 72, 25, 28, 11, 10, 38, 32, 55,
-	56, 39, 41, 42, 47, 90, 8, 12, 65, 66,
-	67, 34, 14, 15, 31, 13, 89, 68, 26, 11,
-	10, 74, 43, 69, 31, 71, 77, 75, 80, 29,
-	12, 9, 78, 54, 83, 14, 15, 19, 13, 29,
-	82, 47, 35, 57, 65, 66, 67, 54, 70, 84,
-	85, 86, 73, 93, 12, 55, 56, 79, 88, 14,
-	15, 6, 13, 87, 92, 4, 91, 18, 17, 46,
-	64, 33, 45, 5, 36, 2, 27, 1, 34, 35,
-	30, 33, 20, 23, 36, 0, 55, 56, 34, 35,
-	61, 59, 60, 58, 62, 63, 0, 0, 0, 0,
-	55, 56, 0, 89, 61, 59, 60, 58, 62, 63,
+	3, 24, 25, 16, 11, 10, 31, 34, 7, 80,
+	21, 44, 37, 31, 22, 39, 41, 42, 40, 32,
+	71, 36, 75, 38, 28, 43, 45, 29, 52, 53,
+	54, 67, 68, 33, 70, 73, 74, 8, 12, 54,
+	76, 77, 79, 14, 15, 45, 13, 5, 82, 83,
+	84, 85, 86, 87, 2, 88, 89, 90, 91, 92,
+	93, 94, 95, 96, 97, 98, 34, 31, 26, 35,
+	81, 36, 11, 10, 106, 34, 35, 107, 45, 11,
+	10, 29, 1, 99, 100, 101, 102, 33, 63, 64,
+	9, 63, 64, 6, 103, 30, 19, 105, 69, 18,
+	65, 66, 72, 65, 66, 20, 12, 78, 108, 23,
+	0, 14, 15, 12, 13, 0, 0, 4, 14, 15,
+	17, 13, 0, 0, 0, 36, 0, 27, 0, 34,
+	35, 52, 53, 54, 55, 56, 0, 60, 62, 59,
+	61, 57, 58, 52, 53, 54, 55, 56, 45, 0,
+	104, 49, 51, 48, 50, 46, 47, 52, 53, 54,
+	55, 56, 104, 0, 103, 52, 53, 54, 55, 56,
+	0, 60, 62, 59, 61, 57, 58, 45, 0, 0,
+	49, 51, 48, 50, 46, 47,
 }
 
 var yyPact = [...]int16{
-	-23, -1000, -23, -1000, -1000, 0, -1000, -58, -42, -1000,
-	46, -44, 6, -21, -21, -21, -1000, -1000, -1000, -1000,
-	42, -1000, -45, -1000, 8, 133, 57, -1000, -1000, 56,
-	-1000, 9, -1000, 56, -1000, -1000, -1000, -36, 56, 37,
-	-21, 37, 37, -61, -1000, -68, -21, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, -1000, 9, 9, 9, -1000, -1000,
-	-1000, -1000, -1000, -1000, -39, -1000, -1000, -1000, -6, 119,
-	21, -1000, 9, -1000, 8, 133, -21, 8, 133, 57,
-	74, -1000, -1000, 37, -1000, -1000, 88, -1000, -1000, -1000,
-	-1000, 32, 24, -1000,
+	-30, -1000, -30, -1000, -1000, 45, -1000, -60, -54, -1000,
+	59, -56, -7, -4, -4, -4, -1000, -1000, -1000, -1000,
+	6, -1000, -57, -1000, 170, 161, 77, -1000, -1000, 5,
+	-1000, -2, -1000, 5, -1000, -1000, -1000, -42, 5, 19,
+	-4, 19, 19, -61, -1000, -63, -4, -4, -4, -4,
+	-4, -4, -2, -2, -2, -2, -2, -2, -2, -2,
+	-2, -2, -2, -45, -45, -45, -45, 141, 127, 74,
+	24, -2, -1000, 170, 161, -4, 170, 161, 77, 71,
+	-1000, -1000, 19, 19, 19, 19, 19, 19, 33, 33,
+	-1000, 24, 24, 153, 153, 153, 153, 153, 153, -1000,
+	-1000, -1000, -1000, -1000, -1000, -1000, 139, 38, -1000,
 }
 
 var yyPgo = [...]int8{
-	0, 123, 27, 122, 34, 120, 33, 38, 58, 117,
-	115, 0, 105, 113, 101, 71, 112, 110, 109, 83,
+	0, 109, 1, 105, 24, 95, 2, 19, 68, 82,
+	54, 0, 117, 47, 93, 90,
 }
 
 var yyR1 = [...]int8{
 	0, 9, 9, 10, 10, 12, 12, 3, 3, 11,
 	11, 13, 13, 15, 15, 15, 15, 15, 15, 14,
 	14, 1, 1, 1, 1, 2, 2, 2, 4, 6,
-	6, 6, 6, 6, 5, 8, 8, 8, 8, 8,
-	8, 7, 17, 17, 17, 16, 19, 19, 19, 19,
-	19, 19, 18, 18, 18, 18, 18, 18, 18,
+	6, 6, 6, 6, 6, 6, 6, 5, 8, 8,
+	8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+	8, 8, 8, 8, 8, 8, 8, 7,
 }
 
 var yyR2 = [...]int8{
 	0, 2, 1, 2, 1, 2, 3, 1, 3, 2,
 	1, 1, 2, 3, 3, 3, 2, 2, 2, 2,
 	5, 1, 1, 1, 1, 1, 3, 3, 1, 1,
-	3, 3, 2, 3, 1, 1, 3, 2, 3, 3,
-	3, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1,
+	3, 3, 3, 3, 3, 2, 3, 1, 1, 3,
+	3, 3, 3, 2, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 1,
 }
 
 var yyChk = [...]int16{
-	-1000, -9, -10, -11, -12, -13, -14, 39, 69, -15,
-	36, 35, 70, 78, 75, 76, -11, -12, -14, -15,
-	-3, 72, 70, -1, -2, -6, -8, 70, -4, 23,
-	-5, 8, -7, 65, 72, 73, 68, 70, 31, -2,
-	23, -2, -2, 20, 70, -16, -18, 7, 14, 12,
-	13, 11, 15, 16, 79, 7, 8, -19, 14, 12,
-	13, 11, 15, 16, -17, 27, 28, 29, -2, -6,
-	-8, -6, 23, -8, -2, -6, 66, -2, -6, -8,
-	-2, 72, -4, -2, -6, -6, -6, -7, 24, 24,
-	24, -6, -2, -11,
+	-1000, -9, -10, -11, -12, -13, -14, 38, 67, -15,
+	35, 34, 68, 76, 73, 74, -11, -12, -14, -15,
+	-3, 70, 68, -1, -2, -6, -8, 68, -4, 22,
+	-5, 8, -7, 28, 70, 71, 66, 68, 30, -2,
+	22, -2, -2, 19, 68, 7, 14, 15, 12, 10,
+	13, 11, 4, 5, 6, 7, 8, 14, 15, 12,
+	10, 13, 11, 14, 15, 26, 27, -2, -6, -8,
+	-6, 22, -8, -2, -6, 64, -2, -6, -8, -2,
+	70, -4, -2, -2, -2, -2, -2, -2, -6, -6,
+	-6, -6, -6, -6, -6, -6, -6, -6, -6, -7,
+	-7, -7, -7, 23, 23, 23, -6, -2, -11,
 }
 
 var yyDef = [...]int8{
 	0, -2, 0, 2, 4, 0, 10, 0, 0, 11,
 	0, 0, 0, 0, 0, 0, 1, 3, 9, 12,
 	5, 7, 0, 19, 21, 22, 23, 24, 25, 0,
-	29, 0, 35, 0, 28, 34, 41, 0, 0, 16,
-	0, 17, 18, 0, 6, 0, 0, 45, 52, 53,
-	54, 55, 56, 57, 58, 0, 0, 0, 46, 47,
-	48, 49, 50, 51, 0, 42, 43, 44, 0, 0,
-	0, 32, 0, 37, 0, 0, 0, 13, 14, 15,
-	0, 8, 26, 38, 30, 31, 39, 36, 27, 33,
-	40, 0, 0, 20,
+	29, 0, 38, 0, 28, 37, 57, 0, 0, 16,
+	0, 17, 18, 0, 6, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	35, 0, 43, 0, 0, 0, 13, 14, 15, 0,
+	8, 26, 44, 45, 46, 47, 48, 49, 30, 31,
+	32, 33, 34, 50, 51, 52, 53, 54, 55, 39,
+	40, 41, 42, 27, 36, 56, 0, 0, 20,
 }
 
 var yyTok1 = [...]int8{
@@ -284,7 +287,7 @@ var yyTok2 = [...]int8{
 	42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
 	52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
 	62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
-	72, 73, 74, 75, 76, 77, 78, 79,
+	72, 73, 74, 75, 76, 77,
 }
 
 var yyTok3 = [...]int8{
@@ -729,13 +732,14 @@ yydefault:
 	case 26:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:122
-		{ /* todo */
+		{
+			yyVAL.value = "(" + yyDollar[1].value + ")+(" + yyDollar[3].value + ")"
 		}
 	case 27:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:123
 		{
-			yyVAL.value = yyDollar[2].value
+			yyVAL.value = "(" + yyDollar[2].value + ")"
 		}
 	case 29:
 		yyDollar = yyS[yypt-1 : yypt+1]
@@ -747,51 +751,151 @@ yydefault:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:133
 		{
-			yyVAL.value = "(" + yyDollar[1].value + ")+(" + yyDollar[3].value + ")"
+			yyVAL.value = "(" + yyDollar[1].value + ")*(" + yyDollar[3].value + ")"
 		}
 	case 31:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:134
 		{
-			yyVAL.value = "(" + yyDollar[1].value + ")-(" + yyDollar[3].value + ")"
+			yyVAL.value = "(" + yyDollar[1].value + ")/(" + yyDollar[3].value + ")"
 		}
 	case 32:
-		yyDollar = yyS[yypt-2 : yypt+1]
+		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:135
 		{
-			yyVAL.value = "-(" + yyDollar[2].value + ")"
+			yyVAL.value = "(" + yyDollar[1].value + ")%(" + yyDollar[3].value + ")"
 		}
 	case 33:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:136
 		{
-			yyVAL.value = "(" + yyDollar[2].value + ")"
+			yyVAL.value = "(" + yyDollar[1].value + ")+(" + yyDollar[3].value + ")"
+		}
+	case 34:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:137
+		{
+			yyVAL.value = "(" + yyDollar[1].value + ")-(" + yyDollar[3].value + ")"
+		}
+	case 35:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line grammar.y:138
+		{
+			yyVAL.value = "-(" + yyDollar[2].value + ")"
 		}
 	case 36:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:145
-		{ /* todo */
-		}
-	case 37:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:146
+//line grammar.y:139
 		{
-			yyVAL.value = "!(" + yyDollar[2].value + ")"
-		}
-	case 38:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:147
-		{ /* todo */
+			yyVAL.value = "(" + yyDollar[2].value + ")"
 		}
 	case 39:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:148
-		{ /* todo */
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "==" + yyDollar[3].value + ")"
 		}
 	case 40:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:149
-		{ /* todo */
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "!=" + yyDollar[3].value + ")"
+		}
+	case 41:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:150
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "&&" + yyDollar[3].value + ")"
+		}
+	case 42:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:151
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "||" + yyDollar[3].value + ")"
+		}
+	case 43:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line grammar.y:152
+		{
+			yyVAL.value = "!(" + yyDollar[2].value + ")"
+		}
+	case 44:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:153
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "==" + yyDollar[3].value + ")"
+		}
+	case 45:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:154
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "!=" + yyDollar[3].value + ")"
+		}
+	case 46:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:155
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "<" + yyDollar[3].value + ")"
+		}
+	case 47:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:156
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "<=" + yyDollar[3].value + ")"
+		}
+	case 48:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:157
+		{
+			yyVAL.value = "(" + yyDollar[1].value + ">" + yyDollar[3].value + ")"
+		}
+	case 49:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:158
+		{
+			yyVAL.value = "(" + yyDollar[1].value + ">=" + yyDollar[3].value + ")"
+		}
+	case 50:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:159
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "==" + yyDollar[3].value + ")"
+		}
+	case 51:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:160
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "!=" + yyDollar[3].value + ")"
+		}
+	case 52:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:161
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "<" + yyDollar[3].value + ")"
+		}
+	case 53:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:162
+		{
+			yyVAL.value = "(" + yyDollar[1].value + "<=" + yyDollar[3].value + ")"
+		}
+	case 54:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:163
+		{
+			yyVAL.value = "(" + yyDollar[1].value + ">" + yyDollar[3].value + ")"
+		}
+	case 55:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:164
+		{
+			yyVAL.value = "(" + yyDollar[1].value + ">=" + yyDollar[3].value + ")"
+		}
+	case 56:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:165
+		{
+			yyVAL.value = "(" + yyDollar[2].value + ")"
 		}
 	}
 	goto yystack /* stack new state and value */

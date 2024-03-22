@@ -8,10 +8,10 @@
 %}
 
 
-%token      MULTI DIV MOD PLUS MINUS PLUSPLUS MINUSMINUS
+%token      MULTI DIV MOD PLUS MINUS PLUSPLUS
             LTE GTE LT GT EQ NEQ
             COLON SEMICOLON DOT COMMA LBRACKET RBRACKET LPAREN RPAREN LBRACE RBRACE
-            AND OR XOR
+            AND OR NOT
             DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
 
 // Keywords
@@ -20,7 +20,7 @@
             ASC DESC NONE NULL TRUE FALSE USE
             INTO KEEP WITH COUNT ALL ANY AGGREGATE
             EVENT
-            LIKE NOT IN WHILE
+            LIKE IN WHILE
             BOOL AT IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
 // actions
             SELECT CLICK DOCUMENT PAGE CONTAINS
@@ -39,7 +39,7 @@
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
 %nonassoc LTE LT GTE GT EQ NEQ IN
-%left OR XOR
+%left OR 
 %left AND
 %left NOT
 %left PLUS MINUS
@@ -119,8 +119,8 @@ expression
 
 stringExpression
     : string
-    | stringExpression opeString2String string { /* todo */}
-    | LPAREN stringExpression RPAREN { $$ = $2}
+    | stringExpression PLUS string { $$ = "("+$1+")+("+ $3 + ")"}
+    | LPAREN stringExpression RPAREN { $$ = "("+$2+")"}
     ;
 
 string
@@ -130,6 +130,9 @@ string
 numExpression
     : number { $$ = $1}
     // to complete ...  { /* todo */}
+    | numExpression MULTI numExpression { $$ = "("+$1+")*("+ $3 + ")"}
+    | numExpression DIV numExpression { $$ = "("+$1+")/("+ $3 + ")"}
+    | numExpression MOD numExpression { $$ = "("+$1+")%("+ $3 + ")"}
     | numExpression PLUS numExpression { $$ = "("+$1+")+("+ $3 + ")"}
     | numExpression MINUS numExpression { $$ = "("+$1+")-("+ $3 + ")"}
     | MINUS numExpression { $$ = "-(" + $2 + ")"}
@@ -142,44 +145,28 @@ number
 
 boolExpression
     : bool
-    | boolExpression opeBool2Bool bool { /* todo */}
+    | boolExpression EQ bool {$$ = "("+$1+"=="+$3+")" }
+    | boolExpression NEQ bool {$$ = "("+$1+"!="+$3+")" }
+    | boolExpression AND bool {$$ = "("+$1+"&&"+$3+")" }
+    | boolExpression OR bool {$$ = "("+$1+"||"+$3+")" }
     | NOT boolExpression { $$ = "!("+$2+")"}
-    | stringExpression opeCompareString2Bool stringExpression { /* todo */}
-    | numExpression opeCompareNum2Bool numExpression { /* todo */}
-    | LPAREN boolExpression RPAREN { /* todo */}
+    | stringExpression EQ stringExpression {$$ = "("+$1+"=="+$3+")" }
+    | stringExpression NEQ stringExpression {$$ = "("+$1+"!="+$3+")" }
+    | stringExpression LT stringExpression {$$ = "("+$1+"<"+$3+")" }
+    | stringExpression LTE stringExpression {$$ = "("+$1+"<="+$3+")" }
+    | stringExpression GT stringExpression {$$ = "("+$1+">"+$3+")" }
+    | stringExpression GTE stringExpression {$$ = "("+$1+">="+$3+")" }
+    | numExpression EQ numExpression {$$ = "("+$1+"=="+$3+")" }
+    | numExpression NEQ numExpression {$$ = "("+$1+"!="+$3+")" }
+    | numExpression LT numExpression {$$ = "("+$1+"<"+$3+")" }
+    | numExpression LTE numExpression {$$ = "("+$1+"<="+$3+")" }
+    | numExpression GT numExpression {$$ = "("+$1+">"+$3+")" }
+    | numExpression GTE numExpression {$$ = "("+$1+">="+$3+")" }
+    | LPAREN boolExpression RPAREN { $$ = "("+$2+")"}
     ;
 
 bool    
     : BOOL // litteral
-    ;
-
-opeBool2Bool
-    : AND
-    | OR
-    | XOR
-    ;
-
-opeString2String
-    : PLUS
-    ;
-
-opeCompareNum2Bool
-    : GT
-    | GTE
-    | LT
-    | LTE
-    | EQ
-    | NEQ
-    ;
-
-opeCompareString2Bool
-    : GT
-    | GTE
-    | LT
-    | LTE
-    | EQ
-    | NEQ
-    | CONTAINS
     ;
 
 %%

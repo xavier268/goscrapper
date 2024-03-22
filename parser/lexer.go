@@ -115,9 +115,6 @@ startLoop:
 	case m.try("++"):
 		lval.value = "++"
 		return PLUSPLUS
-	case m.try("--"):
-		lval.value = "--"
-		return MINUSMINUS
 	case m.try("&&"), m.try("AND"):
 		lval.value = "&&"
 		return AND

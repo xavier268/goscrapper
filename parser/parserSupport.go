@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -86,10 +87,13 @@ func (m *myLexer) printCommentedSource() {
 // prepare res to accept a new set of output variables,
 // by writing the code to do that.
 func (m *myLexer) nextRes() {
-	fmt.Fprintf(m.w, "\n_res = append(_res, Output_%s{})\n", m.name)
+	fmt.Fprintf(m.w, "_res = append(_res, Output_%s{})\n", m.name)
 }
 
 // set the value of a variable in the current set of output variables.
-func (m *myLexer) setRes(name string, value string) {
-	fmt.Fprintf(m.w, "\t\t_res[len(_res)-1].%s = %s\n", name, value)
+func (m *myLexer) setVar(name string, value string, typ string) {
+	if !slices.Contains(m.outparams, name+" "+typ) {
+		m.outparams = append(m.outparams, name+" "+typ)
+	}
+	m.addLines(fmt.Sprintf("\t\t_res[len(_res)-1].%s = %s\n", name, value))
 }

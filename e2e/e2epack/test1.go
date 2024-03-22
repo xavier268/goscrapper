@@ -18,13 +18,15 @@ type Input_test1 struct {
 
 
 type Output_test1 struct {
+	a int
 }
 
 
 func Do_test1(_in Input_test1) (_res []Output_test1, _err error) {
-
 _res = append(_res, Output_test1{})
 rt.Ignore("*.jpg","*.JPEG")
+		_res[len(_res)-1].a = 23
+
 return _res, _err
 }
 

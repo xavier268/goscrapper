@@ -94,7 +94,9 @@ statements
     ;
 
 statement 
-    : IDENTIFIER ASSIGN expression { /* todo */}
+    : IDENTIFIER ASSIGN stringExpression { yylex.(*myLexer).setVar($1, $3, "string")}
+    | IDENTIFIER ASSIGN numExpression { yylex.(*myLexer).setVar($1, $3, "int")}
+    | IDENTIFIER ASSIGN boolExpression { yylex.(*myLexer).setVar($1, $3, "bool")}
     | PAGE stringExpression { /* todo */}
     | SELECT stringExpression { /* todo */}
     | CLICK  stringExpression { /* todo */}

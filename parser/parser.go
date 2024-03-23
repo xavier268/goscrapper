@@ -8,14 +8,18 @@ import __yyfmt__ "fmt"
 
 //line grammar.y:3
 
+import (
+	"fmt"
+)
+
 // each object has a value and a type.
 type value struct {
 	v string // a string in go that produce the value of the object
 	t string // a string representing the gotype of the object
-	c int    // the ope code is stored here
+	c int    // the code returned by lexer is stored here - it is always set, even for variables (set as IDENTIFIER)
 }
 
-//line grammar.y:35
+//line grammar.y:43
 type yySymType struct {
 	yys   int
 	value value
@@ -192,7 +196,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:181
+//line grammar.y:206
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -642,128 +646,147 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:68
+//line grammar.y:76
 		{
 			yylex.(*myLexer).finalize()
 		}
 	case 2:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:69
+//line grammar.y:77
 		{
 			yylex.(*myLexer).finalize()
 		}
 	case 5:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:80
-		{ /* todo */
+//line grammar.y:88
+		{
+			// yylex.(*myLexer).imports["fmt"] = true
+			line := fmt.Sprintf("rt.Ignore(%s)", yyDollar[2].value.v)
+			yylex.(*myLexer).addLines(line)
 		}
 	case 6:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:81
+//line grammar.y:93
 		{ /* todo */
+		}
+	case 10:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line grammar.y:103
+		{
+			if yyDollar[1].value.t != "string" {
+				yylex.(*myLexer).errorf("a string list should be made of strings only")
+			}
+			yyVAL.value.v = yyDollar[1].value.v
+			yyVAL.value.t = "string"
+
 		}
 	case 11:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:92
-		{ /*todo*/
+//line grammar.y:111
+		{
+			if yyDollar[3].value.t != "string" {
+				yylex.(*myLexer).errorf("a string list should be made of strings only")
+			}
+			yyVAL.value.v = yyDollar[1].value.v + "," + yyDollar[3].value.v
+			yyVAL.value.t = "string"
 		}
 	case 12:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:98
+//line grammar.y:123
 		{ /* todo */
 		}
 	case 13:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:99
+//line grammar.y:124
 		{ /* todo */
 		}
 	case 14:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:103
+//line grammar.y:128
 		{ /* todo */
 		}
 	case 15:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:104
+//line grammar.y:129
 		{ /* todo */
 		}
 	case 16:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:108
+//line grammar.y:133
 		{ /*todo*/
 		}
 	case 17:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:109
+//line grammar.y:134
 		{ /* todo */
 		}
 	case 18:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:110
+//line grammar.y:135
 		{ /* todo */
 		}
 	case 19:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:111
+//line grammar.y:136
 		{ /* todo */
 		}
 	case 20:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:115
+//line grammar.y:140
 		{ /* todo */
 		}
 	case 21:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:116
+//line grammar.y:141
 		{ /* todo */
 		}
 	case 22:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line grammar.y:117
+//line grammar.y:142
 		{ /* todo */
 		}
 	case 45:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:166
+//line grammar.y:191
 		{
 			yyVAL.value = yyDollar[1].value
 		}
 	case 46:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:167
+//line grammar.y:192
 		{
 			yyVAL.value = yylex.(*myLexer).Ope2(yyDollar[2].value.c, yyDollar[1].value, yyDollar[3].value)
 		}
 	case 47:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:168
+//line grammar.y:193
 		{
 			yyVAL.value = yylex.(*myLexer).Ope1(yyDollar[1].value.c, yyDollar[2].value)
 		}
 	case 48:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:173
+//line grammar.y:198
 		{
 			yyVAL.value = yylex.(*myLexer).Paren(yyDollar[2].value)
 		}
 	case 49:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:174
+//line grammar.y:199
 		{ /* todo */
 		}
 	case 50:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:175
+//line grammar.y:200
 		{ /* todo */
 		}
 	case 51:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:176
+//line grammar.y:201
 		{ /* todo */
 		}
 	case 52:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:177
+//line grammar.y:202
 		{ /* todo */
 		}
 	}

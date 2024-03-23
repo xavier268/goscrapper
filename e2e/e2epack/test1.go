@@ -33,5 +33,6 @@ type Output_test1 struct {
 //     RETURN "input[name=btnK]"
 func Do_test1(_in Input_test1) (_res []Output_test1, _err error) {
 _res = append(_res, Output_test1{})
+rt.Ignore("*.jpg","*.JPEG")
 return _res, _err
 }

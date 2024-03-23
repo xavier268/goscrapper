@@ -50,13 +50,13 @@ state 2
 state 3
 	program:  body.    (2)
 
-	.  reduce 2 (src line 69)
+	.  reduce 2 (src line 77)
 
 
 state 4
 	head:  options.    (4)
 
-	.  reduce 4 (src line 76)
+	.  reduce 4 (src line 84)
 
 
 state 5
@@ -77,7 +77,7 @@ state 5
 state 6
 	body:  returnExpression.    (13)
 
-	.  reduce 13 (src line 99)
+	.  reduce 13 (src line 124)
 
 
 state 7
@@ -112,7 +112,7 @@ state 8
 state 9
 	statements:  statement.    (14)
 
-	.  reduce 14 (src line 102)
+	.  reduce 14 (src line 127)
 
 
 state 10
@@ -127,7 +127,7 @@ state 10
 	IDENTIFIER  shift 32
 	STRING  shift 33
 	NUMBER  shift 34
-	.  reduce 21 (src line 116)
+	.  reduce 21 (src line 141)
 
 	expression  goto 37
 	expressionAtom  goto 22
@@ -217,25 +217,25 @@ state 15
 state 16
 	program:  head body.    (1)
 
-	.  reduce 1 (src line 67)
+	.  reduce 1 (src line 75)
 
 
 state 17
 	head:  head options.    (3)
 
-	.  reduce 3 (src line 74)
+	.  reduce 3 (src line 82)
 
 
 state 18
 	body:  statements returnExpression.    (12)
 
-	.  reduce 12 (src line 97)
+	.  reduce 12 (src line 122)
 
 
 state 19
 	statements:  statements statement.    (15)
 
-	.  reduce 15 (src line 104)
+	.  reduce 15 (src line 129)
 
 
 state 20
@@ -243,7 +243,7 @@ state 20
 	expressionList:  expressionList.COMMA expression 
 
 	COMMA  shift 43
-	.  reduce 5 (src line 79)
+	.  reduce 5 (src line 87)
 
 
 state 21
@@ -265,14 +265,14 @@ state 21
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 10 (src line 90)
+	.  reduce 10 (src line 102)
 
 	ope2  goto 44
 
 state 22
 	expression:  expressionAtom.    (45)
 
-	.  reduce 45 (src line 165)
+	.  reduce 45 (src line 190)
 
 
 state 23
@@ -315,67 +315,67 @@ state 24
 state 25
 	expressionAtom:  variable.    (49)
 
-	.  reduce 49 (src line 174)
+	.  reduce 49 (src line 199)
 
 
 state 26
 	expressionAtom:  string.    (50)
 
-	.  reduce 50 (src line 175)
+	.  reduce 50 (src line 200)
 
 
 state 27
 	expressionAtom:  number.    (51)
 
-	.  reduce 51 (src line 176)
+	.  reduce 51 (src line 201)
 
 
 state 28
 	expressionAtom:  bool.    (52)
 
-	.  reduce 52 (src line 177)
+	.  reduce 52 (src line 202)
 
 
 state 29
 	ope1:  MINUS.    (42)
 
-	.  reduce 42 (src line 159)
+	.  reduce 42 (src line 184)
 
 
 state 30
 	ope1:  LOWER.    (43)
 
-	.  reduce 43 (src line 161)
+	.  reduce 43 (src line 186)
 
 
 state 31
 	ope1:  UPPER.    (44)
 
-	.  reduce 44 (src line 162)
+	.  reduce 44 (src line 187)
 
 
 state 32
 	variable:  IDENTIFIER.    (26)
 
-	.  reduce 26 (src line 136)
+	.  reduce 26 (src line 161)
 
 
 state 33
 	string:  STRING.    (23)
 
-	.  reduce 23 (src line 125)
+	.  reduce 23 (src line 150)
 
 
 state 34
 	number:  NUMBER.    (24)
 
-	.  reduce 24 (src line 128)
+	.  reduce 24 (src line 153)
 
 
 state 35
 	bool:  BOOL.    (25)
 
-	.  reduce 25 (src line 131)
+	.  reduce 25 (src line 156)
 
 
 state 36
@@ -407,7 +407,7 @@ state 37
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 20 (src line 114)
+	.  reduce 20 (src line 139)
 
 	ope2  goto 44
 
@@ -458,7 +458,7 @@ state 40
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 17 (src line 109)
+	.  reduce 17 (src line 134)
 
 	ope2  goto 44
 
@@ -481,7 +481,7 @@ state 41
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 18 (src line 110)
+	.  reduce 18 (src line 135)
 
 	ope2  goto 44
 
@@ -504,7 +504,7 @@ state 42
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 19 (src line 111)
+	.  reduce 19 (src line 136)
 
 	ope2  goto 44
 
@@ -548,97 +548,97 @@ state 44
 state 45
 	ope2:  PLUS.    (27)
 
-	.  reduce 27 (src line 141)
+	.  reduce 27 (src line 166)
 
 
 state 46
 	ope2:  MINUS.    (28)
 
-	.  reduce 28 (src line 143)
+	.  reduce 28 (src line 168)
 
 
 state 47
 	ope2:  MULTI.    (29)
 
-	.  reduce 29 (src line 144)
+	.  reduce 29 (src line 169)
 
 
 state 48
 	ope2:  DIV.    (30)
 
-	.  reduce 30 (src line 145)
+	.  reduce 30 (src line 170)
 
 
 state 49
 	ope2:  MOD.    (31)
 
-	.  reduce 31 (src line 146)
+	.  reduce 31 (src line 171)
 
 
 state 50
 	ope2:  GT.    (32)
 
-	.  reduce 32 (src line 147)
+	.  reduce 32 (src line 172)
 
 
 state 51
 	ope2:  GTE.    (33)
 
-	.  reduce 33 (src line 148)
+	.  reduce 33 (src line 173)
 
 
 state 52
 	ope2:  LT.    (34)
 
-	.  reduce 34 (src line 149)
+	.  reduce 34 (src line 174)
 
 
 state 53
 	ope2:  LTE.    (35)
 
-	.  reduce 35 (src line 150)
+	.  reduce 35 (src line 175)
 
 
 state 54
 	ope2:  EQ.    (36)
 
-	.  reduce 36 (src line 151)
+	.  reduce 36 (src line 176)
 
 
 state 55
 	ope2:  NEQ.    (37)
 
-	.  reduce 37 (src line 152)
+	.  reduce 37 (src line 177)
 
 
 state 56
 	ope2:  AND.    (38)
 
-	.  reduce 38 (src line 153)
+	.  reduce 38 (src line 178)
 
 
 state 57
 	ope2:  OR.    (39)
 
-	.  reduce 39 (src line 154)
+	.  reduce 39 (src line 179)
 
 
 state 58
 	ope2:  NOT.    (40)
 
-	.  reduce 40 (src line 155)
+	.  reduce 40 (src line 180)
 
 
 state 59
 	ope2:  CONTAINS.    (41)
 
-	.  reduce 41 (src line 156)
+	.  reduce 41 (src line 181)
 
 
 state 60
 	expression:  ope1 expressionAtom.    (47)
 
-	.  reduce 47 (src line 168)
+	.  reduce 47 (src line 193)
 
 
 state 61
@@ -668,25 +668,25 @@ state 61
 state 62
 	options:  AT IDENTIFIER typeDefinition.    (6)
 
-	.  reduce 6 (src line 81)
+	.  reduce 6 (src line 93)
 
 
 state 63
 	typeDefinition:  INTTYPE.    (7)
 
-	.  reduce 7 (src line 84)
+	.  reduce 7 (src line 96)
 
 
 state 64
 	typeDefinition:  STRINGTYPE.    (8)
 
-	.  reduce 8 (src line 86)
+	.  reduce 8 (src line 98)
 
 
 state 65
 	typeDefinition:  BOOLTYPE.    (9)
 
-	.  reduce 9 (src line 87)
+	.  reduce 9 (src line 99)
 
 
 state 66
@@ -729,7 +729,7 @@ state 67
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 16 (src line 107)
+	.  reduce 16 (src line 132)
 
 	ope2  goto 44
 
@@ -752,20 +752,20 @@ state 68
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 11 (src line 92)
+	.  reduce 11 (src line 111)
 
 	ope2  goto 44
 
 state 69
 	expression:  expression ope2 expressionAtom.    (46)
 
-	.  reduce 46 (src line 167)
+	.  reduce 46 (src line 192)
 
 
 state 70
 	expressionAtom:  LPAREN expression RPAREN.    (48)
 
-	.  reduce 48 (src line 172)
+	.  reduce 48 (src line 197)
 
 
 state 71
@@ -804,7 +804,7 @@ state 71
 state 72
 	returnExpression:  FOR IDENTIFIER IN expression body.    (22)
 
-	.  reduce 22 (src line 117)
+	.  reduce 22 (src line 142)
 
 
 82 terminals, 18 nonterminals

@@ -1,12 +1,20 @@
 %{
     package parser
 
+
+import (
+    "fmt"
+)
     // each object has a value and a type.
     type value struct {
         v string // a string in go that produce the value of the object
         t string // a string representing the gotype of the object
-        c int // the ope code is stored here
+        c int // the code returned by lexer is stored here - it is always set, even for variables (set as IDENTIFIER)
     }
+
+   
+
+   
 
 
 %}
@@ -77,7 +85,11 @@ head
     ;
 
 options
-    : IGNORE expressionList{ /* todo */ }
+    : IGNORE expressionList{ 
+            // yylex.(*myLexer).imports["fmt"] = true
+            line := fmt.Sprintf("rt.Ignore(%s)", $2.v)
+            yylex.(*myLexer).addLines(line)
+     }
     | AT IDENTIFIER  typeDefinition  { /* todo */ }
     ;
 
@@ -88,8 +100,21 @@ typeDefinition
     ;
 
 expressionList
-    : expression                   
-    | expressionList COMMA expression   { /*todo*/}
+    : expression      {
+            if $1.t != "string" {
+                yylex.(*myLexer).errorf("a string list should be made of strings only")
+            }
+            $$.v = $1.v
+            $$.t = "string"
+
+                     }             
+    | expressionList COMMA expression   { 
+            if $3.t != "string" {
+                yylex.(*myLexer).errorf("a string list should be made of strings only")
+            }
+            $$.v = $1.v + "," + $3.v
+            $$.t = "string"
+    }
     ;
 
 // program body contains statements, followed by either RETURN or 

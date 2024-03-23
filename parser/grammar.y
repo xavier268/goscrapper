@@ -25,8 +25,9 @@
 // actions
             SELECT CLICK DOCUMENT PAGE CONTAINS
 
-%union {            // ceci redéclare yySymType !
-    value string
+%union {            
+    value string // a string in go that produce the value of the object
+    gtype string // a string representing the gotype of the object
 }
 
 %type <value> expression stringExpression stringList string 
@@ -94,9 +95,7 @@ statements
     ;
 
 statement 
-    : IDENTIFIER ASSIGN stringExpression { yylex.(*myLexer).setVar($1, $3, "string")}
-    | IDENTIFIER ASSIGN numExpression { yylex.(*myLexer).setVar($1, $3, "int")}
-    | IDENTIFIER ASSIGN boolExpression { yylex.(*myLexer).setVar($1, $3, "bool")}
+    : IDENTIFIER ASSIGN expression { yylex.(*myLexer).setVar($1, $3)}
     | PAGE stringExpression { /* todo */}
     | SELECT stringExpression { /* todo */}
     | CLICK  stringExpression { /* todo */}
@@ -114,7 +113,6 @@ expression
     : stringExpression
     | numExpression
     | boolExpression
-    | IDENTIFIER { /* todo */}
     ;
 
 stringExpression
@@ -125,6 +123,7 @@ stringExpression
 
 string
     : STRING     // litteral
+    | IDENTIFIER
     ;
 
 numExpression
@@ -141,6 +140,7 @@ numExpression
 
 number
     : NUMBER // litteral
+    | IDENTIFIER
     ;
 
 boolExpression
@@ -167,6 +167,7 @@ boolExpression
 
 bool    
     : BOOL // litteral
+    | IDENTIFIER
     ;
 
 %%

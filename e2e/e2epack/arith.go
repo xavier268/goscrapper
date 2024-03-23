@@ -14,7 +14,7 @@ package e2epack
 @a int
 @b int
 
-c = a [31m <<<<<<<<<<<<<<<<< syntax error [0m
-+b
+c = a+ [31m <<<<<<<<<<<<<<<<< syntax error [0m
+b
 
 RETURN

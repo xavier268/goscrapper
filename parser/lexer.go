@@ -64,9 +64,10 @@ startLoop:
 	// read strings between " "
 	// You can escape inside " by adding one more.
 	if loc := regexp.MustCompile(`(?s)^"(""+|[^"])*"`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
-		lval.value = strings.Replace(lval.value, `""`, `"`, -1) // replace all doubled quotes escaped inside.
-		lval.value = fmt.Sprintf(`%q`, lval.value)              // store as a quoted string
+		lval.value.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])     // remove external quotes
+		lval.value.v = strings.Replace(lval.value.v, `""`, `"`, -1) // replace all doubled quotes escaped inside.
+		lval.value.v = fmt.Sprintf(`%q`, lval.value.v)              // store as a quoted string
+		lval.value.t = "string"
 		m.pos += loc[1]
 		return STRING
 	}
@@ -74,139 +75,37 @@ startLoop:
 	// read strings between ' '
 	// You can escape inside ' by adding one more.
 	if loc := regexp.MustCompile(`(?s)^'(''+|[^'])*'`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
-		lval.value = strings.Replace(lval.value, `''`, `'`, -1) // replace all doubled quotes escaped inside.
-		lval.value = fmt.Sprintf(`%q`, lval.value)              // stored as a back-quoted string
+		lval.value.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])     // remove external quotes
+		lval.value.v = strings.Replace(lval.value.v, `''`, `'`, -1) // replace all doubled quotes escaped inside.
+		lval.value.v = fmt.Sprintf(`%q`, lval.value.v)              // stored as a back-quoted string
+		lval.value.t = "string"
 		m.pos += loc[1]
 		return STRING
 	}
 
 	// read integer number.
 	if loc := regexp.MustCompile(`^[+-]?[0-9]+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value = string(m.data[m.pos : m.pos+loc[1]])
+		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
+		lval.value.t = "int"
 		m.pos += loc[1]
 		return NUMBER
 	}
 
-	// read boolean. Use true or false, in lowercase.
-	if loc := regexp.MustCompile(`^true|false`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value = string(m.data[m.pos : m.pos+loc[1]])
-		m.pos += loc[1] // skip
-		return BOOL
-	}
-
-	// read symbols
-	// start with the multichar operators before single chars.
-	switch {
-
-	// start with mutibyte
-	case m.try("<="):
-		lval.value = "<="
-		return LTE
-	case m.try(">="):
-		lval.value = ">="
-		return GTE
-	case m.try("=="):
-		lval.value = "=="
-		return EQ
-	case m.try("!="):
-		lval.value = "!="
-		return NEQ
-	case m.try("++"):
-		lval.value = "++"
-		return PLUSPLUS
-	case m.try("&&"), m.try("AND"):
-		lval.value = "&&"
-		return AND
-	case m.try("||"), m.try("OR"):
-		lval.value = "||"
-		return OR
-	case m.try(".."):
-		lval.value = ".."
-		return DOTDOT
-	case m.try("::"):
-		lval.value = "::"
-		return NAMESPACESEPARATOR
-	case m.try("!~"):
-		lval.value = "!~"
-		return REGEXNOTMATCH
-	case m.try("=~"):
-		lval.value = "=~"
-		return REGEXMATCH
-
-		// single bytes
-	case m.try(":"):
-		lval.value = ":"
-		return COLON
-	case m.try(";"):
-		lval.value = ";"
-		return SEMICOLON
-	case m.try("("):
-		lval.value = "("
-		return LPAREN
-	case m.try(")"):
-		lval.value = ")"
-		return RPAREN
-	case m.try("{"):
-		lval.value = "{"
-		return LBRACE
-	case m.try("}"):
-		lval.value = "}"
-		return RBRACE
-	case m.try("["):
-		lval.value = "["
-		return LBRACKET
-	case m.try("]"):
-		lval.value = "]"
-		return RBRACKET
-	case m.try(","):
-		lval.value = ","
-		return COMMA
-	case m.try("."):
-		lval.value = "."
-		return DOT
-
-	case m.try("<"):
-		lval.value = "<"
-		return LT
-	case m.try(">"):
-		lval.value = ">"
-		return GT
-
-	case m.try("*"):
-		lval.value = "*"
-		return MULTI
-	case m.try("/"):
-		lval.value = "/"
-		return DIV
-	case m.try("%"):
-		lval.value = "%"
-		return MOD
-	case m.try("+"):
-		lval.value = "+"
-		return PLUS
-	case m.try("-"):
-		lval.value = "-"
-		return MINUS
-	case m.try("="):
-		lval.value = "="
-		return ASSIGN
-	case m.try("?"):
-		lval.value = "?"
-		return QUESTION
-	case m.try("@"):
-		lval.value = "@"
-		return AT
+	// read symbols or operators
+	key, err := m.tryAllOperators()
+	if err == nil {
+		return key // operator found
 	}
 
 	// keywords
-	key, err := m.tryAllKeywords()
+	key, err = m.tryAllKeywords()
 	if err == nil {
 		return key // keyword found
 	}
 
 	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value = string(m.data[m.pos : m.pos+loc[1]])
+		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
+		lval.value.t = "" // unknown for the moment
 		m.pos += loc[1]
 		return IDENTIFIER
 	}
@@ -227,6 +126,62 @@ func (m *myLexer) tryAllKeywords() (int, error) {
 	}
 
 	return 0, fmt.Errorf("no keyword found")
+}
+
+// try all operators, using an internal table
+func (m *myLexer) tryAllOperators() (int, error) {
+	opeTable := []struct {
+		ope  string
+		code int
+	}{
+		// special values
+		{"true", BOOL},
+		{"false", BOOL},
+		{"int", INTTYPE},
+		{"bool", BOOLTYPE},
+		{"string", STRINGTYPE},
+
+		// multi bytes
+		{"<=", LTE},
+		{">=", GTE},
+		{"==", EQ},
+		{"!=", NEQ},
+		{"++", PLUSPLUS},
+		{"&&", AND},
+		{"||", OR},
+		{"..", DOTDOT},
+		{"::", NAMESPACESEPARATOR},
+		{"!~", REGEXNOTMATCH},
+		{"=~", REGEXMATCH},
+		// single bytes
+		{":", COLON},
+		{";", SEMICOLON},
+		{"(", LPAREN},
+		{")", RPAREN},
+		{"{", LBRACE},
+		{"}", RBRACE},
+		{"[", LBRACKET},
+		{"]", RBRACKET},
+		{",", COMMA},
+		{".", DOT},
+		{"<", LT},
+		{">", GT},
+		{"*", MULTI},
+		{"/", DIV},
+		{"%", MOD},
+		{"+", PLUS},
+		{"-", MINUS},
+		{"=", ASSIGN},
+		{"?", QUESTION},
+		{"@", AT},
+	}
+	for _, k := range opeTable {
+		// fmt.Printf("Trying %d %q\n", i, k)
+		if m.try(k.ope) {
+			return k.code, nil
+		}
+	}
+	return 0, fmt.Errorf("no operator found")
 }
 
 // Try a keyword, if success, update the lexer position and return true.

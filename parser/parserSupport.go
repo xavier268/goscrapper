@@ -48,8 +48,11 @@ func (m *myLexer) finalize() {
 	fmt.Fprintln(m.w, "}")
 	fmt.Fprintln(m.w)
 
+	// save the source function in the function comments
+	m.printCommentedSource()
+
 	// write function header, with parameters
-	fmt.Fprintf(m.w, "\nfunc Do_%s(_in Input_%s) (_res []Output_%s, _err error) {\n", m.name, m.name, m.name)
+	fmt.Fprintf(m.w, "func Do_%s(_in Input_%s) (_res []Output_%s, _err error) {\n", m.name, m.name, m.name)
 
 	// initialize _res
 	m.nextRes()
@@ -61,8 +64,6 @@ func (m *myLexer) finalize() {
 
 	fmt.Fprintln(m.w, "return _res, _err\n}")
 
-	// save the source function at the bottom of the file
-	m.printCommentedSource()
 }
 
 // define an input parameter.
@@ -81,7 +82,6 @@ func (m *myLexer) printCommentedSource() {
 	for _, d := range dd {
 		fmt.Fprintf(m.w, "// %s\n", d)
 	}
-	fmt.Fprintln(m.w)
 }
 
 // prepare res to accept a new set of output variables,

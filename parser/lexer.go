@@ -68,6 +68,7 @@ startLoop:
 		lval.value.v = strings.Replace(lval.value.v, `""`, `"`, -1) // replace all doubled quotes escaped inside.
 		lval.value.v = fmt.Sprintf(`%q`, lval.value.v)              // store as a quoted string
 		lval.value.t = "string"
+		lval.value.c = STRING
 		m.pos += loc[1]
 		return STRING
 	}
@@ -79,6 +80,7 @@ startLoop:
 		lval.value.v = strings.Replace(lval.value.v, `''`, `'`, -1) // replace all doubled quotes escaped inside.
 		lval.value.v = fmt.Sprintf(`%q`, lval.value.v)              // stored as a back-quoted string
 		lval.value.t = "string"
+		lval.value.c = STRING
 		m.pos += loc[1]
 		return STRING
 	}
@@ -87,6 +89,7 @@ startLoop:
 	if loc := regexp.MustCompile(`^[+-]?[0-9]+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
 		lval.value.t = "int"
+		lval.value.c = NUMBER
 		m.pos += loc[1]
 		return NUMBER
 	}
@@ -94,18 +97,21 @@ startLoop:
 	// read symbols or operators
 	key, err := m.tryAllOperators()
 	if err == nil {
+		lval.value.c = key
 		return key // operator found
 	}
 
 	// keywords
 	key, err = m.tryAllKeywords()
 	if err == nil {
+		lval.value.c = key
 		return key // keyword found
 	}
 
 	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
 		lval.value.t = "" // unknown for the moment
+		lval.value.c = IDENTIFIER
 		m.pos += loc[1]
 		return IDENTIFIER
 	}

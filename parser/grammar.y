@@ -5,20 +5,22 @@
     type value struct {
         v string // a string in go that produce the value of the object
         t string // a string representing the gotype of the object
+        c int // the ope code is stored here
     }
 
 
 %}
 
 
-%token      MULTI DIV MOD PLUS MINUS PLUSPLUS
+%token <value>   // all token use value
+            MULTI DIV MOD PLUS MINUS PLUSPLUS
             LTE GTE LT GT EQ NEQ
             COLON SEMICOLON DOT COMMA LBRACKET RBRACKET LPAREN RPAREN LBRACE RBRACE
             AND OR NOT
             DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
             LOWER UPPER
 
-// Keywords
+            // Keywords
             INTTYPE BOOLTYPE STRINGTYPE // native types
             FOR RETURN WAITFOR OPTIONS IGNORE HEADLESS TIMEOUT 
             DISTINCT FILTER CURRENT SORT LIMIT LET COLLECT 
@@ -27,15 +29,15 @@
             EVENT
             LIKE IN WHILE
             BOOL AT IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
-// actions
+            // actions
             SELECT CLICK DOCUMENT PAGE CONTAINS
 
 %union {            
     value value
 }
 
-%type <value> expression expressionList 
-%type <value> number string bool
+%type <value> expression expressionList expressionAtom
+%type <value> number string bool ope2 ope1
 %type <value> IDENTIFIER NUMBER STRING BOOL
 
 
@@ -87,7 +89,7 @@ typeDefinition
 
 expressionList
     : expression                   
-    | expressionList COMMA expression   { $$ = $1 +  "," + $3}
+    | expressionList COMMA expression   { /*todo*/}
     ;
 
 // program body contains statements, followed by either RETURN or 
@@ -103,7 +105,7 @@ statements
     ;
 
 statement 
-    : IDENTIFIER ASSIGN expression { yylex.(*myLexer).setVar($1, $3)}
+    : IDENTIFIER ASSIGN expression { /*todo*/}
     | PAGE expression { /* todo */}
     | SELECT expression { /* todo */}
     | CLICK  expression { /* todo */}
@@ -111,6 +113,7 @@ statement
 
 returnExpression
     : RETURN expression { /* todo */}
+    | RETURN  { /* todo */ }
     | FOR IDENTIFIER IN expression body { /* todo */}
     ;
 
@@ -160,14 +163,14 @@ ope1 // unary operators
     ;
 
 expression // never empty, type is controlled semantically, not syntaxically
-    : expressionAtom { /* todo */ }
-    | expression ope2 expressionAtom { /* todo */ }
-    | ope1 expressionAtom { /* todo */ }
+    : expressionAtom { $$ = $1 }
+    | expression ope2 expressionAtom { $$ = yylex.(*myLexer).Ope2($2.c, $1, $3) }
+    | ope1 expressionAtom { $$ = yylex.(*myLexer).Ope1($1.c, $2) }
     
     ;
 
 expressionAtom // never empty
-    : LPAREN expression RPAREN  { /* todo */ }
+    : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).Paren($2) }
     | variable { /* todo */ }
     | string { /* todo */ }
     | number { /* todo */ }

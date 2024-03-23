@@ -50,13 +50,13 @@ state 2
 state 3
 	program:  body.    (2)
 
-	.  reduce 2 (src line 67)
+	.  reduce 2 (src line 69)
 
 
 state 4
 	head:  options.    (4)
 
-	.  reduce 4 (src line 74)
+	.  reduce 4 (src line 76)
 
 
 state 5
@@ -77,7 +77,7 @@ state 5
 state 6
 	body:  returnExpression.    (13)
 
-	.  reduce 13 (src line 97)
+	.  reduce 13 (src line 99)
 
 
 state 7
@@ -95,12 +95,12 @@ state 7
 
 	expression  goto 21
 	expressionList  goto 20
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 8
 	options:  AT.IDENTIFIER typeDefinition 
@@ -112,11 +112,12 @@ state 8
 state 9
 	statements:  statement.    (14)
 
-	.  reduce 14 (src line 100)
+	.  reduce 14 (src line 102)
 
 
 state 10
 	returnExpression:  RETURN.expression 
+	returnExpression:  RETURN.    (21)
 
 	MINUS  shift 29
 	LPAREN  shift 24
@@ -126,15 +127,15 @@ state 10
 	IDENTIFIER  shift 32
 	STRING  shift 33
 	NUMBER  shift 34
-	.  error
+	.  reduce 21 (src line 116)
 
 	expression  goto 37
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 11
 	returnExpression:  FOR.IDENTIFIER IN expression body 
@@ -164,12 +165,12 @@ state 13
 	.  error
 
 	expression  goto 40
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 14
 	statement:  SELECT.expression 
@@ -185,12 +186,12 @@ state 14
 	.  error
 
 	expression  goto 41
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 15
 	statement:  CLICK.expression 
@@ -206,35 +207,35 @@ state 15
 	.  error
 
 	expression  goto 42
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 16
 	program:  head body.    (1)
 
-	.  reduce 1 (src line 65)
+	.  reduce 1 (src line 67)
 
 
 state 17
 	head:  head options.    (3)
 
-	.  reduce 3 (src line 72)
+	.  reduce 3 (src line 74)
 
 
 state 18
 	body:  statements returnExpression.    (12)
 
-	.  reduce 12 (src line 95)
+	.  reduce 12 (src line 97)
 
 
 state 19
 	statements:  statements statement.    (15)
 
-	.  reduce 15 (src line 102)
+	.  reduce 15 (src line 104)
 
 
 state 20
@@ -242,7 +243,7 @@ state 20
 	expressionList:  expressionList.COMMA expression 
 
 	COMMA  shift 43
-	.  reduce 5 (src line 77)
+	.  reduce 5 (src line 79)
 
 
 state 21
@@ -264,14 +265,14 @@ state 21
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 10 (src line 88)
+	.  reduce 10 (src line 90)
 
 	ope2  goto 44
 
 state 22
-	expression:  expressionAtom.    (44)
+	expression:  expressionAtom.    (45)
 
-	.  reduce 44 (src line 164)
+	.  reduce 45 (src line 165)
 
 
 state 23
@@ -284,11 +285,11 @@ state 23
 	NUMBER  shift 34
 	.  error
 
+	expressionAtom  goto 60
 	number  goto 27
 	string  goto 26
 	bool  goto 28
 	variable  goto 25
-	expressionAtom  goto 60
 
 state 24
 	expressionAtom:  LPAREN.expression RPAREN 
@@ -304,77 +305,77 @@ state 24
 	.  error
 
 	expression  goto 61
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 25
-	expressionAtom:  variable.    (48)
-
-	.  reduce 48 (src line 173)
-
-
-state 26
-	expressionAtom:  string.    (49)
+	expressionAtom:  variable.    (49)
 
 	.  reduce 49 (src line 174)
 
 
-state 27
-	expressionAtom:  number.    (50)
+state 26
+	expressionAtom:  string.    (50)
 
 	.  reduce 50 (src line 175)
 
 
-state 28
-	expressionAtom:  bool.    (51)
+state 27
+	expressionAtom:  number.    (51)
 
 	.  reduce 51 (src line 176)
 
 
-state 29
-	ope1:  MINUS.    (41)
+state 28
+	expressionAtom:  bool.    (52)
 
-	.  reduce 41 (src line 156)
+	.  reduce 52 (src line 177)
+
+
+state 29
+	ope1:  MINUS.    (42)
+
+	.  reduce 42 (src line 159)
 
 
 state 30
-	ope1:  LOWER.    (42)
+	ope1:  LOWER.    (43)
 
-	.  reduce 42 (src line 158)
+	.  reduce 43 (src line 161)
 
 
 state 31
-	ope1:  UPPER.    (43)
+	ope1:  UPPER.    (44)
 
-	.  reduce 43 (src line 159)
+	.  reduce 44 (src line 162)
 
 
 state 32
-	variable:  IDENTIFIER.    (25)
+	variable:  IDENTIFIER.    (26)
 
-	.  reduce 25 (src line 133)
+	.  reduce 26 (src line 136)
 
 
 state 33
-	string:  STRING.    (22)
-
-	.  reduce 22 (src line 122)
-
-
-state 34
-	number:  NUMBER.    (23)
+	string:  STRING.    (23)
 
 	.  reduce 23 (src line 125)
 
 
-state 35
-	bool:  BOOL.    (24)
+state 34
+	number:  NUMBER.    (24)
 
 	.  reduce 24 (src line 128)
+
+
+state 35
+	bool:  BOOL.    (25)
+
+	.  reduce 25 (src line 131)
 
 
 state 36
@@ -406,7 +407,7 @@ state 37
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 20 (src line 112)
+	.  reduce 20 (src line 114)
 
 	ope2  goto 44
 
@@ -431,12 +432,12 @@ state 39
 	.  error
 
 	expression  goto 67
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 40
 	statement:  PAGE expression.    (17)
@@ -457,7 +458,7 @@ state 40
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 17 (src line 107)
+	.  reduce 17 (src line 109)
 
 	ope2  goto 44
 
@@ -480,7 +481,7 @@ state 41
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 18 (src line 108)
+	.  reduce 18 (src line 110)
 
 	ope2  goto 44
 
@@ -503,7 +504,7 @@ state 42
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 19 (src line 109)
+	.  reduce 19 (src line 111)
 
 	ope2  goto 44
 
@@ -521,12 +522,12 @@ state 43
 	.  error
 
 	expression  goto 68
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 44
 	expression:  expression ope2.expressionAtom 
@@ -538,106 +539,106 @@ state 44
 	NUMBER  shift 34
 	.  error
 
+	expressionAtom  goto 69
 	number  goto 27
 	string  goto 26
 	bool  goto 28
 	variable  goto 25
-	expressionAtom  goto 69
 
 state 45
-	ope2:  PLUS.    (26)
+	ope2:  PLUS.    (27)
 
-	.  reduce 26 (src line 138)
+	.  reduce 27 (src line 141)
 
 
 state 46
-	ope2:  MINUS.    (27)
+	ope2:  MINUS.    (28)
 
-	.  reduce 27 (src line 140)
+	.  reduce 28 (src line 143)
 
 
 state 47
-	ope2:  MULTI.    (28)
+	ope2:  MULTI.    (29)
 
-	.  reduce 28 (src line 141)
+	.  reduce 29 (src line 144)
 
 
 state 48
-	ope2:  DIV.    (29)
+	ope2:  DIV.    (30)
 
-	.  reduce 29 (src line 142)
+	.  reduce 30 (src line 145)
 
 
 state 49
-	ope2:  MOD.    (30)
+	ope2:  MOD.    (31)
 
-	.  reduce 30 (src line 143)
+	.  reduce 31 (src line 146)
 
 
 state 50
-	ope2:  GT.    (31)
+	ope2:  GT.    (32)
 
-	.  reduce 31 (src line 144)
+	.  reduce 32 (src line 147)
 
 
 state 51
-	ope2:  GTE.    (32)
+	ope2:  GTE.    (33)
 
-	.  reduce 32 (src line 145)
+	.  reduce 33 (src line 148)
 
 
 state 52
-	ope2:  LT.    (33)
+	ope2:  LT.    (34)
 
-	.  reduce 33 (src line 146)
+	.  reduce 34 (src line 149)
 
 
 state 53
-	ope2:  LTE.    (34)
+	ope2:  LTE.    (35)
 
-	.  reduce 34 (src line 147)
+	.  reduce 35 (src line 150)
 
 
 state 54
-	ope2:  EQ.    (35)
+	ope2:  EQ.    (36)
 
-	.  reduce 35 (src line 148)
+	.  reduce 36 (src line 151)
 
 
 state 55
-	ope2:  NEQ.    (36)
+	ope2:  NEQ.    (37)
 
-	.  reduce 36 (src line 149)
+	.  reduce 37 (src line 152)
 
 
 state 56
-	ope2:  AND.    (37)
+	ope2:  AND.    (38)
 
-	.  reduce 37 (src line 150)
+	.  reduce 38 (src line 153)
 
 
 state 57
-	ope2:  OR.    (38)
+	ope2:  OR.    (39)
 
-	.  reduce 38 (src line 151)
+	.  reduce 39 (src line 154)
 
 
 state 58
-	ope2:  NOT.    (39)
+	ope2:  NOT.    (40)
 
-	.  reduce 39 (src line 152)
+	.  reduce 40 (src line 155)
 
 
 state 59
-	ope2:  CONTAINS.    (40)
+	ope2:  CONTAINS.    (41)
 
-	.  reduce 40 (src line 153)
+	.  reduce 41 (src line 156)
 
 
 state 60
-	expression:  ope1 expressionAtom.    (46)
+	expression:  ope1 expressionAtom.    (47)
 
-	.  reduce 46 (src line 167)
+	.  reduce 47 (src line 168)
 
 
 state 61
@@ -667,25 +668,25 @@ state 61
 state 62
 	options:  AT IDENTIFIER typeDefinition.    (6)
 
-	.  reduce 6 (src line 79)
+	.  reduce 6 (src line 81)
 
 
 state 63
 	typeDefinition:  INTTYPE.    (7)
 
-	.  reduce 7 (src line 82)
+	.  reduce 7 (src line 84)
 
 
 state 64
 	typeDefinition:  STRINGTYPE.    (8)
 
-	.  reduce 8 (src line 84)
+	.  reduce 8 (src line 86)
 
 
 state 65
 	typeDefinition:  BOOLTYPE.    (9)
 
-	.  reduce 9 (src line 85)
+	.  reduce 9 (src line 87)
 
 
 state 66
@@ -702,12 +703,12 @@ state 66
 	.  error
 
 	expression  goto 71
+	expressionAtom  goto 22
 	number  goto 27
 	string  goto 26
 	bool  goto 28
-	variable  goto 25
 	ope1  goto 23
-	expressionAtom  goto 22
+	variable  goto 25
 
 state 67
 	statement:  IDENTIFIER ASSIGN expression.    (16)
@@ -728,7 +729,7 @@ state 67
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 16 (src line 105)
+	.  reduce 16 (src line 107)
 
 	ope2  goto 44
 
@@ -751,20 +752,20 @@ state 68
 	OR  shift 57
 	NOT  shift 58
 	CONTAINS  shift 59
-	.  reduce 11 (src line 90)
+	.  reduce 11 (src line 92)
 
 	ope2  goto 44
 
 state 69
-	expression:  expression ope2 expressionAtom.    (45)
+	expression:  expression ope2 expressionAtom.    (46)
 
-	.  reduce 45 (src line 166)
+	.  reduce 46 (src line 167)
 
 
 state 70
-	expressionAtom:  LPAREN expression RPAREN.    (47)
+	expressionAtom:  LPAREN expression RPAREN.    (48)
 
-	.  reduce 47 (src line 171)
+	.  reduce 48 (src line 172)
 
 
 state 71
@@ -794,23 +795,23 @@ state 71
 	CONTAINS  shift 59
 	.  error
 
+	ope2  goto 44
 	body  goto 72
 	statements  goto 5
 	returnExpression  goto 6
 	statement  goto 9
-	ope2  goto 44
 
 state 72
-	returnExpression:  FOR IDENTIFIER IN expression body.    (21)
+	returnExpression:  FOR IDENTIFIER IN expression body.    (22)
 
-	.  reduce 21 (src line 114)
+	.  reduce 22 (src line 117)
 
 
 82 terminals, 18 nonterminals
-52 grammar rules, 73/16000 states
+53 grammar rules, 73/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 67 working sets used
-memory: parser 136/240000
+memory: parser 125/240000
 8 extra closures
 254 shift entries, 1 exceptions
 32 goto entries

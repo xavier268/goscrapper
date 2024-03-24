@@ -16,10 +16,13 @@ import (
 // ======================================================
 
 // Parse from in and write production on out.
+// No package name is written.
 func Parse(out io.Writer, in io.Reader) error {
-	return parse(out, in, "")
+	return parse(out, in, "noname")
 }
 
+// parse everything and write to out.
+// NB : package name should already have been written to out ...
 func parse(out io.Writer, in io.Reader, name string) error {
 
 	var err error
@@ -32,7 +35,9 @@ func parse(out io.Writer, in io.Reader, name string) error {
 		lines:     []string{},
 		inparams:  []string{},
 		outparams: []string{},
+		vars:      map[string]string{},
 		imports:   map[string]bool{},
+		loops:     0,
 	}
 	lex.data, err = io.ReadAll(in)
 	if err != nil {

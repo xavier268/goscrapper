@@ -9,16 +9,22 @@ import (
 )
 
 type myLexer struct {
-	name string // name of the lexer
+	name string // name of the lexer source
 	data []byte // entire data to be lexed
 	pos  int    // next position to process
 	// code building support
-	w         io.Writer       // where are error messages written to ?
-	lines     []string        // code lines collected so far
-	inparams  []string        // contains the defnitions for the name type definition of the function input parameters, ex :  "name string"
-	outparams []string        // contains the definitions for the name type definition of the function output parameters, ex :  "name string"
-	imports   map[string]bool // set of imports required
+	w         io.Writer         // where are error messages written to ?
+	lines     []string          // list of lines in the code, pending writing.
+	inparams  []string          // contains the names of the input parameters.
+	outparams []string          // contains the the name of the output parameters. Type should not change between scopes !
+	vars      map[string]string // associate a type to a given var. All var defined  with same name in different scopes should have same types.
+	imports   map[string]bool   // set of imports required
+	loops     int               // total number of imbricated for loops in function.
+}
 
+// add lines to the code to be generated.
+func (m *myLexer) addLines(lines ...string) {
+	m.lines = append(m.lines, lines...)
 }
 
 // Error implements yyLexer.
@@ -29,6 +35,11 @@ func (m *myLexer) Error(e string) {
 	fmt.Fprint(m.w, string(m.data[bef:m.pos]))
 	fmt.Fprintf(m.w, " %s <<<<<<<<<<<<<<<<< %s %s\n", ColRED, e, RESET)
 	fmt.Fprintln(m.w, string(m.data[m.pos:after]))
+}
+
+// utility to format error
+func (m *myLexer) errorf(format string, args ...interface{}) {
+	m.Error(fmt.Sprintf(format, args...))
 }
 
 // Lex implements yyLexer.

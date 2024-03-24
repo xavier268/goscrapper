@@ -6,4 +6,4 @@
 
 d = a+b-a*b/a
 
-RETURN c
+RETURN c , d,a2

@@ -31,7 +31,7 @@ type Output_testarith struct {
 // 
 // d = a+b-a*b/a
 // 
-// RETURN c
+// RETURN c , d,a2
 func Do_testarith(_in Input_testarith) (_res []Output_testarith, _err error) {
 var a int = _in.a ; _ = a
 var b int = _in.b ; _ = b

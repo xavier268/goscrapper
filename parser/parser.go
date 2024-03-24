@@ -755,19 +755,19 @@ yydefault:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:192
 		{
-			yyVAL.value = yylex.(*myLexer).Ope2(yyDollar[2].value.c, yyDollar[1].value, yyDollar[3].value)
+			yyVAL.value = yylex.(*myLexer).vOpe2(yyDollar[2].value.c, yyDollar[1].value, yyDollar[3].value)
 		}
 	case 47:
 		yyDollar = yyS[yypt-2 : yypt+1]
 //line grammar.y:193
 		{
-			yyVAL.value = yylex.(*myLexer).Ope1(yyDollar[1].value.c, yyDollar[2].value)
+			yyVAL.value = yylex.(*myLexer).vOpe1(yyDollar[1].value.c, yyDollar[2].value)
 		}
 	case 48:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:198
 		{
-			yyVAL.value = yylex.(*myLexer).Paren(yyDollar[2].value)
+			yyVAL.value = yylex.(*myLexer).vParen(yyDollar[2].value)
 		}
 	case 49:
 		yyDollar = yyS[yypt-1 : yypt+1]

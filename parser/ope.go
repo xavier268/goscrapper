@@ -3,7 +3,7 @@ package parser
 import "fmt"
 
 // binary operators on expressions
-func (m *myLexer) Ope2(ope int, left value, right value) value {
+func (m *myLexer) vOpe2(ope int, left value, right value) value {
 	switch ope {
 
 	case PLUS:
@@ -82,7 +82,7 @@ func (m *myLexer) Ope2(ope int, left value, right value) value {
 }
 
 // unary operators on expressions
-func (m *myLexer) Ope1(ope int, v value) value {
+func (m *myLexer) vOpe1(ope int, v value) value {
 	switch ope {
 	case NOT:
 		if v.t == "bool" {
@@ -114,7 +114,7 @@ func (m *myLexer) Ope1(ope int, v value) value {
 	return value{}
 }
 
-// encapsulate value in parenthesis
-func (m *myLexer) Paren(v value) value {
+// encapsulate value in parenthesis, keep same type.
+func (m *myLexer) vParen(v value) value {
 	return value{t: v.t, v: "(" + v.v + ")"}
 }

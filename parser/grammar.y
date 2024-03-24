@@ -189,13 +189,13 @@ ope1 // unary operators
 
 expression // never empty, type is controlled semantically, not syntaxically
     : expressionAtom { $$ = $1 }
-    | expression ope2 expressionAtom { $$ = yylex.(*myLexer).Ope2($2.c, $1, $3) }
-    | ope1 expressionAtom { $$ = yylex.(*myLexer).Ope1($1.c, $2) }
+    | expression ope2 expressionAtom { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) }
+    | ope1 expressionAtom { $$ = yylex.(*myLexer).vOpe1($1.c, $2) }
     
     ;
 
 expressionAtom // never empty
-    : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).Paren($2) }
+    : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }
     | variable { /* todo */ }
     | string { /* todo */ }
     | number { /* todo */ }

@@ -79,14 +79,15 @@ head
     ;
 
 options
-    : AT IDENTIFIER  typeDefinition  { yylex.(*myLexer).declInputParam($2.v, $3.v) } // set input parameters
+    : AT IDENTIFIER  typeDefinition  { yylex.(*myLexer).declInputParam($2.v, $3.v) }   // declare input parameter
     ;
 
 typeDefinition
     : INTTYPE
     | STRINGTYPE
     | BOOLTYPE
-    /* to do - add array & objects */
+    | LBRACKET  typeDefinition RBRACKET { $$.v = "[]" + $2.v}
+    /* to do - add objects */
     ;
 
 // program body contains statements, followed by either RETURN or 
@@ -162,6 +163,7 @@ expression // never empty, type is controlled semantically, not syntaxically
 expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }
     | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
+    | IDENTIFIER LBRACKET expression RBRACKET { /* todo - expression must be a number, or maybe certain strings for an object key ? */ }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
     | BOOL { $$ = $1 }

@@ -1,7 +1,9 @@
 
 @a int
 @b int
+@a2 [int]
+@a1 [[bool]]
 
-c = a+b-a*b/a
+d = a+b-a*b/a
 
 RETURN c

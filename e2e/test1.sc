@@ -2,10 +2,10 @@
 
 @toto int
 
-IGNORE "*.jpg", "*.JPEG"
+@bbb bool
 
 PAGE "http://www.google.fr"
-    SELECT "input[name=q]"	
+SELECT ANY "input[name=q]"	
     CLICK "input[name=btnK]"
     a = 23 
     RETURN a

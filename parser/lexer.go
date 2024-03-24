@@ -106,22 +106,20 @@ startLoop:
 	}
 
 	// read symbols or operators
-	key, err := m.tryAllOperators()
+	err = m.tryAllOperators(lval)
 	if err == nil {
-		lval.value.c = key
-		return key // operator found
+		return lval.value.c // operator found
 	}
 
 	// keywords
-	key, err = m.tryAllKeywords()
+	err = m.tryAllKeywords(lval)
 	if err == nil {
-		lval.value.c = key
-		return key // keyword found
+		return lval.value.c // keyword found
 	}
 
 	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
-		lval.value.t = "" // unknown for the moment
+		lval.value.t = "IDENTIFIER"
 		lval.value.c = IDENTIFIER
 		m.pos += loc[1]
 		return IDENTIFIER
@@ -132,21 +130,25 @@ startLoop:
 }
 
 // try all keywords, returning their code if found.
-func (m *myLexer) tryAllKeywords() (int, error) {
+func (m *myLexer) tryAllKeywords(lval *yySymType) error {
 
 	for i, k := range yyToknames {
 		// fmt.Printf("Trying %d %q\n", i, k)
 		if m.try(k) { // Keywords are always upperCase
 			// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
-			return i + yyPrivate - 1, nil
+			lval.value.t = k
+			lval.value.c = i + yyPrivate - 1
+			lval.value.v = k
+			return nil
 		}
 	}
 
-	return 0, fmt.Errorf("no keyword found")
+	return fmt.Errorf("no keyword found")
 }
 
 // try all operators, using an internal table
-func (m *myLexer) tryAllOperators() (int, error) {
+// update lval if found.
+func (m *myLexer) tryAllOperators(lval *yySymType) error {
 	opeTable := []struct {
 		ope  string
 		code int
@@ -195,10 +197,13 @@ func (m *myLexer) tryAllOperators() (int, error) {
 	for _, k := range opeTable {
 		// fmt.Printf("Trying %d %q\n", i, k)
 		if m.try(k.ope) {
-			return k.code, nil
+			lval.value.t = TokenAsString(k.code)
+			lval.value.c = k.code
+			lval.value.v = k.ope
+			return nil
 		}
 	}
-	return 0, fmt.Errorf("no operator found")
+	return fmt.Errorf("no operator found")
 }
 
 // Try a keyword, if success, update the lexer position and return true.

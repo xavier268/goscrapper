@@ -38,8 +38,10 @@ func (m *myLexer) finalize() {
 func (m *myLexer) wImports() {
 
 	fmt.Fprintln(m.w, "import (")
+
 	// set import defaults
-	m.imports["github.com/xavier268/goscrapper/rt"] = true
+	// m.imports["github.com/xavier268/goscrapper/rt"] = true
+
 	// add imports added during parsing
 	for k := range m.imports {
 		fmt.Fprintf(m.w, "\t%q\n", k)

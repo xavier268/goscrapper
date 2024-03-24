@@ -74,6 +74,8 @@ import "fmt"
 // Declare a new input parameter.
 func (m *myLexer) declInputParam(name string, typ string) {
 
+	fmt.Println("DEBUG : calling declInputParam with ", name, typ)
+
 	// cheks ...
 	if typ == "" {
 		m.errorf("the type for the input parameter %s should be specified", name)
@@ -89,7 +91,7 @@ func (m *myLexer) declInputParam(name string, typ string) {
 	m.vars[name] = typ
 
 	// declare a golang variable with same name and type in current (gloabl ) scope
-	li := fmt.Sprintf("var %s %s = _in.%s", name, typ, name)
+	li := fmt.Sprintf("var %s %s = _in.%s ; _ = %s", name, typ, name, name)
 	m.addLines(li)
 }
 
@@ -111,7 +113,7 @@ func (m *myLexer) vSetVar(name string, v value) {
 	m.vars[name] = v.t
 
 	// generate code
-	li := fmt.Sprintf("var %s %s= %s", name, v.t, v.v)
+	li := fmt.Sprintf("var %s %s= %s;_=%s", name, v.t, v.v, name)
 	m.addLines(li)
 }
 

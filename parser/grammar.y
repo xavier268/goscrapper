@@ -38,8 +38,9 @@
 
 %type <value> expression expressionAtom
 %type <value> ope2 ope1
-%type <value> typeDefinition
-%type <value> IDENTIFIER identifierList NUMBER STRING BOOL
+%type <value> typeDefinition 
+%type <value> returnList loopClause body 
+%type <value> IDENTIFIER  NUMBER STRING BOOL
 
 
 
@@ -85,13 +86,14 @@ typeDefinition
     : INTTYPE
     | STRINGTYPE
     | BOOLTYPE
+    /* to do - add array & objects */
     ;
 
 // program body contains statements, followed by either RETURN or 
 
 body
-    : statements returnExpression { /* todo */}
-    | returnExpression { /* todo */}
+    : statements returnStatements { /* todo */}
+    | returnStatements { /* todo */}
     ;
 
 statements
@@ -105,18 +107,26 @@ statement
     | CLICK  expression { /* todo */}
     ;
 
-returnExpression
-    : RETURN identifierList { /* todo */}
-    | FOR IDENTIFIER IN expression body { /* todo */}
+returnStatements
+    : RETURN returnList { /* todo */}
+    | loopClause body { /* todo */ }
     ;
 
-identifierList
+returnList
     : IDENTIFIER { $$ = $1 }
-    | identifierList COMMA IDENTIFIER { 
+    | returnList COMMA IDENTIFIER { 
                 $$.v = $1.v + "," + $3.v 
                 $$.t = $3.t
                  }
     ;
+
+loopClause
+    : FOR IDENTIFIER IN expression  { /* todo - expect expression to be an array */}
+    | SELECT ALL expression  { /* todo - expect expression to be a string css */ }
+    | SELECT ANY expression  { /* todo - expect expression to be a string css */ }
+    ;
+
+// ==================
 
 ope2 // binary operators
     : PLUS{ $$ = $1 }

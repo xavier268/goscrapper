@@ -1,22 +1,14 @@
 %{
     package parser
 
-
-import (
-    "fmt"
-)
     // each object has a value and a type.
     type value struct {
-        v string // a string in go that produce the value of the object
-        t string // a string representing the gotype of the object
-        c int // the code returned by lexer is stored here - it is always set, even for variables (set as IDENTIFIER)
+        v string    // a string in go that produce the value of the object
+        t string    // a string representing the gotype of the object
+        c int       // the code returned by lexer is stored here - it is always set by the lexer, even for variables (set as IDENTIFIER)
     }
 
    
-
-   
-
-
 %}
 
 
@@ -44,9 +36,10 @@ import (
     value value
 }
 
-%type <value> expression expressionList expressionAtom
-%type <value> number string bool ope2 ope1
-%type <value> IDENTIFIER NUMBER STRING BOOL
+%type <value> expression expressionAtom
+%type <value> ope2 ope1
+%type <value> typeDefinition
+%type <value> IDENTIFIER identifierList NUMBER STRING BOOL
 
 
 
@@ -69,7 +62,7 @@ import (
 
 %%
 
-/* NB : preferer recursivité gauche plus facile à implémenter et respecte associativité */
+/* NB : prefer left recursivity, easier to implement */
 
 
 program
@@ -85,36 +78,13 @@ head
     ;
 
 options
-    : IGNORE expressionList{ 
-            // yylex.(*myLexer).imports["fmt"] = true
-            line := fmt.Sprintf("rt.Ignore(%s)", $2.v)
-            yylex.(*myLexer).addLines(line)
-     }
-    | AT IDENTIFIER  typeDefinition  { /* todo */ }
+    : AT IDENTIFIER  typeDefinition  { yylex.(*myLexer).declInputParam($2.v, $3.v) } // set input parameters
     ;
 
 typeDefinition
     : INTTYPE
     | STRINGTYPE
     | BOOLTYPE
-    ;
-
-expressionList
-    : expression      {
-            if $1.t != "string" {
-                yylex.(*myLexer).errorf("a string list should be made of strings only")
-            }
-            $$.v = $1.v
-            $$.t = "string"
-
-                     }             
-    | expressionList COMMA expression   { 
-            if $3.t != "string" {
-                yylex.(*myLexer).errorf("a string list should be made of strings only")
-            }
-            $$.v = $1.v + "," + $3.v
-            $$.t = "string"
-    }
     ;
 
 // program body contains statements, followed by either RETURN or 
@@ -130,76 +100,61 @@ statements
     ;
 
 statement 
-    : IDENTIFIER ASSIGN expression { /*todo*/}
+    : IDENTIFIER ASSIGN expression { yylex.(*myLexer).vSetVar($1.v, $3)}
     | PAGE expression { /* todo */}
-    | SELECT expression { /* todo */}
     | CLICK  expression { /* todo */}
     ;
 
 returnExpression
-    : RETURN expression { /* todo */}
-    | RETURN  { /* todo */ }
+    : RETURN identifierList { /* todo */}
     | FOR IDENTIFIER IN expression body { /* todo */}
     ;
 
-
-
-
-// litterals
-
-string
-    : STRING     
+identifierList
+    : IDENTIFIER { $$ = $1 }
+    | identifierList COMMA IDENTIFIER { 
+                $$.v = $1.v + "," + $3.v 
+                $$.t = $3.t
+                 }
     ;
-number
-    : NUMBER 
-    ;
-bool    
-    : BOOL 
-    ;
-
-// variable
-variable
-    : IDENTIFIER
-    ;
-
 
 ope2 // binary operators
-    : PLUS
-    | MINUS
-    | MULTI
-    | DIV
-    | MOD
-    | GT
-    | GTE
-    | LT
-    | LTE
-    | EQ
-    | NEQ
-    | AND
-    | OR
-    | NOT
-    | CONTAINS
+    : PLUS{ $$ = $1 }
+    | MINUS{ $$ = $1 }
+    | MULTI{ $$ = $1 }
+    | DIV{ $$ = $1 }
+    | MOD{ $$ = $1 }
+    | GT{ $$ = $1 }
+    | GTE{ $$ = $1 }
+    | LT{ $$ = $1 }
+    | LTE{ $$ = $1 }
+    | EQ{ $$ = $1 }
+    | NEQ{ $$ = $1 }
+    | AND{ $$ = $1 }
+    | OR{ $$ = $1 }
+    | NOT{ $$ = $1 }
+    | CONTAINS{ $$ = $1 }
     ;
 
 ope1 // unary operators
-    : MINUS
-    | LOWER
-    | UPPER
+    : MINUS{ $$ = $1 }
+    | LOWER{ $$ = $1 }
+    | UPPER{ $$ = $1 }
+    | NOT{ $$ = $1 }
     ;
 
 expression // never empty, type is controlled semantically, not syntaxically
     : expressionAtom { $$ = $1 }
     | expression ope2 expressionAtom { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) }
-    | ope1 expressionAtom { $$ = yylex.(*myLexer).vOpe1($1.c, $2) }
-    
+    | ope1 expressionAtom { $$ = yylex.(*myLexer).vOpe1($1.c, $2) }    
     ;
 
 expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }
-    | variable { /* todo */ }
-    | string { /* todo */ }
-    | number { /* todo */ }
-    | bool { /* todo */ }
+    | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
+    | STRING { $$ = $1 }
+    | NUMBER { $$ = $1 }
+    | BOOL { $$ = $1 }
     ;
 
 

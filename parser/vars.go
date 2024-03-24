@@ -72,7 +72,7 @@ import "fmt"
 // }
 
 // Declare a new input parameter.
-func (m *myLexer) wDeclInputParam(name string, typ string) {
+func (m *myLexer) declInputParam(name string, typ string) {
 
 	// cheks ...
 	if typ == "" {
@@ -95,7 +95,7 @@ func (m *myLexer) wDeclInputParam(name string, typ string) {
 
 // Set a variable (local or global).
 // The type is typically derived from the expression generating the value.
-func (m *myLexer) setVar(name string, val string, typ string) {
+func (m *myLexer) vSetVar(name string, v value) {
 
 	// checks
 	for _, k := range m.inparams {
@@ -103,25 +103,29 @@ func (m *myLexer) setVar(name string, val string, typ string) {
 			m.errorf("you cannot allocate a value to the input parameter %s", name)
 		}
 	}
-	if tt, ok := m.vars[name]; ok && tt != typ {
-		m.errorf("the variable %s already exists under a different type %s but the value is of type %s", name, m.vars[typ], typ)
+	if tt, ok := m.vars[name]; ok && tt != v.t {
+		m.errorf("the variable %s already exists under type %s, but trying to set a value of type %s", name, m.vars[name], v.t)
 	}
 
 	// register variable
-	m.vars[name] = typ
+	m.vars[name] = v.t
 
 	// generate code
-	li := fmt.Sprintf("%s := %s", name, val)
+	li := fmt.Sprintf("var %s %s= %s", name, v.t, v.v)
 	m.addLines(li)
 }
 
 // Get the value and type of a named variable.
-func (m *myLexer) getVar(name string) (val string, typ string) {
+func (m *myLexer) vGetVar(name string) (v value) {
 	// checks
 	tt, ok := m.vars[name]
 	if !ok || tt == "" {
-		m.errorf("variable %s was never defined", name)
+		m.errorf("variable %s is not defined", name)
 	}
-	// return value & type
-	return fmt.Sprintf("( %s )", name), tt
+	// return value
+	return value{
+		v: fmt.Sprintf(" %s ", name),
+		t: tt,
+		c: 0,
+	}
 }

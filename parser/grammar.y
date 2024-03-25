@@ -30,8 +30,8 @@
             LIKE IN WHILE
             BOOL AT IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
             // actions
-            SELECT CLICK DOCUMENT PAGE CONTAINS
-
+            SELECT CLICK DOCUMENT PAGE CONTAINS 
+            
 %union {            
     value value
     list []string
@@ -40,10 +40,9 @@
 %type <value> expression expressionAtom
 %type <value> ope2 ope1
 %type <value> typeDefinition 
-%type <value> loopClause body 
 %type <value> IDENTIFIER  NUMBER STRING BOOL
 
-%type <list> returnList
+%type <list> returnList 
 
 
 
@@ -60,20 +59,19 @@
 %left MOD
 %left LOWER UPPER
 
-
-
-
-
 %%
 
 /* NB : prefer left recursivity, easier to implement */
 
 
 program
-    : head body { yylex.(*myLexer).finalize() }
-    | body      { yylex.(*myLexer).finalize() }
+    : head init body { yylex.(*myLexer).finalize() }
+    | init body      { yylex.(*myLexer).finalize() }
     ;
 
+init // initialize function
+    : { yylex.(*myLexer).incOut()}
+    ;
 
 // head defines options
 head 
@@ -112,8 +110,8 @@ statement
     ;
 
 returnStatements
-    : RETURN returnList { yylex.(*myLexer).declOutputParams($2)}
-    | loopClause body { /* todo */ }
+    : RETURN returnList { yylex.(*myLexer).declOutputParams($2) }
+    | loopClause body { yylex.(*myLexer).finishLoop() }
     ;
 
 returnList
@@ -122,7 +120,7 @@ returnList
     ;
 
 loopClause
-    : FOR IDENTIFIER IN expression  { /* todo - expect expression to be an array */}
+    : FOR IDENTIFIER IN expression  {yylex.(*myLexer).forNameInExpression($2.v, $4)}
     | SELECT ALL expression  { /* todo - expect expression to be a string css */ }
     | SELECT ANY expression  { /* todo - expect expression to be a string css */ }
     ;

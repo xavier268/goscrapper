@@ -33,9 +33,16 @@ type Output_test1 struct {
 //     CLICK "input[name=btnK]"
 //     a = 23 
 //     RETURN a
-func Do_test1(_in Input_test1) (_res []Output_test1, _err error) {
+func Do_test1(_in Input_test1) (_out []Output_test1, _err error) {
 var toto int = _in.toto ; _ = toto
 var bbb bool = _in.bbb ; _ = bbb
+// call to incOut
+ _out = append(_out, Output_test1{})
 var a int= 23;_=a
-return _res, _err
+//call to saveOut
+_out[len(_out)-1].a=a
+//_out[len(_out)-1].toto=toto
+//_out[len(_out)-1].bbb=bbb
+}
+return _out, _err
 }

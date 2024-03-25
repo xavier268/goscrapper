@@ -23,13 +23,19 @@ func (m *myLexer) finalize() {
 
 	m.wFuncDeclaration()
 
-	// write function body
+	// clean lines, and write function body
+	m.cleanOut()
 	for _, l := range m.lines {
 		fmt.Fprintf(m.w, "%s\n", l)
 	}
 
-	// return function results, finish function definition.
-	fmt.Fprintln(m.w, "return _res, _err")
+	// print closing braces for pending loops
+	for i := 1; i < m.loops; i++ {
+		fmt.Fprintln(m.w, "}")
+	}
+
+	// print final return statement
+	fmt.Fprintln(m.w, "return _out, _err")
 	fmt.Fprintln(m.w, "}")
 
 }
@@ -89,6 +95,6 @@ func (m *myLexer) wCommentedSource() {
 // writes function declaration, with input/output types.
 func (m *myLexer) wFuncDeclaration() {
 	fmt.Fprintf(m.w,
-		"func Do_%s(_in Input_%s) (_res []Output_%s, _err error) {\n",
+		"func Do_%s(_in Input_%s) (_out []Output_%s, _err error) {\n",
 		m.name, m.name, m.name)
 }

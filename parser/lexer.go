@@ -117,7 +117,7 @@ startLoop:
 		return lval.value.c // keyword found
 	}
 
-	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
+	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
 		lval.value.t = "IDENTIFIER"
 		lval.value.c = IDENTIFIER
@@ -125,7 +125,7 @@ startLoop:
 		return IDENTIFIER
 	}
 
-	m.Error("unrecognized token") // display error
+	m.errorf("unrecognized token : <%s>", m.data[m.pos:min(len(m.data), m.pos+20)]) // display error
 	return 0
 }
 

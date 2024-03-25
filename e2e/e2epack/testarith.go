@@ -7,6 +7,19 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\testArith.sc
 
+
+[31m ********* Error in testarith :***************[0m
+
+@b int
+@a2 [int]
+@a1 [[bool]]
+@c bool
+
+d = a+b-a*b/a
+
+FOR i IN a1
+RETURN [31m <<<<<<<<<<<<<<<<< FOR ... IN ... needs an array to loop, but  a1  is not an array but a [][]bool [0m
+ c , d,a2
 import (
 )
 
@@ -36,13 +49,28 @@ type Output_testarith struct {
 // 
 // d = a+b-a*b/a
 // 
+// FOR i IN a1
 // RETURN c , d,a2
-func Do_testarith(_in Input_testarith) (_res []Output_testarith, _err error) {
+func Do_testarith(_in Input_testarith) (_out []Output_testarith, _err error) {
 var a int = _in.a ; _ = a
 var b int = _in.b ; _ = b
 var a2 []int = _in.a2 ; _ = a2
 var a1 [][]bool = _in.a1 ; _ = a1
 var c bool = _in.c ; _ = c
+// call to incOut
+ _out = append(_out, Output_testarith{})
 var d int= (((((((( a ) + ( b ))) - ( a ))) * ( b ))) / ( a ));_=d
-return _res, _err
+for i := range  a1  {
+// call to incOut
+ _out = append(_out, Output_testarith{})
+//call to saveOut
+//_out[len(_out)-1].i=i
+//_out[len(_out)-1].a=a
+//_out[len(_out)-1].b=b
+_out[len(_out)-1].a2=a2
+//_out[len(_out)-1].a1=a1
+_out[len(_out)-1].c=c
+_out[len(_out)-1].d=d
+}
+return _out, _err
 }

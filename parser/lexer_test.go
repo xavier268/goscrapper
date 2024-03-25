@@ -25,6 +25,7 @@ func Example_lexer() {
 	'sq with escape '' '
 	"string containing
 	// a comment"
+	PAGE @ PLUS RETURN
 
 	`
 
@@ -72,6 +73,10 @@ func Example_lexer() {
 	// STRING   parser.value{v:"\"dq with escaped \\\"\\\" \"", t:"string", c:57417}
 	// STRING   parser.value{v:"\"sq with escape ' \"", t:"string", c:57417}
 	// STRING   parser.value{v:"\"string containing\\n\\t// a comment\"", t:"string", c:57417}
+	// PAGE   parser.value{v:"PAGE", t:"PAGE", c:57423}
+	// AT   parser.value{v:"@", t:"AT", c:57414}
+	// PLUS   parser.value{v:"PLUS", t:"PLUS", c:57349}
+	// RETURN   parser.value{v:"RETURN", t:"RETURN", c:57382}
 	// TOK-0   parser.value{v:"", t:"", c:0}
 
 }

@@ -1,6 +1,9 @@
 package parser
 
-import "fmt"
+import (
+	"fmt"
+	"regexp"
+)
 
 // this files implements functions to manipulate variable, and input/output parameters.
 
@@ -13,8 +16,10 @@ import "fmt"
 // 		var b typb = _in.b
 //		.../...
 //
-// 		// intitialize global result structure
-// 		_out = []Output_XXX{}
+// 		//********* increment _out ***********
+//		 _out = append(_out, Output_xxx{})
+//		// ************************************
+//
 //
 //		// verbatim lines generated during parsing, usin :=.
 //		// this applies for both output and non output variables.
@@ -25,7 +30,7 @@ import "fmt"
 //		tata := "a tata value" // tata is added to the knwon variables, with its type.
 //
 //
-//		// ********* save and increment _out **********
+//		// ********* save  _out **********
 //      // loop over the output variables, and set the known variables with the same name.
 //		// set c because c is both a known variable and is requested by return.
 //		// _out[len(_out) - 1]. c = c
@@ -53,11 +58,11 @@ import "fmt"
 //				// ************************************
 //
 //
-//				// Last statement contained a RETUN, that generates the save code ...
+//				// Last statement contained a RETURN, that generates the save code ...
 //				// ********* save  _out **********
 //      		// loop over the output variables, and set the known variables with the same name.
 //				// set c because c is both a known variable and is requested by return.
-//				 _out[len(_out) - 1]. c = c
+//				_out[len(_out) - 1]. c = c
 //			 	_out[len(_out) - 1]. tata = tata // based on global value
 //			 	_out[len(_out) - 1]. tutu = tutu // based on local value
 //			 	_out = append(_out, Output_xxx{})
@@ -109,6 +114,10 @@ func (m *myLexer) declOutputParams(names []string) {
 		}
 		// register output name
 		m.outparams = append(m.outparams, name)
+
+		// clean non relevant _out affectations.
+		m.cleanOut()
+
 	}
 }
 
@@ -132,6 +141,8 @@ func (m *myLexer) vSetVar(name string, v value) {
 	// generate code
 	li := fmt.Sprintf("var %s %s= %s;_=%s", name, v.t, v.v, name)
 	m.addLines(li)
+
+	fmt.Printf("DEBUG : vars = %#v\n", m.vars)
 }
 
 // Get the value and type of a named variable.
@@ -146,5 +157,39 @@ func (m *myLexer) vGetVar(name string) (v value) {
 		v: fmt.Sprintf(" %s ", name),
 		t: tt,
 		c: 0,
+	}
+}
+
+// increment the result variable _out.
+func (m *myLexer) incOut() {
+	m.addLines("// call to incOut")
+	li := fmt.Sprintf(" _out = append(_out, Output_%s{})", m.name)
+	m.addLines(li)
+}
+
+// make a snapshot of relevant vars into _out.
+func (m *myLexer) saveOut() {
+	// TODO - this should run only for known variables AND for variables that are already set by the code.
+	// the known variables at this stage are available from m.vars.
+	// but the out variables are not yet available.
+	// This may required to create lines allocating all knwonwn variables as if they were all out params, and at the end, revisiting and commenting all lines atht are not part of out ?
+	m.addLines("//call to saveOut")
+	for v := range m.vars {
+		li := fmt.Sprintf("//_out[len(_out)-1].%s=%s", v, v) // relevant lines will be uncommented later.
+		m.addLines(li)
+	}
+}
+
+// uncomment lines that correspond to valid out params.
+// This should be called only after all return params are defined.
+func (m *myLexer) cleanOut() {
+	patt := regexp.MustCompile(`^//_out\[len\(_out\)-1\]\.([A-Za-z][A-Za-z0-9]*)=([A-Za-z][A-Za-z0-9]*)$`) // same as IDENTIFIER PATTERN
+	for i, li := range m.lines {
+		for _, v := range m.outparams {
+			// fmt.Printf("DEBUG : cleanOut : %s and %s -> %#v\n", v, li, patt.FindStringSubmatch(li))
+			if ss := patt.FindStringSubmatch(li); len(ss) == 3 && ss[1] == v && ss[2] == v {
+				m.lines[i] = li[2:] // uncomment line ...
+			}
+		}
 	}
 }

@@ -194,7 +194,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:182
+//line grammar.y:181
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -894,7 +894,7 @@ yydefault:
 	case 48:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:168
-		{ /* todo */
+		{ /* todo - check all expression in list have same type, and create an array */
 		}
 	case 49:
 		yyDollar = yyS[yypt-1 : yypt+1]

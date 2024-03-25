@@ -142,7 +142,7 @@ func (m *myLexer) vSetVar(name string, v value) {
 	li := fmt.Sprintf("var %s %s= %s;_=%s", name, v.t, v.v, name)
 	m.addLines(li)
 
-	fmt.Printf("DEBUG : vars = %#v\n", m.vars)
+	// fmt.Printf("DEBUG : vars = %#v\n", m.vars)
 }
 
 // Get the value and type of a named variable.
@@ -168,6 +168,7 @@ func (m *myLexer) incOut() {
 }
 
 // make a snapshot of relevant vars into _out.
+// imediately reincrement the output.
 func (m *myLexer) saveOut() {
 	// TODO - this should run only for known variables AND for variables that are already set by the code.
 	// the known variables at this stage are available from m.vars.
@@ -178,6 +179,7 @@ func (m *myLexer) saveOut() {
 		li := fmt.Sprintf("//_out[len(_out)-1].%s=%s", v, v) // relevant lines will be uncommented later.
 		m.addLines(li)
 	}
+	m.incOut()
 }
 
 // uncomment lines that correspond to valid out params.
@@ -185,11 +187,20 @@ func (m *myLexer) saveOut() {
 func (m *myLexer) cleanOut() {
 	patt := regexp.MustCompile(`^//_out\[len\(_out\)-1\]\.([A-Za-z][A-Za-z0-9]*)=([A-Za-z][A-Za-z0-9]*)$`) // same as IDENTIFIER PATTERN
 	for i, li := range m.lines {
-		for _, v := range m.outparams {
-			// fmt.Printf("DEBUG : cleanOut : %s and %s -> %#v\n", v, li, patt.FindStringSubmatch(li))
-			if ss := patt.FindStringSubmatch(li); len(ss) == 3 && ss[1] == v && ss[2] == v {
-				m.lines[i] = li[2:] // uncomment line ...
+		if ss := patt.FindStringSubmatch(li); len(ss) == 3 {
+			suppress := true
+			for _, v := range m.outparams {
+				// fmt.Printf("DEBUG : cleanOut : %s and %s -> %#v\n", v, li, patt.FindStringSubmatch(li))
+				if ss[1] == ss[2] && ss[1] == v {
+					m.lines[i] = li[2:] // uncomment line ...
+					suppress = false
+				}
+			}
+			if suppress {
+				// m.lines[i] += "// *SUPPRESSED !"
+				m.lines[i] = ""
 			}
 		}
 	}
+
 }

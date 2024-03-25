@@ -12,37 +12,49 @@ import (
 
 
 type Input_test1 struct {
-	toto int
+	aaa int
 	bbb bool
+	ccc []bool
 }
 
 
 type Output_test1 struct {
 	a int
+	bbb bool
 }
 
 
-// // A go scrapper test function
 // 
-// @toto int
-// 
+// // define input variables
+// @aaa int
 // @bbb bool
+// @ccc [bool]
 // 
+// 
+// // open a page
 // PAGE "http://www.google.fr"
-// SELECT ANY "input[name=q]"	
-//     CLICK "input[name=btnK]"
-//     a = 23 
-//     RETURN a
+// CLICK "input[name=btnK]"
+// a = 23 
+// b = a + 50
+// c = 70 + a
+// y = 23
+// RETURN a, bbb 
 func Do_test1(_in Input_test1) (_out []Output_test1, _err error) {
-var toto int = _in.toto ; _ = toto
+var aaa int = _in.aaa ; _ = aaa
 var bbb bool = _in.bbb ; _ = bbb
+var ccc []bool = _in.ccc ; _ = ccc
 // call to incOut
  _out = append(_out, Output_test1{})
+{
 var a int= 23;_=a
+var b int= (( a ) + (50));_=b
+var c int= ((70) + ( a ));_=c
+var y int= 23;_=y
 //call to saveOut
+_out[len(_out)-1].bbb=bbb
 _out[len(_out)-1].a=a
-//_out[len(_out)-1].toto=toto
-//_out[len(_out)-1].bbb=bbb
+// call to incOut
+ _out = append(_out, Output_test1{})
 }
-return _out, _err
+return _out[:len(_out) -1], _err
 }

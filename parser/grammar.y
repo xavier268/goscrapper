@@ -5,7 +5,7 @@
     type value struct {
         v string    // a string in go that produce the value of the object
         t string    // a string representing the gotype of the object
-        c int       // the code returned by lexer is stored here - it is always set by the lexer, even for variables (set as IDENTIFIER)
+        c int       // the code returned by lexer is stored here. Always set by the lexer, even for variables (set as IDENTIFIER). A valid go type, without spaces.
     }
 
    
@@ -48,7 +48,7 @@
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc LTE LT GTE GT EQ NEQ CONTAINS
+%nonassoc LTE LT GTE GT EQ NEQ CONTAINS ASSIGN
 %left OR 
 %left AND
 %left NOT
@@ -69,8 +69,8 @@ program
     | init body      { yylex.(*myLexer).finalize() }
     ;
 
-init // initialize function
-    : { yylex.(*myLexer).incOut()}
+init // run before any body
+    : { yylex.(*myLexer).incOut() ; yylex.(*myLexer).addLines("{")}
     ;
 
 // head defines options
@@ -94,8 +94,8 @@ typeDefinition
 // program body contains statements, followed by either RETURN or 
 
 body
-    : statements returnStatements { /* todo */}
-    | returnStatements { /* todo */}
+    : statements returnStatements {  yylex.(*myLexer).addLines("}")}
+    | returnStatements { yylex.(*myLexer).addLines("}")}
     ;
 
 statements
@@ -110,8 +110,8 @@ statement
     ;
 
 returnStatements
-    : RETURN returnList { yylex.(*myLexer).declOutputParams($2) }
-    | loopClause body { yylex.(*myLexer).finishLoop() }
+    : RETURN returnList { yylex.(*myLexer).declOutputParams($2) ; yylex.(*myLexer).saveOut() ;  }
+    | loopClause body { /* */ }
     ;
 
 returnList
@@ -121,8 +121,8 @@ returnList
 
 loopClause
     : FOR IDENTIFIER IN expression  {yylex.(*myLexer).forNameInExpression($2.v, $4)}
-    | SELECT ALL expression  { /* todo - expect expression to be a string css */ }
-    | SELECT ANY expression  { /* todo - expect expression to be a string css */ }
+    | SELECT  expression  { yylex.(*myLexer).selectExpression($2) } // loop on all css matching exprerssion
+    // | SELECT IDENTIFIER expression // SELECT with a counter.
     ;
 
 // ==================

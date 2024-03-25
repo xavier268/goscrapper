@@ -26,18 +26,15 @@ func (m *myLexer) finalize() {
 	// clean lines, and write function body
 	m.cleanOut()
 	for _, l := range m.lines {
-		fmt.Fprintf(m.w, "%s\n", l)
-	}
-
-	// print closing braces for pending loops
-	for i := 1; i < m.loops; i++ {
-		fmt.Fprintln(m.w, "}")
+		if l != "" {
+			fmt.Fprintf(m.w, "%s\n", l)
+		}
 	}
 
 	// print final return statement
-	fmt.Fprintln(m.w, "return _out, _err")
+	// there is laways an empty preallocated element in the slice, so remove it.
+	fmt.Fprintln(m.w, "return _out[:len(_out) -1], _err")
 	fmt.Fprintln(m.w, "}")
-
 }
 
 // write import code

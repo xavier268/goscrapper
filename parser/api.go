@@ -71,6 +71,7 @@ func ParseFiles(outDir string, inFiles ...string) error {
 	packName := Normalize(filepath.Base(outDir))
 	os.MkdirAll(outDir, 0755)
 	for _, inFile := range inFiles {
+		fmt.Println("=========\nParsing", inFile)
 		inFile = MustAbs(inFile)
 		base := Normalize(inFile)
 		out, err := os.Create(filepath.Join(outDir, base+".go"))

@@ -74,7 +74,7 @@ import "fmt"
 // Declare a new input parameter.
 func (m *myLexer) declInputParam(name string, typ string) {
 
-	fmt.Println("DEBUG : calling declInputParam with ", name, typ)
+	// fmt.Println("DEBUG : calling declInputParam with ", name, typ)
 
 	// cheks ...
 	if typ == "" {

@@ -50,6 +50,18 @@ func parse(out io.Writer, in io.Reader, name string) error {
 	return nil
 }
 
+// Parse all files corresponding to the provided glob pattern.
+// The package name is derived from the directory name of the outDir directory.
+// The generated file names are derived from the input file names
+func ParseGlob(outDir, glob string) error {
+
+	files, err := filepath.Glob(glob)
+	if err != nil {
+		return err
+	}
+	return ParseFiles(outDir, files...)
+}
+
 // Parse all inFiles and generate a scrapper in the provided directory.
 // The package name is derived from the directory name.
 // The generated file names are derived from the input file names

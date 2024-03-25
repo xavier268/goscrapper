@@ -37,7 +37,6 @@ func parse(out io.Writer, in io.Reader, name string) error {
 		outparams: []string{},
 		vars:      map[string]string{},
 		imports:   map[string]bool{},
-		loops:     0,
 	}
 	lex.data, err = io.ReadAll(in)
 	if err != nil {

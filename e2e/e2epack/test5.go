@@ -61,11 +61,11 @@ for _, ii := range  bb  {
 var y int= (( x ) + (20));_=y
 var z int= ((30) + ( x ));_=z
 //call to saveOut
+_out[len(_out)-1].i=i
+_out[len(_out)-1].x=x
 _out[len(_out)-1].ii=ii
 _out[len(_out)-1].y=y
 _out[len(_out)-1].z=z
-_out[len(_out)-1].i=i
-_out[len(_out)-1].x=x
 // call to incOut
  _out = append(_out, Output_test5{})
 }

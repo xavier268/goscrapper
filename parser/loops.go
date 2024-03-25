@@ -8,9 +8,6 @@ import (
 // start a loop, saving the output and adding the opening {
 func (m *myLexer) forNameInExpression(name string, expr value) {
 
-	// inc loop counter
-	m.loops += 1
-
 	if !strings.HasPrefix(expr.t, "[]") {
 		m.errorf("FOR name IN expression requires expression to be an array, but %s is not an array; it is a %s", expr.v, expr.t)
 	}
@@ -35,13 +32,10 @@ func (m *myLexer) selectExpression(expr value) {
 
 	// fmt.Println("DEBUG : calling selectExpression with", expr.v)
 
-	// increment loop counter
-	m.loops += 1
-
 	if expr.t != "string" {
 		m.errorf("FOR expression requires expression to be a string, but %s is not a string but a %s", expr.v, expr.t)
 	}
 
-	li := "for true { // this will be a loop with expr ..." // to do ...
+	li := "for true { // this will implement a loop with expr ..." // todo ...
 	m.addLines(li)
 }

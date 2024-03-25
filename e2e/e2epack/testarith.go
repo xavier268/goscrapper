@@ -16,10 +16,14 @@ type Input_testarith struct {
 	b int
 	a2 []int
 	a1 [][]bool
+	c bool
 }
 
 
 type Output_testarith struct {
+	c bool
+	d int
+	a2 []int
 }
 
 
@@ -28,6 +32,7 @@ type Output_testarith struct {
 // @b int
 // @a2 [int]
 // @a1 [[bool]]
+// @c bool
 // 
 // d = a+b-a*b/a
 // 
@@ -37,6 +42,7 @@ var a int = _in.a ; _ = a
 var b int = _in.b ; _ = b
 var a2 []int = _in.a2 ; _ = a2
 var a1 [][]bool = _in.a1 ; _ = a1
+var c bool = _in.c ; _ = c
 var d int= (((((((( a ) + ( b ))) - ( a ))) * ( b ))) / ( a ));_=d
 return _res, _err
 }

@@ -34,13 +34,16 @@
 
 %union {            
     value value
+    list []string
 }
 
 %type <value> expression expressionAtom
 %type <value> ope2 ope1
 %type <value> typeDefinition 
-%type <value> returnList loopClause body 
+%type <value> loopClause body 
 %type <value> IDENTIFIER  NUMBER STRING BOOL
+
+%type <list> returnList
 
 
 
@@ -109,16 +112,13 @@ statement
     ;
 
 returnStatements
-    : RETURN returnList { /* todo */}
+    : RETURN returnList { yylex.(*myLexer).declOutputParams($2)}
     | loopClause body { /* todo */ }
     ;
 
 returnList
-    : IDENTIFIER { $$ = $1 }
-    | returnList COMMA IDENTIFIER { 
-                $$.v = $1.v + "," + $3.v 
-                $$.t = $3.t
-                 }
+    : IDENTIFIER { $$ = append($$, $1.v) }
+    | returnList COMMA IDENTIFIER { $$ = append($1, $3.v) }
     ;
 
 loopClause

@@ -95,6 +95,23 @@ func (m *myLexer) declInputParam(name string, typ string) {
 	m.addLines(li)
 }
 
+// declare list of identifiers as output to be returned.
+func (m *myLexer) declOutputParams(names []string) {
+	for _, name := range names {
+		// check
+		if typ, ok := m.vars[name]; !ok || typ == "" {
+			m.errorf("variable %s cannot be returned because it was never declared", name)
+		}
+		for _, oo := range m.outparams {
+			if oo == name {
+				m.errorf("variable %s duplicated in output parameters", name)
+			}
+		}
+		// register output name
+		m.outparams = append(m.outparams, name)
+	}
+}
+
 // Set a variable (local or global).
 // The type is typically derived from the expression generating the value.
 func (m *myLexer) vSetVar(name string, v value) {

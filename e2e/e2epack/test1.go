@@ -18,6 +18,7 @@ type Input_test1 struct {
 
 
 type Output_test1 struct {
+	a int
 }
 
 

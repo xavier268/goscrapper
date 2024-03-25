@@ -19,6 +19,7 @@ type value struct {
 type yySymType struct {
 	yys   int
 	value value
+	list  []string
 }
 
 const MULTI = 57346
@@ -212,9 +213,9 @@ var yyAct = [...]int8{
 	66, 57, 55, 56, 54, 58, 59, 14, 9, 41,
 	8, 14, 9, 46, 73, 5, 19, 60, 61, 62,
 	51, 52, 53, 49, 50, 2, 57, 55, 56, 54,
-	58, 59, 32, 26, 29, 1, 30, 31, 33, 10,
+	58, 59, 32, 26, 29, 1, 30, 31, 33, 21,
 	7, 11, 60, 61, 62, 11, 15, 13, 63, 12,
-	15, 13, 28, 12, 25, 70, 6, 21, 36, 45,
+	15, 13, 28, 12, 25, 70, 6, 10, 36, 45,
 	3, 64, 18, 16, 34, 35, 4, 27, 37, 17,
 	48, 23, 0, 63, 0, 42, 44, 43, 0, 47,
 	0, 0, 72, 65, 0, 0, 0, 0, 0, 0,
@@ -236,14 +237,14 @@ var yyPact = [...]int16{
 }
 
 var yyPgo = [...]int8{
-	0, 84, 63, 100, 97, 39, 87, 69, 90, 65,
+	0, 84, 63, 100, 97, 39, 87, 90, 69, 65,
 	55, 96, 45, 86, 40,
 }
 
 var yyR1 = [...]int8{
 	0, 9, 9, 10, 10, 11, 5, 5, 5, 5,
-	8, 8, 12, 12, 14, 14, 14, 13, 13, 6,
-	6, 7, 7, 7, 3, 3, 3, 3, 3, 3,
+	7, 7, 12, 12, 14, 14, 14, 13, 13, 8,
+	8, 6, 6, 6, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 4,
 	4, 4, 4, 1, 1, 1, 2, 2, 2, 2,
 	2, 2,
@@ -259,9 +260,9 @@ var yyR2 = [...]int8{
 }
 
 var yyChk = [...]int16{
-	-1000, -9, -10, -8, -11, -12, -13, 72, -14, 40,
-	-7, 73, 81, 79, 39, 78, -8, -11, -13, -14,
-	73, -6, 73, -8, 30, -1, -2, -4, 22, 73,
+	-1000, -9, -10, -7, -11, -12, -13, 72, -14, 40,
+	-6, 73, 81, 79, 39, 78, -7, -11, -13, -14,
+	73, -8, 73, -7, 30, -1, -2, -4, 22, 73,
 	75, 76, 71, 8, 34, 35, 28, -1, 73, 64,
 	65, -5, 36, 38, 37, 20, 19, -1, -3, 7,
 	8, 4, 5, 6, 13, 11, 12, 10, 14, 15,
@@ -639,86 +640,86 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:70
+//line grammar.y:73
 		{
 			yylex.(*myLexer).finalize()
 		}
 	case 2:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:71
+//line grammar.y:74
 		{
 			yylex.(*myLexer).finalize()
 		}
 	case 5:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:82
+//line grammar.y:85
 		{
 			yylex.(*myLexer).declInputParam(yyDollar[2].value.v, yyDollar[3].value.v)
 		}
 	case 9:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:89
+//line grammar.y:92
 		{
 			yyVAL.value.v = "[]" + yyDollar[2].value.v
 		}
 	case 10:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:96
+//line grammar.y:99
 		{ /* todo */
 		}
 	case 11:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:97
+//line grammar.y:100
 		{ /* todo */
 		}
 	case 12:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:101
+//line grammar.y:104
 		{ /* todo */
 		}
 	case 13:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:102
+//line grammar.y:105
 		{ /* todo */
 		}
 	case 14:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:106
+//line grammar.y:109
 		{
 			yylex.(*myLexer).vSetVar(yyDollar[1].value.v, yyDollar[3].value)
 		}
 	case 15:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:107
+//line grammar.y:110
 		{ /* todo */
 		}
 	case 16:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:108
+//line grammar.y:111
 		{ /* todo */
 		}
 	case 17:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:112
-		{ /* todo */
+//line grammar.y:115
+		{
+			yylex.(*myLexer).declOutputParams(yyDollar[2].list)
 		}
 	case 18:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:113
+//line grammar.y:116
 		{ /* todo */
 		}
 	case 19:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:117
+//line grammar.y:120
 		{
-			yyVAL.value = yyDollar[1].value
+			yyVAL.list = append(yyVAL.list, yyDollar[1].value.v)
 		}
 	case 20:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:118
+//line grammar.y:121
 		{
-			yyVAL.value.v = yyDollar[1].value.v + "," + yyDollar[3].value.v
-			yyVAL.value.t = yyDollar[3].value.t
+			yyVAL.list = append(yyDollar[1].list, yyDollar[3].value.v)
 		}
 	case 21:
 		yyDollar = yyS[yypt-4 : yypt+1]

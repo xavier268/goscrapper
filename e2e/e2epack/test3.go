@@ -46,8 +46,8 @@ for _, i := range  iii  {
  _ = i
 var c int= 45;_=c
 //call to saveOut
-_out[len(_out)-1].b=b
 _out[len(_out)-1].c=c
+_out[len(_out)-1].b=b
 // call to incOut
  _out = append(_out, Output_test3{})
 }

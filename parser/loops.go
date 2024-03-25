@@ -36,6 +36,6 @@ func (m *myLexer) selectExpression(expr value) {
 		m.errorf("FOR expression requires expression to be a string, but %s is not a string but a %s", expr.v, expr.t)
 	}
 
-	li := "for true { // this will implement a loop with expr ..." // todo ...
+	li := "for 1 <= 2 { // this will implement a loop with expr ..." // todo ...
 	m.addLines(li)
 }

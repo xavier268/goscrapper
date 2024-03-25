@@ -38,12 +38,12 @@ var b []string = _in.b ; _ = b
  _out = append(_out, Output_test4{})
 {
 var c string= (( a ) + ( a ));_=c
-for true { // this will implement a loop with expr ...
+for 1 <= 2 { // this will implement a loop with expr ...
 var d string= (( a ) + ( a ));_=d
 //call to saveOut
+_out[len(_out)-1].c=c
 _out[len(_out)-1].d=d
 _out[len(_out)-1].a=a
-_out[len(_out)-1].c=c
 // call to incOut
  _out = append(_out, Output_test4{})
 }

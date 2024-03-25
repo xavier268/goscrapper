@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"regexp"
+	"strings"
 )
 
 // this files implements functions to manipulate variable, and input/output parameters.
@@ -202,5 +203,21 @@ func (m *myLexer) cleanOut() {
 			}
 		}
 	}
+}
 
+// get arr[idx]
+func (m *myLexer) vGetElementOf(arr value, idx value) value {
+
+	if idx.t != "int" {
+		m.errorf("array index should be a number, but it is a %s", idx.t)
+	}
+	if !strings.HasPrefix(arr.t, "[]") {
+		m.errorf("expecting an array but got a %s", arr.t)
+	}
+
+	return value{
+		v: fmt.Sprintf("(%s)[%s]", arr.v, idx.v),
+		t: arr.t[2:],
+		c: 0,
+	}
 }

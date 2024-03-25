@@ -35,6 +35,7 @@
 %union {            
     value value
     list []string
+    values []value
 }
 
 %type <value> expression expressionAtom
@@ -43,6 +44,8 @@
 %type <value> IDENTIFIER  NUMBER STRING BOOL
 
 %type <list> returnList 
+
+%type <values> expressionList
 
 
 
@@ -162,10 +165,16 @@ expression // never empty, type is controlled semantically, not syntaxically
 expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }
     | expressionAtom LBRACKET expression RBRACKET {$$ = yylex.(*myLexer).vGetElementOf($1, $3)}
+    | LBRACKET expressionList RBRACKET { /* todo - check all expression in list have same type, and create an array */}
     | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
     | BOOL { $$ = $1 }
+    ;
+
+expressionList  
+    : expression { $$ = []value{$1}}
+    | expressionList COMMA expression { $$ = append($1, $3)}
     ;
 
 

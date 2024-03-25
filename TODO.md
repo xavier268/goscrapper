@@ -1,19 +1,48 @@
 # TODO list
 
+## Arrays
 
-## Redesign architecture to be more modular and manageable
+allow to access elements of arrays using [] selectors.
 
-* Design queries / program in a DomainSpecific Language
-* Compile the queries into a go package
-* Compile generated package, and link to it
+## objects
 
-## Langage definition
+manage 
 
-Inspired by the FERRET language : https://www.montferret.dev/docs/fql/ 
+## loops
 
-Contray to FERRET, the queries will be compiled into binary code by the golang compiler.
+implements more for loops (with counter) ?
+implements select loop with counter ?
 
-## Articulation between the queries and the main application program
+# functions ( eg : concat(x,y,c, ...))
 
-* option 1: the main app will call the functions that have been given the names of the queries with the binding parameters ...
-* option 2 : the queries are run asynchroneously, and results are retrieved from a channel ?
+define builtin functions architecture ? (takes a value as input, returns a value, and have NO SIDE EFFECT)
+execution is often defered.
+
+## commands (eg CLICK, ENTER, EXITS, ? ...)
+
+commands have a side effect.
+execution in the order where they are specified.
+
+## a switch statement on various potential css outcome
+
+tested successively without waiting, until the first one triggers 
+````
+// syntax could be :
+
+a = SWITCH
+    CASE "css1" : expression1
+    CASE "css2" : expression2
+    DEFAULT : expression3
+    TIMEOUT number : expression4
+
+// where expressions should all have the same type, which becomes the type of a, typically a string message ...
+// DEFAULT and TIMEOUT are optionals.
+
+````
+
+### CSS strings
+
+by defaults, will be queried for an array of matching elements ?
+could be extended to provide
+* number of matching elements ?
+* text of selector

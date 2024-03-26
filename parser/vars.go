@@ -178,7 +178,7 @@ func (m *myLexer) saveOut() {
 	// This may required to create lines allocating all knwonwn variables as if they were all out params, and at the end, revisiting and commenting all lines atht are not part of out ?
 	m.addLines("//call to saveOut")
 	// sort vars to make output deterministic for easier testing
-	vv := make([]string, len(m.vars))
+	vv := make([]string, 0, len(m.vars))
 	for v := range m.vars {
 		vv = append(vv, v)
 	}

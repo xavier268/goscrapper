@@ -46,12 +46,6 @@ var c bool = _in.c ; _ = c
 {
 var d int= (((((((( a ) + ( b ))) - ( a ))) * ( b ))) / ( a ));_=d
 //call to saveOut
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
 _out[len(_out)-1].a2=a2
 _out[len(_out)-1].c=c
 _out[len(_out)-1].d=d

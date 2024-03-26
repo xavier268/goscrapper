@@ -68,21 +68,6 @@ var x10 []int= append( x5 ,[]int{4,5,6}...);_=x10
 var x11 [][]int= append( x7 , x7 ...);_=x11
 var x12 [][]int= append(append( x11 , x11 ...), x11 ...);_=x12
 //call to saveOut
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
-//_out[len(_out)-1].=
 _out[len(_out)-1].x1=x1
 _out[len(_out)-1].x2=x2
 // call to incOut

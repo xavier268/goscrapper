@@ -114,6 +114,16 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 			m.imports["fmt"] = true
 			return value{t: "int", v: fmt.Sprintf("-(%s)", v.v)}
 		}
+	case PLUSPLUS:
+		if v.t == "int" {
+			m.imports["fmt"] = true
+			return value{t: "int", v: fmt.Sprintf("(%s+1)", v.v)}
+		}
+	case MINUSMINUS:
+		if v.t == "int" {
+			m.imports["fmt"] = true
+			return value{t: "int", v: fmt.Sprintf("(%s-1)", v.v)}
+		}
 	case LOWER:
 		if v.t == "string" {
 			m.imports["strings"] = true

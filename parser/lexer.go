@@ -166,6 +166,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"==", EQ},
 		{"!=", NEQ},
 		{"++", PLUSPLUS},
+		{"--", MINUSMINUS},
 		{"&&", AND},
 		{"||", OR},
 		{"..", DOTDOT},

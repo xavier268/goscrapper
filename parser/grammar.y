@@ -13,7 +13,7 @@
 
 
 %token <value>   // all token use value
-            MULTI DIV MOD PLUS MINUS PLUSPLUS
+            MULTI DIV MOD PLUS MINUS PLUSPLUS MINUSMINUS
             LTE GTE LT GT EQ NEQ
             COLON SEMICOLON DOT COMMA LBRACKET RBRACKET LPAREN RPAREN LBRACE RBRACE
             AND OR NOT
@@ -60,8 +60,10 @@
 %left MULTI 
 %left DIV
 %left MOD
+%left PLUSPLUS MINUSMINUS
 %left LOWER UPPER
 %left LBRACKET 
+
 
 %%
 
@@ -152,19 +154,21 @@ ope2 // binary operators
 
 ope1 // unary operators
     : MINUS{ $$ = $1 }
+    | PLUSPLUS {$$ = $1 }
+    | MINUSMINUS {$$ = $1 }
     | LOWER{ $$ = $1 }
     | UPPER{ $$ = $1 }
     | NOT{ $$ = $1 }
     ;
 
 expression // never empty, type is controlled semantically, not syntaxically
-    : expressionAtom { $$ = $1 }
-    | expression ope2 expressionAtom { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) }
+    : expressionAtom { $$ = $1 }     
     | ope1 expressionAtom { $$ = yylex.(*myLexer).vOpe1($1.c, $2) }    
+    | expression ope2 expressionAtom { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) }   
     ;
 
 expressionAtom // never empty
-    : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }
+    : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }    
     | expressionAtom LBRACKET expression RBRACKET {$$ = yylex.(*myLexer).vGetElementOf($1, $3)}
     | LBRACKET expressionList RBRACKET { $$ = yylex.(*myLexer).vMakeArray($2)}
     | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }

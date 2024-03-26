@@ -194,7 +194,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:181
+//line grammar.y:189
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -894,7 +894,7 @@ yydefault:
 	case 48:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:168
-		{ /* todo - check all expression in list have same type, and create an array */
+		{ /* todo - construction litteral array */
 		}
 	case 49:
 		yyDollar = yyS[yypt-1 : yypt+1]
@@ -930,7 +930,13 @@ yydefault:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:177
 		{
-			yyVAL.values = append(yyDollar[1].values, yyDollar[3].value)
+			// build list of elements for array if types matches ...
+			if yyDollar[1].values[0].t == yyDollar[3].value.t {
+				yyVAL.values = append(yyDollar[1].values, yyDollar[3].value)
+			} else {
+				yylex.(*myLexer).errorf("elements types %s cannot fit into an array of %s",
+					yyDollar[3].value.t, yyDollar[1].values[0].t)
+			}
 		}
 	}
 	goto yystack /* stack new state and value */

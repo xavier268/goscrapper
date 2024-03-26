@@ -165,7 +165,7 @@ expression // never empty, type is controlled semantically, not syntaxically
 expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }
     | expressionAtom LBRACKET expression RBRACKET {$$ = yylex.(*myLexer).vGetElementOf($1, $3)}
-    | LBRACKET expressionList RBRACKET { /* todo - check all expression in list have same type, and create an array */}
+    | LBRACKET expressionList RBRACKET { /* todo - construction litteral array */}
     | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
@@ -174,7 +174,15 @@ expressionAtom // never empty
 
 expressionList  
     : expression { $$ = []value{$1}}
-    | expressionList COMMA expression { $$ = append($1, $3)}
+    | expressionList COMMA expression { 
+            // build list of elements for array if types matches ...
+            if $1[0].t == $3.t {
+                $$ = append($1, $3)
+            }else{
+                yylex.(*myLexer).errorf("elements types %s cannot fit into an array of %s",
+                $3.t,$1[0].t)
+            }
+        }
     ;
 
 

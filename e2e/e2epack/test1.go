@@ -51,8 +51,8 @@ var b int= (( a ) + (50));_=b
 var c int= ((70) + ( a ));_=c
 var y int= 23;_=y
 //call to saveOut
-_out[len(_out)-1].a=a
 _out[len(_out)-1].bbb=bbb
+_out[len(_out)-1].a=a
 // call to incOut
  _out = append(_out, Output_test1{})
 }

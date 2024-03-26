@@ -74,34 +74,33 @@ const LET = 57393
 const COLLECT = 57394
 const ASC = 57395
 const DESC = 57396
-const NONE = 57397
-const NULL = 57398
-const TRUE = 57399
-const FALSE = 57400
-const USE = 57401
-const INTO = 57402
-const KEEP = 57403
-const WITH = 57404
-const COUNT = 57405
-const ALL = 57406
-const ANY = 57407
-const AGGREGATE = 57408
-const EVENT = 57409
-const LIKE = 57410
-const IN = 57411
-const WHILE = 57412
-const BOOL = 57413
-const AT = 57414
-const IDENTIFIER = 57415
-const IGNOREID = 57416
-const STRING = 57417
-const NUMBER = 57418
-const NAMESPACESEPARATOR = 57419
-const SELECT = 57420
-const CLICK = 57421
-const DOCUMENT = 57422
-const PAGE = 57423
-const CONTAINS = 57424
+const NIL = 57397
+const TRUE = 57398
+const FALSE = 57399
+const USE = 57400
+const INTO = 57401
+const KEEP = 57402
+const WITH = 57403
+const COUNT = 57404
+const ALL = 57405
+const ANY = 57406
+const AGGREGATE = 57407
+const EVENT = 57408
+const LIKE = 57409
+const IN = 57410
+const WHILE = 57411
+const BOOL = 57412
+const AT = 57413
+const IDENTIFIER = 57414
+const IGNOREID = 57415
+const STRING = 57416
+const NUMBER = 57417
+const NAMESPACESEPARATOR = 57418
+const SELECT = 57419
+const CLICK = 57420
+const DOCUMENT = 57421
+const PAGE = 57422
+const CONTAINS = 57423
 
 var yyToknames = [...]string{
 	"$end",
@@ -158,8 +157,7 @@ var yyToknames = [...]string{
 	"COLLECT",
 	"ASC",
 	"DESC",
-	"NONE",
-	"NULL",
+	"NIL",
 	"TRUE",
 	"FALSE",
 	"USE",
@@ -194,7 +192,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:189
+//line grammar.y:190
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -205,51 +203,51 @@ var yyExca = [...]int8{
 
 const yyPrivate = 57344
 
-const yyLast = 153
+const yyLast = 151
 
 var yyAct = [...]int8{
-	53, 54, 55, 51, 52, 73, 59, 57, 58, 56,
-	60, 61, 41, 31, 24, 30, 19, 81, 5, 71,
-	26, 80, 62, 63, 64, 53, 54, 55, 51, 52,
-	66, 59, 57, 58, 56, 60, 61, 17, 12, 43,
-	28, 78, 48, 77, 76, 11, 13, 62, 63, 64,
-	53, 54, 55, 51, 52, 22, 59, 57, 58, 56,
-	60, 61, 9, 27, 35, 10, 32, 2, 33, 34,
-	67, 14, 62, 63, 64, 21, 18, 16, 65, 15,
-	40, 1, 42, 47, 36, 4, 3, 72, 7, 6,
-	49, 74, 69, 23, 68, 70, 31, 29, 30, 44,
-	46, 45, 8, 65, 39, 50, 0, 0, 0, 20,
-	37, 38, 0, 0, 0, 0, 25, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 65, 0,
-	75, 0, 0, 0, 0, 79, 0, 0, 0, 0,
-	0, 0, 82, 0, 0, 0, 0, 35, 0, 32,
-	0, 33, 34,
+	54, 55, 56, 51, 53, 52, 60, 58, 59, 57,
+	61, 62, 74, 31, 41, 30, 24, 82, 19, 5,
+	72, 26, 63, 64, 65, 54, 55, 56, 51, 53,
+	52, 60, 58, 59, 57, 61, 62, 17, 12, 28,
+	43, 79, 48, 78, 77, 81, 67, 63, 64, 65,
+	54, 55, 56, 51, 53, 52, 60, 58, 59, 57,
+	61, 62, 27, 35, 13, 32, 9, 33, 34, 68,
+	14, 2, 63, 64, 65, 18, 16, 66, 15, 40,
+	1, 42, 47, 36, 4, 70, 11, 7, 73, 49,
+	75, 23, 29, 69, 71, 31, 22, 30, 44, 46,
+	45, 8, 66, 39, 10, 50, 0, 0, 20, 37,
+	38, 0, 0, 3, 21, 25, 6, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 66, 0, 0,
+	76, 0, 0, 0, 0, 80, 0, 0, 0, 0,
+	0, 0, 83, 0, 0, 35, 0, 32, 0, 33,
+	34,
 }
 
 var yyPact = [...]int16{
-	-54, -1000, -54, -2, -1000, -57, -2, -1000, -1000, -2,
-	-1000, -1000, -59, -2, -10, 76, 76, -61, 76, 63,
-	-1000, -1000, -1000, 23, -1000, -1000, 76, 46, 10, -7,
-	76, 76, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	46, -50, 46, -1000, -1000, -1000, -1000, 63, -68, 46,
+	-52, -1000, -52, -2, -1000, -54, -2, -1000, -1000, -2,
+	-1000, -1000, -56, -2, -9, 75, 75, -58, 75, 62,
+	-1000, -1000, -1000, 23, -1000, -1000, 75, 46, 26, -7,
+	75, 75, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
+	46, -48, 46, -1000, -1000, -1000, -1000, 62, -60, 46,
 	-7, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, -1000, -1000, 76, 10, 21, 22,
-	46, 76, 0, -1000, 10, -4, -1000, -1000, 76, 46,
-	-1000, -1000, 46,
+	-1000, -1000, -1000, -1000, -1000, -1000, -1000, 75, 26, 21,
+	22, 46, 75, 24, -1000, 26, -4, -1000, -1000, 75,
+	46, -1000, -1000, 46,
 }
 
 var yyPgo = [...]int8{
-	0, 63, 40, 105, 97, 39, 93, 92, 81, 67,
-	86, 102, 85, 62, 65, 45, 46,
+	0, 62, 39, 105, 92, 40, 91, 85, 80, 71,
+	113, 101, 84, 66, 104, 86, 64,
 }
 
 var yyR1 = [...]int8{
 	0, 8, 8, 10, 9, 9, 12, 5, 5, 5,
 	5, 11, 11, 13, 13, 15, 15, 15, 14, 14,
 	6, 6, 16, 16, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 4,
-	4, 4, 4, 1, 1, 1, 2, 2, 2, 2,
-	2, 2, 2, 7, 7,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	4, 4, 4, 4, 1, 1, 1, 2, 2, 2,
+	2, 2, 2, 2, 7, 7,
 }
 
 var yyR2 = [...]int8{
@@ -257,32 +255,32 @@ var yyR2 = [...]int8{
 	3, 2, 1, 1, 2, 3, 2, 2, 2, 2,
 	1, 3, 4, 2, 1, 1, 1, 1, 1, 1,
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 3, 2, 3, 4, 3, 1,
-	1, 1, 1, 1, 3,
+	1, 1, 1, 1, 1, 3, 2, 3, 4, 3,
+	1, 1, 1, 1, 1, 3,
 }
 
 var yyChk = [...]int16{
-	-1000, -8, -9, -10, -12, 72, -10, -12, -11, -13,
-	-14, -15, 40, -16, 73, 81, 79, 39, 78, 73,
-	-11, -14, -15, -6, 73, -11, 30, -1, -2, -4,
-	22, 20, 73, 75, 76, 71, 8, 34, 35, 28,
-	-1, 73, -1, -5, 36, 38, 37, 20, 19, -1,
-	-3, 7, 8, 4, 5, 6, 13, 11, 12, 10,
-	14, 15, 26, 27, 28, 82, 20, -2, -1, -7,
-	-1, 69, -5, 73, -2, -1, 23, 21, 19, -1,
-	21, 21, -1,
+	-1000, -8, -9, -10, -12, 71, -10, -12, -11, -13,
+	-14, -15, 40, -16, 72, 80, 78, 39, 77, 72,
+	-11, -14, -15, -6, 72, -11, 30, -1, -2, -4,
+	22, 20, 72, 74, 75, 70, 8, 34, 35, 28,
+	-1, 72, -1, -5, 36, 38, 37, 20, 19, -1,
+	-3, 7, 9, 8, 4, 5, 6, 13, 11, 12,
+	10, 14, 15, 26, 27, 28, 81, 20, -2, -1,
+	-7, -1, 68, -5, 72, -2, -1, 23, 21, 19,
+	-1, 21, 21, -1,
 }
 
 var yyDef = [...]int8{
 	3, -2, 3, 0, 5, 0, 0, 4, 2, 0,
 	12, 13, 0, 0, 0, 0, 0, 0, 0, 0,
-	1, 11, 14, 18, 20, 19, 0, 16, 43, 0,
-	0, 0, 49, 50, 51, 52, 39, 40, 41, 42,
+	1, 11, 14, 18, 20, 19, 0, 16, 44, 0,
+	0, 0, 50, 51, 52, 53, 40, 41, 42, 43,
 	17, 0, 23, 6, 7, 8, 9, 0, 0, 15,
 	0, 24, 25, 26, 27, 28, 29, 30, 31, 32,
-	33, 34, 35, 36, 37, 38, 0, 45, 0, 0,
-	53, 0, 0, 21, 44, 0, 46, 48, 0, 22,
-	10, 47, 54,
+	33, 34, 35, 36, 37, 38, 39, 0, 46, 0,
+	0, 54, 0, 0, 21, 45, 0, 47, 49, 0,
+	22, 10, 48, 55,
 }
 
 var yyTok1 = [...]int8{
@@ -298,7 +296,6 @@ var yyTok2 = [...]int8{
 	52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
 	62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
 	72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
-	82,
 }
 
 var yyTok3 = [...]int8{
@@ -839,7 +836,7 @@ yydefault:
 		}
 	case 39:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:153
+//line grammar.y:150
 		{
 			yyVAL.value = yyDollar[1].value
 		}
@@ -863,50 +860,51 @@ yydefault:
 		}
 	case 43:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:160
+//line grammar.y:157
 		{
 			yyVAL.value = yyDollar[1].value
 		}
 	case 44:
-		yyDollar = yyS[yypt-3 : yypt+1]
+		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:161
+		{
+			yyVAL.value = yyDollar[1].value
+		}
+	case 45:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:162
 		{
 			yyVAL.value = yylex.(*myLexer).vOpe2(yyDollar[2].value.c, yyDollar[1].value, yyDollar[3].value)
 		}
-	case 45:
+	case 46:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:162
+//line grammar.y:163
 		{
 			yyVAL.value = yylex.(*myLexer).vOpe1(yyDollar[1].value.c, yyDollar[2].value)
 		}
-	case 46:
+	case 47:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:166
+//line grammar.y:167
 		{
 			yyVAL.value = yylex.(*myLexer).vParen(yyDollar[2].value)
 		}
-	case 47:
+	case 48:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line grammar.y:167
+//line grammar.y:168
 		{
 			yyVAL.value = yylex.(*myLexer).vGetElementOf(yyDollar[1].value, yyDollar[3].value)
 		}
-	case 48:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:168
-		{ /* todo - construction litteral array */
-		}
 	case 49:
-		yyDollar = yyS[yypt-1 : yypt+1]
+		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:169
 		{
-			yyVAL.value = yylex.(*myLexer).vGetVar(yyDollar[1].value.v)
+			yyVAL.value = yylex.(*myLexer).vMakeArray(yyDollar[2].values)
 		}
 	case 50:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:170
 		{
-			yyVAL.value = yyDollar[1].value
+			yyVAL.value = yylex.(*myLexer).vGetVar(yyDollar[1].value.v)
 		}
 	case 51:
 		yyDollar = yyS[yypt-1 : yypt+1]
@@ -922,13 +920,19 @@ yydefault:
 		}
 	case 53:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:176
+//line grammar.y:173
+		{
+			yyVAL.value = yyDollar[1].value
+		}
+	case 54:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line grammar.y:177
 		{
 			yyVAL.values = []value{yyDollar[1].value}
 		}
-	case 54:
+	case 55:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:177
+//line grammar.y:178
 		{
 			// build list of elements for array if types matches ...
 			if yyDollar[1].values[0].t == yyDollar[3].value.t {

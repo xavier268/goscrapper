@@ -158,6 +158,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"int", INTTYPE},
 		{"bool", BOOLTYPE},
 		{"string", STRINGTYPE},
+		{"nil", NIL},
 
 		// multi bytes
 		{"<=", LTE},

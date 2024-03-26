@@ -24,7 +24,7 @@
             INTTYPE BOOLTYPE STRINGTYPE // native types
             FOR RETURN WAITFOR OPTIONS IGNORE HEADLESS TIMEOUT 
             DISTINCT FILTER CURRENT SORT LIMIT LET COLLECT 
-            ASC DESC NONE NULL TRUE FALSE USE
+            ASC DESC NIL TRUE FALSE USE
             INTO KEEP WITH COUNT ALL ANY AGGREGATE
             EVENT
             LIKE IN WHILE
@@ -41,7 +41,7 @@
 %type <value> expression expressionAtom
 %type <value> ope2 ope1
 %type <value> typeDefinition 
-%type <value> IDENTIFIER  NUMBER STRING BOOL
+%type <value> IDENTIFIER  NUMBER STRING BOOL NIL
 
 %type <list> returnList 
 
@@ -132,7 +132,8 @@ loopClause
 // ==================
 
 ope2 // binary operators
-    : PLUS{ $$ = $1 }
+    : PLUS{ $$ = $1 } // concat strings, append to array
+    | PLUSPLUS {$$ = $1} // aggregate arrays
     | MINUS{ $$ = $1 }
     | MULTI{ $$ = $1 }
     | DIV{ $$ = $1 }
@@ -165,7 +166,7 @@ expression // never empty, type is controlled semantically, not syntaxically
 expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }
     | expressionAtom LBRACKET expression RBRACKET {$$ = yylex.(*myLexer).vGetElementOf($1, $3)}
-    | LBRACKET expressionList RBRACKET { /* todo - construction litteral array */}
+    | LBRACKET expressionList RBRACKET { $$ = yylex.(*myLexer).vMakeArray($2)}
     | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }

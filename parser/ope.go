@@ -1,15 +1,35 @@
 package parser
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // binary operators on expressions
 func (m *myLexer) vOpe2(ope int, left value, right value) value {
 	switch ope {
 
-	case PLUS:
-		if left.t == right.t && (left.t == "int" || left.t == "string") {
+	case PLUS: // add numbers, concat strings, append to an array
+		if left.t == right.t && (left.t == "int" || left.t == "string") { // num + num   string + string
 			return value{t: left.t, v: fmt.Sprintf("((%s) + (%s))", left.v, right.v)}
 		}
+		if left.t == "[]"+right.t { // []T + t -> append(T, t)
+			return value{
+				v: fmt.Sprintf("append(%s,%s)", left.v, right.v),
+				t: left.t,
+				c: 0,
+			}
+		}
+
+	case PLUSPLUS: // merge two arrays
+		if left.t == right.t && strings.HasPrefix(left.t, "[]") {
+			return value{
+				v: fmt.Sprintf("append(%s,%s...)", left.v, right.v),
+				t: left.t,
+				c: 0,
+			}
+		}
+
 	case MINUS:
 		if left.t == right.t && (left.t == "int") {
 			return value{t: left.t, v: fmt.Sprintf("((%s) - (%s))", left.v, right.v)}

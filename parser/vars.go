@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -176,7 +177,13 @@ func (m *myLexer) saveOut() {
 	// but the out variables are not yet available.
 	// This may required to create lines allocating all knwonwn variables as if they were all out params, and at the end, revisiting and commenting all lines atht are not part of out ?
 	m.addLines("//call to saveOut")
+	// sort vars to make output deterministic for easier testing
+	vv := make([]string, len(m.vars))
 	for v := range m.vars {
+		vv = append(vv, v)
+	}
+	sort.Strings(vv)
+	for _, v := range vv {
 		li := fmt.Sprintf("//_out[len(_out)-1].%s=%s", v, v) // relevant lines will be uncommented later.
 		m.addLines(li)
 	}
@@ -220,4 +227,31 @@ func (m *myLexer) vGetElementOf(arr value, idx value) value {
 		t: arr.t[2:],
 		c: 0,
 	}
+}
+
+// create an arry, checking all types are the same (or nil)
+func (m *myLexer) vMakeArray(li []value) value {
+	if len(li) == 0 { // that should never happen ...
+		m.errorf("you cannot define a litteral array wit no elements")
+	}
+
+	t0 := li[0].t
+	v0 := "[]" + t0 + "{"
+
+	for i, v := range li {
+		if i != 0 {
+			v0 += ","
+		}
+		if v.t != t0 {
+			m.errorf("array element type %s differs from first element type %s", v.t, t0)
+		}
+		v0 += v.v
+	}
+
+	return value{
+		v: v0 + "}",
+		t: "[]" + t0,
+		c: 0,
+	}
+
 }

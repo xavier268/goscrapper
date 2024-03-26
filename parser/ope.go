@@ -106,22 +106,18 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 	switch ope {
 	case NOT:
 		if v.t == "bool" {
-			m.imports["fmt"] = true
 			return value{t: "bool", v: fmt.Sprintf("!(%s)", v.v)}
 		}
 	case MINUS:
 		if v.t == "int" {
-			m.imports["fmt"] = true
 			return value{t: "int", v: fmt.Sprintf("-(%s)", v.v)}
 		}
 	case PLUSPLUS:
 		if v.t == "int" {
-			m.imports["fmt"] = true
 			return value{t: "int", v: fmt.Sprintf("(%s+1)", v.v)}
 		}
 	case MINUSMINUS:
 		if v.t == "int" {
-			m.imports["fmt"] = true
 			return value{t: "int", v: fmt.Sprintf("(%s-1)", v.v)}
 		}
 	case LOWER:

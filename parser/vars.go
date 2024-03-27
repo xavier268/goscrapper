@@ -229,7 +229,7 @@ func (m *myLexer) vGetElementOf(arr value, idx value) value {
 	}
 }
 
-// create an arry, checking all types are the same (or nil)
+// create an array, checking all types are the same (or nil)
 func (m *myLexer) vMakeArray(li []value) value {
 	if len(li) == 0 { // that should never happen ...
 		m.errorf("you cannot define a litteral array with no elements")
@@ -254,4 +254,17 @@ func (m *myLexer) vMakeArray(li []value) value {
 		c: 0,
 	}
 
+}
+
+// construct the golang object type where member keys and types are provided from the non empty list.
+func (m *myLexer) objectType(vl []value) string {
+	typ := "struct{"
+	for i, v := range vl {
+		if i > 0 {
+			typ = typ + ";"
+		}
+		typ = typ + v.v + ":" + v.t
+	}
+	typ = typ + "}"
+	return typ
 }

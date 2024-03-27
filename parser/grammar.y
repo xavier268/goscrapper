@@ -98,21 +98,21 @@ options
     : AT IDENTIFIER  typeDefinition  { lx.declInputParam($2.v, $3.v) }   // declare input parameter
     ;
 
-typeDefinition // contains the type as its value.v
+typeDefinition // contains the type as its value.v The value.t member has no meaning.
     : INTTYPE
     | STRINGTYPE
     | BOOLTYPE
     | BINTYPE { $$.v = "[]byte"} // translate "bin" into "[]byte, never use 'bin' anywhere"
     | LBRACKET  typeDefinition RBRACKET { $$.v = "[]" + $2.v}
-    | LBRACE keytypeList RBRACE
+    | LBRACE keytypeList RBRACE { $$.v = lx.objectType($2)}
     ;
 
-keytype // value with value.v = identifier & value.t = type
-    : IDENTIFIER COLON typeDefinition { /* todo */}
+keytype // value with value.v = key & value.t = type
+    : IDENTIFIER COLON typeDefinition { $$ = value{v:$1.v,t:$3.v}}
     ;
-keytypeList
-    : keytype { /* todo */}
-    | keytypeList COMMA keytype { /* todo */}
+keytypeList // as a list of values, containing the description of object.
+    : keytype { $$ = []value{$1}}
+    | keytypeList COMMA keytype{ $$ = append($1, $3)}
     ;
 
 // program body contains statements, followed by either RETURN or 
@@ -212,13 +212,13 @@ expressionList
     | expressionList COMMA expression { $$ = append($1, $3) } // no type checks yet
     ;
 
-keyExpressionList
-    : IDENTIFIER COLON expression { /* todo */}
-    | keyExpressionList COMMA IDENTIFIER COLON expression { /* todo */}
+keyExpressionList // its a map[string]value, mapping the key to the expression value
+    : IDENTIFIER COLON expression { $$ = map[string]value{$1.v : $3}}
+    | keyExpressionList COMMA IDENTIFIER COLON expression { $$ = $1 ; $$[$3.v]=$5}
     ;
 
-keyIdentifierList
-    : IDENTIFIER { /* todo */}
-    | keyIdentifierList COMMA IDENTIFIER { /* todo */}
+keyIdentifierList // same as above, identifier is both the value and the expression.
+    : IDENTIFIER { $$ = map[string]value{$1.v:$1}}
+    | keyIdentifierList COMMA IDENTIFIER { $$ = $1;$$[$3.v] = $3}
     ;
 %%

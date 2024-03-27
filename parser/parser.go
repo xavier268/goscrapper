@@ -710,20 +710,29 @@ yydefault:
 		{
 			yyVAL.value.v = "[]" + yyDollar[2].value.v
 		}
+	case 13:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line grammar.y:107
+		{
+			yyVAL.value.v = lx.objectType(yyDollar[2].values)
+		}
 	case 14:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:111
-		{ /* todo */
+		{
+			yyVAL.value = value{v: yyDollar[1].value.v, t: yyDollar[3].value.v}
 		}
 	case 15:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:114
-		{ /* todo */
+		{
+			yyVAL.values = []value{yyDollar[1].value}
 		}
 	case 16:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:115
-		{ /* todo */
+		{
+			yyVAL.values = append(yyDollar[1].values, yyDollar[3].value)
 		}
 	case 17:
 		yyDollar = yyS[yypt-2 : yypt+1]
@@ -1041,22 +1050,28 @@ yydefault:
 	case 71:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:216
-		{ /* todo */
+		{
+			yyVAL.mvalue = map[string]value{yyDollar[1].value.v: yyDollar[3].value}
 		}
 	case 72:
 		yyDollar = yyS[yypt-5 : yypt+1]
 //line grammar.y:217
-		{ /* todo */
+		{
+			yyVAL.mvalue = yyDollar[1].mvalue
+			yyVAL.mvalue[yyDollar[3].value.v] = yyDollar[5].value
 		}
 	case 73:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:221
-		{ /* todo */
+		{
+			yyVAL.mvalue = map[string]value{yyDollar[1].value.v: yyDollar[1].value}
 		}
 	case 74:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:222
-		{ /* todo */
+		{
+			yyVAL.mvalue = yyDollar[1].mvalue
+			yyVAL.mvalue[yyDollar[3].value.v] = yyDollar[3].value
 		}
 	}
 	goto yystack /* stack new state and value */

@@ -8,6 +8,8 @@
         c int       // the code returned by lexer is stored here. Always set by the lexer, even for variables (set as IDENTIFIER). A valid go type, without spaces.
     }
 
+    var lx *myLexer // shorthand for lx
+
    
 %}
 
@@ -70,12 +72,16 @@
 
 
 program
-    : head init body { yylex.(*myLexer).finalize() }
-    | init body      { yylex.(*myLexer).finalize() }
+    : beforeProgram head beforeBody body { lx.finalize() }
+    | beforeProgram beforeBody body      { lx.finalize() }
     ;
 
-init // run before any body
-    : { yylex.(*myLexer).incOut() ; yylex.(*myLexer).addLines("{")}
+beforeProgram
+    : {lx = yylex.(*myLexer)}
+    ;
+
+beforeBody // run before any body
+    : { lx.incOut() ; lx.addLines("{")}
     ;
 
 // head defines options
@@ -85,7 +91,7 @@ head
     ;
 
 options
-    : AT IDENTIFIER  typeDefinition  { yylex.(*myLexer).declInputParam($2.v, $3.v) }   // declare input parameter
+    : AT IDENTIFIER  typeDefinition  { lx.declInputParam($2.v, $3.v) }   // declare input parameter
     ;
 
 typeDefinition
@@ -100,8 +106,8 @@ typeDefinition
 // program body contains statements, followed by either RETURN or 
 
 body
-    : statements returnStatements {  yylex.(*myLexer).addLines("}")}
-    | returnStatements { yylex.(*myLexer).addLines("}")}
+    : statements returnStatements {  lx.addLines("}")}
+    | returnStatements { lx.addLines("}")}
     ;
 
 statements
@@ -110,13 +116,13 @@ statements
     ;
 
 statement 
-    : IDENTIFIER ASSIGN expression { yylex.(*myLexer).vSetVar($1.v, $3)}
+    : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
     | PAGE expression { /* todo */}
     | CLICK  expression { /* todo */}
     ;
 
 returnStatements
-    : RETURN returnList { yylex.(*myLexer).declOutputParams($2) ; yylex.(*myLexer).saveOut() ;  }
+    : RETURN returnList { lx.declOutputParams($2) ; lx.saveOut() ;  }
     | loopClause body { /* */ }
     ;
 
@@ -126,8 +132,8 @@ returnList
     ;
 
 loopClause
-    : FOR IDENTIFIER IN expression  {yylex.(*myLexer).forNameInExpression($2.v, $4)}
-    | SELECT  expression  { yylex.(*myLexer).selectExpression($2) } // loop on all css matching exprerssion
+    : FOR IDENTIFIER IN expression  {lx.forNameInExpression($2.v, $4)}
+    | SELECT  expression  { lx.selectExpression($2) } // loop on all css matching exprerssion
     // | SELECT IDENTIFIER expression // SELECT with a counter.
     ;
 
@@ -163,21 +169,21 @@ ope1 // unary operators
 
 expression // never empty, type is controlled semantically, not syntaxically
     : expressionUnary { $$=$1 }   
-    | expression ope2 expressionUnary { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) } 
+    | expression ope2 expressionUnary { $$ = lx.vOpe2($2.c, $1, $3) } 
     ;
 
 expressionUnary // never empty
     : expressionAtom { $$ = $1 }  
-    | ope1 expressionAtom { $$ = yylex.(*myLexer).vOpe1($1.c, $2) }    
+    | ope1 expressionAtom { $$ = lx.vOpe1($1.c, $2) }    
     ;
 
 expressionAtom // never empty
-    : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }    
-    | expressionAtom LBRACKET expression RBRACKET {$$ = yylex.(*myLexer).vGetElementOf($1, $3)}
-    | LBRACKET expressionList RBRACKET { $$ = yylex.(*myLexer).vMakeArray($2)}
+    : LPAREN expression RPAREN  { $$ = lx.vParen($2) }    
+    | expressionAtom LBRACKET expression RBRACKET {$$ = lx.vGetElementOf($1, $3)}
+    | LBRACKET expressionList RBRACKET { $$ = lx.vMakeArray($2)}
     | IDENTIFIER LPAREN expressionList RPAREN { /* TODO - function call computing and returning a value */ }   
     | IDENTIFIER LPAREN  RPAREN { /* TODO - function call computing and returning a value - empty input params */ }   
-    | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
+    | IDENTIFIER { $$ = lx.vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
     | BOOL { $$ = $1 }

@@ -263,8 +263,95 @@ func (m *myLexer) objectType(vl []value) string {
 		if i > 0 {
 			typ = typ + ";"
 		}
-		typ = typ + v.v + ":" + v.t
+		typ = typ + v.v + " " + v.t
 	}
 	typ = typ + "}"
 	return typ
+}
+
+// construct an object from the map of keys to expressions
+func (m *myLexer) vMakeObject(mv map[string]value) value {
+
+	typ := "struct{"
+	val := "{"
+	first := true
+	for k, e := range mv {
+		if !first {
+			typ = typ + ";"
+			val = val + ","
+		}
+		first = false
+		typ = typ + k + " " + e.t
+		val = val + e.v
+	}
+	typ = typ + "}"
+	val = typ + val + "}"
+	// fmt.Printf("DEBUG - constructing object : val = %s and typ =  %s\n", val, typ)
+	return value{
+		v: val,
+		t: typ,
+	}
+}
+
+// access the key within an object.
+// It MUST be an object, and the key MUST be present ...
+func (m *myLexer) vAccessObject(obj value, key string) value {
+	mres := m.splitStructType(obj.t)
+	if len(mres) == 0 {
+		m.errorf("this type should be a valid struct type, but it is not : %s", obj.t)
+	}
+	if typ, ok := mres[key]; ok && typ != "" {
+		return value{
+			v: obj.v + "." + key,
+			t: typ,
+		}
+	}
+	m.errorf("the requested key: %s  does not exists in the provided object : %#v", key, obj)
+	return value{}
+}
+
+// split a struct type into its components.
+// woks even if components contain nested structs.
+func (m *myLexer) splitStructType(typ string) map[string]string {
+	typ = strings.TrimSpace(typ)
+
+	if !strings.HasPrefix(typ, "struct{") {
+		return nil // not a struct type
+	}
+	typ = typ[len("struct{") : len(typ)-len("}")]
+
+	// now, we split everything around the ;
+	tt1 := strings.Split(typ, ";")
+	// we reaggregate the pieces until we have balanced braces and brackets
+	buff := ""
+	res := make([]string, 0, len(tt1))
+	for _, tt := range tt1 {
+		// reconstruct buffer ...
+		if buff == "" {
+			buff = tt
+		} else {
+			buff = buff + ";" + tt
+		}
+		// check if buffer is balanced
+		if strings.Count(buff, "{") == strings.Count(buff, "}") &&
+			strings.Count(buff, "[") == strings.Count(buff, "]") {
+			// if buff is balanced, save and reset buff
+			res = append(res, buff)
+			buff = ""
+		}
+	}
+	if buff != "" {
+		m.errorf("syntax error (unbalanced braces or brackets) in type %s", typ)
+	}
+
+	// split each component into the map
+	mres := make(map[string]string, len(res))
+	for _, r := range res {
+		rr := strings.SplitN(r, " ", 2)
+		if len(rr) != 2 {
+			m.errorf("incorrect syntax in type definition (missing space ?) %s", r)
+		}
+		mres[strings.TrimSpace(rr[0])] = strings.TrimSpace(rr[1])
+	}
+	return mres
 }

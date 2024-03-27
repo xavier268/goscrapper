@@ -70,6 +70,7 @@
 %left LOWER UPPER 
 %left LBRACKET 
 
+
 %%
 
 /* NB : prefer left recursivity, easier to implement */
@@ -195,11 +196,11 @@ expressionUnary // never empty
 expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = lx.vParen($2) }    
     | expressionAtom LBRACKET expression RBRACKET {$$ = lx.vGetElementOf($1, $3)}
-    | expressionAtom DOT IDENTIFIER { /* todo - access an object key */}
+    | expressionAtom DOT IDENTIFIER { $$ = lx.vAccessObject($1, $3.v)}
     | LBRACKET expressionList RBRACKET { $$ = lx.vMakeArray($2)}
     | IDENTIFIER LPAREN expressionList RPAREN { /* TODO - function call computing and returning a value */ }   
     | IDENTIFIER LPAREN  RPAREN { /* TODO - function call computing and returning a value - empty input params */ }   
-    | LBRACE keyExpressionList RBRACE {/* constructs a litteral object - todo*/}
+    | LBRACE keyExpressionList RBRACE {$$ = lx.vMakeObject($2)} 
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
@@ -212,10 +213,11 @@ expressionList
     ;
 
 keyExpressionList // its a map[string]value, mapping the key to the expression value
-    : IDENTIFIER COLON expression { $$ = map[string]value{$1.v : $3}}
-    | IDENTIFIER { $$ = map[string]value{$1.v:$1}}
+    : IDENTIFIER COLON expression { $$ = map[string]value{$1.v : $3}}   
     | keyExpressionList COMMA IDENTIFIER COLON expression { $$ = $1 ; $$[$3.v]=$5}
-    | keyExpressionList COMMA IDENTIFIER { $$ = $1;$$[$3.v] = $3}
+    // implicit kety name from identifier
+    | IDENTIFIER { $$ = map[string]value{$1.v:lx.vGetVar($1.v)}}
+    | keyExpressionList COMMA IDENTIFIER { $$ = $1;$$[$3.v] = lx.vGetVar($3.v)}
     ;
 
 %%

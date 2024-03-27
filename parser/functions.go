@@ -33,23 +33,20 @@ func registerValueFunction(name string, f myValueFunction) {
 	myFunctions[name] = f
 }
 
-func (m *myLexer) callFunction(name string, values []value) (value) {
+func (m *myLexer) callFunction(name string, values []value) value {
 	f, ok := myFunctions[name]
 	if !ok {
-		return value{}, m.errorf("function not registered: %s" , name)
+		m.errorf("function not registered: %s", name)
 	}
 	v, err := f(m, values)
 	if err != nil {
-		m.errorf("error calling function %s : %s",name,  err.Error())
+		m.errorf("error calling function %s : %s", name, err.Error())
 	}
 	return v
 }
 
+// ======================================================================
 
 func testFunction(m *myLexer, values []value) (value, error) {
 	return value{v: "test is ok !", t: "string"}, nil
 }
-
-func 
-
-

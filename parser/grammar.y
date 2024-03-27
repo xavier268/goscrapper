@@ -38,6 +38,7 @@
     value value
     list []string
     values []value
+    mvalue map[string]value
 }
 
 %type <value> expression expressionUnary expressionAtom
@@ -47,7 +48,10 @@
 
 %type <list> returnList 
 
-%type <values> expressionList
+%type <values> expressionList keytypeList
+%type <value> keytype
+
+%type <mvalue> keyIdentifierList keyExpressionList
 
 
 
@@ -94,13 +98,21 @@ options
     : AT IDENTIFIER  typeDefinition  { lx.declInputParam($2.v, $3.v) }   // declare input parameter
     ;
 
-typeDefinition
+typeDefinition // contains the type as its value.v
     : INTTYPE
     | STRINGTYPE
     | BOOLTYPE
     | BINTYPE { $$.v = "[]byte"} // translate "bin" into "[]byte, never use 'bin' anywhere"
     | LBRACKET  typeDefinition RBRACKET { $$.v = "[]" + $2.v}
-    /* to do - add objects */
+    | LBRACE keytypeList RBRACE
+    ;
+
+keytype // value with value.v = identifier & value.t = type
+    : IDENTIFIER COLON typeDefinition { /* todo */}
+    ;
+keytypeList
+    : keytype { /* todo */}
+    | keytypeList COMMA keytype { /* todo */}
     ;
 
 // program body contains statements, followed by either RETURN or 
@@ -183,9 +195,12 @@ expressionUnary // never empty
 expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = lx.vParen($2) }    
     | expressionAtom LBRACKET expression RBRACKET {$$ = lx.vGetElementOf($1, $3)}
+    | expressionAtom DOT IDENTIFIER { /* todo - access an object key */}
     | LBRACKET expressionList RBRACKET { $$ = lx.vMakeArray($2)}
     | IDENTIFIER LPAREN expressionList RPAREN { /* TODO - function call computing and returning a value */ }   
     | IDENTIFIER LPAREN  RPAREN { /* TODO - function call computing and returning a value - empty input params */ }   
+    | LBRACE keyExpressionList RBRACE {/* constructs a litteral object - todo*/}
+    | LBRACE keyIdentifierList RBRACE {/* constructs a litteral object, where var names are used as key - todo*/}
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
@@ -197,5 +212,13 @@ expressionList
     | expressionList COMMA expression { $$ = append($1, $3) } // no type checks yet
     ;
 
+keyExpressionList
+    : IDENTIFIER COLON expression { /* todo */}
+    | keyExpressionList COMMA IDENTIFIER COLON expression { /* todo */}
+    ;
 
+keyIdentifierList
+    : IDENTIFIER { /* todo */}
+    | keyIdentifierList COMMA IDENTIFIER { /* todo */}
+    ;
 %%

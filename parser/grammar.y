@@ -51,7 +51,7 @@
 %type <values> expressionList keytypeList
 %type <value> keytype
 
-%type <mvalue> keyIdentifierList keyExpressionList
+%type <mvalue>  keyExpressionList
 
 
 
@@ -200,7 +200,6 @@ expressionAtom // never empty
     | IDENTIFIER LPAREN expressionList RPAREN { /* TODO - function call computing and returning a value */ }   
     | IDENTIFIER LPAREN  RPAREN { /* TODO - function call computing and returning a value - empty input params */ }   
     | LBRACE keyExpressionList RBRACE {/* constructs a litteral object - todo*/}
-    | LBRACE keyIdentifierList RBRACE {/* constructs a litteral object, where var names are used as key - todo*/}
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
@@ -214,11 +213,9 @@ expressionList
 
 keyExpressionList // its a map[string]value, mapping the key to the expression value
     : IDENTIFIER COLON expression { $$ = map[string]value{$1.v : $3}}
+    | IDENTIFIER { $$ = map[string]value{$1.v:$1}}
     | keyExpressionList COMMA IDENTIFIER COLON expression { $$ = $1 ; $$[$3.v]=$5}
+    | keyExpressionList COMMA IDENTIFIER { $$ = $1;$$[$3.v] = $3}
     ;
 
-keyIdentifierList // same as above, identifier is both the value and the expression.
-    : IDENTIFIER { $$ = map[string]value{$1.v:$1}}
-    | keyIdentifierList COMMA IDENTIFIER { $$ = $1;$$[$3.v] = $3}
-    ;
 %%

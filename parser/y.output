@@ -1,15 +1,12 @@
 
 state 0
 	$accept: .program $end 
-	init: .    (3)
+	beforeProgram: .    (3)
 
-	AT  shift 5
-	.  reduce 3 (src line 77)
+	.  reduce 3 (src line 79)
 
 	program  goto 1
-	head  goto 2
-	init  goto 3
-	options  goto 4
+	beforeProgram  goto 2
 
 state 1
 	$accept:  program.$end 
@@ -19,987 +16,999 @@ state 1
 
 
 state 2
-	program:  head.init body 
-	head:  head.options 
-	init: .    (3)
+	program:  beforeProgram.head beforeBody body 
+	program:  beforeProgram.beforeBody body 
+	beforeBody: .    (4)
 
-	AT  shift 5
-	.  reduce 3 (src line 77)
+	AT  shift 6
+	.  reduce 4 (src line 83)
 
-	init  goto 6
-	options  goto 7
+	head  goto 3
+	beforeBody  goto 4
+	options  goto 5
 
 state 3
-	program:  init.body 
+	program:  beforeProgram head.beforeBody body 
+	head:  head.options 
+	beforeBody: .    (4)
 
-	FOR  shift 17
-	RETURN  shift 12
-	IDENTIFIER  shift 14
-	SELECT  shift 18
-	CLICK  shift 16
-	PAGE  shift 15
-	.  error
+	AT  shift 6
+	.  reduce 4 (src line 83)
 
-	body  goto 8
-	statements  goto 9
-	returnStatements  goto 10
-	statement  goto 11
-	loopClause  goto 13
+	beforeBody  goto 7
+	options  goto 8
 
 state 4
-	head:  options.    (5)
+	program:  beforeProgram beforeBody.body 
 
-	.  reduce 5 (src line 84)
+	FOR  shift 18
+	RETURN  shift 13
+	IDENTIFIER  shift 15
+	SELECT  shift 19
+	CLICK  shift 17
+	PAGE  shift 16
+	.  error
 
+	body  goto 9
+	statements  goto 10
+	returnStatements  goto 11
+	statement  goto 12
+	loopClause  goto 14
 
 state 5
-	options:  AT.IDENTIFIER typeDefinition 
+	head:  options.    (6)
 
-	IDENTIFIER  shift 19
-	.  error
+	.  reduce 6 (src line 90)
 
 
 state 6
-	program:  head init.body 
+	options:  AT.IDENTIFIER typeDefinition 
 
-	FOR  shift 17
-	RETURN  shift 12
-	IDENTIFIER  shift 14
-	SELECT  shift 18
-	CLICK  shift 16
-	PAGE  shift 15
+	IDENTIFIER  shift 20
 	.  error
 
-	body  goto 20
-	statements  goto 9
-	returnStatements  goto 10
-	statement  goto 11
-	loopClause  goto 13
 
 state 7
-	head:  head options.    (4)
+	program:  beforeProgram head beforeBody.body 
 
-	.  reduce 4 (src line 82)
+	FOR  shift 18
+	RETURN  shift 13
+	IDENTIFIER  shift 15
+	SELECT  shift 19
+	CLICK  shift 17
+	PAGE  shift 16
+	.  error
 
+	body  goto 21
+	statements  goto 10
+	returnStatements  goto 11
+	statement  goto 12
+	loopClause  goto 14
 
 state 8
-	program:  init body.    (2)
+	head:  head options.    (5)
 
-	.  reduce 2 (src line 74)
+	.  reduce 5 (src line 88)
 
 
 state 9
+	program:  beforeProgram beforeBody body.    (2)
+
+	.  reduce 2 (src line 76)
+
+
+state 10
 	body:  statements.returnStatements 
 	statements:  statements.statement 
 
-	FOR  shift 17
-	RETURN  shift 12
-	IDENTIFIER  shift 14
-	SELECT  shift 18
-	CLICK  shift 16
-	PAGE  shift 15
+	FOR  shift 18
+	RETURN  shift 13
+	IDENTIFIER  shift 15
+	SELECT  shift 19
+	CLICK  shift 17
+	PAGE  shift 16
 	.  error
 
-	returnStatements  goto 21
-	statement  goto 22
-	loopClause  goto 13
-
-state 10
-	body:  returnStatements.    (13)
-
-	.  reduce 13 (src line 104)
-
+	returnStatements  goto 22
+	statement  goto 23
+	loopClause  goto 14
 
 state 11
-	statements:  statement.    (14)
+	body:  returnStatements.    (14)
 
-	.  reduce 14 (src line 107)
+	.  reduce 14 (src line 110)
 
 
 state 12
-	returnStatements:  RETURN.returnList 
+	statements:  statement.    (15)
 
-	IDENTIFIER  shift 24
-	.  error
+	.  reduce 15 (src line 113)
 
-	returnList  goto 23
 
 state 13
-	returnStatements:  loopClause.body 
+	returnStatements:  RETURN.returnList 
 
-	FOR  shift 17
-	RETURN  shift 12
-	IDENTIFIER  shift 14
-	SELECT  shift 18
-	CLICK  shift 16
-	PAGE  shift 15
+	IDENTIFIER  shift 25
 	.  error
 
-	body  goto 25
-	statements  goto 9
-	returnStatements  goto 10
-	statement  goto 11
-	loopClause  goto 13
+	returnList  goto 24
 
 state 14
-	statement:  IDENTIFIER.ASSIGN expression 
+	returnStatements:  loopClause.body 
 
-	ASSIGN  shift 26
+	FOR  shift 18
+	RETURN  shift 13
+	IDENTIFIER  shift 15
+	SELECT  shift 19
+	CLICK  shift 17
+	PAGE  shift 16
 	.  error
 
+	body  goto 26
+	statements  goto 10
+	returnStatements  goto 11
+	statement  goto 12
+	loopClause  goto 14
 
 state 15
-	statement:  PAGE.expression 
+	statement:  IDENTIFIER.ASSIGN expression 
 
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
+	ASSIGN  shift 27
 	.  error
 
-	expression  goto 27
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
 
 state 16
-	statement:  CLICK.expression 
+	statement:  PAGE.expression 
 
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
 	.  error
 
-	expression  goto 43
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
+	expression  goto 28
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
 
 state 17
-	loopClause:  FOR.IDENTIFIER IN expression 
+	statement:  CLICK.expression 
 
-	IDENTIFIER  shift 44
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
 	.  error
 
+	expression  goto 44
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
 
 state 18
-	loopClause:  SELECT.expression 
+	loopClause:  FOR.IDENTIFIER IN expression 
 
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
+	IDENTIFIER  shift 45
 	.  error
 
-	expression  goto 45
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
 
 state 19
-	options:  AT IDENTIFIER.typeDefinition 
+	loopClause:  SELECT.expression 
 
-	LBRACKET  shift 51
-	INTTYPE  shift 47
-	BOOLTYPE  shift 49
-	STRINGTYPE  shift 48
-	BINTYPE  shift 50
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
 	.  error
 
-	typeDefinition  goto 46
+	expression  goto 46
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
 
 state 20
-	program:  head init body.    (1)
+	options:  AT IDENTIFIER.typeDefinition 
 
-	.  reduce 1 (src line 72)
+	LBRACKET  shift 52
+	INTTYPE  shift 48
+	BOOLTYPE  shift 50
+	STRINGTYPE  shift 49
+	BINTYPE  shift 51
+	.  error
 
+	typeDefinition  goto 47
 
 state 21
-	body:  statements returnStatements.    (12)
+	program:  beforeProgram head beforeBody body.    (1)
+
+	.  reduce 1 (src line 74)
+
+
+state 22
+	body:  statements returnStatements.    (13)
+
+	.  reduce 13 (src line 108)
+
+
+state 23
+	statements:  statements statement.    (16)
+
+	.  reduce 16 (src line 115)
+
+
+state 24
+	returnStatements:  RETURN returnList.    (20)
+	returnList:  returnList.COMMA IDENTIFIER 
+
+	COMMA  shift 53
+	.  reduce 20 (src line 124)
+
+
+state 25
+	returnList:  IDENTIFIER.    (22)
+
+	.  reduce 22 (src line 129)
+
+
+state 26
+	returnStatements:  loopClause body.    (21)
+
+	.  reduce 21 (src line 126)
+
+
+state 27
+	statement:  IDENTIFIER ASSIGN.expression 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expression  goto 54
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
+
+state 28
+	statement:  PAGE expression.    (18)
+	expression:  expression.ope2 expressionUnary 
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  reduce 18 (src line 120)
+
+	ope2  goto 55
+
+state 29
+	expression:  expressionUnary.    (48)
+
+	.  reduce 48 (src line 170)
+
+
+state 30
+	expressionUnary:  expressionAtom.    (50)
+	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
+
+	LBRACKET  shift 72
+	.  reduce 50 (src line 175)
+
+
+state 31
+	expressionUnary:  ope1.expressionAtom 
+
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expressionAtom  goto 73
+
+state 32
+	expressionAtom:  LPAREN.expression RPAREN 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expression  goto 74
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
+
+state 33
+	expressionAtom:  LBRACKET.expressionList RBRACKET 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expression  goto 76
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
+	expressionList  goto 75
+
+state 34
+	expressionAtom:  IDENTIFIER.LPAREN expressionList RPAREN 
+	expressionAtom:  IDENTIFIER.LPAREN RPAREN 
+	expressionAtom:  IDENTIFIER.    (57)
+
+	LPAREN  shift 77
+	.  reduce 57 (src line 186)
+
+
+state 35
+	expressionAtom:  STRING.    (58)
+
+	.  reduce 58 (src line 187)
+
+
+state 36
+	expressionAtom:  NUMBER.    (59)
+
+	.  reduce 59 (src line 188)
+
+
+state 37
+	expressionAtom:  BOOL.    (60)
+
+	.  reduce 60 (src line 189)
+
+
+state 38
+	ope1:  MINUS.    (42)
+
+	.  reduce 42 (src line 161)
+
+
+state 39
+	ope1:  PLUSPLUS.    (43)
+
+	.  reduce 43 (src line 163)
+
+
+state 40
+	ope1:  MINUSMINUS.    (44)
+
+	.  reduce 44 (src line 164)
+
+
+state 41
+	ope1:  LOWER.    (45)
+
+	.  reduce 45 (src line 165)
+
+
+state 42
+	ope1:  UPPER.    (46)
+
+	.  reduce 46 (src line 166)
+
+
+state 43
+	ope1:  NOT.    (47)
+
+	.  reduce 47 (src line 167)
+
+
+state 44
+	statement:  CLICK expression.    (19)
+	expression:  expression.ope2 expressionUnary 
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  reduce 19 (src line 121)
+
+	ope2  goto 55
+
+state 45
+	loopClause:  FOR IDENTIFIER.IN expression 
+
+	IN  shift 78
+	.  error
+
+
+state 46
+	loopClause:  SELECT expression.    (25)
+	expression:  expression.ope2 expressionUnary 
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  reduce 25 (src line 136)
+
+	ope2  goto 55
+
+state 47
+	options:  AT IDENTIFIER typeDefinition.    (7)
+
+	.  reduce 7 (src line 93)
+
+
+state 48
+	typeDefinition:  INTTYPE.    (8)
+
+	.  reduce 8 (src line 97)
+
+
+state 49
+	typeDefinition:  STRINGTYPE.    (9)
+
+	.  reduce 9 (src line 99)
+
+
+state 50
+	typeDefinition:  BOOLTYPE.    (10)
+
+	.  reduce 10 (src line 100)
+
+
+state 51
+	typeDefinition:  BINTYPE.    (11)
+
+	.  reduce 11 (src line 101)
+
+
+state 52
+	typeDefinition:  LBRACKET.typeDefinition RBRACKET 
+
+	LBRACKET  shift 52
+	INTTYPE  shift 48
+	BOOLTYPE  shift 50
+	STRINGTYPE  shift 49
+	BINTYPE  shift 51
+	.  error
+
+	typeDefinition  goto 79
+
+state 53
+	returnList:  returnList COMMA.IDENTIFIER 
+
+	IDENTIFIER  shift 80
+	.  error
+
+
+state 54
+	statement:  IDENTIFIER ASSIGN expression.    (17)
+	expression:  expression.ope2 expressionUnary 
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  reduce 17 (src line 118)
+
+	ope2  goto 55
+
+state 55
+	expression:  expression ope2.expressionUnary 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expressionUnary  goto 81
+	expressionAtom  goto 30
+	ope1  goto 31
+
+state 56
+	ope2:  PLUS.    (26)
+
+	.  reduce 26 (src line 142)
+
+
+state 57
+	ope2:  PLUSPLUS.    (27)
+
+	.  reduce 27 (src line 144)
+
+
+state 58
+	ope2:  MINUS.    (28)
+
+	.  reduce 28 (src line 145)
+
+
+state 59
+	ope2:  MULTI.    (29)
+
+	.  reduce 29 (src line 146)
+
+
+state 60
+	ope2:  DIV.    (30)
+
+	.  reduce 30 (src line 147)
+
+
+state 61
+	ope2:  MOD.    (31)
+
+	.  reduce 31 (src line 148)
+
+
+state 62
+	ope2:  GT.    (32)
+
+	.  reduce 32 (src line 149)
+
+
+state 63
+	ope2:  GTE.    (33)
+
+	.  reduce 33 (src line 150)
+
+
+state 64
+	ope2:  LT.    (34)
+
+	.  reduce 34 (src line 151)
+
+
+state 65
+	ope2:  LTE.    (35)
+
+	.  reduce 35 (src line 152)
+
+
+state 66
+	ope2:  EQ.    (36)
+
+	.  reduce 36 (src line 153)
+
+
+state 67
+	ope2:  NEQ.    (37)
+
+	.  reduce 37 (src line 154)
+
+
+state 68
+	ope2:  AND.    (38)
+
+	.  reduce 38 (src line 155)
+
+
+state 69
+	ope2:  OR.    (39)
+
+	.  reduce 39 (src line 156)
+
+
+state 70
+	ope2:  NOT.    (40)
+
+	.  reduce 40 (src line 157)
+
+
+state 71
+	ope2:  CONTAINS.    (41)
+
+	.  reduce 41 (src line 158)
+
+
+state 72
+	expressionAtom:  expressionAtom LBRACKET.expression RBRACKET 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expression  goto 82
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
+
+state 73
+	expressionUnary:  ope1 expressionAtom.    (51)
+	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
+
+	LBRACKET  shift 72
+	.  reduce 51 (src line 177)
+
+
+state 74
+	expression:  expression.ope2 expressionUnary 
+	expressionAtom:  LPAREN expression.RPAREN 
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	RPAREN  shift 83
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  error
+
+	ope2  goto 55
+
+state 75
+	expressionAtom:  LBRACKET expressionList.RBRACKET 
+	expressionList:  expressionList.COMMA expression 
+
+	COMMA  shift 85
+	RBRACKET  shift 84
+	.  error
+
+
+state 76
+	expression:  expression.ope2 expressionUnary 
+	expressionList:  expression.    (61)
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  reduce 61 (src line 192)
+
+	ope2  goto 55
+
+state 77
+	expressionAtom:  IDENTIFIER LPAREN.expressionList RPAREN 
+	expressionAtom:  IDENTIFIER LPAREN.RPAREN 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	RPAREN  shift 87
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expression  goto 76
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
+	expressionList  goto 86
+
+state 78
+	loopClause:  FOR IDENTIFIER IN.expression 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expression  goto 88
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
+
+state 79
+	typeDefinition:  LBRACKET typeDefinition.RBRACKET 
+
+	RBRACKET  shift 89
+	.  error
+
+
+state 80
+	returnList:  returnList COMMA IDENTIFIER.    (23)
+
+	.  reduce 23 (src line 131)
+
+
+state 81
+	expression:  expression ope2 expressionUnary.    (49)
+
+	.  reduce 49 (src line 172)
+
+
+state 82
+	expression:  expression.ope2 expressionUnary 
+	expressionAtom:  expressionAtom LBRACKET expression.RBRACKET 
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	RBRACKET  shift 90
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  error
+
+	ope2  goto 55
+
+state 83
+	expressionAtom:  LPAREN expression RPAREN.    (52)
+
+	.  reduce 52 (src line 180)
+
+
+state 84
+	expressionAtom:  LBRACKET expressionList RBRACKET.    (54)
+
+	.  reduce 54 (src line 183)
+
+
+state 85
+	expressionList:  expressionList COMMA.expression 
+
+	MINUS  shift 38
+	PLUSPLUS  shift 39
+	MINUSMINUS  shift 40
+	LBRACKET  shift 33
+	LPAREN  shift 32
+	NOT  shift 43
+	LOWER  shift 41
+	UPPER  shift 42
+	BOOL  shift 37
+	IDENTIFIER  shift 34
+	STRING  shift 35
+	NUMBER  shift 36
+	.  error
+
+	expression  goto 91
+	expressionUnary  goto 29
+	expressionAtom  goto 30
+	ope1  goto 31
+
+state 86
+	expressionAtom:  IDENTIFIER LPAREN expressionList.RPAREN 
+	expressionList:  expressionList.COMMA expression 
+
+	COMMA  shift 85
+	RPAREN  shift 92
+	.  error
+
+
+state 87
+	expressionAtom:  IDENTIFIER LPAREN RPAREN.    (56)
+
+	.  reduce 56 (src line 185)
+
+
+state 88
+	loopClause:  FOR IDENTIFIER IN expression.    (24)
+	expression:  expression.ope2 expressionUnary 
+
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  reduce 24 (src line 134)
+
+	ope2  goto 55
+
+state 89
+	typeDefinition:  LBRACKET typeDefinition RBRACKET.    (12)
 
 	.  reduce 12 (src line 102)
 
 
-state 22
-	statements:  statements statement.    (15)
-
-	.  reduce 15 (src line 109)
-
-
-state 23
-	returnStatements:  RETURN returnList.    (19)
-	returnList:  returnList.COMMA IDENTIFIER 
-
-	COMMA  shift 52
-	.  reduce 19 (src line 118)
-
-
-state 24
-	returnList:  IDENTIFIER.    (21)
-
-	.  reduce 21 (src line 123)
-
-
-state 25
-	returnStatements:  loopClause body.    (20)
-
-	.  reduce 20 (src line 120)
-
-
-state 26
-	statement:  IDENTIFIER ASSIGN.expression 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expression  goto 53
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
-
-state 27
-	statement:  PAGE expression.    (17)
-	expression:  expression.ope2 expressionUnary 
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  reduce 17 (src line 114)
-
-	ope2  goto 54
-
-state 28
-	expression:  expressionUnary.    (47)
-
-	.  reduce 47 (src line 164)
-
-
-state 29
-	expressionUnary:  expressionAtom.    (49)
-	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
-
-	LBRACKET  shift 71
-	.  reduce 49 (src line 169)
-
-
-state 30
-	expressionUnary:  ope1.expressionAtom 
-
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expressionAtom  goto 72
-
-state 31
-	expressionAtom:  LPAREN.expression RPAREN 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expression  goto 73
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
-
-state 32
-	expressionAtom:  LBRACKET.expressionList RBRACKET 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expression  goto 75
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
-	expressionList  goto 74
-
-state 33
-	expressionAtom:  IDENTIFIER.LPAREN expressionList RPAREN 
-	expressionAtom:  IDENTIFIER.LPAREN RPAREN 
-	expressionAtom:  IDENTIFIER.    (56)
-
-	LPAREN  shift 76
-	.  reduce 56 (src line 180)
-
-
-state 34
-	expressionAtom:  STRING.    (57)
-
-	.  reduce 57 (src line 181)
-
-
-state 35
-	expressionAtom:  NUMBER.    (58)
-
-	.  reduce 58 (src line 182)
-
-
-state 36
-	expressionAtom:  BOOL.    (59)
-
-	.  reduce 59 (src line 183)
-
-
-state 37
-	ope1:  MINUS.    (41)
-
-	.  reduce 41 (src line 155)
-
-
-state 38
-	ope1:  PLUSPLUS.    (42)
-
-	.  reduce 42 (src line 157)
-
-
-state 39
-	ope1:  MINUSMINUS.    (43)
-
-	.  reduce 43 (src line 158)
-
-
-state 40
-	ope1:  LOWER.    (44)
-
-	.  reduce 44 (src line 159)
-
-
-state 41
-	ope1:  UPPER.    (45)
-
-	.  reduce 45 (src line 160)
-
-
-state 42
-	ope1:  NOT.    (46)
-
-	.  reduce 46 (src line 161)
-
-
-state 43
-	statement:  CLICK expression.    (18)
-	expression:  expression.ope2 expressionUnary 
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  reduce 18 (src line 115)
-
-	ope2  goto 54
-
-state 44
-	loopClause:  FOR IDENTIFIER.IN expression 
-
-	IN  shift 77
-	.  error
-
-
-state 45
-	loopClause:  SELECT expression.    (24)
-	expression:  expression.ope2 expressionUnary 
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  reduce 24 (src line 130)
-
-	ope2  goto 54
-
-state 46
-	options:  AT IDENTIFIER typeDefinition.    (6)
-
-	.  reduce 6 (src line 87)
-
-
-state 47
-	typeDefinition:  INTTYPE.    (7)
-
-	.  reduce 7 (src line 91)
-
-
-state 48
-	typeDefinition:  STRINGTYPE.    (8)
-
-	.  reduce 8 (src line 93)
-
-
-state 49
-	typeDefinition:  BOOLTYPE.    (9)
-
-	.  reduce 9 (src line 94)
-
-
-state 50
-	typeDefinition:  BINTYPE.    (10)
-
-	.  reduce 10 (src line 95)
-
-
-state 51
-	typeDefinition:  LBRACKET.typeDefinition RBRACKET 
-
-	LBRACKET  shift 51
-	INTTYPE  shift 47
-	BOOLTYPE  shift 49
-	STRINGTYPE  shift 48
-	BINTYPE  shift 50
-	.  error
-
-	typeDefinition  goto 78
-
-state 52
-	returnList:  returnList COMMA.IDENTIFIER 
-
-	IDENTIFIER  shift 79
-	.  error
-
-
-state 53
-	statement:  IDENTIFIER ASSIGN expression.    (16)
-	expression:  expression.ope2 expressionUnary 
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  reduce 16 (src line 112)
-
-	ope2  goto 54
-
-state 54
-	expression:  expression ope2.expressionUnary 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expressionUnary  goto 80
-	expressionAtom  goto 29
-	ope1  goto 30
-
-state 55
-	ope2:  PLUS.    (25)
-
-	.  reduce 25 (src line 136)
-
-
-state 56
-	ope2:  PLUSPLUS.    (26)
-
-	.  reduce 26 (src line 138)
-
-
-state 57
-	ope2:  MINUS.    (27)
-
-	.  reduce 27 (src line 139)
-
-
-state 58
-	ope2:  MULTI.    (28)
-
-	.  reduce 28 (src line 140)
-
-
-state 59
-	ope2:  DIV.    (29)
-
-	.  reduce 29 (src line 141)
-
-
-state 60
-	ope2:  MOD.    (30)
-
-	.  reduce 30 (src line 142)
-
-
-state 61
-	ope2:  GT.    (31)
-
-	.  reduce 31 (src line 143)
-
-
-state 62
-	ope2:  GTE.    (32)
-
-	.  reduce 32 (src line 144)
-
-
-state 63
-	ope2:  LT.    (33)
-
-	.  reduce 33 (src line 145)
-
-
-state 64
-	ope2:  LTE.    (34)
-
-	.  reduce 34 (src line 146)
-
-
-state 65
-	ope2:  EQ.    (35)
-
-	.  reduce 35 (src line 147)
-
-
-state 66
-	ope2:  NEQ.    (36)
-
-	.  reduce 36 (src line 148)
-
-
-state 67
-	ope2:  AND.    (37)
-
-	.  reduce 37 (src line 149)
-
-
-state 68
-	ope2:  OR.    (38)
-
-	.  reduce 38 (src line 150)
-
-
-state 69
-	ope2:  NOT.    (39)
-
-	.  reduce 39 (src line 151)
-
-
-state 70
-	ope2:  CONTAINS.    (40)
-
-	.  reduce 40 (src line 152)
-
-
-state 71
-	expressionAtom:  expressionAtom LBRACKET.expression RBRACKET 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expression  goto 81
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
-
-state 72
-	expressionUnary:  ope1 expressionAtom.    (50)
-	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
-
-	LBRACKET  shift 71
-	.  reduce 50 (src line 171)
-
-
-state 73
-	expression:  expression.ope2 expressionUnary 
-	expressionAtom:  LPAREN expression.RPAREN 
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	RPAREN  shift 82
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  error
-
-	ope2  goto 54
-
-state 74
-	expressionAtom:  LBRACKET expressionList.RBRACKET 
-	expressionList:  expressionList.COMMA expression 
-
-	COMMA  shift 84
-	RBRACKET  shift 83
-	.  error
-
-
-state 75
-	expression:  expression.ope2 expressionUnary 
-	expressionList:  expression.    (60)
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  reduce 60 (src line 186)
-
-	ope2  goto 54
-
-state 76
-	expressionAtom:  IDENTIFIER LPAREN.expressionList RPAREN 
-	expressionAtom:  IDENTIFIER LPAREN.RPAREN 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	RPAREN  shift 86
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expression  goto 75
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
-	expressionList  goto 85
-
-state 77
-	loopClause:  FOR IDENTIFIER IN.expression 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expression  goto 87
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
-
-state 78
-	typeDefinition:  LBRACKET typeDefinition.RBRACKET 
-
-	RBRACKET  shift 88
-	.  error
-
-
-state 79
-	returnList:  returnList COMMA IDENTIFIER.    (22)
-
-	.  reduce 22 (src line 125)
-
-
-state 80
-	expression:  expression ope2 expressionUnary.    (48)
-
-	.  reduce 48 (src line 166)
-
-
-state 81
-	expression:  expression.ope2 expressionUnary 
-	expressionAtom:  expressionAtom LBRACKET expression.RBRACKET 
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	RBRACKET  shift 89
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  error
-
-	ope2  goto 54
-
-state 82
-	expressionAtom:  LPAREN expression RPAREN.    (51)
-
-	.  reduce 51 (src line 174)
-
-
-state 83
-	expressionAtom:  LBRACKET expressionList RBRACKET.    (53)
-
-	.  reduce 53 (src line 177)
-
-
-state 84
-	expressionList:  expressionList COMMA.expression 
-
-	MINUS  shift 37
-	PLUSPLUS  shift 38
-	MINUSMINUS  shift 39
-	LBRACKET  shift 32
-	LPAREN  shift 31
-	NOT  shift 42
-	LOWER  shift 40
-	UPPER  shift 41
-	BOOL  shift 36
-	IDENTIFIER  shift 33
-	STRING  shift 34
-	NUMBER  shift 35
-	.  error
-
-	expression  goto 90
-	expressionUnary  goto 28
-	expressionAtom  goto 29
-	ope1  goto 30
-
-state 85
-	expressionAtom:  IDENTIFIER LPAREN expressionList.RPAREN 
-	expressionList:  expressionList.COMMA expression 
-
-	COMMA  shift 84
-	RPAREN  shift 91
-	.  error
-
-
-state 86
-	expressionAtom:  IDENTIFIER LPAREN RPAREN.    (55)
-
-	.  reduce 55 (src line 179)
-
-
-state 87
-	loopClause:  FOR IDENTIFIER IN expression.    (23)
-	expression:  expression.ope2 expressionUnary 
-
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  reduce 23 (src line 128)
-
-	ope2  goto 54
-
-state 88
-	typeDefinition:  LBRACKET typeDefinition RBRACKET.    (11)
-
-	.  reduce 11 (src line 96)
-
-
-state 89
-	expressionAtom:  expressionAtom LBRACKET expression RBRACKET.    (52)
-
-	.  reduce 52 (src line 176)
-
-
 state 90
-	expression:  expression.ope2 expressionUnary 
-	expressionList:  expressionList COMMA expression.    (61)
+	expressionAtom:  expressionAtom LBRACKET expression RBRACKET.    (53)
 
-	MULTI  shift 58
-	DIV  shift 59
-	MOD  shift 60
-	PLUS  shift 55
-	MINUS  shift 57
-	PLUSPLUS  shift 56
-	LTE  shift 64
-	GTE  shift 62
-	LT  shift 63
-	GT  shift 61
-	EQ  shift 65
-	NEQ  shift 66
-	AND  shift 67
-	OR  shift 68
-	NOT  shift 69
-	CONTAINS  shift 70
-	.  reduce 61 (src line 188)
+	.  reduce 53 (src line 182)
 
-	ope2  goto 54
 
 state 91
-	expressionAtom:  IDENTIFIER LPAREN expressionList RPAREN.    (54)
+	expression:  expression.ope2 expressionUnary 
+	expressionList:  expressionList COMMA expression.    (62)
 
-	.  reduce 54 (src line 178)
+	MULTI  shift 59
+	DIV  shift 60
+	MOD  shift 61
+	PLUS  shift 56
+	MINUS  shift 58
+	PLUSPLUS  shift 57
+	LTE  shift 65
+	GTE  shift 63
+	LT  shift 64
+	GT  shift 62
+	EQ  shift 66
+	NEQ  shift 67
+	AND  shift 68
+	OR  shift 69
+	NOT  shift 70
+	CONTAINS  shift 71
+	.  reduce 62 (src line 194)
+
+	ope2  goto 55
+
+state 92
+	expressionAtom:  IDENTIFIER LPAREN expressionList RPAREN.    (55)
+
+	.  reduce 55 (src line 184)
 
 
-84 terminals, 18 nonterminals
-62 grammar rules, 92/16000 states
+84 terminals, 19 nonterminals
+63 grammar rules, 93/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-67 working sets used
-memory: parser 83/240000
+68 working sets used
+memory: parser 84/240000
 25 extra closures
 336 shift entries, 1 exceptions
-35 goto entries
+36 goto entries
 47 entries saved by goto default
-Optimizer space used: output 174/240000
-174 table entries, 32 zero
-maximum spread: 84, maximum offset: 84
+Optimizer space used: output 180/240000
+180 table entries, 37 zero
+maximum spread: 84, maximum offset: 85

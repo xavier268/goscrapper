@@ -232,7 +232,7 @@ func (m *myLexer) vGetElementOf(arr value, idx value) value {
 // create an arry, checking all types are the same (or nil)
 func (m *myLexer) vMakeArray(li []value) value {
 	if len(li) == 0 { // that should never happen ...
-		m.errorf("you cannot define a litteral array wit no elements")
+		m.errorf("you cannot define a litteral array with no elements")
 	}
 
 	t0 := li[0].t

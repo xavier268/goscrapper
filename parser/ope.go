@@ -130,6 +130,7 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 			m.imports["strings"] = true
 			return value{t: "string", v: fmt.Sprintf("strings.ToUpper(%s)", v.v)}
 		}
+
 	default:
 		m.errorf("unknown operator : %s", TokenAsString(ope))
 		return value{}

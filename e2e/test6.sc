@@ -4,6 +4,7 @@
 @ai [int]
 @aai [[int]]
 
+// x0 = [] // <== this should fail
 
 x1 = ai[i]
 x2 = ai[ 0]

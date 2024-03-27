@@ -30,6 +30,7 @@ type Output_test6 struct {
 // @ai [int]
 // @aai [[int]]
 // 
+// // x0 = [] // <== this should fail
 // 
 // x1 = ai[i]
 // x2 = ai[ 0]

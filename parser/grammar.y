@@ -18,7 +18,7 @@
             COLON SEMICOLON DOT COMMA LBRACKET RBRACKET LPAREN RPAREN LBRACE RBRACE
             AND OR NOT
             DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
-            LOWER UPPER
+            LOWER UPPER FORMAT
 
             // Keywords
             INTTYPE BOOLTYPE STRINGTYPE // native types
@@ -51,7 +51,7 @@
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc LTE LT GTE GT EQ NEQ CONTAINS ASSIGN  
+%nonassoc LTE LT GTE GT EQ NEQ CONTAINS ASSIGN 
 %left OR 
 %left AND
 %left NOT
@@ -61,9 +61,8 @@
 %left DIV
 %left MOD
 %left PLUSPLUS MINUSMINUS
-%left LOWER UPPER
+%left LOWER UPPER 
 %left LBRACKET 
-
 
 %%
 
@@ -163,7 +162,7 @@ ope1 // unary operators
 
 expression // never empty, type is controlled semantically, not syntaxically
     : expressionUnary { $$=$1 }   
-    | expression ope2 expressionUnary { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) }   
+    | expression ope2 expressionUnary { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) } 
     ;
 
 expressionUnary // never empty
@@ -175,6 +174,7 @@ expressionAtom // never empty
     : LPAREN expression RPAREN  { $$ = yylex.(*myLexer).vParen($2) }    
     | expressionAtom LBRACKET expression RBRACKET {$$ = yylex.(*myLexer).vGetElementOf($1, $3)}
     | LBRACKET expressionList RBRACKET { $$ = yylex.(*myLexer).vMakeArray($2)}
+    | IDENTIFIER LPAREN expressionList RPAREN { /* TODO - function call computing and returning a value */ }   
     | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
@@ -183,15 +183,7 @@ expressionAtom // never empty
 
 expressionList  
     : expression { $$ = []value{$1}}
-    | expressionList COMMA expression { 
-            // build list of elements for array if types matches ...
-            if $1[0].t == $3.t {
-                $$ = append($1, $3)
-            }else{
-                yylex.(*myLexer).errorf("elements types %s cannot fit into an array of %s",
-                $3.t,$1[0].t)
-            }
-        }
+    | expressionList COMMA expression { $$ = append($1, $3) } // no type checks yet
     ;
 
 

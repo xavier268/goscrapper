@@ -21,7 +21,7 @@
             LOWER UPPER FORMAT
 
             // Keywords
-            INTTYPE BOOLTYPE STRINGTYPE // native types
+            INTTYPE BOOLTYPE STRINGTYPE BINTYPE // native types
             FOR RETURN WAITFOR OPTIONS IGNORE HEADLESS TIMEOUT 
             DISTINCT FILTER CURRENT SORT LIMIT LET COLLECT 
             ASC DESC NIL TRUE FALSE USE
@@ -40,7 +40,7 @@
 
 %type <value> expression expressionUnary expressionAtom
 %type <value> ope2 ope1
-%type <value> typeDefinition 
+%type <value> typeDefinition INTTYPE BOOLTYPE BINTYPE
 %type <value> IDENTIFIER  NUMBER STRING BOOL NIL
 
 %type <list> returnList 
@@ -92,6 +92,7 @@ typeDefinition
     : INTTYPE
     | STRINGTYPE
     | BOOLTYPE
+    | BINTYPE { $$.v = "[]byte"} // translate "bin" into "[]byte, never use 'bin' anywhere"
     | LBRACKET  typeDefinition RBRACKET { $$.v = "[]" + $2.v}
     /* to do - add objects */
     ;
@@ -175,6 +176,7 @@ expressionAtom // never empty
     | expressionAtom LBRACKET expression RBRACKET {$$ = yylex.(*myLexer).vGetElementOf($1, $3)}
     | LBRACKET expressionList RBRACKET { $$ = yylex.(*myLexer).vMakeArray($2)}
     | IDENTIFIER LPAREN expressionList RPAREN { /* TODO - function call computing and returning a value */ }   
+    | IDENTIFIER LPAREN  RPAREN { /* TODO - function call computing and returning a value - empty input params */ }   
     | IDENTIFIER { $$ = yylex.(*myLexer).vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }

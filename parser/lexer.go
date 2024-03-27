@@ -19,6 +19,7 @@ type myLexer struct {
 	outparams []string          // contains the the name of the output parameters. Type should not change between scopes !
 	vars      map[string]string // associate a type to a given var. All var defined  with same name in different scopes should have same types.
 	imports   map[string]bool   // set of imports required
+
 }
 
 // add lines to the code to be generated.

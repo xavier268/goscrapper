@@ -91,6 +91,7 @@ func (m *myLexer) wCommentedSource() {
 }
 
 // writes function declaration, with input/output types.
+// NB : the _err returned, will be a RUNTIME error, not a parse time error !
 func (m *myLexer) wFuncDeclaration() {
 	fmt.Fprintf(m.w,
 		"func Do_%s(_in Input_%s) (_out []Output_%s, _err error) {\n",

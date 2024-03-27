@@ -7,9 +7,6 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test4.sc
 
-import (
-)
-
 
 type Input_test4 struct {
 	a string
@@ -36,7 +33,6 @@ var a string = _in.a ; _ = a
 var b []string = _in.b ; _ = b
 // call to incOut
  _out = append(_out, Output_test4{})
-{
 var c string= (( a ) + ( a ));_=c
 for 1 <= 2 { // this will implement a loop with expr ...
 var d string= (( a ) + ( a ));_=d
@@ -46,7 +42,6 @@ _out[len(_out)-1].c=c
 _out[len(_out)-1].d=d
 // call to incOut
  _out = append(_out, Output_test4{})
-}
 }
 return _out[:len(_out) -1], _err
 }

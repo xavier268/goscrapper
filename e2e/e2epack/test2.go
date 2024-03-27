@@ -7,9 +7,6 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test2.sc
 
-import (
-)
-
 
 type Input_test2 struct {
 	a int
@@ -43,7 +40,6 @@ var a1 [][]bool = _in.a1 ; _ = a1
 var c bool = _in.c ; _ = c
 // call to incOut
  _out = append(_out, Output_test2{})
-{
 var d int= (((((((( a ) + ( b ))) - ( a ))) * ( b ))) / ( a ));_=d
 //call to saveOut
 _out[len(_out)-1].a2=a2
@@ -51,6 +47,5 @@ _out[len(_out)-1].c=c
 _out[len(_out)-1].d=d
 // call to incOut
  _out = append(_out, Output_test2{})
-}
 return _out[:len(_out) -1], _err
 }

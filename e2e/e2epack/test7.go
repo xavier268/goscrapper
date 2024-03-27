@@ -7,9 +7,6 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test7.sc
 
-import (
-)
-
 
 type Input_test7 struct {
 	a []byte
@@ -41,7 +38,6 @@ var a []byte = _in.a ; _ = a
 var a1 [][]byte = _in.a1 ; _ = a1
 // call to incOut
  _out = append(_out, Output_test7{})
-{
 var x0 [][]byte=  a1 ;_=x0
 var x1 [][]byte= append( a1 , a );_=x1
 var x2 [][]byte= append( a1 , a1 ...);_=x2
@@ -52,6 +48,5 @@ _out[len(_out)-1].a=a
 _out[len(_out)-1].a1=a1
 // call to incOut
  _out = append(_out, Output_test7{})
-}
 return _out[:len(_out) -1], _err
 }

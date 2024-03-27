@@ -7,9 +7,6 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test3.sc
 
-import (
-)
-
 
 type Input_test3 struct {
 	iii []string
@@ -40,7 +37,6 @@ var iii []string = _in.iii ; _ = iii
 var pp string = _in.pp ; _ = pp
 // call to incOut
  _out = append(_out, Output_test3{})
-{
 var b string= (("css code") + ("blablabla"));_=b
 for _, i := range  iii  { 
  _ = i
@@ -50,7 +46,6 @@ _out[len(_out)-1].b=b
 _out[len(_out)-1].c=c
 // call to incOut
  _out = append(_out, Output_test3{})
-}
 }
 return _out[:len(_out) -1], _err
 }

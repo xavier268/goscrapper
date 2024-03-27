@@ -7,9 +7,6 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test5.sc
 
-import (
-)
-
 
 type Input_test5 struct {
 	a int
@@ -52,7 +49,6 @@ var b []int = _in.b ; _ = b
 var bb []string = _in.bb ; _ = bb
 // call to incOut
  _out = append(_out, Output_test5{})
-{
 for _, i := range  b  { 
  _ = i
 var x int= 23;_=x
@@ -68,7 +64,6 @@ _out[len(_out)-1].y=y
 _out[len(_out)-1].z=z
 // call to incOut
  _out = append(_out, Output_test5{})
-}
 }
 }
 return _out[:len(_out) -1], _err

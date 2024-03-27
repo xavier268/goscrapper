@@ -39,11 +39,12 @@ func (m *myLexer) finalize() {
 
 // write import code
 func (m *myLexer) wImports() {
+	// write nothing if no imports were added during parsing.
+	if len(m.imports) == 0 {
+		return
+	}
 
 	fmt.Fprintln(m.w, "import (")
-
-	// set import defaults
-	// m.imports["github.com/xavier268/goscrapper/rt"] = true
 
 	// add imports added during parsing
 	for k := range m.imports {

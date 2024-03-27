@@ -81,7 +81,7 @@ beforeProgram
     ;
 
 beforeBody // run before any body
-    : { lx.incOut() ; lx.addLines("{")}
+    : { lx.incOut() }
     ;
 
 // head defines options
@@ -106,8 +106,8 @@ typeDefinition
 // program body contains statements, followed by either RETURN or 
 
 body
-    : statements returnStatements {  lx.addLines("}")}
-    | returnStatements { lx.addLines("}")}
+    : statements returnStatements {  }
+    | returnStatements { }
     ;
 
 statements
@@ -123,8 +123,11 @@ statement
 
 returnStatements
     : RETURN returnList { lx.declOutputParams($2) ; lx.saveOut() ;  }
-    | loopClause body { /* */ }
+    | loopClause body afterLoop { /* */ }
     ;
+
+afterLoop
+    : { lx.addLines("}")}
 
 returnList
     : IDENTIFIER { $$ = append($$, $1.v) }

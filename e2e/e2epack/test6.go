@@ -7,9 +7,6 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test6.sc
 
-import (
-)
-
 
 type Input_test6 struct {
 	i int
@@ -55,7 +52,6 @@ var ai []int = _in.ai ; _ = ai
 var aai [][]int = _in.aai ; _ = aai
 // call to incOut
  _out = append(_out, Output_test6{})
-{
 var x1 int= ( ai )[ i ];_=x1
 var x2 int= ( ai )[0];_=x2
 var x3 int= (( aai )[1])[2];_=x3
@@ -73,6 +69,5 @@ _out[len(_out)-1].x1=x1
 _out[len(_out)-1].x2=x2
 // call to incOut
  _out = append(_out, Output_test6{})
-}
 return _out[:len(_out) -1], _err
 }

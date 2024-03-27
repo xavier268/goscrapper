@@ -13,6 +13,7 @@ b = a + 50
 c = 70 + a
 y = 23
 x1 = ++y
-x2=--y+ (++y) // this works
-// x3 = 22 + ++ 45  <<< this will not work ??
+x2=--y+ (++y)
+x3 = 22 + ++ 45  
+
 RETURN a, bbb 

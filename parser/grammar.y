@@ -38,7 +38,7 @@
     values []value
 }
 
-%type <value> expression expressionAtom
+%type <value> expression expressionUnary expressionAtom
 %type <value> ope2 ope1
 %type <value> typeDefinition 
 %type <value> IDENTIFIER  NUMBER STRING BOOL NIL
@@ -162,9 +162,13 @@ ope1 // unary operators
     ;
 
 expression // never empty, type is controlled semantically, not syntaxically
-    : expressionAtom { $$ = $1 }     
+    : expressionUnary { $$=$1 }   
+    | expression ope2 expressionUnary { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) }   
+    ;
+
+expressionUnary // never empty
+    : expressionAtom { $$ = $1 }  
     | ope1 expressionAtom { $$ = yylex.(*myLexer).vOpe1($1.c, $2) }    
-    | expression ope2 expressionAtom { $$ = yylex.(*myLexer).vOpe2($2.c, $1, $3) }   
     ;
 
 expressionAtom // never empty

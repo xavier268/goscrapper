@@ -39,8 +39,9 @@ type Output_test1 struct {
 // c = 70 + a
 // y = 23
 // x1 = ++y
-// x2=--y+ (++y) // this works
-// // x3 = 22 + ++ 45  <<< this will not work ??
+// x2=--y+ (++y)
+// x3 = 22 + ++ 45  
+// 
 // RETURN a, bbb 
 func Do_test1(_in Input_test1) (_out []Output_test1, _err error) {
 var aaa int = _in.aaa ; _ = aaa
@@ -55,6 +56,7 @@ var c int= ((70) + ( a ));_=c
 var y int= 23;_=y
 var x1 int= ( y +1);_=x1
 var x2 int= ((( y -1)) + ((( y +1))));_=x2
+var x3 int= ((22) + ((45+1)));_=x3
 //call to saveOut
 _out[len(_out)-1].a=a
 _out[len(_out)-1].bbb=bbb

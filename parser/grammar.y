@@ -62,14 +62,11 @@
 %left OR 
 %left AND
 %left NOT
-%left PLUS
-%left MINUS
-%left MULTI 
-%left DIV
 %left MOD
+%left PLUS MINUS
+%left MULTI DIV
 %left PLUSPLUS MINUSMINUS
-%left LBRACKET 
-%left DOT
+%left LBRACKET DOT
 
 %%
 
@@ -200,7 +197,7 @@ expressionAtom // never empty
     | LBRACKET expressionList RBRACKET { $$ = lx.vMakeArray($2)}
     | LBRACE keyExpressionList RBRACE {$$ = lx.vMakeObject($2)} 
 
-    | TEXT expressionAtom {/*todo*/} // will retrieve the text for the provided css selector
+    | TEXT expressionAtom {/*todo*/} // will retrieve the text for the provided cssselector or element
     | HREF expressionAtom {/* */}
 
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }

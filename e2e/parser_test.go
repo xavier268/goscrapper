@@ -9,7 +9,6 @@ import (
 )
 
 func TestParserVisual(t *testing.T) {
-
 	err := parser.ParseGlob("e2epack", "*.sc")
 	if err != nil {
 		fmt.Println(err)

@@ -2,13 +2,16 @@ package parser
 
 import (
 	"fmt"
-	"os"
+	"strings"
+	"testing"
+
+	"github.com/xavier268/mytest"
 )
 
 // compiler checks
 var _ yyLexer = new(myLexer)
 
-func Example_lexer() {
+func TestLexer(t *testing.T) {
 
 	dd := ` 
 	un deux22 // trois quatre
@@ -29,10 +32,12 @@ func Example_lexer() {
 	int bool bin string
 	`
 
+	buff := new(strings.Builder)
+
 	lx := &myLexer{
 		data: []byte(dd),
 		pos:  0,
-		w:    os.Stdout,
+		w:    buff,
 	}
 
 	for {
@@ -40,46 +45,12 @@ func Example_lexer() {
 		tok := lx.Lex(lval)
 
 		//                TokenTypeAsString,  string value, number value
-		fmt.Printf("%s   %#v\n", TokenAsString(tok), lval.value)
+		fmt.Fprintf(buff, "%s   %#v\n", TokenAsString(tok), lval.value)
 		if tok == 0 {
 			break
 		}
 	}
 
-	// Output:
-	// IDENTIFIER   parser.value{v:"un", t:"IDENTIFIER", c:57420}
-	// IDENTIFIER   parser.value{v:"deux22", t:"IDENTIFIER", c:57420}
-	// LT   parser.value{v:"<", t:"LT", c:57355}
-	// LTE   parser.value{v:"<=", t:"LTE", c:57353}
-	// DOTDOT   parser.value{v:"..", t:"DOTDOT", c:57372}
-	// DOT   parser.value{v:".", t:"DOT", c:57361}
-	// BOOL   parser.value{v:"true", t:"BOOL", c:57418}
-	// BOOL   parser.value{v:"false", t:"BOOL", c:57418}
-	// IDENTIFIER   parser.value{v:"totointboolstring", t:"IDENTIFIER", c:57420}
-	// BOOL   parser.value{v:"true", t:"BOOL", c:57418}
-	// BOOL   parser.value{v:"false", t:"BOOL", c:57418}
-	// IDENTIFIER   parser.value{v:"toto", t:"IDENTIFIER", c:57420}
-	// INTTYPE   parser.value{v:"int", t:"INTTYPE", c:57383}
-	// BOOLTYPE   parser.value{v:"bool", t:"BOOLTYPE", c:57384}
-	// STRINGTYPE   parser.value{v:"string", t:"STRINGTYPE", c:57385}
-	// NUMBER   parser.value{v:"1", t:"int", c:57423}
-	// NUMBER   parser.value{v:"2", t:"int", c:57423}
-	// IDENTIFIER   parser.value{v:"cinq", t:"IDENTIFIER", c:57420}
-	// NUMBER   parser.value{v:"0555", t:"int", c:57423}
-	// DOTDOT   parser.value{v:"..", t:"DOTDOT", c:57372}
-	// DOT   parser.value{v:".", t:"DOT", c:57361}
-	// STRING   parser.value{v:"\"a dq string\\n\\taccross the line \"", t:"string", c:57422}
-	// STRING   parser.value{v:"\"a sq string\"", t:"string", c:57422}
-	// STRING   parser.value{v:"\"dq with escaped \\\"\\\" \"", t:"string", c:57422}
-	// STRING   parser.value{v:"\"sq with escape ' \"", t:"string", c:57422}
-	// STRING   parser.value{v:"\"string containing\\n\\t// a comment\"", t:"string", c:57422}
-	// PAGE   parser.value{v:"PAGE", t:"PAGE", c:57428}
-	// AT   parser.value{v:"@", t:"AT", c:57419}
-	// PLUS   parser.value{v:"PLUS", t:"PLUS", c:57349}
-	// RETURN   parser.value{v:"RETURN", t:"RETURN", c:57388}
-	// INTTYPE   parser.value{v:"int", t:"INTTYPE", c:57383}
-	// BOOLTYPE   parser.value{v:"bool", t:"BOOLTYPE", c:57384}
-	// BINTYPE   parser.value{v:"bin", t:"BINTYPE", c:57386}
-	// STRINGTYPE   parser.value{v:"string", t:"STRINGTYPE", c:57385}
-	// TOK-0   parser.value{v:"", t:"", c:0}
+	mytest.Verify(t, dd+"\n\n"+buff.String(), "lexer_test")
+
 }

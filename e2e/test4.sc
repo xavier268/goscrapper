@@ -2,6 +2,6 @@
 @b [string]
 
 c = a  + a
-SELECT a
+SELECT ALL a
     d = a + a
     RETURN c,a,d

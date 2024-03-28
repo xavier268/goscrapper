@@ -21,6 +21,7 @@
             AND OR NOT
             DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
             LOWER UPPER FORMAT
+            NOW TEXT HREF
 
             // Keywords
             INTTYPE BOOLTYPE STRINGTYPE BINTYPE // native types
@@ -44,7 +45,7 @@
 %type <value> expression expressionUnary expressionAtom
 %type <value> ope2 ope1
 %type <value> typeDefinition INTTYPE BOOLTYPE BINTYPE
-%type <value> IDENTIFIER  NUMBER STRING BOOL NIL
+%type <value> IDENTIFIER  NUMBER STRING BOOL NIL NOW
 
 %type <list> returnList 
 
@@ -57,7 +58,7 @@
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc LTE LT GTE GT EQ NEQ CONTAINS ASSIGN 
+%nonassoc LTE LT GTE GT EQ NEQ CONTAINS ASSIGN TEXT HREF 
 %left OR 
 %left AND
 %left NOT
@@ -67,9 +68,8 @@
 %left DIV
 %left MOD
 %left PLUSPLUS MINUSMINUS
-%left LOWER UPPER 
 %left LBRACKET 
-
+%left DOT
 
 %%
 
@@ -130,7 +130,7 @@ statements
 
 statement 
     : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
-    | PAGE expression { /* todo */}
+    | PAGE expression { lx.vPage($2)} // navigate to the designated page. Expects a string argument.
     | CLICK  expression { /* todo */}
     ;
 
@@ -149,7 +149,7 @@ returnList
 
 loopClause
     : FOR IDENTIFIER IN expression  {lx.forNameInExpression($2.v, $4)}
-    | SELECT  expression  { lx.selectExpression($2) } // loop on all css matching exprerssion
+    | SELECT  ALL expression  { lx.selectExpression($3) } // loop on all css matching exprerssion
     // | SELECT IDENTIFIER expression // SELECT with a counter.
     ;
 
@@ -198,13 +198,16 @@ expressionAtom // never empty
     | expressionAtom LBRACKET expression RBRACKET {$$ = lx.vGetElementOf($1, $3)}
     | expressionAtom DOT IDENTIFIER { $$ = lx.vAccessObject($1, $3.v)}
     | LBRACKET expressionList RBRACKET { $$ = lx.vMakeArray($2)}
-    | IDENTIFIER LPAREN expressionList RPAREN { /* TODO - function call computing and returning a value */ }   
-    | IDENTIFIER LPAREN  RPAREN { /* TODO - function call computing and returning a value - empty input params */ }   
     | LBRACE keyExpressionList RBRACE {$$ = lx.vMakeObject($2)} 
+
+    | TEXT expressionAtom {/*todo*/} // will retrieve the text for the provided css selector
+    | HREF expressionAtom {/* */}
+
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }
     | STRING { $$ = $1 }
     | NUMBER { $$ = $1 }
     | BOOL { $$ = $1 }
+    | NOW { $$ = value{v:"time.Now()", t: "time.Time"} ; lx.imports["time"] = true}
     ;
 
 expressionList  

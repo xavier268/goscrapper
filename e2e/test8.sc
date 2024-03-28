@@ -20,4 +20,7 @@ y4 = x4.x2
 y5 = x2.bb
 y6 = x2.bb[3]
 
-RETURN a, y4 , x4, y5, y6
+// time stamp
+zz = NOW
+
+RETURN a, y4 , x4, y5, y6,zz

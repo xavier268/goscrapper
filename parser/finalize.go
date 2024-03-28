@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -96,4 +97,14 @@ func (m *myLexer) wFuncDeclaration() {
 	fmt.Fprintf(m.w,
 		"func Do_%s(_in Input_%s) (_out []Output_%s, _err error) {\n",
 		m.name, m.name, m.name)
+
+	// write lateDecl lines, sorted.
+	ld := make([]string, 0, len(m.lateDecl)) // lateDecl lines, sorted.
+	for l := range m.lateDecl {
+		ld = append(ld, l)
+	}
+	sort.Strings(ld)
+	for _, l := range ld {
+		fmt.Fprintf(m.w, "%s\n", l)
+	}
 }

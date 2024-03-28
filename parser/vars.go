@@ -275,7 +275,13 @@ func (m *myLexer) vMakeObject(mv map[string]value) value {
 	typ := "struct{"
 	val := "{"
 	first := true
-	for k, e := range mv {
+	keys := make([]string, 0, len(mv))
+	for k := range mv {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		e := mv[k]
 		if !first {
 			typ = typ + ";"
 			val = val + ","

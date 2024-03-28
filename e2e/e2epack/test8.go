@@ -23,8 +23,8 @@ type Input_test8 struct {
 
 type Output_test8 struct {
 	a struct{toto int;titi bool;tutu []int}
-	y4 struct{c string;d int;bb []byte}
-	x4 struct{x1 struct{s string;t int};x2 struct{c string;d int;bb []byte};x3 struct{s string;d int}}
+	y4 struct{d int;bb []byte;c string}
+	x4 struct{x1 struct{s string;t int};x2 struct{d int;bb []byte;c string};x3 struct{s string;d int}}
 	y5 []byte
 	y6 byte
 	zz time.Time
@@ -66,13 +66,13 @@ var bb []byte = _in.bb ; _ = bb
 // call to incOut
  _out = append(_out, Output_test8{})
 var x1 struct{s string;t int}= struct{s string;t int}{ c , d };_=x1
-var x2 struct{c string;d int;bb []byte}= struct{c string;d int;bb []byte}{ c , d , bb };_=x2
+var x2 struct{d int;bb []byte;c string}= struct{d int;bb []byte;c string}{ d , bb , c };_=x2
 var x3 struct{s string;d int}= struct{s string;d int}{ c , d };_=x3
-var x4 struct{x1 struct{s string;t int};x2 struct{c string;d int;bb []byte};x3 struct{s string;d int}}= struct{x1 struct{s string;t int};x2 struct{c string;d int;bb []byte};x3 struct{s string;d int}}{ x1 , x2 , x3 };_=x4
+var x4 struct{x1 struct{s string;t int};x2 struct{d int;bb []byte;c string};x3 struct{s string;d int}}= struct{x1 struct{s string;t int};x2 struct{d int;bb []byte;c string};x3 struct{s string;d int}}{ x1 , x2 , x3 };_=x4
 var y1 string=  x1 .s;_=y1
 var y2 int=  x2 .d;_=y2
 var y3 int=  x3 .d;_=y3
-var y4 struct{c string;d int;bb []byte}=  x4 .x2;_=y4
+var y4 struct{d int;bb []byte;c string}=  x4 .x2;_=y4
 var y5 []byte=  x2 .bb;_=y5
 var y6 byte= ( x2 .bb)[3];_=y6
 var zz time.Time= time.Now();_=zz

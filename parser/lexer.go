@@ -97,8 +97,8 @@ startLoop:
 		return STRING
 	}
 
-	// read integer number.
-	if loc := regexp.MustCompile(`^[+-]?[0-9]+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
+	// read positive integer number.
+	if loc := regexp.MustCompile(`^[0-9]+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
 		lval.value.t = "int"
 		lval.value.c = NUMBER
@@ -169,7 +169,6 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"==", EQ},
 		{"!=", NEQ},
 		{"++", PLUSPLUS},
-		{"--", MINUSMINUS},
 		{"&&", AND},
 		{"||", OR},
 		{"..", DOTDOT},

@@ -7,6 +7,11 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test4.sc
 
+import (
+	"github.com/xavier268/goscrapper/rt"
+	"github.com/go-rod/rod"
+)
+
 
 type Input_test4 struct {
 	a string
@@ -25,6 +30,7 @@ type Output_test4 struct {
 // @b [string]
 // 
 // c = a  + a
+// page = PAGE "google.com"
 // SELECT FROM page ALL a AS z
 //     d = a + a
 //     RETURN c,a,d
@@ -34,6 +40,7 @@ var b []string = _in.b ; _ = b
 // call to incOut
  _out = append(_out, Output_test4{})
 var c string= (( a ) + ( a ));_=c
+var page *rod.Page= rt.GetPage("google.com");_=page
 {// select TODO
 var d string= (( a ) + ( a ));_=d
 //call to saveOut

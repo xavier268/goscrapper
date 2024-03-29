@@ -40,9 +40,16 @@ type Output_test1 struct {
 // b = a + 50
 // c = 70 + a
 // y = 23
+// y2 = 2 + 3
+// y3=2+3
+// y4=-2+-3
 // x1 = ++y
-// x2=--y+ (++y)
+// x2=-y+ (++y)
 // x3 = 22 + ++ 45  
+// 
+// bb = true && false
+// bc = true OR false
+// bd = true || false
 // 
 // RETURN a, bbb 
 func Do_test1(_in Input_test1) (_out []Output_test1, _err error) {
@@ -56,9 +63,15 @@ var a int= 23;_=a
 var b int= (( a ) + (50));_=b
 var c int= ((70) + ( a ));_=c
 var y int= 23;_=y
+var y2 int= ((2) + (3));_=y2
+var y3 int= ((2) + (3));_=y3
+var y4 int= ((-(2)) + (-(3)));_=y4
 var x1 int= ( y +1);_=x1
-var x2 int= ((( y -1)) + ((( y +1))));_=x2
+var x2 int= ((-( y )) + ((( y +1))));_=x2
 var x3 int= ((22) + ((45+1)));_=x3
+var bb bool= ((true) && (false));_=bb
+var bc bool= ((true) || (false));_=bc
+var bd bool= ((true) || (false));_=bd
 //call to saveOut
 _out[len(_out)-1].a=a
 _out[len(_out)-1].bbb=bbb

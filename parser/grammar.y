@@ -15,7 +15,7 @@
 
 
 %token <value>   // all token use value
-            MULTI DIV MOD PLUS MINUS PLUSPLUS MINUSMINUS
+            MULTI DIV MOD PLUS MINUS PLUSPLUS 
             LTE GTE LT GT EQ NEQ
             COLON SEMICOLON DOT COMMA LBRACKET RBRACKET LPAREN RPAREN LBRACE RBRACE
             AND OR NOT
@@ -67,7 +67,7 @@
 %left PLUS 
 %left MINUS
 %left MULTI DIV
-%left PLUSPLUS MINUSMINUS
+%left PLUSPLUS 
 %left LBRACKET DOT
 
 %%
@@ -99,9 +99,9 @@ options
     ;
 
 typeDefinition // contains the type as its value.v The value.t member has no meaning.
-    : INTTYPE
-    | STRINGTYPE
-    | BOOLTYPE
+    : INTTYPE{$$.v="int"}
+    | STRINGTYPE{$$.v="string"}
+    | BOOLTYPE {$$.v ="bool"}
     | BINTYPE { $$.v = "[]byte"} // translate "bin" into "[]byte, never use 'bin' anywhere"
     | LBRACKET  typeDefinition RBRACKET { $$.v = "[]" + $2.v}
     | LBRACE keytypeList RBRACE { $$.v = lx.objectType($2)}
@@ -151,11 +151,11 @@ loopClause
     // | SELECT IDENTIFIER expression // SELECT with a counter.
 
     // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
-    | SELECT FROM IDENTIFIER ALL expression AS IDENTIFIER selectOptions {lx.addLines("{// select TODO" );} // do not wait
-    | SELECT FROM IDENTIFIER ONE expression AS IDENTIFIER {lx.addLines("{// select TODO" );}// one exactly, and wait for it
+    | SELECT FROM expression ALL expression AS IDENTIFIER selectOptions {lx.addLines("{// select TODO" );} // do not wait
+    | SELECT FROM expression ONE expression AS IDENTIFIER {lx.addLines("{// select TODO" );}// one exactly, and wait for it
     // below, FROM should be a page or an rod.Element, identifier will be set to the expression specified for the matched css
-    | SELECT FROM IDENTIFIER AS IDENTIFIER ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
-    | SELECT FROM IDENTIFIER ANY AS IDENTIFIER  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
+    | SELECT FROM expression AS IDENTIFIER ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
+    | SELECT FROM expression ANY AS IDENTIFIER  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
     ;
 
 selectOptions
@@ -203,7 +203,6 @@ ope2 // binary operators
 ope1 // unary operators
     : MINUS{ $$ = $1 }
     | PLUSPLUS {$$ = $1 }
-    | MINUSMINUS {$$ = $1 }
     | LOWER{ $$ = $1 }
     | UPPER{ $$ = $1 }
     | NOT{ $$ = $1 }
@@ -232,9 +231,9 @@ expressionAtom // never empty
     | HREF expressionAtom {/* */}
 
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }
-    | STRING { $$ = $1 }
-    | NUMBER { $$ = $1 }
-    | BOOL { $$ = $1 }
+    | STRING { $$ =value{v:$1.v, t:"string"} }
+    | NUMBER { $$ =value{v:$1.v, t:"int"} }
+    | BOOL { $$ =value{v:$1.v, t:"bool"} }
     | NOW { $$ = value{v:"time.Now()", t: "time.Time"} ; lx.imports["time"] = true}
     ;
 

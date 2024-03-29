@@ -49,12 +49,12 @@ func (m *myLexer) vOpe2(ope int, left value, right value) value {
 			return value{t: left.t, v: fmt.Sprintf("((%s) %% (%s))", left.v, right.v)}
 		}
 	case AND:
-		if left.t == right.t && (left.t == "bool") {
+		if (left.t == right.t) && (left.t == "bool") {
 			return value{t: left.t, v: fmt.Sprintf("((%s) && (%s))", left.v, right.v)}
 		}
 
 	case OR:
-		if left.t == right.t && (left.t == "bool") {
+		if (left.t == right.t) && (left.t == "bool") {
 			return value{t: left.t, v: fmt.Sprintf("((%s) || (%s))", left.v, right.v)}
 		}
 
@@ -63,7 +63,6 @@ func (m *myLexer) vOpe2(ope int, left value, right value) value {
 			m.imports["strings"] = true
 			return value{t: "bool", v: fmt.Sprintf("(strings.Contains(%s,%s))", left.v, right.v)}
 		}
-
 	case EQ:
 		if left.t == right.t { // only compare same types, works with objects since keys are always ordered
 			return value{t: "bool", v: fmt.Sprintf("((%s) == (%s))", left.v, right.v)}
@@ -115,10 +114,6 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 	case PLUSPLUS:
 		if v.t == "int" {
 			return value{t: "int", v: fmt.Sprintf("(%s+1)", v.v)}
-		}
-	case MINUSMINUS:
-		if v.t == "int" {
-			return value{t: "int", v: fmt.Sprintf("(%s-1)", v.v)}
 		}
 	case LOWER:
 		if v.t == "string" {

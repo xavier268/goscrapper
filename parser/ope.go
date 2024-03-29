@@ -65,7 +65,7 @@ func (m *myLexer) vOpe2(ope int, left value, right value) value {
 		}
 
 	case EQ:
-		if left.t == right.t { // only compare same types
+		if left.t == right.t { // only compare same types, works with objects since keys are always ordered
 			return value{t: "bool", v: fmt.Sprintf("((%s) == (%s))", left.v, right.v)}
 		}
 	case NEQ:

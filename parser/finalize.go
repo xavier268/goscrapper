@@ -41,9 +41,15 @@ func (m *myLexer) wImports() {
 	}
 
 	fmt.Fprintln(m.w, "import (")
+	// sort imports for reproductibility
+	keys := make([]string, 0, len(m.imports))
+	for k := range m.imports {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
 
 	// add imports added during parsing
-	for k := range m.imports {
+	for _, k := range keys {
 		fmt.Fprintf(m.w, "\t%q\n", k)
 	}
 	fmt.Fprintln(m.w, ")")

@@ -8,8 +8,8 @@ package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test1.sc
 
 import (
-	"github.com/xavier268/goscrapper/rt"
 	"github.com/go-rod/rod"
+	"github.com/xavier268/goscrapper/rt"
 )
 
 

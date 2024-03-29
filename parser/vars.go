@@ -257,13 +257,26 @@ func (m *myLexer) vMakeArray(li []value) value {
 }
 
 // construct the golang object type where member keys and types are provided from the non empty list.
+// sorted by keys for determinisms and easier type comparison.
 func (m *myLexer) objectType(vl []value) string {
+	// dedup
+	mv := make(map[string]string, len(vl)) // map[value]type
+	for _, v := range vl {
+		mv[v.v] = v.t
+	}
+	// sort
+	vs := make([]string, 0, len(mv))
+	for v := range mv {
+		vs = append(vs, v)
+	}
+	sort.Strings(vs)
+	// create
 	typ := "struct{"
-	for i, v := range vl {
+	for i, v := range vs {
 		if i > 0 {
 			typ = typ + ";"
 		}
-		typ = typ + v.v + " " + v.t
+		typ = typ + v + " " + mv[v]
 	}
 	typ = typ + "}"
 	return typ

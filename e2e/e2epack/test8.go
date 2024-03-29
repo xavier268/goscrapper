@@ -13,21 +13,23 @@ import (
 
 
 type Input_test8 struct {
-	a struct{toto int;titi bool;tutu []int}
+	a struct{titi bool;toto int;tutu []int}
 	b struct{combo struct{titi int;toto bool};tutu []struct{tata int;tyty string}}
 	c string
 	d int
 	bb []byte
+	tt1 struct{a int;b int}
+	tt2 struct{a string;b int}
 }
 
 
 type Output_test8 struct {
-	a struct{toto int;titi bool;tutu []int}
+	zz time.Time
+	a struct{titi bool;toto int;tutu []int}
 	y4 struct{bb []byte;c string;d int}
 	x4 struct{x1 struct{s string;t int};x2 struct{bb []byte;c string;d int};x3 struct{d int;s string}}
 	y5 []byte
 	y6 byte
-	zz time.Time
 }
 
 
@@ -39,7 +41,14 @@ type Output_test8 struct {
 // @d int
 // @bb bin
 // 
-// x1 = { s:c,t:d }
+// @tt1 { a:string, b:int, a: int} // duplicated a should be silently ignored
+// @tt2 { a:string, b:int, a: string} // duplicated a should be silently ignored
+// 
+// x1a = { s:c,t:d }
+// x1b = { t:d, s:c} 
+// x1 = x1a
+// z = x1a == x1b // should be true !
+// 
 // x2 = {c,d, bb}
 // x3 = { s:c, d}
 // x4 = { x1, x2, x3}
@@ -56,16 +65,21 @@ type Output_test8 struct {
 // // time stamp
 // zz = NOW
 // 
-// RETURN a, y4 , x4, y5, y6,zz
+// RETURN zz, a, y4 , x4, y5, y6
 func Do_test8(_in Input_test8) (_out []Output_test8, _err error) {
-var a struct{toto int;titi bool;tutu []int} = _in.a ; _ = a
+var a struct{titi bool;toto int;tutu []int} = _in.a ; _ = a
 var b struct{combo struct{titi int;toto bool};tutu []struct{tata int;tyty string}} = _in.b ; _ = b
 var c string = _in.c ; _ = c
 var d int = _in.d ; _ = d
 var bb []byte = _in.bb ; _ = bb
+var tt1 struct{a int;b int} = _in.tt1 ; _ = tt1
+var tt2 struct{a string;b int} = _in.tt2 ; _ = tt2
 // call to incOut
  _out = append(_out, Output_test8{})
-var x1 struct{s string;t int}= struct{s string;t int}{ c , d };_=x1
+var x1a struct{s string;t int}= struct{s string;t int}{ c , d };_=x1a
+var x1b struct{s string;t int}= struct{s string;t int}{ c , d };_=x1b
+var x1 struct{s string;t int}=  x1a ;_=x1
+var z bool= (( x1a ) == ( x1b ));_=z
 var x2 struct{bb []byte;c string;d int}= struct{bb []byte;c string;d int}{ bb , c , d };_=x2
 var x3 struct{d int;s string}= struct{d int;s string}{ d , c };_=x3
 var x4 struct{x1 struct{s string;t int};x2 struct{bb []byte;c string;d int};x3 struct{d int;s string}}= struct{x1 struct{s string;t int};x2 struct{bb []byte;c string;d int};x3 struct{d int;s string}}{ x1 , x2 , x3 };_=x4

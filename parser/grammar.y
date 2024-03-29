@@ -26,14 +26,14 @@
             // Keywords
             INTTYPE BOOLTYPE STRINGTYPE BINTYPE // native types
             FOR RETURN WAITFOR OPTIONS IGNORE HEADLESS TIMEOUT 
-            DISTINCT FILTER CURRENT SORT LIMIT LET COLLECT 
-            ASC DESC NIL TRUE FALSE USE
-            INTO KEEP WITH COUNT ALL ANY AGGREGATE
+            TRUE FALSE 
             EVENT
             LIKE IN WHILE
             BOOL AT IDENTIFIER IGNOREID STRING NUMBER NAMESPACESEPARATOR
-            // actions
-            SELECT CLICK DOCUMENT PAGE CONTAINS 
+            // selects
+            SELECT ALL ANY ONE AS FROM WHERE LIMIT DISTINCT SORT ASC DESC DEFAULT CASE
+            // html
+            CLICK DOCUMENT PAGE CONTAINS 
             
 %union {            
     value value
@@ -45,7 +45,7 @@
 %type <value> expression expressionUnary expressionAtom
 %type <value> ope2 ope1
 %type <value> typeDefinition INTTYPE BOOLTYPE BINTYPE
-%type <value> IDENTIFIER  NUMBER STRING BOOL NIL NOW
+%type <value> IDENTIFIER  NUMBER STRING BOOL NOW
 
 %type <list> returnList 
 
@@ -63,7 +63,8 @@
 %left AND
 %left NOT
 %left MOD
-%left PLUS MINUS
+%left PLUS 
+%left MINUS
 %left MULTI DIV
 %left PLUSPLUS MINUSMINUS
 %left LBRACKET DOT
@@ -146,9 +147,37 @@ returnList
 
 loopClause
     : FOR IDENTIFIER IN expression  {lx.forNameInExpression($2.v, $4)}
-    | SELECT  ALL expression  { lx.selectExpression($3) } // loop on all css matching exprerssion
+    // | SELECT  ALL expression  { lx.selectExpression($3) } // loop on all css matching exprerssion
     // | SELECT IDENTIFIER expression // SELECT with a counter.
+
+    // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
+    | SELECT FROM IDENTIFIER ALL expression AS IDENTIFIER selectOptions {/*todo*/} // do not wait
+    | SELECT FROM IDENTIFIER ONE expression AS IDENTIFIER {/*todo*/} // one exactly, and wait for it
+    // below, FROM should be a page or an rod.Element, identifier will be set to the expression specified for the matched css
+    | SELECT FROM IDENTIFIER AS IDENTIFIER ANY cases {/*todo*/} // one exactly, and wait for it
+    | SELECT FROM IDENTIFIER ANY AS IDENTIFIER  cases {/*todo*/} // one exactly, and wait for it - alternative syntax
     ;
+
+selectOptions
+    : {/* options are optionnal */}
+    | selectOptions WHERE expression {/*todo*/}
+    | selectOptions LIMIT expression {/*todo*/}
+    | selectOptions SORT ASC {/*todo*/}
+    | selectOptions SORT DESC {/*todo*/}
+    | selectOptions DISTINCT {/*todo*/}
+
+cases // at least one case is required
+    : case{/*todo*/}
+    | cases case{/*todo*/}
+    ;
+
+case // when one of the css expr is found, _element is set to the matched element, loop variable is set to the expression after the COLON
+     // the expression after the colon have no access to access the matched element.
+    :  CASE expression COLON expression{/*todo*/} // $2 is a css, the loop variable is set to the $4 expression.
+    | DEFAULT  expression {/*todo*/} // set variable to (*rodElement)nil
+    ;
+
+
 
 // ==================
 

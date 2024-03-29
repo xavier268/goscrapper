@@ -161,7 +161,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"bool", BOOLTYPE},
 		{"string", STRINGTYPE},
 		{"bin", BINTYPE},
-		{"nil", NIL},
+		//{"nil", NIL},
 
 		// multi bytes
 		{"<=", LTE},

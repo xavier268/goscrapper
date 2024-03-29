@@ -25,7 +25,7 @@ type Output_test4 struct {
 // @b [string]
 // 
 // c = a  + a
-// SELECT ALL a
+// SELECT FROM page ALL a AS z
 //     d = a + a
 //     RETURN c,a,d
 func Do_test4(_in Input_test4) (_out []Output_test4, _err error) {
@@ -34,7 +34,6 @@ var b []string = _in.b ; _ = b
 // call to incOut
  _out = append(_out, Output_test4{})
 var c string= (( a ) + ( a ));_=c
-for 1 <= 2 { // this will implement a loop with expr ...
 var d string= (( a ) + ( a ));_=d
 //call to saveOut
 _out[len(_out)-1].a=a

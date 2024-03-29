@@ -2,6 +2,6 @@
 @b [string]
 
 c = a  + a
-SELECT ALL a
+SELECT FROM page ALL a AS z
     d = a + a
     RETURN c,a,d

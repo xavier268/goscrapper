@@ -34,7 +34,7 @@ type Output_test1 struct {
 // 
 // 
 // // open a page
-// PAGE "http://www.google.fr"
+// p1 = PAGE "http://www.google.fr"
 // CLICK "input[name=btnK]"
 // a = 23 
 // b = a + 50
@@ -46,23 +46,12 @@ type Output_test1 struct {
 // 
 // RETURN a, bbb 
 func Do_test1(_in Input_test1) (_out []Output_test1, _err error) {
-var _page *rod.Page;_=_page
-var _select *rod.Element;_=_select
 var aaa int = _in.aaa ; _ = aaa
 var bbb bool = _in.bbb ; _ = bbb
 var ccc []bool = _in.ccc ; _ = ccc
 // call to incOut
  _out = append(_out, Output_test1{})
-if _page == nil { 
-_page,_err=rt.GetPage("http://www.google.fr")
-defer rt.ClosePage(_page)
-}else{
-_err=_page.Navigate("http://www.google.fr")
-}
-if _err !=nil {
-return _out, _err
-}
-_select=nil // reset selection within page
+var p1 *rod.Page= rt.GetPage("http://www.google.fr");_=p1
 var a int= 23;_=a
 var b int= (( a ) + (50));_=b
 var c int= ((70) + ( a ));_=c

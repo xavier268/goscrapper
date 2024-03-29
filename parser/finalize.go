@@ -16,14 +16,10 @@ import (
 func (m *myLexer) finalize() {
 
 	m.wImports()
-
 	m.wInputParams()
 	m.wOutputParams()
-
 	m.wCommentedSource()
-
 	m.wFuncDeclaration()
-
 	// clean lines, and write function body
 	m.cleanOut()
 	for _, l := range m.lines {
@@ -31,7 +27,6 @@ func (m *myLexer) finalize() {
 			fmt.Fprintf(m.w, "%s\n", l)
 		}
 	}
-
 	// print final return statement
 	// there is laways an empty preallocated element in the slice, so remove it.
 	fmt.Fprintln(m.w, "return _out[:len(_out) -1], _err")

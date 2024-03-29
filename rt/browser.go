@@ -104,8 +104,13 @@ func GetBrowser() *rod.Browser {
 // return a new page. Use empty string for empty page.
 // browser is started if not already available.
 // todo - think about implementing PagePool ?
-func GetPage(url string) (*rod.Page, error) {
-	return GetBrowser().Page(proto.TargetCreateTarget{URL: url})
+func GetPage(url string) *rod.Page {
+	p, err := GetBrowser().Page(proto.TargetCreateTarget{URL: url})
+	if err != nil {
+		Errorf("Error getting page %s : %v", url, err)
+		return nil
+	}
+	return p
 }
 
 // close page, set page pointer to nil on success.

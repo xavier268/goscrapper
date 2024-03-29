@@ -59,6 +59,7 @@
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
 %nonassoc LTE LT GTE GT EQ NEQ CONTAINS ASSIGN TEXT HREF 
+%left PAGE
 %left OR 
 %left AND
 %left NOT
@@ -128,7 +129,6 @@ statements
 
 statement 
     : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
-    | PAGE expression { lx.vPage($2)} // navigate to the designated page. Expects a string argument.
     | CLICK  expression { /* todo */}
     ;
 
@@ -151,11 +151,11 @@ loopClause
     // | SELECT IDENTIFIER expression // SELECT with a counter.
 
     // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
-    | SELECT FROM IDENTIFIER ALL expression AS IDENTIFIER selectOptions {/*todo*/} // do not wait
-    | SELECT FROM IDENTIFIER ONE expression AS IDENTIFIER {/*todo*/} // one exactly, and wait for it
+    | SELECT FROM IDENTIFIER ALL expression AS IDENTIFIER selectOptions {lx.addLines("{// select TODO" );} // do not wait
+    | SELECT FROM IDENTIFIER ONE expression AS IDENTIFIER {lx.addLines("{// select TODO" );}// one exactly, and wait for it
     // below, FROM should be a page or an rod.Element, identifier will be set to the expression specified for the matched css
-    | SELECT FROM IDENTIFIER AS IDENTIFIER ANY cases {/*todo*/} // one exactly, and wait for it
-    | SELECT FROM IDENTIFIER ANY AS IDENTIFIER  cases {/*todo*/} // one exactly, and wait for it - alternative syntax
+    | SELECT FROM IDENTIFIER AS IDENTIFIER ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
+    | SELECT FROM IDENTIFIER ANY AS IDENTIFIER  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
     ;
 
 selectOptions
@@ -207,9 +207,11 @@ ope1 // unary operators
     | LOWER{ $$ = $1 }
     | UPPER{ $$ = $1 }
     | NOT{ $$ = $1 }
+    | PAGE {$$ = $1}
     ;
 
 expression // never empty, type is controlled semantically, not syntaxically
+        // unary expression are always evalueated first, before binary operations.
     : expressionUnary { $$=$1 }   
     | expression ope2 expressionUnary { $$ = lx.vOpe2($2.c, $1, $3) } 
     ;

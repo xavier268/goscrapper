@@ -24,35 +24,15 @@ type Output_test9 struct {
 
 
 // @url string
-// PAGE url
-// PAGE url + "/login"
+// p1 = PAGE url
+// p2 = PAGE (url + "/login")
 // RETURN url
 func Do_test9(_in Input_test9) (_out []Output_test9, _err error) {
-var _page *rod.Page;_=_page
-var _select *rod.Element;_=_select
 var url string = _in.url ; _ = url
 // call to incOut
  _out = append(_out, Output_test9{})
-if _page == nil { 
-_page,_err=rt.GetPage( url )
-defer rt.ClosePage(_page)
-}else{
-_err=_page.Navigate( url )
-}
-if _err !=nil {
-return _out, _err
-}
-_select=nil // reset selection within page
-if _page == nil { 
-_page,_err=rt.GetPage((( url ) + ("/login")))
-defer rt.ClosePage(_page)
-}else{
-_err=_page.Navigate((( url ) + ("/login")))
-}
-if _err !=nil {
-return _out, _err
-}
-_select=nil // reset selection within page
+var p1 *rod.Page= rt.GetPage( url );_=p1
+var p2 *rod.Page= rt.GetPage(((( url ) + ("/login"))));_=p2
 //call to saveOut
 _out[len(_out)-1].url=url
 // call to incOut

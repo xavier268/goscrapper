@@ -1,4 +1,4 @@
 @url string
-PAGE url
-PAGE url + "/login"
+p1 = PAGE url
+p2 = PAGE (url + "/login")
 RETURN url

@@ -6,7 +6,7 @@
 
 
 // open a page
-PAGE "http://www.google.fr"
+p1 = PAGE "http://www.google.fr"
 CLICK "input[name=btnK]"
 a = 23 
 b = a + 50

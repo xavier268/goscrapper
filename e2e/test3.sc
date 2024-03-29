@@ -3,7 +3,7 @@
 @iii [string]
 @pp string
 
-PAGE pp
+page = PAGE pp
 b = "css code" + "blablabla"
 
 FOR i  IN iii// this starts a loop ... 

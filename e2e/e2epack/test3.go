@@ -30,7 +30,7 @@ type Output_test3 struct {
 // @iii [string]
 // @pp string
 // 
-// PAGE pp
+// page = PAGE pp
 // b = "css code" + "blablabla"
 // 
 // FOR i  IN iii// this starts a loop ... 
@@ -38,22 +38,11 @@ type Output_test3 struct {
 //     c = 45
 //     RETURN b,c
 func Do_test3(_in Input_test3) (_out []Output_test3, _err error) {
-var _page *rod.Page;_=_page
-var _select *rod.Element;_=_select
 var iii []string = _in.iii ; _ = iii
 var pp string = _in.pp ; _ = pp
 // call to incOut
  _out = append(_out, Output_test3{})
-if _page == nil { 
-_page,_err=rt.GetPage( pp )
-defer rt.ClosePage(_page)
-}else{
-_err=_page.Navigate( pp )
-}
-if _err !=nil {
-return _out, _err
-}
-_select=nil // reset selection within page
+var page *rod.Page= rt.GetPage( pp );_=page
 var b string= (("css code") + ("blablabla"));_=b
 for _, i := range  iii  { 
  _ = i

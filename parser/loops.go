@@ -28,6 +28,7 @@ func (m *myLexer) forNameInExpression(name string, expr value) {
 
 }
 
+/* // TODO !
 func (m *myLexer) selectExpression(expr value) {
 
 	// fmt.Println("DEBUG : calling selectExpression with", expr.v)
@@ -39,3 +40,4 @@ func (m *myLexer) selectExpression(expr value) {
 	li := "for 1 <= 2 { // this will implement a loop with expr ..." // todo ...
 	m.addLines(li)
 }
+*/

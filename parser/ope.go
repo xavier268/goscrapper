@@ -91,12 +91,12 @@ func (m *myLexer) vOpe2(ope int, left value, right value) value {
 		}
 
 	default:
-		m.errorf("unknown operator : %s", TokenAsString(ope))
+		m.errorf("unknown binary operator : %s", TokenAsString(ope))
 		return value{}
 	}
 
 	// we found an operator, but could not apply it.
-	m.errorf("types %s and %s are mismatched for %s", left.t, right.t, TokenAsString(ope))
+	m.errorf("types %s and %s are mismatched for binary operator  %s", left.t, right.t, TokenAsString(ope))
 	return value{}
 
 }
@@ -130,9 +130,15 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 			m.imports["strings"] = true
 			return value{t: "string", v: fmt.Sprintf("strings.ToUpper(%s)", v.v)}
 		}
+	case PAGE:
+		if v.t == "string" {
+			m.imports["github.com/xavier268/goscrapper/rt"] = true
+			m.imports["github.com/go-rod/rod"] = true
+			return value{t: "*rod.Page", v: fmt.Sprintf("rt.GetPage(%s)", v.v)}
+		}
 
 	default:
-		m.errorf("unknown operator : %s", TokenAsString(ope))
+		m.errorf("unknown unary operator %s for type %s ", TokenAsString(ope), v.t)
 		return value{}
 	}
 

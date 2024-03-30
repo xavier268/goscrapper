@@ -10,6 +10,24 @@
 
     var lx *myLexer // shorthand for lx
 
+    // options for SELECT ONE, ANY, ALL
+    type selopt struct {
+        from value      // can be *rod.Page or *rod.Element
+        css value       // css selector
+        loopv string    // loop variable identifier
+        where []value   // list of where conditions
+        distinct bool
+        sort int        // ASC or DESC
+        limit value
+        cases []casopt
+    }   
+
+    // cases for select ANY
+    type casopt struct {
+        def bool
+        e1 value
+        e2 value
+    }
    
 %}
 
@@ -40,6 +58,9 @@
     list []string
     values []value
     mvalue map[string]value
+    selopt selopt
+    casopt casopt
+    casopts []casopt
 }
 
 %type <value> expression expressionUnary expressionAtom
@@ -54,6 +75,9 @@
 
 %type <mvalue>  keyExpressionList
 
+%type <casopt> case
+%type <casopts> cases
+%type <selopt> selectOptions 
 
 
 // definition des precedences et des associativités
@@ -151,7 +175,7 @@ loopClause
     // | SELECT IDENTIFIER expression // SELECT with a counter.
 
     // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
-    | SELECT FROM expression ALL expression AS IDENTIFIER selectOptions {lx.addLines("{// select TODO" );} // do not wait
+    | SELECT FROM expression ALL expression AS IDENTIFIER selectOptions {opt:= $8; opt.from=$3; opt.css=$5;opt.loopv=$7.v; lx.selectAll(opt)} // do not wait
     | SELECT FROM expression ONE expression AS IDENTIFIER {lx.addLines("{// select TODO" );}// one exactly, and wait for it
     // below, FROM should be a page or an rod.Element, identifier will be set to the expression specified for the matched css
     | SELECT FROM expression AS IDENTIFIER ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
@@ -159,22 +183,22 @@ loopClause
     ;
 
 selectOptions
-    : {/* options are optionnal */}
-    | selectOptions WHERE expression {/*todo*/}
-    | selectOptions LIMIT expression {/*todo*/}
-    | selectOptions SORT ASC {/*todo*/}
-    | selectOptions SORT DESC {/*todo*/}
-    | selectOptions DISTINCT {/*todo*/}
+    : {$$ = selopt{}}
+    | selectOptions WHERE expression {$$ = $1; $$.where = append($$.where, $3)}
+    | selectOptions LIMIT expression {$$=$1; $$.limit = $3} // ovewrite previous limits
+    | selectOptions SORT ASC {$$=$1;$$.sort = ASC}
+    | selectOptions SORT DESC {$$=$1;$$.sort = DESC}
+    | selectOptions DISTINCT {{$$=$1;$$.distinct = true}}
 
 cases // at least one case is required
-    : case{/*todo*/}
-    | cases case{/*todo*/}
+    : case{$$ = []casopt{}}
+    | cases case{$$ = append($1, $2)}
     ;
 
 case // when one of the css expr is found, _element is set to the matched element, loop variable is set to the expression after the COLON
      // the expression after the colon have no access to access the matched element.
-    :  CASE expression COLON expression{/*todo*/} // $2 is a css, the loop variable is set to the $4 expression.
-    | DEFAULT  expression {/*todo*/} // set variable to (*rodElement)nil
+    :  CASE expression COLON expression{$$ = casopt{e1:$2,e2:$4}} // $2 is a css, the loop variable is set to the $4 expression.
+    | DEFAULT  expression {$$ = casopt{def:true, e2:$2}} // set loop variable to $2
     ;
 
 

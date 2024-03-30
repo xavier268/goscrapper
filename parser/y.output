@@ -3,7 +3,7 @@ state 0
 	$accept: .program $end 
 	beforeProgram: .    (3)
 
-	.  reduce 3 (src line 107)
+	.  reduce 3 (src line 105)
 
 	program  goto 1
 	beforeProgram  goto 2
@@ -21,7 +21,7 @@ state 2
 	beforeBody: .    (4)
 
 	AT  shift 6
-	.  reduce 4 (src line 111)
+	.  reduce 4 (src line 109)
 
 	head  goto 3
 	beforeBody  goto 4
@@ -33,7 +33,7 @@ state 3
 	beforeBody: .    (4)
 
 	AT  shift 6
-	.  reduce 4 (src line 111)
+	.  reduce 4 (src line 109)
 
 	beforeBody  goto 7
 	options  goto 8
@@ -57,7 +57,7 @@ state 4
 state 5
 	head:  options.    (6)
 
-	.  reduce 6 (src line 118)
+	.  reduce 6 (src line 116)
 
 
 state 6
@@ -86,13 +86,13 @@ state 7
 state 8
 	head:  head options.    (5)
 
-	.  reduce 5 (src line 116)
+	.  reduce 5 (src line 114)
 
 
 state 9
 	program:  beforeProgram beforeBody body.    (2)
 
-	.  reduce 2 (src line 104)
+	.  reduce 2 (src line 102)
 
 
 state 10
@@ -113,13 +113,13 @@ state 10
 state 11
 	body:  returnStatements.    (18)
 
-	.  reduce 18 (src line 146)
+	.  reduce 18 (src line 144)
 
 
 state 12
 	statements:  statement.    (19)
 
-	.  reduce 19 (src line 149)
+	.  reduce 19 (src line 147)
 
 
 state 13
@@ -212,19 +212,19 @@ state 19
 state 20
 	program:  beforeProgram head beforeBody body.    (1)
 
-	.  reduce 1 (src line 102)
+	.  reduce 1 (src line 100)
 
 
 state 21
 	body:  statements returnStatements.    (17)
 
-	.  reduce 17 (src line 144)
+	.  reduce 17 (src line 142)
 
 
 state 22
 	statements:  statements statement.    (20)
 
-	.  reduce 20 (src line 151)
+	.  reduce 20 (src line 149)
 
 
 state 23
@@ -232,20 +232,20 @@ state 23
 	returnList:  returnList.COMMA IDENTIFIER 
 
 	COMMA  shift 56
-	.  reduce 23 (src line 159)
+	.  reduce 23 (src line 157)
 
 
 state 24
 	returnList:  IDENTIFIER.    (26)
 
-	.  reduce 26 (src line 167)
+	.  reduce 26 (src line 165)
 
 
 state 25
 	returnStatements:  loopClause body.afterLoop 
 	afterLoop: .    (25)
 
-	.  reduce 25 (src line 164)
+	.  reduce 25 (src line 162)
 
 	afterLoop  goto 57
 
@@ -295,24 +295,24 @@ state 27
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 22 (src line 156)
+	.  reduce 22 (src line 154)
 
 	ope2  goto 59
 
 state 28
-	expression:  expressionUnary.    (65)
+	expression:  expressionUnary.    (62)
 
-	.  reduce 65 (src line 236)
+	.  reduce 62 (src line 232)
 
 
 state 29
-	expressionUnary:  expressionAtom.    (67)
+	expressionUnary:  expressionAtom.    (64)
 	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
 	expressionAtom:  expressionAtom.DOT IDENTIFIER 
 
 	DOT  shift 77
 	LBRACKET  shift 76
-	.  reduce 67 (src line 242)
+	.  reduce 64 (src line 238)
 
 
 state 30
@@ -428,69 +428,69 @@ state 35
 	expressionAtom  goto 85
 
 state 36
-	expressionAtom:  IDENTIFIER.    (76)
+	expressionAtom:  IDENTIFIER.    (73)
 
-	.  reduce 76 (src line 257)
+	.  reduce 73 (src line 253)
 
 
 state 37
-	expressionAtom:  STRING.    (77)
+	expressionAtom:  STRING.    (74)
 
-	.  reduce 77 (src line 258)
+	.  reduce 74 (src line 254)
 
 
 state 38
-	expressionAtom:  NUMBER.    (78)
+	expressionAtom:  NUMBER.    (75)
 
-	.  reduce 78 (src line 259)
+	.  reduce 75 (src line 255)
 
 
 state 39
-	expressionAtom:  BOOL.    (79)
+	expressionAtom:  BOOL.    (76)
 
-	.  reduce 79 (src line 260)
+	.  reduce 76 (src line 256)
 
 
 state 40
-	expressionAtom:  NOW.    (80)
+	expressionAtom:  NOW.    (77)
 
-	.  reduce 80 (src line 261)
+	.  reduce 77 (src line 257)
 
 
 state 41
-	ope1:  MINUS.    (59)
+	ope1:  MINUS.    (56)
+
+	.  reduce 56 (src line 223)
+
+
+state 42
+	ope1:  PLUSPLUS.    (57)
+
+	.  reduce 57 (src line 225)
+
+
+state 43
+	ope1:  LOWER.    (58)
+
+	.  reduce 58 (src line 226)
+
+
+state 44
+	ope1:  UPPER.    (59)
 
 	.  reduce 59 (src line 227)
 
 
-state 42
-	ope1:  PLUSPLUS.    (60)
-
-	.  reduce 60 (src line 229)
-
-
-state 43
-	ope1:  LOWER.    (61)
-
-	.  reduce 61 (src line 230)
-
-
-state 44
-	ope1:  UPPER.    (62)
-
-	.  reduce 62 (src line 231)
-
-
 state 45
-	ope1:  NOT.    (63)
+	ope1:  NOT.    (60)
 
-	.  reduce 63 (src line 232)
+	.  reduce 60 (src line 228)
 
 
 state 46
-	ope1:  PAGE.    (64)
+	ope1:  PAGE.    (61)
 
-	.  reduce 64 (src line 233)
+	.  reduce 61 (src line 229)
 
 
 state 47
@@ -532,31 +532,31 @@ state 48
 state 49
 	options:  AT IDENTIFIER typeDefinition.    (7)
 
-	.  reduce 7 (src line 121)
+	.  reduce 7 (src line 119)
 
 
 state 50
 	typeDefinition:  INTTYPE.    (8)
 
-	.  reduce 8 (src line 125)
+	.  reduce 8 (src line 123)
 
 
 state 51
 	typeDefinition:  STRINGTYPE.    (9)
 
-	.  reduce 9 (src line 127)
+	.  reduce 9 (src line 125)
 
 
 state 52
 	typeDefinition:  BOOLTYPE.    (10)
 
-	.  reduce 10 (src line 128)
+	.  reduce 10 (src line 126)
 
 
 state 53
 	typeDefinition:  BINTYPE.    (11)
 
-	.  reduce 11 (src line 129)
+	.  reduce 11 (src line 127)
 
 
 state 54
@@ -591,7 +591,7 @@ state 56
 state 57
 	returnStatements:  loopClause body afterLoop.    (24)
 
-	.  reduce 24 (src line 161)
+	.  reduce 24 (src line 159)
 
 
 state 58
@@ -614,7 +614,7 @@ state 58
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 21 (src line 154)
+	.  reduce 21 (src line 152)
 
 	ope2  goto 59
 
@@ -644,99 +644,99 @@ state 59
 	ope1  goto 30
 
 state 60
-	ope2:  PLUS.    (43)
+	ope2:  PLUS.    (40)
+
+	.  reduce 40 (src line 204)
+
+
+state 61
+	ope2:  PLUSPLUS.    (41)
+
+	.  reduce 41 (src line 206)
+
+
+state 62
+	ope2:  MINUS.    (42)
+
+	.  reduce 42 (src line 207)
+
+
+state 63
+	ope2:  MULTI.    (43)
 
 	.  reduce 43 (src line 208)
 
 
-state 61
-	ope2:  PLUSPLUS.    (44)
-
-	.  reduce 44 (src line 210)
-
-
-state 62
-	ope2:  MINUS.    (45)
-
-	.  reduce 45 (src line 211)
-
-
-state 63
-	ope2:  MULTI.    (46)
-
-	.  reduce 46 (src line 212)
-
-
 state 64
-	ope2:  DIV.    (47)
+	ope2:  DIV.    (44)
 
-	.  reduce 47 (src line 213)
+	.  reduce 44 (src line 209)
 
 
 state 65
-	ope2:  MOD.    (48)
+	ope2:  MOD.    (45)
 
-	.  reduce 48 (src line 214)
+	.  reduce 45 (src line 210)
 
 
 state 66
-	ope2:  GT.    (49)
+	ope2:  GT.    (46)
 
-	.  reduce 49 (src line 215)
+	.  reduce 46 (src line 211)
 
 
 state 67
-	ope2:  GTE.    (50)
+	ope2:  GTE.    (47)
 
-	.  reduce 50 (src line 216)
+	.  reduce 47 (src line 212)
 
 
 state 68
-	ope2:  LT.    (51)
+	ope2:  LT.    (48)
 
-	.  reduce 51 (src line 217)
+	.  reduce 48 (src line 213)
 
 
 state 69
-	ope2:  LTE.    (52)
+	ope2:  LTE.    (49)
 
-	.  reduce 52 (src line 218)
+	.  reduce 49 (src line 214)
 
 
 state 70
-	ope2:  EQ.    (53)
+	ope2:  EQ.    (50)
 
-	.  reduce 53 (src line 219)
+	.  reduce 50 (src line 215)
 
 
 state 71
-	ope2:  NEQ.    (54)
+	ope2:  NEQ.    (51)
 
-	.  reduce 54 (src line 220)
+	.  reduce 51 (src line 216)
 
 
 state 72
-	ope2:  AND.    (55)
+	ope2:  AND.    (52)
 
-	.  reduce 55 (src line 221)
+	.  reduce 52 (src line 217)
 
 
 state 73
-	ope2:  OR.    (56)
+	ope2:  OR.    (53)
 
-	.  reduce 56 (src line 222)
+	.  reduce 53 (src line 218)
 
 
 state 74
-	ope2:  NOT.    (57)
+	ope2:  NOT.    (54)
 
-	.  reduce 57 (src line 223)
+	.  reduce 54 (src line 219)
 
 
 state 75
-	ope2:  CONTAINS.    (58)
+	ope2:  CONTAINS.    (55)
 
-	.  reduce 58 (src line 224)
+	.  reduce 55 (src line 220)
 
 
 state 76
@@ -773,13 +773,13 @@ state 77
 
 
 state 78
-	expressionUnary:  ope1 expressionAtom.    (68)
+	expressionUnary:  ope1 expressionAtom.    (65)
 	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
 	expressionAtom:  expressionAtom.DOT IDENTIFIER 
 
 	DOT  shift 77
 	LBRACKET  shift 76
-	.  reduce 68 (src line 244)
+	.  reduce 65 (src line 240)
 
 
 state 79
@@ -818,7 +818,7 @@ state 80
 
 state 81
 	expression:  expression.ope2 expressionUnary 
-	expressionList:  expression.    (81)
+	expressionList:  expression.    (78)
 
 	MULTI  shift 63
 	DIV  shift 64
@@ -836,7 +836,7 @@ state 81
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 81 (src line 264)
+	.  reduce 78 (src line 260)
 
 	ope2  goto 59
 
@@ -852,30 +852,30 @@ state 82
 
 state 83
 	keyExpressionList:  IDENTIFIER.COLON expression 
-	keyExpressionList:  IDENTIFIER.    (85)
+	keyExpressionList:  IDENTIFIER.    (82)
 
 	COLON  shift 101
-	.  reduce 85 (src line 273)
+	.  reduce 82 (src line 269)
 
 
 state 84
 	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
 	expressionAtom:  expressionAtom.DOT IDENTIFIER 
-	expressionAtom:  TEXT expressionAtom.    (74)
+	expressionAtom:  TEXT expressionAtom.    (71)
 
 	DOT  shift 77
 	LBRACKET  shift 76
-	.  reduce 74 (src line 254)
+	.  reduce 71 (src line 250)
 
 
 state 85
 	expressionAtom:  expressionAtom.LBRACKET expression RBRACKET 
 	expressionAtom:  expressionAtom.DOT IDENTIFIER 
-	expressionAtom:  HREF expressionAtom.    (75)
+	expressionAtom:  HREF expressionAtom.    (72)
 
 	DOT  shift 77
 	LBRACKET  shift 76
-	.  reduce 75 (src line 255)
+	.  reduce 72 (src line 251)
 
 
 state 86
@@ -954,7 +954,7 @@ state 89
 state 90
 	keytypeList:  keytype.    (15)
 
-	.  reduce 15 (src line 137)
+	.  reduce 15 (src line 135)
 
 
 state 91
@@ -967,13 +967,13 @@ state 91
 state 92
 	returnList:  returnList COMMA IDENTIFIER.    (27)
 
-	.  reduce 27 (src line 169)
+	.  reduce 27 (src line 167)
 
 
 state 93
-	expression:  expression ope2 expressionUnary.    (66)
+	expression:  expression ope2 expressionUnary.    (63)
 
-	.  reduce 66 (src line 239)
+	.  reduce 63 (src line 235)
 
 
 state 94
@@ -1002,21 +1002,21 @@ state 94
 	ope2  goto 59
 
 state 95
-	expressionAtom:  expressionAtom DOT IDENTIFIER.    (71)
+	expressionAtom:  expressionAtom DOT IDENTIFIER.    (68)
 
-	.  reduce 71 (src line 250)
+	.  reduce 68 (src line 246)
 
 
 state 96
-	expressionAtom:  LPAREN expression RPAREN.    (69)
+	expressionAtom:  LPAREN expression RPAREN.    (66)
 
-	.  reduce 69 (src line 247)
+	.  reduce 66 (src line 243)
 
 
 state 97
-	expressionAtom:  LBRACKET expressionList RBRACKET.    (72)
+	expressionAtom:  LBRACKET expressionList RBRACKET.    (69)
 
-	.  reduce 72 (src line 251)
+	.  reduce 69 (src line 247)
 
 
 state 98
@@ -1046,9 +1046,9 @@ state 98
 	ope1  goto 30
 
 state 99
-	expressionAtom:  LBRACE keyExpressionList RBRACE.    (73)
+	expressionAtom:  LBRACE keyExpressionList RBRACE.    (70)
 
-	.  reduce 73 (src line 252)
+	.  reduce 70 (src line 248)
 
 
 state 100
@@ -1105,7 +1105,7 @@ state 102
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 28 (src line 172)
+	.  reduce 28 (src line 170)
 
 	ope2  goto 59
 
@@ -1178,13 +1178,13 @@ state 106
 state 107
 	typeDefinition:  LBRACKET typeDefinition RBRACKET.    (12)
 
-	.  reduce 12 (src line 130)
+	.  reduce 12 (src line 128)
 
 
 state 108
 	typeDefinition:  LBRACE keytypeList RBRACE.    (13)
 
-	.  reduce 13 (src line 131)
+	.  reduce 13 (src line 129)
 
 
 state 109
@@ -1209,14 +1209,14 @@ state 110
 	typeDefinition  goto 120
 
 state 111
-	expressionAtom:  expressionAtom LBRACKET expression RBRACKET.    (70)
+	expressionAtom:  expressionAtom LBRACKET expression RBRACKET.    (67)
 
-	.  reduce 70 (src line 249)
+	.  reduce 67 (src line 245)
 
 
 state 112
 	expression:  expression.ope2 expressionUnary 
-	expressionList:  expressionList COMMA expression.    (82)
+	expressionList:  expressionList COMMA expression.    (79)
 
 	MULTI  shift 63
 	DIV  shift 64
@@ -1234,21 +1234,21 @@ state 112
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 82 (src line 266)
+	.  reduce 79 (src line 262)
 
 	ope2  goto 59
 
 state 113
 	keyExpressionList:  keyExpressionList COMMA IDENTIFIER.COLON expression 
-	keyExpressionList:  keyExpressionList COMMA IDENTIFIER.    (86)
+	keyExpressionList:  keyExpressionList COMMA IDENTIFIER.    (83)
 
 	COLON  shift 121
-	.  reduce 86 (src line 274)
+	.  reduce 83 (src line 270)
 
 
 state 114
 	expression:  expression.ope2 expressionUnary 
-	keyExpressionList:  IDENTIFIER COLON expression.    (83)
+	keyExpressionList:  IDENTIFIER COLON expression.    (80)
 
 	MULTI  shift 63
 	DIV  shift 64
@@ -1266,7 +1266,7 @@ state 114
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 83 (src line 269)
+	.  reduce 80 (src line 265)
 
 	ope2  goto 59
 
@@ -1337,13 +1337,13 @@ state 118
 state 119
 	keytypeList:  keytypeList COMMA keytype.    (16)
 
-	.  reduce 16 (src line 139)
+	.  reduce 16 (src line 137)
 
 
 state 120
 	keytype:  IDENTIFIER COLON typeDefinition.    (14)
 
-	.  reduce 14 (src line 134)
+	.  reduce 14 (src line 132)
 
 
 state 121
@@ -1408,7 +1408,7 @@ state 125
 
 state 126
 	expression:  expression.ope2 expressionUnary 
-	keyExpressionList:  keyExpressionList COMMA IDENTIFIER COLON expression.    (84)
+	keyExpressionList:  keyExpressionList COMMA IDENTIFIER COLON expression.    (81)
 
 	MULTI  shift 63
 	DIV  shift 64
@@ -1426,7 +1426,7 @@ state 126
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 84 (src line 271)
+	.  reduce 81 (src line 267)
 
 	ope2  goto 59
 
@@ -1434,14 +1434,14 @@ state 127
 	loopClause:  SELECT FROM expression ALL expression AS IDENTIFIER.selectOptions 
 	selectOptions: .    (33)
 
-	.  reduce 33 (src line 185)
+	.  reduce 33 (src line 183)
 
 	selectOptions  goto 134
 
 state 128
 	loopClause:  SELECT FROM expression ONE expression AS IDENTIFIER.    (30)
 
-	.  reduce 30 (src line 179)
+	.  reduce 30 (src line 177)
 
 
 state 129
@@ -1450,14 +1450,14 @@ state 129
 
 	DEFAULT  shift 132
 	CASE  shift 131
-	.  reduce 31 (src line 181)
+	.  reduce 31 (src line 179)
 
 	case  goto 135
 
 state 130
-	cases:  case.    (39)
+	cases:  case.    (36)
 
-	.  reduce 39 (src line 193)
+	.  reduce 36 (src line 189)
 
 
 state 131
@@ -1518,7 +1518,7 @@ state 133
 
 	DEFAULT  shift 132
 	CASE  shift 131
-	.  reduce 32 (src line 182)
+	.  reduce 32 (src line 180)
 
 	case  goto 135
 
@@ -1526,21 +1526,16 @@ state 134
 	loopClause:  SELECT FROM expression ALL expression AS IDENTIFIER selectOptions.    (29)
 	selectOptions:  selectOptions.WHERE expression 
 	selectOptions:  selectOptions.LIMIT expression 
-	selectOptions:  selectOptions.SORT ASC 
-	selectOptions:  selectOptions.SORT DESC 
-	selectOptions:  selectOptions.DISTINCT 
 
 	WHERE  shift 138
 	LIMIT  shift 139
-	DISTINCT  shift 141
-	SORT  shift 140
-	.  reduce 29 (src line 178)
+	.  reduce 29 (src line 176)
 
 
 state 135
-	cases:  cases case.    (40)
+	cases:  cases case.    (37)
 
-	.  reduce 40 (src line 195)
+	.  reduce 37 (src line 191)
 
 
 state 136
@@ -1559,7 +1554,7 @@ state 136
 	GT  shift 66
 	EQ  shift 70
 	NEQ  shift 71
-	COLON  shift 142
+	COLON  shift 140
 	AND  shift 72
 	OR  shift 73
 	NOT  shift 74
@@ -1569,7 +1564,7 @@ state 136
 	ope2  goto 59
 
 state 137
-	case:  DEFAULT expression.    (42)
+	case:  DEFAULT expression.    (39)
 	expression:  expression.ope2 expressionUnary 
 
 	MULTI  shift 63
@@ -1588,7 +1583,7 @@ state 137
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 42 (src line 201)
+	.  reduce 39 (src line 197)
 
 	ope2  goto 59
 
@@ -1613,7 +1608,7 @@ state 138
 	PAGE  shift 46
 	.  error
 
-	expression  goto 143
+	expression  goto 141
 	expressionUnary  goto 28
 	expressionAtom  goto 29
 	ope1  goto 30
@@ -1639,27 +1634,12 @@ state 139
 	PAGE  shift 46
 	.  error
 
-	expression  goto 144
+	expression  goto 142
 	expressionUnary  goto 28
 	expressionAtom  goto 29
 	ope1  goto 30
 
 state 140
-	selectOptions:  selectOptions SORT.ASC 
-	selectOptions:  selectOptions SORT.DESC 
-
-	ASC  shift 145
-	DESC  shift 146
-	.  error
-
-
-state 141
-	selectOptions:  selectOptions DISTINCT.    (38)
-
-	.  reduce 38 (src line 191)
-
-
-state 142
 	case:  CASE expression COLON.expression 
 
 	MINUS  shift 41
@@ -1680,12 +1660,12 @@ state 142
 	PAGE  shift 46
 	.  error
 
-	expression  goto 147
+	expression  goto 143
 	expressionUnary  goto 28
 	expressionAtom  goto 29
 	ope1  goto 30
 
-state 143
+state 141
 	selectOptions:  selectOptions WHERE expression.    (34)
 	expression:  expression.ope2 expressionUnary 
 
@@ -1705,11 +1685,11 @@ state 143
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 34 (src line 187)
+	.  reduce 34 (src line 185)
 
 	ope2  goto 59
 
-state 144
+state 142
 	selectOptions:  selectOptions LIMIT expression.    (35)
 	expression:  expression.ope2 expressionUnary 
 
@@ -1729,24 +1709,12 @@ state 144
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 35 (src line 188)
+	.  reduce 35 (src line 186)
 
 	ope2  goto 59
 
-state 145
-	selectOptions:  selectOptions SORT ASC.    (36)
-
-	.  reduce 36 (src line 189)
-
-
-state 146
-	selectOptions:  selectOptions SORT DESC.    (37)
-
-	.  reduce 37 (src line 190)
-
-
-state 147
-	case:  CASE expression COLON expression.    (41)
+state 143
+	case:  CASE expression COLON expression.    (38)
 	expression:  expression.ope2 expressionUnary 
 
 	MULTI  shift 63
@@ -1765,19 +1733,19 @@ state 147
 	OR  shift 73
 	NOT  shift 74
 	CONTAINS  shift 75
-	.  reduce 41 (src line 198)
+	.  reduce 38 (src line 194)
 
 	ope2  goto 59
 
 81 terminals, 26 nonterminals
-87 grammar rules, 148/16000 states
+84 grammar rules, 144/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 75 working sets used
 memory: parser 125/240000
 39 extra closures
-690 shift entries, 1 exceptions
+686 shift entries, 1 exceptions
 57 goto entries
 76 entries saved by goto default
-Optimizer space used: output 387/240000
-387 table entries, 133 zero
-maximum spread: 81, maximum offset: 142
+Optimizer space used: output 385/240000
+385 table entries, 135 zero
+maximum spread: 81, maximum offset: 140

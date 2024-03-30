@@ -38,7 +38,7 @@ var css string = _in.css ; _ = css
  _out = append(_out, Output_test9{})
 var p1 *rod.Page= rt.GetPage( url );_=p1
 var p2 *rod.Page= rt.GetPage(((( url ) + ("/login"))));_=p2
-{// select : parser.selopt{from:parser.value{v:"rt.GetPage( url )", t:"*rod.Page", c:0}, css:parser.value{v:"(((( css ) + (\",\"))) + ( css ))", t:"string", c:0}, loopv:"r", where:[]parser.value{parser.value{v:"true", t:"bool", c:0}}, distinct:false, sort:0, limit:parser.value{v:"((2) + (3))", t:"int", c:0}, cases:[]parser.casopt(nil)}
+{// select : parser.selopt{from:parser.value{v:"rt.GetPage( url )", t:"*rod.Page", c:0}, css:parser.value{v:"(((( css ) + (\",\"))) + ( css ))", t:"string", c:0}, loopv:"r", where:[]parser.value{parser.value{v:"true", t:"bool", c:0}}, limit:parser.value{v:"((2) + (3))", t:"int", c:0}, cases:[]parser.casopt(nil)}
 //call to saveOut
 _out[len(_out)-1].url=url
 // call to incOut

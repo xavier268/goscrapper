@@ -41,7 +41,7 @@ var b []string = _in.b ; _ = b
  _out = append(_out, Output_test4{})
 var c string= (( a ) + ( a ));_=c
 var page *rod.Page= rt.GetPage("google.com");_=page
-{// select : parser.selopt{from:parser.value{v:" page ", t:"*rod.Page", c:0}, css:parser.value{v:" a ", t:"string", c:0}, loopv:"z", where:[]parser.value(nil), distinct:false, sort:0, limit:parser.value{v:"", t:"", c:0}, cases:[]parser.casopt(nil)}
+{// select : parser.selopt{from:parser.value{v:" page ", t:"*rod.Page", c:0}, css:parser.value{v:" a ", t:"string", c:0}, loopv:"z", where:[]parser.value(nil), limit:parser.value{v:"", t:"", c:0}, cases:[]parser.casopt(nil)}
 var d string= (( a ) + ( a ));_=d
 //call to saveOut
 _out[len(_out)-1].a=a

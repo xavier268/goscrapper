@@ -15,9 +15,7 @@
         from value      // can be *rod.Page or *rod.Element
         css value       // css selector
         loopv string    // loop variable identifier
-        where []value   // list of where conditions
-        distinct bool
-        sort int        // ASC or DESC
+        where []value   // list of where conditions, applied on loopv
         limit value
         cases []casopt
     }   
@@ -186,9 +184,7 @@ selectOptions
     : {$$ = selopt{}}
     | selectOptions WHERE expression {$$ = $1; $$.where = append($$.where, $3)}
     | selectOptions LIMIT expression {$$=$1; $$.limit = $3} // ovewrite previous limits
-    | selectOptions SORT ASC {$$=$1;$$.sort = ASC}
-    | selectOptions SORT DESC {$$=$1;$$.sort = DESC}
-    | selectOptions DISTINCT {{$$=$1;$$.distinct = true}}
+    ;
 
 cases // at least one case is required
     : case{$$ = []casopt{}}

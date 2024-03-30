@@ -181,11 +181,11 @@ loopClause
     | SELECT FROM expression ANY AS IDENTIFIER  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
     ;
 
-asClause // declares the select loop variable, so it is available in the where clause.
+asClause // pre-declares the select loop variable, so it is available in the where clause.
     : AS IDENTIFIER {         
         $$ = $2; 
         if typ,ok := lx.vars[$2.v] ; ok {
-            lx.errorf("loop variable %s was already declared (type : %s)", $2.v, typ)
+            lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as loop variable", $2.v, typ)
         }
         lx.vars[$2.v] = "*rod.Element";
         }

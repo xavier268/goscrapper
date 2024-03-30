@@ -891,7 +891,7 @@ yydefault:
 		{
 			yyVAL.value = yyDollar[2].value
 			if typ, ok := lx.vars[yyDollar[2].value.v]; ok {
-				lx.errorf("loop variable %s was already declared (type : %s)", yyDollar[2].value.v, typ)
+				lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as loop variable", yyDollar[2].value.v, typ)
 			}
 			lx.vars[yyDollar[2].value.v] = "*rod.Element"
 		}

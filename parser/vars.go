@@ -168,7 +168,7 @@ func (m *myLexer) vGetVar(name string) (v value) {
 	}
 	// return value
 	return value{
-		v: fmt.Sprintf(" %s ", name),
+		v: name,
 		t: tt,
 		c: 0,
 	}

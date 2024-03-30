@@ -69,7 +69,7 @@
 %type <list> returnList 
 
 %type <values> expressionList keytypeList
-%type <value> keytype
+%type <value> keytype asClause
 
 %type <mvalue>  keyExpressionList
 
@@ -174,12 +174,23 @@ loopClause
     // | SELECT IDENTIFIER expression // SELECT with a counter.
 
     // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
-    | SELECT FROM expression ALL expression AS IDENTIFIER selectOptions {opt:= $8; opt.from=$3; opt.css=$5;opt.loopv=$7.v; lx.selectAll(opt)} // do not wait
+    | SELECT FROM expression ALL expression asClause selectOptions {opt:= $7; opt.from=$3; opt.css=$5;opt.loopv=$6.v; lx.selectAll(opt)} // do not wait
     | SELECT FROM expression ONE expression AS IDENTIFIER {lx.addLines("{// select TODO" );}// one exactly, and wait for it
     // below, FROM should be a page or an rod.Element, identifier will be set to the expression specified for the matched css
     | SELECT FROM expression AS IDENTIFIER ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
     | SELECT FROM expression ANY AS IDENTIFIER  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
     ;
+
+asClause // declares the select loop variable, so it is available in the where clause.
+    : AS IDENTIFIER {         
+        $$ = $2; 
+        if typ,ok := lx.vars[$2.v] ; ok {
+            lx.errorf("loop variable %s was already declared (type : %s)", $2.v, typ)
+        }
+        lx.vars[$2.v] = "*rod.Element";
+        }
+    ;
+
 
 selectOptions
     : {$$ = selopt{}}

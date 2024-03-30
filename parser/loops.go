@@ -41,11 +41,9 @@ func (m *myLexer) selectAll(opt selopt) {
 		m.errorf("when a limit is set, an int is expected, but got a %s", opt.limit.t)
 	}
 
-	// register loop variable
-	if typ, ok := m.vars[opt.loopv]; !ok {
-		m.vars[opt.loopv] = "*rod.Element"
-	} else {
-		m.errorf("the loop variable %s has already been declared as %s", opt.loopv, typ)
+	// verify loop variable correctly set
+	if typ := m.vars[opt.loopv]; typ != "*rod.Element" {
+		m.errorf("internal error with the loop variable %s not correctly prepared : %s", opt.loopv, typ)
 	}
 
 	// generate code

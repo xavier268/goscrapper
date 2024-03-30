@@ -7,22 +7,6 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test4.sc
 
-
-[31m ********* Error in test4 :***************[0m
-
-= PAGE "google.com"
-SELECT FROM page ALL a AS z WHERE 2+4==1 LIMIT 2+66 WHERE z [31m <<<<<<<<<<<<<<<<< variable z is not defined [0m
- == z
-    d = a + a
-    RETURN c,a,d
-
-[31m ********* Error in test4 :***************[0m
-
-E "google.com"
-SELECT FROM page ALL a AS z WHERE 2+4==1 LIMIT 2+66 WHERE z == z [31m <<<<<<<<<<<<<<<<< variable z is not defined [0m
-
-    d = a + a
-    RETURN c,a,d
 import (
 	"github.com/go-rod/rod"
 	"github.com/xavier268/goscrapper/rt"
@@ -45,8 +29,12 @@ type Output_test4 struct {
 // @a string
 // @b [string]
 // 
+// // z = 2 // uncommenting this should fail because loop variable z would be redeclared 
+// 
+// 
 // c = a  + a
 // page = PAGE "google.com"
+// 
 // SELECT FROM page ALL a AS z WHERE 2+4==1 LIMIT 2+66 WHERE z == z
 //     d = a + a
 //     RETURN c,a,d

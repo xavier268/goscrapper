@@ -30,6 +30,41 @@ func (m *myLexer) forNameInExpression(name string, expr value) {
 
 func (m *myLexer) selectAll(opt selopt) {
 
-	li := fmt.Sprintf("{// select : %#v", opt)
-	m.addLines(li)
+	// check types
+	if (opt.from.t != "*rod.Page") && (opt.from.t != "*rod.Element") {
+		m.errorf("cannot select all from type %s but expected *rod.Page or *rod.Element.", opt.from.t)
+	}
+	if opt.css.t != "string" {
+		m.errorf("css selector should be a string, but got a %s", opt.css.t)
+	}
+	if opt.limit.v != "" && opt.limit.t != "int" {
+		m.errorf("when a limit is set, an int is expected, but got a %s", opt.limit.t)
+	}
+
+	// register loop variable
+	if typ, ok := m.vars[opt.loopv]; !ok {
+		m.vars[opt.loopv] = "*rod.Element"
+	} else {
+		m.errorf("the loop variable %s has already been declared as %s", opt.loopv, typ)
+	}
+
+	// generate code
+	m.imports["github.com/xavier268/goscrapper/rt"] = true
+	uid := UID()
+	lim := "0"
+	if opt.limit.v != "" {
+		lim = opt.limit.v
+	}
+	li1 := fmt.Sprintf("_it%s:=rt.NewSelectAllIterator(%s,%s,%s); ", uid, opt.from.v, opt.css.v, lim)
+	li2 := fmt.Sprintf("for %s, _ok%s := _it%s.Next(); _ok%s;%s, _ok%s = _it%s.Next(){_=%s;", opt.loopv, uid, uid, uid, opt.loopv, uid, uid, opt.loopv)
+	m.addLines(li1, li2)
+	for _, w := range opt.where {
+		// check where clause type
+		if w.t != "bool" {
+			m.errorf("cannot accept where clause that is not a bool value but a %s", w.t)
+			continue
+		}
+		li := fmt.Sprintf("if (%s) {continue;}", w.v)
+		m.addLines(li)
+	}
 }

@@ -103,15 +103,22 @@ func (m *myLexer) declInputParam(name string, typ string) {
 }
 
 // declare list of identifiers as output to be returned.
+// *rod are excluded.
 func (m *myLexer) declOutputParams(names []string) {
 	for _, name := range names {
 		// check
 		if typ, ok := m.vars[name]; !ok || typ == "" {
 			m.errorf("variable %s cannot be returned because it was never declared", name)
+			continue
+		}
+		if typ := m.vars[name]; strings.Contains(typ, "*rod") {
+			m.errorf("variable %s cannot be returned because its type cannot be exported : %s", name, typ)
+			continue
 		}
 		for _, oo := range m.outparams {
 			if oo == name {
 				m.errorf("variable %s duplicated in output parameters", name)
+				continue
 			}
 		}
 		// register output name
@@ -144,7 +151,12 @@ func (m *myLexer) vSetVar(name string, v value) {
 	li := fmt.Sprintf("var %s %s= %s;_=%s", name, v.t, v.v, name)
 	m.addLines(li)
 
-	// fmt.Printf("DEBUG : vars = %#v\n", m.vars)
+	// if type requires closing (eg : page), defer closing
+	if v.t == "*rod.Page" {
+		m.imports["github.com/xavier268/goscrapper/rt"] = true
+		li := fmt.Sprintf("defer rt.ClosePage(%s)", name)
+		m.addLines(li)
+	}
 }
 
 // Get the value and type of a named variable.

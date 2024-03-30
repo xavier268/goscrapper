@@ -80,7 +80,8 @@
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc LTE LT GTE GT EQ NEQ CONTAINS ASSIGN TEXT HREF 
+%nonassoc LTE LT GTE GT CONTAINS ASSIGN TEXT HREF 
+%left EQ NEQ 
 %left PAGE
 %left OR 
 %left AND

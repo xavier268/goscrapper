@@ -7,6 +7,22 @@
 package e2epack
 // Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test4.sc
 
+
+[31m ********* Error in test4 :***************[0m
+
+= PAGE "google.com"
+SELECT FROM page ALL a AS z WHERE 2+4==1 LIMIT 2+66 WHERE z [31m <<<<<<<<<<<<<<<<< variable z is not defined [0m
+ == z
+    d = a + a
+    RETURN c,a,d
+
+[31m ********* Error in test4 :***************[0m
+
+E "google.com"
+SELECT FROM page ALL a AS z WHERE 2+4==1 LIMIT 2+66 WHERE z == z [31m <<<<<<<<<<<<<<<<< variable z is not defined [0m
+
+    d = a + a
+    RETURN c,a,d
 import (
 	"github.com/go-rod/rod"
 	"github.com/xavier268/goscrapper/rt"
@@ -31,7 +47,7 @@ type Output_test4 struct {
 // 
 // c = a  + a
 // page = PAGE "google.com"
-// SELECT FROM page ALL a AS z
+// SELECT FROM page ALL a AS z WHERE 2+4==1 LIMIT 2+66 WHERE z == z
 //     d = a + a
 //     RETURN c,a,d
 func Do_test4(_in Input_test4) (_out []Output_test4, _err error) {
@@ -41,7 +57,11 @@ var b []string = _in.b ; _ = b
  _out = append(_out, Output_test4{})
 var c string= (( a ) + ( a ));_=c
 var page *rod.Page= rt.GetPage("google.com");_=page
-{// select : parser.selopt{from:parser.value{v:" page ", t:"*rod.Page", c:0}, css:parser.value{v:" a ", t:"string", c:0}, loopv:"z", where:[]parser.value(nil), limit:parser.value{v:"", t:"", c:0}, cases:[]parser.casopt(nil)}
+defer rt.ClosePage(page)
+_it002:=rt.NewSelectAllIterator( page , a ,((2) + (66))); 
+for z, _ok002 := _it002.Next(); _ok002;z, _ok002 = _it002.Next(){_=z;
+if (((((2) + (4))) == (1))) {continue;}
+if ((( z ) == ( z ))) {continue;}
 var d string= (( a ) + ( a ));_=d
 //call to saveOut
 _out[len(_out)-1].a=a

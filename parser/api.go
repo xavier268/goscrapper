@@ -151,7 +151,7 @@ func PrintHeader(w io.Writer, ss ...string) {
 // Genarate a unique id as a string
 func UID() string {
 	uid += 1
-	return fmt.Sprintf("%06x", uid)
+	return fmt.Sprintf("%03x", uid)
 }
 
 var uid = 1

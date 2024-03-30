@@ -23,4 +23,7 @@ bb = true && false
 bc = true OR false
 bd = true || false
 
+be = 2 + 3 == 5 // same as (2+3)==5
+bf = 5 == (2 + 3 ) // without parenthesis, whould fail as : (5==2)+3
+
 RETURN a, bbb 

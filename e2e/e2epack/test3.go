@@ -43,6 +43,7 @@ var pp string = _in.pp ; _ = pp
 // call to incOut
  _out = append(_out, Output_test3{})
 var page *rod.Page= rt.GetPage( pp );_=page
+defer rt.ClosePage(page)
 var b string= (("css code") + ("blablabla"));_=b
 for _, i := range  iii  { 
  _ = i

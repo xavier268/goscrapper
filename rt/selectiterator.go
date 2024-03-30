@@ -10,9 +10,14 @@ type Iterator[T any] interface {
 	Next() (next T, ok bool)
 }
 
+// Can provides Elements. A page or an element.
+type Elementer interface {
+	Elements(string) (rod.Elements, error)
+}
+
 // iterator implementation
 type selectAllIteratorP struct {
-	source *rod.Page                            // page on which we iterate
+	source Elementer                            // page or element on which we iterate
 	css    string                               // css selector we use
 	elms   []*rod.Element                       // remaining potential elements
 	done   map[proto.RuntimeRemoteObjectID]bool // ids of objects we have already returned
@@ -22,7 +27,7 @@ type selectAllIteratorP struct {
 
 var _ Iterator[*rod.Element] = &selectAllIteratorP{}
 
-func NewSelectAllIteratorP(page *rod.Page, css string, limit int) *selectAllIteratorP {
+func NewSelectAllIterator[T Elementer](page T, css string, limit int) *selectAllIteratorP {
 	return &selectAllIteratorP{
 		source: page,
 		css:    css,

@@ -20,7 +20,7 @@ func (m *myLexer) finalize() {
 	m.wOutputParams()
 	m.wCommentedSource()
 	m.wFuncDeclaration()
-	// clean lines, and write function body
+	// clean excess _out lines, and write function body
 	m.cleanOut()
 	for _, l := range m.lines {
 		if l != "" {

@@ -3,8 +3,6 @@ package e2e
 
 import (
 	"fmt"
-	"io"
-	"os"
 	"path/filepath"
 	"testing"
 
@@ -22,24 +20,13 @@ func TestParserVisual(t *testing.T) {
 		t.Fail()
 	}
 
-	// look for changes in compiled files
+	// verify changes in compiled files
 	ff, err := filepath.Glob(filepath.Join("e2epack", "*.go"))
-	fmt.Println(ff)
 	if err != nil {
 		panic(err)
 	}
 	for _, f := range ff {
-		fmt.Printf("Verifying %s\n", f)
-		r, err := os.Open(f)
-		if err != nil {
-			panic(err)
-		}
-		bb, err := io.ReadAll(r)
-		if err != nil {
-			panic(err)
-		}
-		r.Close()
-		mytest.Verify(t, string(bb), f)
+		mytest.VerifyFile(t, f)
 	}
 
 }

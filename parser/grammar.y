@@ -152,7 +152,7 @@ statements
 
 statement 
     : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
-    | CLICK  expression { /* todo */}
+    | CLICK expression FROM expression{ /* todo - css from page */}
     ;
 
 returnStatements
@@ -175,10 +175,10 @@ loopClause
 
     // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
     | SELECT FROM expression ALL expression asClause selectOptions {opt:= $7; opt.from=$3; opt.css=$5;opt.loopv=$6.v; lx.selectAll(opt)} // do not wait, but compatible with dynamic pages
-    | SELECT FROM expression ONE expression AS IDENTIFIER {lx.addLines("{// select TODO" );}// one exactly, and wait for it
+    | SELECT FROM expression ONE expression asClause {lx.addLines("{// select TODO" );}// one exactly, and wait for it
     // below, FROM should be a page or an rod.Element, identifier will be set to the expression specified for the matched css
-    | SELECT FROM expression AS IDENTIFIER ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
-    | SELECT FROM expression ANY AS IDENTIFIER  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
+    | SELECT FROM expression asClause ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
+    | SELECT FROM expression ANY asClause  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
     ;
 
 asClause // pre-declares the select loop variable, so it is available in the where clause or case clause
@@ -203,10 +203,10 @@ cases // at least one case is required
     | cases case{$$ = append($1, $2)}
     ;
 
-case // when one of the css expr is found, _element is set to the matched element, loop variable is set to the expression after the COLON
-     // the expression after the colon have NO access to matched element.
-    :  CASE expression COLON expression{$$ = casopt{e1:$2,e2:$4}} // $2 is a css, the loop variable is set to the $4 expression.
-    | DEFAULT  expression {$$ = casopt{def:true, e2:$2}} // set loop variable to $2
+case // when one of the css expr is found, loop variable is set to the matched rodElement, 
+     // and the statemensta re executed. Staements have access to the loop variable.
+    : CASE expression COLON statements SEMICOLON {/*todo*/} // $2 is a css, the loop variable is set to the $4 expression.
+    | DEFAULT COLON statements SEMICOLON {/*todo*/} // set loop variable to $2
     ;
 
 

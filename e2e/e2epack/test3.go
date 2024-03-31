@@ -34,7 +34,7 @@ type Output_test3 struct {
 // b = "css code" + "blablabla"
 // 
 // FOR i  IN iii// this starts a loop ... 
-//     CLICK "."
+//     CLICK "." FROM page
 //     c = 45
 //     RETURN b,c
 func Do_test3(_in Input_test3) (_out []Output_test3, _err error) {

@@ -1,7 +1,11 @@
 @ a int
 @ b int
-@ url string
+url = "https://www.google.fr"
 
+p = PAGE url
 c = a + b
 
-RETURN c
+SELECT FROM p ALL "div" AS divel LIMIT 5
+t = TEXT divel
+
+RETURN c, url, t

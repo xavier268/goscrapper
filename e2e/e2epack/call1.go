@@ -9,39 +9,54 @@ package e2epack
 
 import (
 	"context"
+	"github.com/go-rod/rod"
+	"github.com/xavier268/goscrapper/rt"
 )
 
 
 type Input_call1 struct {
 	a int
 	b int
-	url string
 }
 
 
 type Output_call1 struct {
 	c int
+	url string
+	t string
 }
 
 
 // @ a int
 // @ b int
-// @ url string
+// url = "https://www.google.fr"
 // 
+// p = PAGE url
 // c = a + b
 // 
-// RETURN c
+// SELECT FROM p ALL "div" AS divel LIMIT 5
+// t = TEXT divel
+// 
+// RETURN c, url, t
 func Do_call1(_ctx context.Context,_in Input_call1) (_out []Output_call1, _err error) {
 var a int = _in.a ; _ = a
 var b int = _in.b ; _ = b
-var url string = _in.url ; _ = url
 // call to incOut
  _out = append(_out, Output_call1{})
+var url string= "https://www.google.fr";_=url
+var p *rod.Page= rt.GetPage(url);_=p
+defer rt.ClosePage(p)
 var c int= ((a) + (b));_=c
+_it002:=rt.NewSelectAllIterator(_ctx, p,"div",5); 
+for divel, _ok002 := _it002.Next(); _ok002;divel, _ok002 = _it002.Next(){_=divel;
+var t string= rt.GetText(divel);_=t
 //call to saveOut
 _out[len(_out)-1].c=c
+_out[len(_out)-1].t=t
+_out[len(_out)-1].url=url
 if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_call1{})
+}
 return _out[:len(_out) -1], _err
 }

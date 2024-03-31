@@ -48,8 +48,8 @@ var b []string = _in.b ; _ = b
 var c string= ((a) + (a));_=c
 var page *rod.Page= rt.GetPage("google.com");_=page
 defer rt.ClosePage(page)
-_it004:=rt.NewSelectAllIterator(_ctx, page,a,((2) + (66))); 
-for z, _ok004 := _it004.Next(); _ok004;z, _ok004 = _it004.Next(){_=z;
+_it006:=rt.NewSelectAllIterator(_ctx, page,a,((2) + (66))); 
+for z, _ok006 := _it006.Next(); _ok006;z, _ok006 = _it006.Next(){_=z;
 if (((((2) + (4))) == (1))) {continue;}
 if (((z) == (z))) {continue;}
 var d string= ((a) + (a));_=d

@@ -5,45 +5,60 @@
 // (c) Xavier Gandillot 2024
 
 package e2e
-// Generated from C:\Users\xavie\Desktop\goscrapper\e2e\call1.sc
+// Generated from c:\Users\xavie\Desktop\goscrapper\e2e\call1.sc
 
 import (
 	"context"
+	"github.com/go-rod/rod"
+	"github.com/xavier268/goscrapper/rt"
 )
 
 
 type Input_call1_async struct {
 	a int
 	b int
-	url string
 }
 
 
 type Output_call1_async struct {
 	c int
+	url string
+	t string
 }
 
 
 // @ a int
 // @ b int
-// @ url string
+// url = "https://www.google.fr"
 // 
+// p = PAGE url
 // c = a + b
 // 
-// RETURN c
+// SELECT FROM p ALL "div" AS divel LIMIT 5
+// t = TEXT divel
+// 
+// RETURN c, url, t
 func DoAsync_call1_async(_ctx context.Context,_ch chan<- Output_call1_async,  _in Input_call1_async) (_err error) {
 var _out Output_call1_async
 var a int = _in.a ; _ = a
 var b int = _in.b ; _ = b
-var url string = _in.url ; _ = url
 // call to incOut
  _out = Output_call1_async{}
+var url string= "https://www.google.fr";_=url
+var p *rod.Page= rt.GetPage(url);_=p
+defer rt.ClosePage(p)
 var c int= ((a) + (b));_=c
+_it002:=rt.NewSelectAllIterator(_ctx, p,"div",5); 
+for divel, _ok002 := _it002.Next(); _ok002;divel, _ok002 = _it002.Next(){_=divel;
+var t string= rt.GetText(divel);_=t
 //call to saveOut
 _out.c=c
+_out.t=t
+_out.url=url
 select {case <- _ctx.Done():return _ctx.Err();case _ch <- _out:}
 if _err = _ctx.Err() ; _err != nil { return _err}
 // call to incOut
  _out = Output_call1_async{}
+}
 return _err
 }

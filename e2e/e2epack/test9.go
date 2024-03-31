@@ -47,8 +47,8 @@ var p1 *rod.Page= rt.GetPage(url);_=p1
 defer rt.ClosePage(p1)
 var p2 *rod.Page= rt.GetPage((((url) + ("/login"))));_=p2
 defer rt.ClosePage(p2)
-_it003:=rt.NewSelectAllIterator(_ctx, rt.GetPage(url),((((css) + (","))) + (css)),((2) + (3))); 
-for r, _ok003 := _it003.Next(); _ok003;r, _ok003 = _it003.Next(){_=r;
+_it004:=rt.NewSelectAllIterator(_ctx, rt.GetPage(url),((((css) + (","))) + (css)),((2) + (3))); 
+for r, _ok004 := _it004.Next(); _ok004;r, _ok004 = _it004.Next(){_=r;
 if (true) {continue;}
 select{
 case <- _ctx.Done():

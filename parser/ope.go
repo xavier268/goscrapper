@@ -131,6 +131,12 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 			m.imports["github.com/go-rod/rod"] = true
 			return value{t: "*rod.Page", v: fmt.Sprintf("rt.GetPage(%s)", v.v)}
 		}
+	case TEXT:
+		if v.t == "*rod.Element" {
+			m.imports["github.com/xavier268/goscrapper/rt"] = true
+			m.imports["github.com/go-rod/rod"] = true
+			return value{t: "string", v: fmt.Sprintf("rt.GetText(%s)", v.v)}
+		}
 
 	default:
 		m.errorf("unknown unary operator %s for type %s ", TokenAsString(ope), v.t)

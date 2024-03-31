@@ -80,9 +80,10 @@
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc LTE LT GTE GT CONTAINS ASSIGN TEXT HREF 
+%nonassoc LTE LT GTE GT CONTAINS ASSIGN HREF 
 %left EQ NEQ 
-%left PAGE
+%left PAGE 
+%left TEXT
 %left OR 
 %left AND
 %left NOT
@@ -240,6 +241,7 @@ ope1 // unary operators
     | UPPER{ $$ = $1 }
     | NOT{ $$ = $1 }
     | PAGE {$$ = $1}
+    | TEXT {$$ = $1}
     ;
 
 expression // never empty, type is controlled semantically, not syntaxically
@@ -259,9 +261,6 @@ expressionAtom // never empty
     | expressionAtom DOT IDENTIFIER { $$ = lx.vAccessObject($1, $3.v)}
     | LBRACKET expressionList RBRACKET { $$ = lx.vMakeArray($2)}
     | LBRACE keyExpressionList RBRACE {$$ = lx.vMakeObject($2)} 
-
-    | TEXT expressionAtom {/*todo*/} // will retrieve the text for the provided cssselector or element
-    | HREF expressionAtom {/* */}
 
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }
     | STRING { $$ =value{v:$1.v, t:"string"} }

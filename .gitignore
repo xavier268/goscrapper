@@ -28,5 +28,10 @@ go.work
 # application dir
 /autoscrapper
 /autoscrapper/**/*
+.browserDataDir/
+.browserDataDir/**/*
+/e2e/.browserDataDir/
+/e2e/.browserDataDir/**/*
+
 
 

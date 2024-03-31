@@ -128,3 +128,15 @@ func ClosePage(page *rod.Page) error {
 	page = nil
 	return nil
 }
+
+// retrieve text from a *rod.Element.
+func GetText(el *rod.Element) string {
+	if el == nil {
+		return ""
+	}
+	s, err := el.Text()
+	if err != nil {
+		Errorf("cannot retieve text from element")
+	}
+	return s
+}

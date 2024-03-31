@@ -14,14 +14,14 @@ import (
 )
 
 
-type Input_test1 struct {
+type Input_test1_async struct {
 	aaa int
 	bbb bool
 	ccc []bool
 }
 
 
-type Output_test1 struct {
+type Output_test1_async struct {
 	a int
 	bbb bool
 }
@@ -56,12 +56,13 @@ type Output_test1 struct {
 // bf = 5 == (2 + 3 ) // without parenthesis, whould fail as : (5==2)+3
 // 
 // RETURN a, bbb 
-func Do_test1(_ctx context.Context,_in Input_test1) (_out []Output_test1, _err error) {
+func DoAsync_test1_async(_ctx context.Context,_ch chan<- Output_test1_async,  _in Input_test1_async) (_err error) {
+var _out Output_test1_async
 var aaa int = _in.aaa ; _ = aaa
 var bbb bool = _in.bbb ; _ = bbb
 var ccc []bool = _in.ccc ; _ = ccc
 // call to incOut
- _out = append(_out, Output_test1{})
+ _out = Output_test1_async{}
 var p1 *rod.Page= rt.GetPage("http://www.google.fr");_=p1
 defer rt.ClosePage(p1)
 var a int= 23;_=a
@@ -80,10 +81,11 @@ var bd bool= ((true) || (false));_=bd
 var be bool= ((((2) + (3))) == (5));_=be
 var bf bool= ((5) == ((((2) + (3)))));_=bf
 //call to saveOut
-_out[len(_out)-1].a=a
-_out[len(_out)-1].bbb=bbb
-if _err = _ctx.Err() ; _err != nil { return _out,_err}
+_out.a=a
+_out.bbb=bbb
+select {case <- _ctx.Done():return _err;case _ch <- _out:}
+if _err = _ctx.Err() ; _err != nil { return _err}
 // call to incOut
- _out = append(_out, Output_test1{})
-return _out[:len(_out) -1], _err
+ _out = Output_test1_async{}
+return _err
 }

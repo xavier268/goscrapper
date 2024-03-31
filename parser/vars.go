@@ -177,8 +177,13 @@ func (m *myLexer) vGetVar(name string) (v value) {
 // increment the result variable _out.
 func (m *myLexer) incOut() {
 	m.addLines("// call to incOut")
-	li := fmt.Sprintf(" _out = append(_out, Output_%s{})", m.name)
-	m.addLines(li)
+	if m.async {
+		li := fmt.Sprintf(" _out = Output_%s{}", m.name)
+		m.addLines(li)
+	} else {
+		li := fmt.Sprintf(" _out = append(_out, Output_%s{})", m.name)
+		m.addLines(li)
+	}
 }
 
 // make a snapshot of relevant vars into _out.
@@ -195,19 +200,32 @@ func (m *myLexer) saveOut() {
 		vv = append(vv, v)
 	}
 	sort.Strings(vv)
-	for _, v := range vv {
-		li := fmt.Sprintf("//_out[len(_out)-1].%s=%s", v, v) // relevant lines will be uncommented later.
-		m.addLines(li)
+	if m.async {
+		for _, v := range vv {
+			li := fmt.Sprintf("//_out.%s=%s", v, v) // relevant lines will be uncommented later.
+			m.addLines(li)
+		}
+		m.addLines("select {case <- _ctx.Done():return _err;case _ch <- _out:}")
+	} else {
+		for _, v := range vv {
+			li := fmt.Sprintf("//_out[len(_out)-1].%s=%s", v, v) // relevant lines will be uncommented later.
+			m.addLines(li)
+		}
 	}
 	// check context cancelled ?
-	m.addLines("if _err := _ctx.Err(); _err != nil { return _out, _err ;}")
+	m.checkContext()
 	m.incOut()
 }
 
 // uncomment lines that correspond to valid out params.
 // This should be called only after all return params are defined.
 func (m *myLexer) cleanOut() {
-	patt := regexp.MustCompile(`^//_out\[len\(_out\)-1\]\.([A-Za-z][A-Za-z0-9]*)=([A-Za-z][A-Za-z0-9]*)$`) // same as IDENTIFIER PATTERN
+	var patt *regexp.Regexp
+	if m.async {
+		patt = regexp.MustCompile(`^//_out\.([A-Za-z][A-Za-z0-9]*)=([A-Za-z][A-Za-z0-9]*)$`) // same as IDENTIFIER PATTERN
+	} else {
+		patt = regexp.MustCompile(`^//_out\[len\(_out\)-1\]\.([A-Za-z][A-Za-z0-9]*)=([A-Za-z][A-Za-z0-9]*)$`) // same as IDENTIFIER PATTERN
+	}
 	for i, li := range m.lines {
 		if ss := patt.FindStringSubmatch(li); len(ss) == 3 {
 			suppress := true
@@ -387,4 +405,13 @@ func (m *myLexer) splitStructType(typ string) map[string]string {
 		mres[strings.TrimSpace(rr[0])] = strings.TrimSpace(rr[1])
 	}
 	return mres
+}
+
+// check context, and retrun immediately if needed.
+func (m *myLexer) checkContext() {
+	if m.async {
+		m.addLines("if _err = _ctx.Err() ; _err != nil { return _err}")
+	} else {
+		m.addLines("if _err = _ctx.Err() ; _err != nil { return _out,_err}")
+	}
 }

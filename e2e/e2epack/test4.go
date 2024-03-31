@@ -56,7 +56,7 @@ var d string= ((a) + (a));_=d
 _out[len(_out)-1].a=a
 _out[len(_out)-1].c=c
 _out[len(_out)-1].d=d
-if _err := _ctx.Err(); _err != nil { return _out, _err ;}
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_test4{})
 }

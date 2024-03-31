@@ -66,7 +66,7 @@ _out[len(_out)-1].ii=ii
 _out[len(_out)-1].x=x
 _out[len(_out)-1].y=y
 _out[len(_out)-1].z=z
-if _err := _ctx.Err(); _err != nil { return _out, _err ;}
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_test5{})
 }

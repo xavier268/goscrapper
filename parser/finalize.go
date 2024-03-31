@@ -19,18 +19,29 @@ func (m *myLexer) finalize() {
 	m.wInputParams()
 	m.wOutputParams()
 	m.wCommentedSource()
+
 	m.wFuncDeclaration()
-	// clean excess _out lines, and write function body
+	// clean excess _out lines,
 	m.cleanOut()
+	// write function body
 	for _, l := range m.lines {
 		if l != "" {
 			fmt.Fprintf(m.w, "%s\n", l)
 		}
 	}
 	// print final return statement
-	// there is laways an empty preallocated element in the slice, so remove it.
-	fmt.Fprintln(m.w, "return _out[:len(_out) -1], _err")
+	m.wFinalReturn()
 	fmt.Fprintln(m.w, "}")
+
+}
+
+func (m *myLexer) wFinalReturn() {
+	if m.async {
+		fmt.Fprintln(m.w, "return _err")
+	} else {
+		// there is laways an empty preallocated element in the slice, so remove it.
+		fmt.Fprintln(m.w, "return _out[:len(_out) -1], _err")
+	}
 }
 
 // write import code
@@ -98,9 +109,16 @@ func (m *myLexer) wCommentedSource() {
 // writes function declaration, with input/output types.
 // NB : the _err returned, will be a RUNTIME error, not a parse time error !
 func (m *myLexer) wFuncDeclaration() {
-	fmt.Fprintf(m.w,
-		"func Do_%s(_ctx context.Context,_in Input_%s) (_out []Output_%s, _err error) {\n",
-		m.name, m.name, m.name)
+	if m.async {
+		fmt.Fprintf(m.w,
+			"func DoAsync_%s(_ctx context.Context,_ch chan<- Output_%s,  _in Input_%s) (_err error) {\n"+
+				"var _out Output_%s\n",
+			m.name, m.name, m.name, m.name)
+	} else {
+		fmt.Fprintf(m.w,
+			"func Do_%s(_ctx context.Context,_in Input_%s) (_out []Output_%s, _err error) {\n",
+			m.name, m.name, m.name)
+	}
 
 	// write lateDecl lines, sorted.
 	ld := make([]string, 0, len(m.lateDecl)) // lateDecl lines, sorted.

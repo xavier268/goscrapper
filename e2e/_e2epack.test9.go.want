@@ -48,7 +48,7 @@ for r, _ok003 := _it003.Next(); _ok003;r, _ok003 = _it003.Next(){_=r;
 if (true) {continue;}
 //call to saveOut
 _out[len(_out)-1].url=url
-if _err := _ctx.Err(); _err != nil { return _out, _err ;}
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_test9{})
 }

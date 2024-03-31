@@ -54,7 +54,7 @@ var c int= 45;_=c
 //call to saveOut
 _out[len(_out)-1].b=b
 _out[len(_out)-1].c=c
-if _err := _ctx.Err(); _err != nil { return _out, _err ;}
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_test3{})
 }

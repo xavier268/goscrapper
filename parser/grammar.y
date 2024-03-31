@@ -205,6 +205,7 @@ cases // at least one case is required
 
 case // when one of the css expr is found, loop variable is set to the matched rodElement, 
      // and the statemensta re executed. Staements have access to the loop variable.
+     // NB : Notice the SEMICOLON after the statements group !
     : CASE expression COLON statements SEMICOLON {/*todo*/} // $2 is a css, the loop variable is set to the $4 expression.
     | DEFAULT COLON statements SEMICOLON {/*todo*/} // set loop variable to $2
     ;

@@ -19,6 +19,13 @@ func TestParserVisual(t *testing.T) {
 		fmt.Println(err)
 		t.Fail()
 	}
+	err = parser.ParseGlobAsync("e2epack", "*.sc")
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+	}
+
+	//t.Skip()
 
 	// verify changes in compiled files
 	ff, err := filepath.Glob(filepath.Join("e2epack", "*.go"))

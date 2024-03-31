@@ -98,7 +98,7 @@ _out[len(_out)-1].y4=y4
 _out[len(_out)-1].y5=y5
 _out[len(_out)-1].y6=y6
 _out[len(_out)-1].zz=zz
-if _err := _ctx.Err(); _err != nil { return _out, _err ;}
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_test8{})
 return _out[:len(_out) -1], _err

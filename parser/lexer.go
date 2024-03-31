@@ -20,7 +20,7 @@ type myLexer struct {
 	vars      map[string]string // associate a type to a given var. All var defined  with same name in different scopes should have same types.
 	imports   map[string]bool   // set of imports required, written at the end during finalize
 	lateDecl  map[string]bool   // set of local variables that will be declared once before function starts. Ex : _page.
-
+	async     bool              // are we targeting an async version for the output ?
 }
 
 // add lines to the code to be generated.

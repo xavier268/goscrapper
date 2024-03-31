@@ -18,12 +18,17 @@ import (
 // Parse from in and write production on out.
 // No package name is written.
 func Parse(out io.Writer, in io.Reader) error {
-	return parse(out, in, "noname")
+	return parse(out, in, "noname", false)
+}
+
+// Same as Parse, but generate async function.
+func ParseAsync(out io.Writer, in io.Reader) error {
+	return parse(out, in, "noname", true)
 }
 
 // parse everything and write to out.
 // NB : package name should already have been written to out ...
-func parse(out io.Writer, in io.Reader, name string) error {
+func parse(out io.Writer, in io.Reader, name string, async bool) error {
 
 	var err error
 
@@ -38,12 +43,12 @@ func parse(out io.Writer, in io.Reader, name string) error {
 		vars:      map[string]string{},
 		imports:   map[string]bool{},
 		lateDecl:  map[string]bool{},
+		async:     async,
 	}
 	lex.data, err = io.ReadAll(in)
 	if err != nil {
 		return err
 	}
-
 	if yyParse(lex) != 0 {
 		return fmt.Errorf("parsing error")
 	}
@@ -60,6 +65,16 @@ func ParseGlob(outDir, glob string) error {
 		return err
 	}
 	return ParseFiles(outDir, files...)
+}
+
+// Same as ParseGlob but in async mode.
+func ParseGlobAsync(outDir, glob string) error {
+
+	files, err := filepath.Glob(glob)
+	if err != nil {
+		return err
+	}
+	return ParseFilesAsync(outDir, files...)
 }
 
 // Parse all inFiles and generate a scrapper in the provided directory.
@@ -85,7 +100,37 @@ func ParseFiles(outDir string, inFiles ...string) error {
 			panic(err)
 		}
 		defer in.Close()
-		if err := parse(out, in, base); err != nil {
+		if err := parse(out, in, base, false); err != nil {
+			return err
+		}
+		out.Close()
+		in.Close()
+	}
+	return nil
+}
+
+// Same as ParseFiles but in async mode.
+func ParseFilesAsync(outDir string, inFiles ...string) error {
+
+	outDir = MustAbs(outDir)
+	packName := Normalize(filepath.Base(outDir))
+	os.MkdirAll(outDir, 0755)
+	for _, inFile := range inFiles {
+		fmt.Println("Parsing async", inFile)
+		inFile = MustAbs(inFile)
+		base := Normalize(inFile) + "_async"
+		out, err := os.Create(filepath.Join(outDir, base+".go"))
+		if err != nil {
+			panic(err)
+		}
+		PrintHeader(out, "package "+packName, "// Generated from "+inFile)
+		defer out.Close()
+		in, err := os.Open(inFile)
+		if err != nil {
+			panic(err)
+		}
+		defer in.Close()
+		if err := parse(out, in, base, true); err != nil {
 			return err
 		}
 		out.Close()

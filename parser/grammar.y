@@ -1,6 +1,10 @@
 %{
     package parser
 
+    import (
+        "fmt"
+    )
+
     // each object has a value and a type.
     type value struct {
         v string    // a string in go that produce the value of the object
@@ -50,6 +54,8 @@
             SELECT ALL ANY ONE AS FROM WHERE LIMIT DISTINCT SORT ASC DESC DEFAULT CASE
             // html
             CLICK DOCUMENT PAGE CONTAINS 
+            // others
+            PRINT
             
 %union {            
     value value
@@ -82,7 +88,7 @@
 // les opérateurs definis en dernier ont la précedence la plus élevée.
 %nonassoc LTE LT GTE GT CONTAINS ASSIGN HREF 
 %left EQ NEQ 
-%left PAGE 
+%left PAGE PRINT
 %left TEXT
 %left OR 
 %left AND
@@ -153,6 +159,7 @@ statements
 
 statement 
     : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
+    | PRINT expression { lx.imports["fmt"]=true; lx.addLines(fmt.Sprintf("fmt.Println(%s)",$2.v))}
     | CLICK expression FROM expression{ /* todo - css from page */}
     ;
 

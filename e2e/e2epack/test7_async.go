@@ -5,7 +5,7 @@
 // (c) Xavier Gandillot 2024
 
 package e2epack
-// Generated from C:\Users\xavie\Desktop\goscrapper\e2e\test7.sc
+// Generated from test7.sc
 
 import (
 	"context"

@@ -93,7 +93,7 @@ func ParseFiles(outDir string, inFiles ...string) error {
 		if err != nil {
 			panic(err)
 		}
-		PrintHeader(out, "package "+packName, "// Generated from "+inFile)
+		PrintHeader(out, "package "+packName, "// Generated from "+filepath.Base(inFile))
 		defer out.Close()
 		in, err := os.Open(inFile)
 		if err != nil {
@@ -123,7 +123,7 @@ func ParseFilesAsync(outDir string, inFiles ...string) error {
 		if err != nil {
 			panic(err)
 		}
-		PrintHeader(out, "package "+packName, "// Generated from "+inFile)
+		PrintHeader(out, "package "+packName, "// Generated from "+filepath.Base(inFile))
 		defer out.Close()
 		in, err := os.Open(inFile)
 		if err != nil {
@@ -185,7 +185,7 @@ func PrintHeader(w io.Writer, ss ...string) {
 	fmt.Fprintf(w, "// Date: %s\n", goscrapper.BUILDDATE)
 	fmt.Fprintf(w, "// Built : %s\n", goscrapper.GITHASH)
 	fmt.Fprintf(w, "// %s\n", goscrapper.COPYRIGHT)
-	fmt.Fprintln(w)
+	fmt.Fprintln(w, "")
 
 	for _, s := range ss {
 		fmt.Fprintln(w, s)

@@ -32,7 +32,7 @@ func (m *myLexer) selectAll(opt selopt) {
 
 	// check types
 	if (opt.from.t != "*rod.Page") && (opt.from.t != "*rod.Element") {
-		m.errorf("cannot select all from type %s but expected *rod.Page or *rod.Element.", opt.from.t)
+		m.errorf("cannot select all from type %s , expected *rod.Page or *rod.Element.", opt.from.t)
 	}
 	if opt.css.t != "string" {
 		m.errorf("css selector should be a string, but got a %s", opt.css.t)
@@ -65,4 +65,25 @@ func (m *myLexer) selectAll(opt selopt) {
 		li := fmt.Sprintf("if (%s) {continue;}", w.v)
 		m.addLines(li)
 	}
+}
+
+func (m *myLexer) selectOne(source value, css value, id value) {
+
+	// check types
+	if (source.t != "*rod.Page") && (source.t != "*rod.Element") {
+		m.errorf("cannot select one from type %s , expected *rod.Page or *rod.Element.", source.t)
+	}
+	if css.t != "string" {
+		m.errorf("css selector should be a string, but got a %s", css.t)
+	}
+	if id.t != "IDENTIFIER" {
+		m.errorf("invalid identifier %s for a select one variable", id.v)
+	}
+
+	// generate code
+	m.imports["github.com/xavier268/goscrapper/rt"] = true
+	m.addLines("select{\ncase <- _ctx.Done():")
+	m.checkContext()
+	m.addLines(fmt.Sprintf("default: %s := rt.SelectOne(%s,%s);_=%s\n", id.v, source.v, css.v, id.v))
+
 }

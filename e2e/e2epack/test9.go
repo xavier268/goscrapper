@@ -30,6 +30,12 @@ type Output_test9 struct {
 // p1 = PAGE url
 // p2 = PAGE (url + "/login")
 // SELECT FROM PAGE url ALL css + ","+ css AS r WHERE true  LIMIT 2 + 3
+//     SELECT FROM p1 ONE css AS el1
+//         toto = "hello" + "world"
+//         titi = ( el1 == el1)
+//         SELECT FROM p1 ONE css AS el2
+//             p3 = 23+4
+//             tutu = (el1 == el2)
 // 
 // RETURN url
 func Do_test9(_ctx context.Context,_in Input_test9) (_out []Output_test9, _err error) {
@@ -44,11 +50,27 @@ defer rt.ClosePage(p2)
 _it003:=rt.NewSelectAllIterator(_ctx, rt.GetPage(url),((((css) + (","))) + (css)),((2) + (3))); 
 for r, _ok003 := _it003.Next(); _ok003;r, _ok003 = _it003.Next(){_=r;
 if (true) {continue;}
+select{
+case <- _ctx.Done():
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
+default: el1 := rt.SelectOne(p1,css);_=el1
+
+var toto string= (("hello") + ("world"));_=toto
+var titi bool= (((el1) == (el1)));_=titi
+select{
+case <- _ctx.Done():
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
+default: el2 := rt.SelectOne(p1,css);_=el2
+
+var p3 int= ((23) + (4));_=p3
+var tutu bool= (((el1) == (el2)));_=tutu
 //call to saveOut
 _out[len(_out)-1].url=url
 if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_test9{})
+}
+}
 }
 return _out[:len(_out) -1], _err
 }

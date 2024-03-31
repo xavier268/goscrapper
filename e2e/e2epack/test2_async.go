@@ -50,7 +50,7 @@ var d int= ((((((((a) + (b))) - (a))) * (b))) / (a));_=d
 _out.a2=a2
 _out.c=c
 _out.d=d
-select {case <- _ctx.Done():return _err;case _ch <- _out:}
+select {case <- _ctx.Done():return _ctx.Err();case _ch <- _out:}
 if _err = _ctx.Err() ; _err != nil { return _err}
 // call to incOut
  _out = Output_test2_async{}

@@ -99,7 +99,7 @@ _out.y4=y4
 _out.y5=y5
 _out.y6=y6
 _out.zz=zz
-select {case <- _ctx.Done():return _err;case _ch <- _out:}
+select {case <- _ctx.Done():return _ctx.Err();case _ch <- _out:}
 if _err = _ctx.Err() ; _err != nil { return _err}
 // call to incOut
  _out = Output_test8_async{}

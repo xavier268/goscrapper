@@ -72,7 +72,7 @@ var x12 [][]int= append(append(x11,x11...),x11...);_=x12
 //call to saveOut
 _out.x1=x1
 _out.x2=x2
-select {case <- _ctx.Done():return _err;case _ch <- _out:}
+select {case <- _ctx.Done():return _ctx.Err();case _ch <- _out:}
 if _err = _ctx.Err() ; _err != nil { return _err}
 // call to incOut
  _out = Output_test6_async{}

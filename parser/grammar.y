@@ -175,7 +175,7 @@ loopClause
 
     // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
     | SELECT FROM expression ALL expression asClause selectOptions {opt:= $7; opt.from=$3; opt.css=$5;opt.loopv=$6.v; lx.selectAll(opt)} // do not wait, but compatible with dynamic pages
-    | SELECT FROM expression ONE expression asClause {lx.addLines("{// select TODO" );}// one exactly, and wait for it
+    | SELECT FROM expression ONE expression asClause {lx.selectOne($3,$5,$6);}// one exactly, and wait for it
     // below, FROM should be a page or an rod.Element, identifier will be set to the expression specified for the matched css
     | SELECT FROM expression asClause ANY cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it
     | SELECT FROM expression ANY asClause  cases {lx.addLines("{// select TODO" );} // one exactly, and wait for it - alternative syntax
@@ -185,7 +185,7 @@ asClause // pre-declares the select loop variable, so it is available in the whe
     : AS IDENTIFIER {         
         $$ = $2; 
         if typ,ok := lx.vars[$2.v] ; ok {
-            lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as loop variable", $2.v, typ)
+            lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as SELECT variable", $2.v, typ)
         }
         lx.vars[$2.v] = "*rod.Element";
         }

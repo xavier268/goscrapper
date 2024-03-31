@@ -30,6 +30,12 @@ type Output_test9_async struct {
 // p1 = PAGE url
 // p2 = PAGE (url + "/login")
 // SELECT FROM PAGE url ALL css + ","+ css AS r WHERE true  LIMIT 2 + 3
+//     SELECT FROM p1 ONE css AS el1
+//         toto = "hello" + "world"
+//         titi = ( el1 == el1)
+//         SELECT FROM p1 ONE css AS el2
+//             p3 = 23+4
+//             tutu = (el1 == el2)
 // 
 // RETURN url
 func DoAsync_test9_async(_ctx context.Context,_ch chan<- Output_test9_async,  _in Input_test9_async) (_err error) {
@@ -45,12 +51,28 @@ defer rt.ClosePage(p2)
 _it005:=rt.NewSelectAllIterator(_ctx, rt.GetPage(url),((((css) + (","))) + (css)),((2) + (3))); 
 for r, _ok005 := _it005.Next(); _ok005;r, _ok005 = _it005.Next(){_=r;
 if (true) {continue;}
+select{
+case <- _ctx.Done():
+if _err = _ctx.Err() ; _err != nil { return _err}
+default: el1 := rt.SelectOne(p1,css);_=el1
+
+var toto string= (("hello") + ("world"));_=toto
+var titi bool= (((el1) == (el1)));_=titi
+select{
+case <- _ctx.Done():
+if _err = _ctx.Err() ; _err != nil { return _err}
+default: el2 := rt.SelectOne(p1,css);_=el2
+
+var p3 int= ((23) + (4));_=p3
+var tutu bool= (((el1) == (el2)));_=tutu
 //call to saveOut
 _out.url=url
-select {case <- _ctx.Done():return _err;case _ch <- _out:}
+select {case <- _ctx.Done():return _ctx.Err();case _ch <- _out:}
 if _err = _ctx.Err() ; _err != nil { return _err}
 // call to incOut
  _out = Output_test9_async{}
+}
+}
 }
 return _err
 }

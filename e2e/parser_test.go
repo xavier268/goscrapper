@@ -25,7 +25,7 @@ func TestParserVisual(t *testing.T) {
 		t.Fail()
 	}
 
-	//t.Skip()
+	t.Skip() // uncomment to monitor any changes in compiled files.
 
 	// verify changes in compiled files
 	ff, err := filepath.Glob(filepath.Join("e2epack", "*.go"))

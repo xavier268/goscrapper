@@ -83,7 +83,7 @@ var bf bool= ((5) == ((((2) + (3)))));_=bf
 //call to saveOut
 _out.a=a
 _out.bbb=bbb
-select {case <- _ctx.Done():return _err;case _ch <- _out:}
+select {case <- _ctx.Done():return _ctx.Err();case _ch <- _out:}
 if _err = _ctx.Err() ; _err != nil { return _err}
 // call to incOut
  _out = Output_test1_async{}

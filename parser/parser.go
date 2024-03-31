@@ -873,7 +873,7 @@ yydefault:
 		yyDollar = yyS[yypt-6 : yypt+1]
 //line grammar.y:178
 		{
-			lx.addLines("{// select TODO")
+			lx.selectOne(yyDollar[3].value, yyDollar[5].value, yyDollar[6].value)
 		}
 	case 31:
 		yyDollar = yyS[yypt-6 : yypt+1]
@@ -893,7 +893,7 @@ yydefault:
 		{
 			yyVAL.value = yyDollar[2].value
 			if typ, ok := lx.vars[yyDollar[2].value.v]; ok {
-				lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as loop variable", yyDollar[2].value.v, typ)
+				lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as SELECT variable", yyDollar[2].value.v, typ)
 			}
 			lx.vars[yyDollar[2].value.v] = "*rod.Element"
 		}

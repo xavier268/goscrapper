@@ -205,7 +205,7 @@ func (m *myLexer) saveOut() {
 			li := fmt.Sprintf("//_out.%s=%s", v, v) // relevant lines will be uncommented later.
 			m.addLines(li)
 		}
-		m.addLines("select {case <- _ctx.Done():return _err;case _ch <- _out:}")
+		m.addLines("select {case <- _ctx.Done():return _ctx.Err();case _ch <- _out:}")
 	} else {
 		for _, v := range vv {
 			li := fmt.Sprintf("//_out[len(_out)-1].%s=%s", v, v) // relevant lines will be uncommented later.

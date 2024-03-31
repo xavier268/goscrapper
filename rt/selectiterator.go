@@ -15,6 +15,7 @@ type Iterator[T any] interface {
 // Can provides Elements. A page or an element.
 type Elementer interface {
 	Elements(string) (rod.Elements, error)
+	Element(string) (*rod.Element, error)
 }
 
 // iterator implementation

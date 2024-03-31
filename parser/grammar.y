@@ -18,7 +18,7 @@
         where []value   // list of where conditions, applied on loopv
         limit value
         cases []casopt
-    }   
+    }
 
     // cases for select ANY
     type casopt struct {

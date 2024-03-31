@@ -35,6 +35,9 @@ func (m *myLexer) finalize() {
 
 // write import code
 func (m *myLexer) wImports() {
+	// add default imports
+	m.imports["context"] = true
+
 	// write nothing if no imports were added during parsing.
 	if len(m.imports) == 0 {
 		return
@@ -96,7 +99,7 @@ func (m *myLexer) wCommentedSource() {
 // NB : the _err returned, will be a RUNTIME error, not a parse time error !
 func (m *myLexer) wFuncDeclaration() {
 	fmt.Fprintf(m.w,
-		"func Do_%s(_in Input_%s) (_out []Output_%s, _err error) {\n",
+		"func Do_%s(_ctx context.Context,_in Input_%s) (_out []Output_%s, _err error) {\n",
 		m.name, m.name, m.name)
 
 	// write lateDecl lines, sorted.

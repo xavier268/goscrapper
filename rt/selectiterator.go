@@ -1,6 +1,8 @@
 package rt
 
 import (
+	"context"
+
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/proto"
 )
@@ -23,17 +25,19 @@ type selectAllIteratorP struct {
 	done   map[proto.RuntimeRemoteObjectID]bool // ids of objects we have already returned
 	count  int                                  // number of elements returned
 	limit  int                                  // limit of elements to return
+	ctx    context.Context                      // passed on construction
 }
 
 var _ Iterator[*rod.Element] = &selectAllIteratorP{}
 
-func NewSelectAllIterator[T Elementer](page T, css string, limit int) *selectAllIteratorP {
+func NewSelectAllIterator[T Elementer](ctx context.Context, page T, css string, limit int) *selectAllIteratorP {
 	return &selectAllIteratorP{
 		source: page,
 		css:    css,
 		elms:   make([]*rod.Element, 0, 5),
 		done:   make(map[proto.RuntimeRemoteObjectID]bool, 5),
 		limit:  limit,
+		ctx:    ctx,
 	}
 }
 
@@ -46,9 +50,14 @@ func (it *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
 			return nil, false
 		}
 
-	loop:
-		// try to send an element from waiting list
+	loop: // try to send an element from waiting list
 		for i, el := range it.elms {
+
+			// check context
+			if it.ctx.Err() != nil {
+				return nil, false
+			}
+
 			if it.done[el.Object.ObjectID] {
 				it.elms = it.elms[i+1:] // remove element from waiting list
 				break loop
@@ -60,12 +69,23 @@ func (it *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
 			return el, true
 		}
 
+		// check context
+		if it.ctx.Err() != nil {
+			return nil, false
+		}
+
 		// nothing was sent - can we load more ?
 		more, err := it.source.Elements(it.css)
 		if err != nil {
 			Errorf("error trying to retrieve elements with %s : %v", it.css, err)
 			return nil, false
 		}
+
+		// check context
+		if it.ctx.Err() != nil {
+			return nil, false
+		}
+
 		// add to waiting list
 		for _, el := range more {
 			if !it.done[el.Object.ObjectID] { // only add elts not already sent
@@ -76,6 +96,12 @@ func (it *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
 		if len(it.elms) == 0 {
 			return nil, false
 		}
+
+		// check context
+		if it.ctx.Err() != nil {
+			return nil, false
+		}
+
 	}
 
 }

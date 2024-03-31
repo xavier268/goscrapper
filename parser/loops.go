@@ -53,7 +53,7 @@ func (m *myLexer) selectAll(opt selopt) {
 	if opt.limit.v != "" {
 		lim = opt.limit.v
 	}
-	li1 := fmt.Sprintf("_it%s:=rt.NewSelectAllIterator(%s,%s,%s); ", uid, opt.from.v, opt.css.v, lim)
+	li1 := fmt.Sprintf("_it%s:=rt.NewSelectAllIterator(_ctx, %s,%s,%s); ", uid, opt.from.v, opt.css.v, lim)
 	li2 := fmt.Sprintf("for %s, _ok%s := _it%s.Next(); _ok%s;%s, _ok%s = _it%s.Next(){_=%s;", opt.loopv, uid, uid, uid, opt.loopv, uid, uid, opt.loopv)
 	m.addLines(li1, li2)
 	for _, w := range opt.where {

@@ -199,6 +199,8 @@ func (m *myLexer) saveOut() {
 		li := fmt.Sprintf("//_out[len(_out)-1].%s=%s", v, v) // relevant lines will be uncommented later.
 		m.addLines(li)
 	}
+	// check context cancelled ?
+	m.addLines("if _err := _ctx.Err(); _err != nil { return _out, _err ;}")
 	m.incOut()
 }
 

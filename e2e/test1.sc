@@ -5,6 +5,7 @@
 @ccc [bool]
 
 
+
 // open a page
 p1 = PAGE "http://www.google.fr"
 CLICK "input[name=btnK]" FROM p1

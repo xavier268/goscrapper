@@ -37,6 +37,7 @@ func parse(out io.Writer, in io.Reader, name string, async bool) error {
 		data:      []byte{},
 		pos:       0,
 		w:         out,
+		ew:        os.Stdout,
 		lines:     []string{},
 		inparams:  []string{},
 		outparams: []string{},

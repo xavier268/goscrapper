@@ -7,4 +7,5 @@ package parser
 func init() {
 	// set debugging
 	yyDebug = 1
+	yyErrorVerbose = true
 }

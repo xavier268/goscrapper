@@ -13,7 +13,8 @@ type myLexer struct {
 	data []byte // entire data to be lexed
 	pos  int    // next position to process
 	// code building support
-	w         io.Writer         // where are error messages written to ?
+	w         io.Writer         // where shall data be written to ?
+	ew        io.Writer         // where shall error be written to ?
 	lines     []string          // list of lines in the code, pending writing.
 	inparams  []string          // contains the names of the input parameters.
 	outparams []string          // contains the the name of the output parameters. Type should not change between scopes !
@@ -30,12 +31,15 @@ func (m *myLexer) addLines(lines ...string) {
 
 // Error implements yyLexer.
 func (m *myLexer) Error(e string) {
-	fmt.Fprintf(m.w, "\n%s ********* Error in %s :***************%s\n\n", ColRED, m.name, RESET)
+	// write to std error writer lx.ew
+	fmt.Fprintf(m.ew, "\n%s ********* Error in %s :***************%s\n\n", ColRED, m.name, RESET)
 	bef := max(0, m.pos-80)
 	after := min(len(m.data), m.pos+80)
-	fmt.Fprint(m.w, string(m.data[bef:m.pos]))
-	fmt.Fprintf(m.w, " %s <<<<<<<<<<<<<<<<< %s %s\n", ColRED, e, RESET)
-	fmt.Fprintln(m.w, string(m.data[m.pos:after]))
+	fmt.Fprint(m.ew, ColYELLOW, string(m.data[bef:m.pos]))
+	fmt.Fprintf(m.ew, " %s <-- %s %s\n", ColRED, e, RESET)
+	fmt.Fprintln(m.ew, ColYELLOW, string(m.data[m.pos:after]), RESET)
+	// write to data writer e.w
+	fmt.Fprintf(m.w, "\npanic(\"Parsing error in %s : %s\")\n\n", m.name, e)
 }
 
 // utility to format error

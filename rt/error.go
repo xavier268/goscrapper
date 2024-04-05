@@ -8,4 +8,5 @@ var Errorf = func(format string, args ...interface{}) {
 	fmt.Println("**************")
 	fmt.Println("Runtime Error:")
 	fmt.Printf(format, args...)
+	fmt.Println("\n**************")
 }

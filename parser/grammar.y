@@ -182,18 +182,32 @@ loopClause
     // below, FROM should be a page or an rod.Element, identifier will be set to a rod.Element
     | SELECT FROM expression ALL expression asClause selectOptions {opt:= $7; opt.from=$3; opt.css=$5;opt.loopv=$6.v; lx.selectAll(opt)} // do not wait, but compatible with dynamic pages
     | SELECT FROM expression ONE expression asClause {lx.selectOne($3,$5,$6);}// one exactly, and wait for it
+    | SELECT FROM expression ANY asClause cases { lx.selectAny($3,$5,$6)} // identifier is set to the return expression corresponding to the matched selector
+ ;
+
+cases // at least one case is required
+    : case{$$ = []casopt{$1}}
+    | cases case{$$ = append($1, $2)}
+    ;
+
+case 
+    // when one of the css expr is found, the corresponding expression is returned in the loop variable.
+    // Expression do not have access to the matching css.
+    // If no default is specified, loop forever until a match happens.
+    // NB : Notice the SEMICOLON after each statement group !
+    : CASE expression COLON expression SEMICOLON {$$ = casopt{e1: $2, e2:$4 }} // $2 is a css, the loop variable is set to the $4 expression.
+    | DEFAULT COLON expression SEMICOLON {$$ = casopt{ def: true, e2: $3 }} // set loop variable to $2
     ;
 
 asClause // pre-declares the select loop variable, so it is available in the where clause or case clause
     : AS IDENTIFIER {         
         $$ = $2; 
         if typ,ok := lx.vars[$2.v] ; ok {
-            lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as SELECT variable", $2.v, typ)
+            lx.errorf("variable %s was already declared (type : %s), cannot be redeclared as SELECT loop variable", $2.v, typ)
         }
         lx.vars[$2.v] = "*rod.Element";
         }
     ;
-
 
 selectOptions
     : {$$ = selopt{}}
@@ -253,8 +267,7 @@ expressionAtom // never empty
     | LBRACKET expressionList RBRACKET { $$ = lx.vMakeArray($2)}
     | LBRACE keyExpressionList RBRACE {$$ = lx.vMakeObject($2)} 
 
-    | SELECT FROM expression ANY asClause cases { /* todo*/}
-
+   
     | IDENTIFIER { $$ = lx.vGetVar($1.v) }
     | STRING { $$ =value{v:$1.v, t:"string"} }
     | NUMBER { $$ =value{v:$1.v, t:"int"} }
@@ -262,17 +275,7 @@ expressionAtom // never empty
     | NOW { $$ = value{v:"time.Now()", t: "time.Time"} ; lx.imports["time"] = true}
     ;
 
-cases // at least one case is required
-    : case{$$ = []casopt{$1}}
-    | cases case{$$ = append($1, $2)}
-    ;
 
-case // when one of the css expr is found, loop variable is set to the FIRST matched rodElement, 
-     // and the statemenst are executed. Staements have access to the loop variable.
-     // NB : Notice the SEMICOLON after each statement group !
-    : CASE expression COLON expression SEMICOLON {$$ = casopt{e1: $2, e2:$4 }} // $2 is a css, the loop variable is set to the $4 expression.
-    | DEFAULT COLON expression SEMICOLON {$$ = casopt{ def: true, e2: $3 }} // set loop variable to $2
-    ;
 
 
 expressionList  

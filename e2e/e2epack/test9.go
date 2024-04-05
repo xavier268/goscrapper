@@ -36,6 +36,10 @@ type Output_test9 struct {
 //         SELECT FROM p1 ONE css AS el2
 //             p3 = 23+4
 //             tutu = (el1 == el2)
+//             SELECT FROM p1 ANY AS el3
+//                 CASE "html" : "an html value";
+//                 CASE "div" : "a div was found";
+//                 DEFAULT : "none of the above";
 // 
 // RETURN url
 func Do_test9(_ctx context.Context,_in Input_test9) (_out []Output_test9, _err error) {
@@ -43,13 +47,13 @@ var url string = _in.url ; _ = url
 var css string = _in.css ; _ = css
 // call to incOut
  _out = append(_out, Output_test9{})
-var p1 *rod.Page= rt.GetPage(url);_=p1
+var p1 *rod.Page= rt.GetPage(_ctx,url);_=p1
 defer rt.ClosePage(p1)
-var p2 *rod.Page= rt.GetPage((((url) + ("/login"))));_=p2
+var p2 *rod.Page= rt.GetPage(_ctx,(((url) + ("/login"))));_=p2
 defer rt.ClosePage(p2)
-_it004:=rt.NewSelectAllIterator(_ctx, rt.GetPage(url),((((css) + (","))) + (css)),((2) + (3))); 
-for r, _ok004 := _it004.Next(); _ok004;r, _ok004 = _it004.Next(){_=r;
-if (true) {continue;}
+_it_001:=rt.NewSelectAllIterator(_ctx, rt.GetPage(_ctx,url),((((css) + (","))) + (css)),((2) + (3))); 
+for r, _ok_001 := _it_001.Next(); _ok_001;r, _ok_001 = _it_001.Next(){_=r;
+if !(true) {continue;}// where clause checks
 select{
 case <- _ctx.Done():
 if _err = _ctx.Err() ; _err != nil { return _out,_err}
@@ -64,11 +68,24 @@ default: el2 := rt.SelectOne(p1,css);_=el2
 
 var p3 int= ((23) + (4));_=p3
 var tutu bool= (((el1) == (el2)));_=tutu
+{
+var el3 string;_=el3
+
+for {
+if _err = _ctx.Err() ; _err != nil { return _out,_err}
+if( rt.Exists(p1,"html")){ el3="an html value";_=el3;break; }
+
+if( rt.Exists(p1,"div")){ el3="a div was found";_=el3;break; }
+
+ el3="none of the above";_=el3;break
+
+}//for
 //call to saveOut
 _out[len(_out)-1].url=url
 if _err = _ctx.Err() ; _err != nil { return _out,_err}
 // call to incOut
  _out = append(_out, Output_test9{})
+}
 }
 }
 }

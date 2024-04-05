@@ -54,7 +54,7 @@ var b int = _in.b ; _ = b
 // call to incOut
  _out = append(_out, Output_call1{})
 var url string= "https://www.wikipedia.fr";_=url
-var p *rod.Page= rt.GetPage(url);_=p
+var p *rod.Page= rt.GetPage(_ctx,url);_=p
 defer rt.ClosePage(p)
 select{
 case <- _ctx.Done():
@@ -63,8 +63,8 @@ default: found := rt.SelectOne(p,"div");_=found
 
 fmt.Println((("Page was correctly loaded for ") + (url)))
 var c int= ((a) + (b));_=c
-_it002:=rt.NewSelectAllIterator(_ctx, p,"div",5); 
-for divel, _ok002 := _it002.Next(); _ok002;divel, _ok002 = _it002.Next(){_=divel;
+_it_001:=rt.NewSelectAllIterator(_ctx, p,"div",5); 
+for divel, _ok_001 := _it_001.Next(); _ok_001;divel, _ok_001 = _it_001.Next(){_=divel;
 fmt.Println("captured :")
 fmt.Println(divel)
 var t string= rt.GetText(divel);_=t

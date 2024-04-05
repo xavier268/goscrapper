@@ -64,7 +64,7 @@ var bbb bool = _in.bbb ; _ = bbb
 var ccc []bool = _in.ccc ; _ = ccc
 // call to incOut
  _out = Output_test1_async{}
-var p1 *rod.Page= rt.GetPage("http://www.google.fr");_=p1
+var p1 *rod.Page= rt.GetPage(_ctx,"http://www.google.fr");_=p1
 defer rt.ClosePage(p1)
 var a int= 23;_=a
 var b int= ((a) + (50));_=b

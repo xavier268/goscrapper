@@ -46,12 +46,12 @@ var b []string = _in.b ; _ = b
 // call to incOut
  _out = Output_test4_async{}
 var c string= ((a) + (a));_=c
-var page *rod.Page= rt.GetPage("google.com");_=page
+var page *rod.Page= rt.GetPage(_ctx,"google.com");_=page
 defer rt.ClosePage(page)
-_it006:=rt.NewSelectAllIterator(_ctx, page,a,((2) + (66))); 
-for z, _ok006 := _it006.Next(); _ok006;z, _ok006 = _it006.Next(){_=z;
-if (((((2) + (4))) == (1))) {continue;}
-if (((z) == (z))) {continue;}
+_it_001:=rt.NewSelectAllIterator(_ctx, page,a,((2) + (66))); 
+for z, _ok_001 := _it_001.Next(); _ok_001;z, _ok_001 = _it_001.Next(){_=z;
+if !(((((2) + (4))) == (1))) {continue;}// where clause checks
+if !(((z) == (z))) {continue;}// where clause checks
 var d string= ((a) + (a));_=d
 //call to saveOut
 _out.a=a

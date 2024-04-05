@@ -129,7 +129,7 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 		if v.t == "string" {
 			m.imports["github.com/xavier268/goscrapper/rt"] = true
 			m.imports["github.com/go-rod/rod"] = true
-			return value{t: "*rod.Page", v: fmt.Sprintf("rt.GetPage(%s)", v.v)}
+			return value{t: "*rod.Page", v: fmt.Sprintf("rt.GetPage(_ctx,%s)", v.v)}
 		}
 	case TEXT:
 		if v.t == "*rod.Element" {

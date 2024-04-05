@@ -1,6 +1,7 @@
 package rt
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -104,12 +105,13 @@ func GetBrowser() *rod.Browser {
 // return a new page. Use empty string for empty page.
 // browser is started if not already available.
 // todo - think about implementing PagePool ?
-func GetPage(url string) *rod.Page {
+func GetPage(ctx context.Context, url string) *rod.Page {
 	p, err := GetBrowser().Page(proto.TargetCreateTarget{URL: url})
 	if err != nil {
 		Errorf("Error getting page %s : %v", url, err)
 		return nil
 	}
+	p = p.Context(ctx)
 	return p
 }
 

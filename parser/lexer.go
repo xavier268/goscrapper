@@ -22,6 +22,12 @@ type myLexer struct {
 	imports   map[string]bool   // set of imports required, written at the end during finalize
 	lateDecl  map[string]bool   // set of local variables that will be declared once before function starts. Ex : _page.
 	async     bool              // are we targeting an async version for the output ?
+	uidroot   int               // used to generate unique id
+}
+
+func (m *myLexer) uid() string {
+	m.uidroot++
+	return fmt.Sprintf("_%03x", m.uidroot)
 }
 
 // add lines to the code to be generated.

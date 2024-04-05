@@ -9,5 +9,9 @@ SELECT FROM PAGE url ALL css + ","+ css AS r WHERE true  LIMIT 2 + 3
         SELECT FROM p1 ONE css AS el2
             p3 = 23+4
             tutu = (el1 == el2)
+            SELECT FROM p1 ANY AS el3
+                CASE "html" : "an html value";
+                CASE "div" : "a div was found";
+                DEFAULT : "none of the above";
 
 RETURN url

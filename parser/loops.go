@@ -48,7 +48,7 @@ func (m *myLexer) selectAll(opt selopt) {
 
 	// generate code
 	m.imports["github.com/xavier268/goscrapper/rt"] = true
-	uid := UID()
+	uid := m.uid()
 	lim := "0"
 	if opt.limit.v != "" {
 		lim = opt.limit.v
@@ -62,7 +62,7 @@ func (m *myLexer) selectAll(opt selopt) {
 			m.errorf("cannot accept where clause that is not a bool value but a %s", w.t)
 			continue
 		}
-		li := fmt.Sprintf("if (%s) {continue;}", w.v)
+		li := fmt.Sprintf("if !(%s) {continue;}// where clause checks", w.v)
 		m.addLines(li)
 	}
 }
@@ -86,4 +86,60 @@ func (m *myLexer) selectOne(source value, css value, id value) {
 	m.checkContext()
 	m.addLines(fmt.Sprintf("default: %s := rt.SelectOne(%s,%s);_=%s\n", id.v, source.v, css.v, id.v))
 
+}
+
+func (m *myLexer) selectAny(vpage value, vid value, vcases []casopt) { // page_or_element, loopvarId, case list
+
+	if vpage.t != "*rod.Page" && vpage.t != "*rod.Element" {
+		m.errorf("cannot select any from type %s, expected *rod.Page.", vpage.t)
+		return
+	}
+	if vid.t != "IDENTIFIER" {
+		m.errorf("invalid identifier %s for a select any variable", vid.v)
+		return
+	}
+	if _, ok := lx.vars[vid.v]; !ok {
+		m.errorf("internal error : select any variable should have been defined already")
+		return
+	}
+	if len(vcases) == 0 {
+		m.errorf("no cases to select from")
+		return
+	}
+	extyp := "" // expression type should be identical for all expressions.
+	for _, c := range vcases {
+		if !c.def && c.e1.t != "string" {
+			m.errorf("cannot accept a case selector that is not a string, but found a %s", c.e1.t)
+			return
+		}
+		if extyp == "" {
+			extyp = c.e2.t
+		} else {
+			if extyp != c.e2.t {
+				m.errorf("cannot accept a case result expression  that is not of the same type as the previous case result expression, but found a %s and %s", extyp, c.e2.t)
+				return
+			}
+		}
+	}
+	if extyp == "" {
+		m.errorf("no cases expression result specified")
+		return
+	}
+	lx.vars[vid.v] = extyp // set type of loop variable.
+	vid.t = extyp
+
+	m.imports["github.com/xavier268/goscrapper/rt"] = true
+	// declare loop variable
+	m.addLines("{") // create a "pseudo-loop" block
+	m.addLines(fmt.Sprintf("var %s %s;_=%s\n", vid.v, vid.t, vid.v))
+	m.addLines("for {")
+	m.checkContext()
+	for _, c := range vcases {
+		if c.def {
+			m.addLines(fmt.Sprintf(" %s=%s;_=%s;break\n", vid.v, c.e2.v, vid.v))
+		} else {
+			m.addLines(fmt.Sprintf("if( rt.Exists(%s,%s)){ %s=%s;_=%s;break; }\n", vpage.v, c.e1.v, vid.v, c.e2.v, vid.v))
+		}
+	}
+	m.addLines("}//for")
 }

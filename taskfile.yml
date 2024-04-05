@@ -5,7 +5,7 @@ env:
     sh: go env GOOS
   VERSION: # program version
     ignore-error : true
-    sh: echo $( go run ./cli -version) ; if [ $? -ne 0 ]; then echo "0.0.0"; fi  # if cli not installed, return 0.0.0
+    sh: echo $( go run ./gsc -version) ; if [ $? -ne 0 ]; then echo "0.0.0"; fi 
   EXE: # executable extension (.exe or nothing)
     sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo ".exe"; else echo ""; fi'
   BROWSER: # browser to open  page
@@ -26,7 +26,7 @@ tasks:
     cmds:
       - task --version
       - go version
-      - bin/cli-{{.VERSION}}{{.EXE}} -info
+      - bin/gsc-{{.VERSION}}{{.EXE}} -info
 
   godoc: 
     desc: launch godoc viewer and open browser page on windows
@@ -43,7 +43,7 @@ tasks:
       - ./**/*go
     cmds:
       - go mod tidy
-      - go build -o bin/cli-{{.VERSION}}{{.EXE}} -ldflags "-X 'github.com/xavier268/goscrapper.BUILDDATE={{.DATE}}' -X 'github.com/xavier268/goscrapper.GITHASH=$(git rev-parse HEAD)'" ./cli
+      - go build -o bin/gsc-{{.VERSION}}{{.EXE}} -ldflags "-X 'github.com/xavier268/goscrapper.BUILDDATE={{.DATE}}' -X 'github.com/xavier268/goscrapper.GITHASH=$(git rev-parse HEAD)'" ./gsc
 
   test:
     desc: run all generator tests
@@ -84,4 +84,5 @@ tasks:
       - ./parser/y.output
       - ./parser/parser.go
     cmds:
+      - go install golang.org/x/tools/cmd/goyacc@latest
       - go generate ./...

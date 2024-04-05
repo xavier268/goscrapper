@@ -31,13 +31,31 @@ func (m *myLexer) addLines(lines ...string) {
 
 // Error implements yyLexer.
 func (m *myLexer) Error(e string) {
+	windows := 100
 	// write to std error writer lx.ew
 	fmt.Fprintf(m.ew, "\n%s ********* Error in %s :***************%s\n\n", ColRED, m.name, RESET)
-	bef := max(0, m.pos-80)
-	after := min(len(m.data), m.pos+80)
-	fmt.Fprint(m.ew, ColYELLOW, string(m.data[bef:m.pos]))
-	fmt.Fprintf(m.ew, " %s <-- %s %s\n", ColRED, e, RESET)
-	fmt.Fprintln(m.ew, ColYELLOW, string(m.data[m.pos:after]), RESET)
+	bef := max(0, m.pos-windows)
+	bfs := strings.Split(string(m.data[bef:m.pos]), "\n")
+	if len(bfs) > 1 {
+		bfs = bfs[1:] // remove potentially incomplete first line
+	}
+
+	after := min(len(m.data), m.pos+windows)
+	afs := strings.Split(string(m.data[m.pos:after]), "\n")
+
+	// print until the line containing error
+	last := 0
+	for _, li := range bfs {
+		fmt.Fprintf(m.ew, "\n%s%s", ColYELLOW, li)
+		last = len(li)
+	}
+	fmt.Fprintf(m.ew, "%s%s\n", ColYELLOW, afs[0])
+	// last points to error position
+	last = max(0, last-2)
+	fmt.Fprintf(m.ew, " %s%s^ %s %s\n", ColRED, strings.Repeat(" ", last), e, RESET)
+	// print rest of context
+	fmt.Fprintf(m.ew, "%s%s\n", ColYELLOW, strings.Join(afs[1:], "\n"))
+	fmt.Fprintln(m.ew, RESET)
 	// write to data writer e.w
 	fmt.Fprintf(m.w, "\npanic(\"Parsing error in %s : %s\")\n\n", m.name, e)
 }

@@ -1,7 +1,7 @@
 github.com/go-rod/rod v0.114.8 h1:2Mr2kO17blDAwWU4+eOBPgRf0w+6bfUxsPc7Nzd9VXk=
 github.com/go-rod/rod v0.114.8/go.mod h1:aiedSEFg5DwG/fnNbUOTPMTTWX3MRj6vIs/a684Mthw=
-github.com/xavier268/mytest v1.0.0 h1:6nug/CyLVnm45STfk1m+UWv9F9GSxoUk0D0Pcdw4VN8=
-github.com/xavier268/mytest v1.0.0/go.mod h1:+nze05d4iRrXA+gJ+K3zKyc0OOqJnvbr0OOOqIJmFAc=
+github.com/xavier268/mytest v1.0.1 h1:ueZ/B6EhUF9gBZb6XJH9WVU1ZCw3lbz4P5bhVPobpT0=
+github.com/xavier268/mytest v1.0.1/go.mod h1:+nze05d4iRrXA+gJ+K3zKyc0OOqJnvbr0OOOqIJmFAc=
 github.com/ysmood/fetchup v0.2.3 h1:ulX+SonA0Vma5zUFXtv52Kzip/xe7aj4vqT5AJwQ+ZQ=
 github.com/ysmood/fetchup v0.2.3/go.mod h1:xhibcRKziSvol0H1/pj33dnKrYyI2ebIvz5cOOkYGns=
 github.com/ysmood/goob v0.4.0 h1:HsxXhyLBeGzWXnqVKtmT9qM7EuVs/XOgkX7T6r1o1AQ=

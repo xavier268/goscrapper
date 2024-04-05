@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/go-rod/rod v0.114.8
-	github.com/xavier268/mytest v1.0.0
+	github.com/xavier268/mytest v1.0.1
 )
 
 require (

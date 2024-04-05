@@ -47,7 +47,7 @@ func (m *myLexer) wFinalReturn() {
 // write import code
 func (m *myLexer) wImports() {
 	// add default imports
-	m.imports["context"] = true
+	m.addImport("context")
 
 	// write nothing if no imports were added during parsing.
 	if len(m.imports) == 0 {

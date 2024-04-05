@@ -153,7 +153,7 @@ func (m *myLexer) vSetVar(name string, v value) {
 
 	// if type requires closing (eg : page), defer closing
 	if v.t == "*rod.Page" {
-		m.imports["github.com/xavier268/goscrapper/rt"] = true
+		m.addImport("rt")
 		li := fmt.Sprintf("defer rt.ClosePage(%s)", name)
 		m.addLines(li)
 	}

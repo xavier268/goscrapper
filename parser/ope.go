@@ -60,7 +60,7 @@ func (m *myLexer) vOpe2(ope int, left value, right value) value {
 
 	case CONTAINS:
 		if left.t == right.t && (left.t == "string") {
-			m.imports["strings"] = true
+			m.addImport("strings")
 			return value{t: "bool", v: fmt.Sprintf("(strings.Contains(%s,%s))", left.v, right.v)}
 		}
 	case EQ:
@@ -87,6 +87,11 @@ func (m *myLexer) vOpe2(ope int, left value, right value) value {
 	case LTE:
 		if left.t == right.t && (left.t == "int") { // only compare ints
 			return value{t: "bool", v: fmt.Sprintf("((%s) <= (%s))", left.v, right.v)}
+		}
+	case ATTRIBUTE:
+		m.addImport("rt")
+		if left.t == "*rod.Element" && (right.t == "string") {
+			return value{t: "string", v: fmt.Sprintf("(rt.Attribute(%s,%s))", left.v, right.v)}
 		}
 
 	default:
@@ -117,24 +122,23 @@ func (m *myLexer) vOpe1(ope int, v value) value {
 		}
 	case LOWER:
 		if v.t == "string" {
-			m.imports["strings"] = true
+			m.addImport("strings")
 			return value{t: "string", v: fmt.Sprintf("strings.ToLower(%s)", v.v)}
 		}
 	case UPPER:
 		if v.t == "string" {
-			m.imports["strings"] = true
+			m.addImport("strings")
 			return value{t: "string", v: fmt.Sprintf("strings.ToUpper(%s)", v.v)}
 		}
 	case PAGE:
 		if v.t == "string" {
-			m.imports["github.com/xavier268/goscrapper/rt"] = true
-			m.imports["github.com/go-rod/rod"] = true
+			m.addImport("rt")
+			m.addImport("rod")
 			return value{t: "*rod.Page", v: fmt.Sprintf("rt.GetPage(_ctx,%s)", v.v)}
 		}
 	case TEXT:
 		if v.t == "*rod.Element" {
-			m.imports["github.com/xavier268/goscrapper/rt"] = true
-			m.imports["github.com/go-rod/rod"] = true
+			m.addImport("rt", "rod")
 			return value{t: "string", v: fmt.Sprintf("rt.GetText(%s)", v.v)}
 		}
 

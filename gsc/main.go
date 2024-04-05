@@ -32,7 +32,7 @@ func main() {
 	// redefine Usage function to print default values.
 	flag.Usage = func() {
 		fmt.Printf("Usage of %s\n%s [ option flags ... ] inputFile1 inputFile2 inputFile3 ...\n", os.Args[0], filepath.Base(os.Args[0]))
-		fmt.Println("NB : file names can be glob patterns.")
+		fmt.Println("Version", goscrapper.VERSION, " - ", goscrapper.COPYRIGHT)
 		flag.PrintDefaults()
 	}
 

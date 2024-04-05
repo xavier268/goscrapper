@@ -47,7 +47,7 @@ func (m *myLexer) selectAll(opt selopt) {
 	}
 
 	// generate code
-	m.imports["github.com/xavier268/goscrapper/rt"] = true
+	m.addImport("rt")
 	uid := m.uid()
 	lim := "0"
 	if opt.limit.v != "" {
@@ -81,7 +81,7 @@ func (m *myLexer) selectOne(source value, css value, id value) {
 	}
 
 	// generate code
-	m.imports["github.com/xavier268/goscrapper/rt"] = true
+	m.addImport("rt")
 	m.addLines("select{\ncase <- _ctx.Done():")
 	m.checkContext()
 	m.addLines(fmt.Sprintf("default: %s := rt.SelectOne(%s,%s);_=%s\n", id.v, source.v, css.v, id.v))
@@ -128,7 +128,7 @@ func (m *myLexer) selectAny(vpage value, vid value, vcases []casopt) { // page_o
 	lx.vars[vid.v] = extyp // set type of loop variable.
 	vid.t = extyp
 
-	m.imports["github.com/xavier268/goscrapper/rt"] = true
+	m.addImport("rt")
 	// declare loop variable
 	m.addLines("{") // create a "pseudo-loop" block
 	m.addLines(fmt.Sprintf("var %s %s;_=%s\n", vid.v, vid.t, vid.v))

@@ -41,7 +41,7 @@
             AND OR NOT
             DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
             LOWER UPPER FORMAT
-            NOW TEXT HREF
+            NOW TEXT HREF ATTRIBUTE
 
             // Keywords
             INTTYPE BOOLTYPE STRINGTYPE BINTYPE // native types
@@ -70,7 +70,7 @@
 %type <value> expression expressionUnary expressionAtom
 %type <value> ope2 ope1
 %type <value> typeDefinition INTTYPE BOOLTYPE BINTYPE
-%type <value> IDENTIFIER  NUMBER STRING BOOL NOW
+%type <value> IDENTIFIER  NUMBER STRING BOOL NOW 
 
 %type <list> returnList 
 
@@ -88,7 +88,7 @@
 // les opérateurs definis en dernier ont la précedence la plus élevée.
 %nonassoc LTE LT GTE GT CONTAINS ASSIGN HREF 
 %left EQ NEQ 
-%left PAGE PRINT
+%left PAGE PRINT ATTRIBUTE
 %left TEXT
 %left OR 
 %left AND
@@ -159,7 +159,7 @@ statements
 
 statement 
     : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
-    | PRINT expression { lx.imports["fmt"]=true; lx.addLines(fmt.Sprintf("fmt.Println(%s)",$2.v))}
+    | PRINT expression { lx.addImport("fmt"); lx.addLines(fmt.Sprintf("fmt.Println(%s)",$2.v))}
     | CLICK expression FROM expression{ /* todo - css from page */}
     ;
 
@@ -237,6 +237,7 @@ ope2 // binary operators
     | OR{ $$ = $1 }
     | NOT{ $$ = $1 }
     | CONTAINS{ $$ = $1 }
+    | ATTRIBUTE { $$ = $1 }
     ;
 
 ope1 // unary operators
@@ -272,11 +273,8 @@ expressionAtom // never empty
     | STRING { $$ =value{v:$1.v, t:"string"} }
     | NUMBER { $$ =value{v:$1.v, t:"int"} }
     | BOOL { $$ =value{v:$1.v, t:"bool"} }
-    | NOW { $$ = value{v:"time.Now()", t: "time.Time"} ; lx.imports["time"] = true}
+    | NOW { $$ = value{v:"time.Now()", t: "time.Time"} ; lx.addImport("time")}
     ;
-
-
-
 
 expressionList  
     : expression { $$ = []value{$1}}

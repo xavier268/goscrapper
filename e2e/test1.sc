@@ -8,7 +8,8 @@
 
 // open a page
 p1 = PAGE "http://www.google.fr"
-CLICK "input[name=btnK]" FROM p1
+INPUT "test" IN "input" FROM p1
+CLICK "button" FROM p1
 a = 23 
 b = a + 50
 c = 70 + a

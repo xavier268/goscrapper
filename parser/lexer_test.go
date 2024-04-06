@@ -30,6 +30,7 @@ func TestLexer(t *testing.T) {
 	// a comment"
 	PAGE @ PLUS RETURN
 	int bool bin string
+	LEFT RIGHT MIDDLE INPUT CLICK IN FROM
 	`
 
 	buff := new(strings.Builder)

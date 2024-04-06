@@ -25,6 +25,7 @@ type myLexer struct {
 	uidroot   int               // used to generate unique id
 }
 
+// unique id
 func (m *myLexer) uid() string {
 	m.uidroot++
 	return fmt.Sprintf("_%03x", m.uidroot)
@@ -161,14 +162,23 @@ startLoop:
 // try all keywords, returning their code if found.
 func (m *myLexer) tryAllKeywords(lval *yySymType) error {
 
-	for i, k := range yyToknames {
-		// fmt.Printf("Trying %d %q\n", i, k)
-		if m.try(k) { // Keywords are always upperCase
-			// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
-			lval.value.t = k
-			lval.value.c = i + yyPrivate - 1
-			lval.value.v = k
-			return nil
+	// special care taken to ensure INPUT is never recognized as IN
+	size := 0
+	for _, t := range yyToknames {
+		size = max(size, len(t))
+	}
+
+	for s := size; s > 0; s-- {
+		// test by decreasing token length
+		for i, k := range yyToknames {
+			// only look at s-sized token
+			if len(k) == s && m.try(k) { // Keywords are always upperCase
+				// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
+				lval.value.t = k
+				lval.value.c = i + yyPrivate - 1
+				lval.value.v = k
+				return nil
+			}
 		}
 	}
 

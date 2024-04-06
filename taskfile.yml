@@ -15,6 +15,11 @@ env:
 
 tasks:
 
+  update-task:
+    desc: update task to latest version
+    cmds:
+      - go install github.com/go-task/task/v3/cmd/task@latest
+
   default:
     desc: default task will display task menu
     cmds:
@@ -41,6 +46,8 @@ tasks:
     deps: [generate]
     sources: # what triggers rebuild
       - ./**/*go
+    generates: # what triggers rebuild
+      - bin/gsc-{{.VERSION}}{{.EXE}}
     cmds:
       - go mod tidy
       - go build -o bin/gsc-{{.VERSION}}{{.EXE}} -ldflags "-X 'github.com/xavier268/goscrapper.BUILDDATE={{.DATE}}' -X 'github.com/xavier268/goscrapper.GITHASH=$(git rev-parse HEAD)'" ./gsc

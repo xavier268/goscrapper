@@ -17,41 +17,49 @@ Reference : lexer_test
 	// a comment"
 	PAGE @ PLUS RETURN
 	int bool bin string
+	LEFT RIGHT MIDDLE INPUT CLICK IN FROM
 	
 
-IDENTIFIER   parser.value{v:"un", t:"IDENTIFIER", c:57402}
-IDENTIFIER   parser.value{v:"deux22", t:"IDENTIFIER", c:57402}
+IDENTIFIER   parser.value{v:"un", t:"IDENTIFIER", c:57405}
+IDENTIFIER   parser.value{v:"deux22", t:"IDENTIFIER", c:57405}
 LT   parser.value{v:"<", t:"LT", c:57354}
 LTE   parser.value{v:"<=", t:"LTE", c:57352}
 DOTDOT   parser.value{v:"..", t:"DOTDOT", c:57371}
 DOT   parser.value{v:".", t:"DOT", c:57360}
-BOOL   parser.value{v:"true", t:"BOOL", c:57400}
-BOOL   parser.value{v:"false", t:"BOOL", c:57400}
-IDENTIFIER   parser.value{v:"totointboolstring", t:"IDENTIFIER", c:57402}
-BOOL   parser.value{v:"true", t:"BOOL", c:57400}
-BOOL   parser.value{v:"false", t:"BOOL", c:57400}
-IDENTIFIER   parser.value{v:"toto", t:"IDENTIFIER", c:57402}
-INTTYPE   parser.value{v:"int", t:"INTTYPE", c:57383}
-BOOLTYPE   parser.value{v:"bool", t:"BOOLTYPE", c:57384}
-STRINGTYPE   parser.value{v:"string", t:"STRINGTYPE", c:57385}
-NUMBER   parser.value{v:"1", t:"int", c:57405}
-NUMBER   parser.value{v:"2", t:"int", c:57405}
-IDENTIFIER   parser.value{v:"cinq", t:"IDENTIFIER", c:57402}
-NUMBER   parser.value{v:"0555", t:"int", c:57405}
+BOOL   parser.value{v:"true", t:"BOOL", c:57403}
+BOOL   parser.value{v:"false", t:"BOOL", c:57403}
+IDENTIFIER   parser.value{v:"totointboolstring", t:"IDENTIFIER", c:57405}
+BOOL   parser.value{v:"true", t:"BOOL", c:57403}
+BOOL   parser.value{v:"false", t:"BOOL", c:57403}
+IDENTIFIER   parser.value{v:"toto", t:"IDENTIFIER", c:57405}
+INTTYPE   parser.value{v:"int", t:"INTTYPE", c:57386}
+BOOLTYPE   parser.value{v:"bool", t:"BOOLTYPE", c:57387}
+STRINGTYPE   parser.value{v:"string", t:"STRINGTYPE", c:57388}
+NUMBER   parser.value{v:"1", t:"int", c:57408}
+NUMBER   parser.value{v:"2", t:"int", c:57408}
+IDENTIFIER   parser.value{v:"cinq", t:"IDENTIFIER", c:57405}
+NUMBER   parser.value{v:"0555", t:"int", c:57408}
 DOTDOT   parser.value{v:"..", t:"DOTDOT", c:57371}
 DOT   parser.value{v:".", t:"DOT", c:57360}
-STRING   parser.value{v:"\"a dq string\\n\\taccross the line \"", t:"string", c:57404}
-STRING   parser.value{v:"\"a sq string\"", t:"string", c:57404}
-STRING   parser.value{v:"\"dq with escaped \\\"\\\" \"", t:"string", c:57404}
-STRING   parser.value{v:"\"sq with escape ' \"", t:"string", c:57404}
-STRING   parser.value{v:"\"string containing\\n\\t// a comment\"", t:"string", c:57404}
-PAGE   parser.value{v:"PAGE", t:"PAGE", c:57423}
-AT   parser.value{v:"@", t:"AT", c:57401}
+STRING   parser.value{v:"\"a dq string\\n\\taccross the line \"", t:"string", c:57407}
+STRING   parser.value{v:"\"a sq string\"", t:"string", c:57407}
+STRING   parser.value{v:"\"dq with escaped \\\"\\\" \"", t:"string", c:57407}
+STRING   parser.value{v:"\"sq with escape ' \"", t:"string", c:57407}
+STRING   parser.value{v:"\"string containing\\n\\t// a comment\"", t:"string", c:57407}
+PAGE   parser.value{v:"PAGE", t:"PAGE", c:57427}
+AT   parser.value{v:"@", t:"AT", c:57404}
 PLUS   parser.value{v:"PLUS", t:"PLUS", c:57349}
-RETURN   parser.value{v:"RETURN", t:"RETURN", c:57388}
-INTTYPE   parser.value{v:"int", t:"INTTYPE", c:57383}
-BOOLTYPE   parser.value{v:"bool", t:"BOOLTYPE", c:57384}
-BINTYPE   parser.value{v:"bin", t:"BINTYPE", c:57386}
-STRINGTYPE   parser.value{v:"string", t:"STRINGTYPE", c:57385}
+RETURN   parser.value{v:"RETURN", t:"RETURN", c:57391}
+INTTYPE   parser.value{v:"int", t:"INTTYPE", c:57386}
+BOOLTYPE   parser.value{v:"bool", t:"BOOLTYPE", c:57387}
+BINTYPE   parser.value{v:"bin", t:"BINTYPE", c:57389}
+STRINGTYPE   parser.value{v:"string", t:"STRINGTYPE", c:57388}
+LEFT   parser.value{v:"LEFT", t:"LEFT", c:57383}
+RIGHT   parser.value{v:"RIGHT", t:"RIGHT", c:57384}
+MIDDLE   parser.value{v:"MIDDLE", t:"MIDDLE", c:57385}
+INPUT   parser.value{v:"INPUT", t:"INPUT", c:57425}
+CLICK   parser.value{v:"CLICK", t:"CLICK", c:57424}
+IN   parser.value{v:"IN", t:"IN", c:57401}
+FROM   parser.value{v:"FROM", t:"FROM", c:57415}
 TOK-0   parser.value{v:"", t:"", c:0}
 

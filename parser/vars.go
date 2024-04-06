@@ -409,9 +409,15 @@ func (m *myLexer) splitStructType(typ string) map[string]string {
 
 // check context, and retrun immediately if needed.
 func (m *myLexer) checkContext() {
+	m.addLines(" _err = _ctx.Err()")
+	m.checkError()
+}
+
+// return immediately on error
+func (m *myLexer) checkError() {
 	if m.async {
-		m.addLines("if _err = _ctx.Err() ; _err != nil { return _err}")
+		m.addLines("if _err != nil { return _err}")
 	} else {
-		m.addLines("if _err = _ctx.Err() ; _err != nil { return _out,_err}")
+		m.addLines("if _err != nil { return _out,_err}")
 	}
 }

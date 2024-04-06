@@ -5,12 +5,15 @@
         "fmt"
     )
 
+
     // each object has a value and a type.
     type value struct {
         v string    // a string in go that produce the value of the object
         t string    // a string representing the gotype of the object
         c int       // the code returned by lexer is stored here. Always set by the lexer, even for variables (set as IDENTIFIER). A valid go type, without spaces.
     }
+
+    var _zv = value{} // zero value
 
     var lx *myLexer // shorthand for lx
 
@@ -34,7 +37,7 @@
 %}
 
 
-%token <value>   // all token use value
+%token <value>  // all token use value
             MULTI DIV MOD PLUS MINUS PLUSPLUS 
             LTE GTE LT GT EQ NEQ
             COLON SEMICOLON DOT COMMA LBRACKET RBRACKET LPAREN RPAREN LBRACE RBRACE
@@ -42,6 +45,7 @@
             DOTDOT ASSIGN QUESTION REGEXMATCH REGEXNOTMATCH
             LOWER UPPER FORMAT
             NOW TEXT HREF ATTRIBUTE
+            LEFT RIGHT MIDDLE
 
             // Keywords
             INTTYPE BOOLTYPE STRINGTYPE BINTYPE // native types
@@ -53,7 +57,7 @@
             // selects
             SELECT ALL ANY ONE AS FROM WHERE LIMIT DISTINCT SORT ASC DESC DEFAULT CASE
             // html
-            CLICK DOCUMENT PAGE CONTAINS 
+            CLICK INPUT DOCUMENT PAGE CONTAINS 
             // others
             PRINT
             
@@ -160,7 +164,19 @@ statements
 statement 
     : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
     | PRINT expression { lx.addImport("fmt"); lx.addLines(fmt.Sprintf("fmt.Println(%s)",$2.v))}
-    | CLICK expression FROM expression{ /* todo - css from page */}
+
+    | CLICK expression { lx.Click($2, _zv, _zv)} // element, left, once
+    | CLICK expression LEFT expression { lx.Click($2, $3, $4)} // element, left, multiple times
+    | CLICK expression RIGHT expression {lx.Click($2, $3, $4)} // element, right mutiple times
+    | CLICK expression MIDDLE expression {lx.Click($2, $3, $4)} // element, middle, multiple times
+
+    | CLICK expression FROM expression { lx.ClickFrom($2, _zv, _zv, $4)} // css, left, once, page
+    | CLICK expression LEFT expression FROM expression { lx.ClickFrom($2, $3, $4, $6)} // css, left, multiple times
+    | CLICK expression RIGHT expression FROM expression {lx.ClickFrom($2, $3, $4, $6)} // css, right mutiple times
+    | CLICK expression MIDDLE expression FROM expression {lx.ClickFrom($2, $3, $4, $6)} // css, middle, multiple times
+
+    | INPUT expression IN expression {lx.input($2, $4)} // input text in element
+    | INPUT expression IN expression FROM expression {lx.inputFrom($2, $4, $6)} // input text to the element selected by css from page 
     ;
 
 returnStatements

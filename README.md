@@ -60,12 +60,21 @@ Available types are *int*, *bool*, *string*, or *bin*. The *bin* type is interna
 
 **Input variables** are declared at the start of the script, using @.
 
-**Output variables** are listed in the last return statement.
+*Examples :*
+* @ PASSWORD string // string value
+* @ X23 [ int ] // array of int
+* @ C { one : string, two : bool } // object
+* @ ZZZ { one : int, two : bool, three : [ string ], four : {five : string, six : [ bool ] } } // combined types
 
-Variables can be upper or lower case. Of course, only upper case variables will be available outside of the package.
-Variable names should start with a letter, and continue with digits or letters. Underscore is not accepted (reserved for internal variables).
+**Output variables** are listed in the last return statement. There should always be at least ONE return variable.
 
-**A variable can only be assigned once**. A variable that is not declared cannot be used.
+*Examples :*
+* RETURN X, X22
+* RETURN ZZZ
+
+Variables can be upper or lower case. Only upper case variables will be available outside of the package. It is good practice to use upper case variables names for input and output variables, lower case for the other. Variable names should start with a letter, and continue with digits or letters. Underscore ( _ ) is not a valid variable name (reserved for internal variables).
+
+**A variable can only be assigned once**. A variable that is neither declared as input variable, nor previously assigned, cannot be used. It is an error to assign to an input variable.
 
 It costs very little to create as many intermediate variables as needed. Those that are not output variables will be discarded when function returns. 
 

@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	VERSION   = "0.3.8"
+	VERSION   = "0.3.9"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
 )
 
@@ -20,7 +20,7 @@ var (
 // Parse the version into its components.
 // Shorter version string are accepted, corresponding values default to 0.
 // Non numbers also default to 0.
-// There can ba a string prefix or suffix.
+// There can be a string prefix or suffix.
 func ParseVersion() (major int, minor int, patch int) {
 	return parseVersion(VERSION)
 }

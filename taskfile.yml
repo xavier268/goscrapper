@@ -56,7 +56,7 @@ tasks:
     desc: run all generator tests
     deps: [build]
     cmds:
-      - go test ./parser # unit tests
+      - go test ./internal/parser # unit tests
       - go test -v -count=1 ./e2e # end-to-end tests
 
   clean: 

@@ -6,7 +6,7 @@ import(
     "time"
     "testing"
     "context"
-    "github.com/xavier268/goscrapper/parser"
+    "github.com/xavier268/goscrapper/internal/parser"
 )
 
 // Basic test template for call1

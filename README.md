@@ -74,6 +74,8 @@ Available types are *int*, *bool*, *string*, or *bin*. The *bin* type is interna
 
 Variables can be upper or lower case. Only upper case variables will be available outside of the package. It is good practice to use upper case variables names for input and output variables, lower case for the other. Variable names should start with a letter, and continue with digits or letters. Underscore ( _ ) is not a valid variable name (reserved for internal variables).
 
+Both input and output variables names will be used to creat input structs and output structs, defininng the API of the generated function.
+
 **A variable can only be assigned once**. A variable that is neither declared as input variable, nor previously assigned, cannot be used. It is an error to assign to an input variable.
 
 It costs very little to create as many intermediate variables as needed. Those that are not output variables will be discarded when function returns. 

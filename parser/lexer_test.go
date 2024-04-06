@@ -22,7 +22,7 @@ func TestLexer(t *testing.T) {
 	1 2cinq  /* do not
 	print this */ 0555 .. .
 	"a dq string
-	accross the line "
+	across the line "
 	'a sq string'
 	"dq with escaped """ "
 	'sq with escape '' '

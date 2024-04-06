@@ -9,7 +9,7 @@ Reference : lexer_test
 	1 2cinq  /* do not
 	print this */ 0555 .. .
 	"a dq string
-	accross the line "
+	across the line "
 	'a sq string'
 	"dq with escaped """ "
 	'sq with escape '' '
@@ -41,7 +41,7 @@ IDENTIFIER   parser.value{v:"cinq", t:"IDENTIFIER", c:57405}
 NUMBER   parser.value{v:"0555", t:"int", c:57408}
 DOTDOT   parser.value{v:"..", t:"DOTDOT", c:57371}
 DOT   parser.value{v:".", t:"DOT", c:57360}
-STRING   parser.value{v:"\"a dq string\\n\\taccross the line \"", t:"string", c:57407}
+STRING   parser.value{v:"\"a dq string\\n\\tacross the line \"", t:"string", c:57407}
 STRING   parser.value{v:"\"a sq string\"", t:"string", c:57407}
 STRING   parser.value{v:"\"dq with escaped \\\"\\\" \"", t:"string", c:57407}
 STRING   parser.value{v:"\"sq with escape ' \"", t:"string", c:57407}

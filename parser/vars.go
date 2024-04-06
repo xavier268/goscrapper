@@ -97,7 +97,7 @@ func (m *myLexer) declInputParam(name string, typ string) {
 	m.inparams = append(m.inparams, name)
 	m.vars[name] = typ
 
-	// declare a golang variable with same name and type in current (gloabl ) scope
+	// declare a golang variable with same name and type in current (global ) scope
 	li := fmt.Sprintf("var %s %s = _in.%s ; _ = %s", name, typ, name, name)
 	m.addLines(li)
 }
@@ -187,7 +187,7 @@ func (m *myLexer) incOut() {
 }
 
 // make a snapshot of relevant vars into _out.
-// imediately reincrement the output.
+// immediately reincrement the output.
 func (m *myLexer) saveOut() {
 	// TODO - this should run only for known variables AND for variables that are already set by the code.
 	// the known variables at this stage are available from m.vars.

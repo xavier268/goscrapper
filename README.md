@@ -1,5 +1,8 @@
 # goscrapper
 
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/xavier268/goscrapper.svg)](https://pkg.go.dev/github.com/xavier268/goscrapper) [![Go Report Card](https://goreportcard.com/badge/github.com/xavier268/goscrapper)](https://goreportcard.com/report/github.com/xavier268/goscrapper)
+
 High level tool for generating scrapping helper functions in go.
 
 ## How to use this tool 

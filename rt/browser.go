@@ -67,7 +67,7 @@ func SetBrowserDataDir(dir string) (err error) {
 }
 
 // threadsafe construction/access to  browser singleton.
-// Use this, to garantee lazy, threadsafe browser initialization.
+// Use this, to guarantee lazy, threadsafe browser initialization.
 func GetBrowser() *rod.Browser {
 	browserLock.Lock()
 	defer browserLock.Unlock()

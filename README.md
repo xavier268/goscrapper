@@ -101,7 +101,7 @@ Array members are accessed using the bracket operatoir and an integer expression
 * **NOW** *returns a timeStamp of type time.Time* 
 * **true false** *are in **lower** case, return the corresponding bool values*
 
-### Unary operators**
+### Unary operators
 
 * **-** : *changes sign of integer.*
 * **++**  : *increments an integer.*
@@ -110,7 +110,7 @@ Array members are accessed using the bracket operatoir and an integer expression
 * **PAGE** : *applies to a string expression, that represents an URL. It opens a new page (tab) with this url. The url can be empty, in which case a blank page is open. It returns a page object. A page object has an internal ytype, and cannot be returned.*
 * **TEXT** : *applies to an Element (typically obtained as the loop variable of a SELECT statement) or a Page object (obatined with PAGE).*
 
-### Binary operators**
+### Binary operators
 
 * **+ - * / %** : *are the usual operations on integers.*
 * **+** : *also applies to string, for concatenation.*

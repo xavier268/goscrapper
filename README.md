@@ -29,7 +29,7 @@ In particular, it can be compiled either :
 * in synchroneous mode (loop as requested, and return an array of structs for each loop)
 * in asynchroneous mode (loop as requested, each capture value is emitted to the provided channel, function return when finished)
 
-### 4. Use the generated function(s) from you code
+### 4. Use the generated function(s) from your code
    
 The function is contained in a file with the same name as the script. This files also contains the structs for input/output.
 Functions are provided a context.Context to allow for extarnal cancelation or timeout.
@@ -89,23 +89,23 @@ Array members are accessed using the bracket operatoir and an integer expression
 
 ### Unary operators**
 
-* **-** *changes sign of integer.*
-* **++**  *increments an integer.*
-* **LOWER UPPER** *change case of string expression.*
-* **NOT** or **!** *applies to bool expressions.*
-* **PAGE** *applies to a string expression, that represents an URL. It opens a new page (tab) with this url. The url can be empty, in which case a blank page is open. It returns a page object. A page object has an internal ytype, and cannot be returned.*
-* **TEXT** *applies to an Element (typically obtained as the loop variable of a SELECT statement) or a Page object (obatined with PAGE).*
+* **-** : *changes sign of integer.*
+* **++**  : *increments an integer.*
+* **LOWER** and **UPPER** : *change case of string expression.*
+* **NOT** or **!** : *applies to bool expressions.*
+* **PAGE** : *applies to a string expression, that represents an URL. It opens a new page (tab) with this url. The url can be empty, in which case a blank page is open. It returns a page object. A page object has an internal ytype, and cannot be returned.*
+* **TEXT** : *applies to an Element (typically obtained as the loop variable of a SELECT statement) or a Page object (obatined with PAGE).*
 
 ### Binary operators**
 
-* **+ - * / %** *are the usual operations on integers.*
-* **+** *also applies to string, for concatenation.*
-* **++** *applies to arrays of same type, and merge them.*
-* **&& ||** *apply to booleans, for AND and OR.*
-* **CONTAINS** *applies to string expressions, returning a boolean : exp1 CONTAINS exp2.*
-* **== !=** *are equality/inequality operators, retruning a boolean. Apply to any type.*
-* **< > <= >=** *are usual compaison operators for integers, returning a boolean.*
-* *element **ATTRIBUTE** stringExpr returns a string with the value of the requested attribute for the Element.*
+* **+ - * / %** : *are the usual operations on integers.*
+* **+** : *also applies to string, for concatenation.*
+* **++** : *applies to arrays of same type, and merge them.*
+* **&& ||** : *apply to booleans, for AND and OR.*
+* **CONTAINS** : *applies to string expressions, returning a boolean : exp1 CONTAINS exp2.*
+* **== !=** : *are equality/inequality operators, retruning a boolean. Apply to any type.*
+* **< > <= >=** : *are usual compaison operators for integers, returning a boolean.*
+* element **ATTRIBUTE** stringExpr : *returns a string with the value of the requested attribute for the Element.*
 
 ### Expressions
 

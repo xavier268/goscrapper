@@ -14,7 +14,7 @@ c = a + b
 SELECT FROM p ALL "div" AS divel LIMIT 5
 PRINT "captured :"
 PRINT divel
-
 t = TEXT divel
+SLOW // debugging !
 
 RETURN c, url, t

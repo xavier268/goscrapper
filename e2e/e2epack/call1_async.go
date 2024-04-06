@@ -44,8 +44,8 @@ type Output_call1_async struct {
 // SELECT FROM p ALL "div" AS divel LIMIT 5
 // PRINT "captured :"
 // PRINT divel
-// 
 // t = TEXT divel
+// SLOW // debugging !
 // 
 // RETURN c, url, t
 func DoAsync_call1_async(_ctx context.Context,_ch chan<- Output_call1_async,  _in Input_call1_async) (_err error) {
@@ -70,6 +70,7 @@ for divel, _ok_001 := _it_001.Next(); _ok_001;divel, _ok_001 = _it_001.Next(){_=
 fmt.Println("captured :")
 fmt.Println(divel)
 var t string= rt.GetText(divel);_=t
+rt.Slow(_ctx)
 //call to saveOut
 _out.c=c
 _out.t=t

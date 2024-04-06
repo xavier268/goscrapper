@@ -59,7 +59,7 @@
             // html
             CLICK INPUT DOCUMENT PAGE CONTAINS 
             // others
-            PRINT
+            PRINT SLOW
             
 %union {            
     value value
@@ -164,6 +164,7 @@ statements
 statement 
     : IDENTIFIER ASSIGN expression { lx.vSetVar($1.v, $3)}
     | PRINT expression { lx.addImport("fmt"); lx.addLines(fmt.Sprintf("fmt.Println(%s)",$2.v))}
+    | SLOW {lx.addImport("rt");lx.addLines("rt.Slow(_ctx)")}
 
     | CLICK expression { lx.Click($2, _zv, _zv)} // element, left, once
     | CLICK expression LEFT expression { lx.Click($2, $3, $4)} // element, left, multiple times

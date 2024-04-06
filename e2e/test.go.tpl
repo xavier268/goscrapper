@@ -34,8 +34,8 @@ func TestCall1Sync(t *testing.T) {
 func TestCall1Async(t *testing.T) {
 
 	ch := make(chan Output_call1_async, 20)
-	go func() { // wait 5 sec and close channel
-		time.Sleep(5 * time.Second)
+	go func() { // wait 25 sec and close channel
+		time.Sleep(25 * time.Second)
 		close(ch)
 	}()
 

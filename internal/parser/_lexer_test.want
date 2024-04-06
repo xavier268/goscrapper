@@ -17,7 +17,7 @@ Reference : lexer_test
 	// a comment"
 	PAGE @ PLUS RETURN
 	int bool bin string
-	LEFT RIGHT MIDDLE INPUT CLICK IN FROM
+	LEFT RIGHT MIDDLE INPUT CLICK IN FROM SLOW
 	
 
 IDENTIFIER   parser.value{v:"un", t:"IDENTIFIER", c:57405}
@@ -61,5 +61,6 @@ INPUT   parser.value{v:"INPUT", t:"INPUT", c:57425}
 CLICK   parser.value{v:"CLICK", t:"CLICK", c:57424}
 IN   parser.value{v:"IN", t:"IN", c:57401}
 FROM   parser.value{v:"FROM", t:"FROM", c:57415}
+SLOW   parser.value{v:"SLOW", t:"SLOW", c:57430}
 TOK-0   parser.value{v:"", t:"", c:0}
 

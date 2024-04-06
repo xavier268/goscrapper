@@ -44,8 +44,8 @@ type Output_call1 struct {
 // SELECT FROM p ALL "div" AS divel LIMIT 5
 // PRINT "captured :"
 // PRINT divel
-// 
 // t = TEXT divel
+// SLOW // debugging !
 // 
 // RETURN c, url, t
 func Do_call1(_ctx context.Context,_in Input_call1) (_out []Output_call1, _err error) {
@@ -69,6 +69,7 @@ for divel, _ok_001 := _it_001.Next(); _ok_001;divel, _ok_001 = _it_001.Next(){_=
 fmt.Println("captured :")
 fmt.Println(divel)
 var t string= rt.GetText(divel);_=t
+rt.Slow(_ctx)
 //call to saveOut
 _out[len(_out)-1].c=c
 _out[len(_out)-1].t=t

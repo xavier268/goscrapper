@@ -175,4 +175,4 @@ The following are also valid expressions :
 * **RETURN var1, var2, ...** :
 *There should be EXACTLY ONE return statement, with at least ONE variable. Return variables should have been declared and assigned to. Expressions are not allowed in return list. Only types that can be provided as input are accepted as return (int, bool, string, bin, arrays and objects). Pages, Elements, and other internal types cannot be returned.*
 
-
+* **SLOW** : *for debugging purposes mostly, wait a little time before proceeding. See rt SlowDuration to set the duration. Wait stops if function context is cancelled.*.

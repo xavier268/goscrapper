@@ -101,7 +101,7 @@ Array members are accessed using the bracket operatoir and an integer expression
 * **+ - * / %** : *are the usual operations on integers.*
 * **+** : *also applies to string, for concatenation.*
 * **++** : *applies to arrays of same type, and merge them.*
-* **&& ||** : *apply to booleans, for AND and OR.*
+* **&&** and **||** : *apply to booleans, for AND and OR.*
 * **CONTAINS** : *applies to string expressions, returning a boolean : exp1 CONTAINS exp2.*
 * **== !=** : *are equality/inequality operators, retruning a boolean. Apply to any type.*
 * **< > <= >=** : *are usual compaison operators for integers, returning a boolean.*
@@ -112,40 +112,51 @@ Array members are accessed using the bracket operatoir and an integer expression
 Expressions are created by applying the above operators to other expressions.
 
 The following are also valid expressions :
+
 * ( expr )
-* expr [indexExpression] // to get an array element
-* expr . key // to get an object member value
-* [ expr1, exp2, ... ] to create an array from same type expressions
-* { key1 : expr1, key2 : expr2, ...} to create an object from pairs of keys and expressions.
+* expr [indexExpression] : *get an array element.*
+* expr . key : *get an object member value.*
+* [ expr1, exp2, ... ] : *create an array from same type expressions.*
+* { key1 : expr1, key2 : expr2, ...} : *create an object from pairs of keys and expressions.*
 
 ### Statements
 
-*(See grammar for details)*
-
-* **variable = expression** : *Assign an expression to a variable. The variable is declared, and its type derived from the expression.*
+* **variable = expression** : 
+*Assign an expression to a variable. The variable is declared, and its type derived from the expression.*
   
-* **PRINT expression** : *Prints expression to stdout.*
+* **PRINT expression** : 
+*Prints expression to stdout.*
   
-* **CLICK element** : *assume LEFT click, once*.
+* **CLICK element** : 
+*assume LEFT click, once*.
 * **CLICK element LEFT count**
 * **CLICK element RIGHT count**
-* **CLICK element MIDDLE count** : *Click on selected element, using the specified button, for the count times.*
+* **CLICK element MIDDLE count** : 
+*Click on selected element, using the specified button, for the count times.*
   
-* **CLICK css FROM pageOrElement** : *assume LEFT click, once*.
+* **CLICK css FROM pageOrElement** : 
+*assume LEFT click, once*.
 * **CLICK element LEFT count FROM pageOrElement**
 * **CLICK element RIGHT count FROM pageOrElement**
-* **CLICK element MIDDLE count FROM pageOrElement** : *Same as above, but first select the element from the pageOrElement using the provided css selector.*
+* **CLICK element MIDDLE count FROM pageOrElement** : 
+*Same as above, but first select the element from the pageOrElement using the provided css selector.*
   
-* **INPUT text IN element** : *Input Text in corresponding element. Previous text is first selected, then cleared.*
-* **INPUT text IN css FROM pageOrElement** : *Same as above, but will first select the page using the css selector.*
+* **INPUT text IN element** : 
+*Input Text in corresponding element. Previous text is first selected, then cleared.*
+* **INPUT text IN css FROM pageOrElement** : 
+*Same as above, but will first select the page using the css selector.*
   
-* **FOR identifier IN arrayExpression** : *Usual for loop over an arrayExpression. The identifier declares the loop variable, that will sucessively take all the values from the array.*
+* **FOR identifier IN arrayExpression** : 
+*Usual for loop over an arrayExpression. The identifier declares the loop variable, that will sucessively take all the values from the array.*
   
-* **SELECT FROM pageOrElement ALL cssExpression AS loopVariable WHERE boolExpression LIMIT integerExpression** : *This is a loop statement. Loop statements can be nested. It collects all available Element from the pageOrElement provided, using the cssExpression as the selector. The loopVariable should not be already declared. For each collected Element, it only keep those matching the (optionnal) WHERE condition, and up to the number specified in the optional LIMIT. Setting LIMIT to 0 means no limit. It is possible that no element are collected.* **The loopVariable is set to a *rod.Element.**
+* **SELECT FROM pageOrElement ALL cssExpression AS loopVariable WHERE boolExpression LIMIT integerExpression** : 
+*This is a loop statement. Loop statements can be nested. It collects all available Element from the pageOrElement provided, using the cssExpression as the selector. The loopVariable should not be already declared. For each collected Element, it only keep those matching the (optionnal) WHERE condition, and up to the number specified in the optional LIMIT. Setting LIMIT to 0 means no limit. It is possible that no element are collected.* **The loopVariable is set to a *rod.Element.**
 
-* **SELECT FROM pageOrElement ONE cssExpression AS loopVariable** : *This is a loop statement. Loop statements can be nested. It collects just one Element avaible for the pageOrElement provided, using the cssExpression as the selector. ONE elemnet is always collected. Loop variable is* **set to a rod.Element**. *Statement will wait until timeout or one element becomes available on page.*
+* **SELECT FROM pageOrElement ONE cssExpression AS loopVariable** : 
+*This is a loop statement. Loop statements can be nested. It collects just one Element avaible for the pageOrElement provided, using the cssExpression as the selector. ONE elemnet is always collected. Loop variable is* **set to a rod.Element**. *Statement will wait until timeout or one element becomes available on page.*
   
-* **SELECT FROM pageOrElement ANY AS loopVariable CASE css1 : expr1 ; CASE css2 : expr2 ; DEFAULT   : expr3 ;** : *This is a loop statement. Loop statements can be nested. It expects an element to match ANY of the css selectors. It will loop until there is a match, unless a default is provided. When a match is found,* **the loopVariable is assigned the value of the corresponding expression, NOT the matching rod.Element !.** *The expression may not reference the matched element. Note the required semicolon at the end of each expression*
+* **SELECT FROM pageOrElement ANY AS loopVariable CASE css1 : expr1 ; CASE css2 : expr2 ; DEFAULT   : expr3 ;** : 
+*This is a loop statement. Loop statements can be nested. It expects an element to match ANY of the css selectors. It will loop until there is a match, unless a default is provided. When a match is found,* **the loopVariable is assigned the value of the corresponding expression, NOT the matching rod.Element !.** *The expression may not reference the matched element. Note the required semicolon at the end of each expression*
 
 * **RETURN var1, var2, ...** :
 *There should be EXACTLY ONE return statement, with at least ONE variable. Return variables should have been declared and assigned to. Expressions are not allowed in return list. Only types that can be provided as input are accepted as return (int, bool, string, bin, arrays and objects). Pages, Elements, and other internal types cannot be returned.*

@@ -6,25 +6,37 @@
     )
 
     // keep the compiler happy
-    _ = fmt.Println
+    var _ = fmt.Println
 
-    type keyword struct {
+    type tok struct {
         v string
-        t type
+        t string
         c int // lexer/parser constant code
     } 
 
-    var lx *myLexer // shorthand for lx
-
-    type Doer [T any] interface {
-        Eval[T]() (T, error)
+    type id struct {
+        v string // identifier name
+        c int // lexer code
     }
 
+
+
+    var lx *myLexer // shorthand for lx
+
 %}
+      
+%union {            
+    tok tok // token read from lexer
+}
 
+%token <tok>  
 
-%token <keyword>  
-IDENTIFIER ASSIGN SEMICOLON CLICK INPUT IN 
+BOOL
+NUMBER
+STRING 
+IDENTIFIER
+
+ASSIGN SEMICOLON CLICK INPUT IN 
 PRINT SLOW LEFT RIGHT MIDDLE 
 RETURN COMMA FOR
 SELECT AS FROM
@@ -32,28 +44,19 @@ WHERE LIMIT
 LPAREN RPAREN
 LBRACKET RBRACKET
 LBRACE RBRACE
-DOT NUBMBER LEN 
-NUMBER PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS
-BOOL NOT AND OR XOR
+DOT LEN 
+PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS
+NOT AND OR XOR
 EQ NEQ LT LTE GT GTE
 CONTAINS
-STRING FIND PATH WITH JOIN PAGE
+FIND PATH WITH JOIN PAGE
 COLON TEXT ATTR OF
 DISTINCT 
 AT /* @ */
-RANGE /* ... */
+DOTDOT /* .. */
+QUESTION
 
 
-
-
-
-
-
-
-            
-%union {            
-    keyword keyword
-}
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.

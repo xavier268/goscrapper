@@ -4,40 +4,33 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
 	"regexp"
 	"strings"
 )
 
 type myLexer struct {
-	name string // name of the lexer source
-	data []byte // entire data to be lexed
-	pos  int    // next position to process
-	// code building support
-	w         io.Writer         // where shall data be written to ?
-	ew        io.Writer         // where shall error be written to ?
-	lines     []string          // list of lines in the code, pending writing.
-	inparams  []string          // contains the names of the input parameters.
-	outparams []string          // contains the the name of the output parameters. Type should not change between scopes !
-	vars      map[string]string // associate a type to a given var. All var defined  with same name in different scopes should have same types.
-	imports   map[string]bool   // set of imports required, written at the end during finalize
-	lateDecl  map[string]bool   // set of local variables that will be declared once before function starts. Ex : _page.
-	async     bool              // are we targeting an async version for the output ?
-	uidroot   int               // used to generate unique id
+	name string    // name of the lexer source, user defined
+	data []byte    // entire data to be lexed
+	pos  int       // next position to process
+	ew   io.Writer // where shall lexer errors be written to ?
 }
 
-// unique id
-func (m *myLexer) uid() string {
-	m.uidroot++
-	return fmt.Sprintf("_%03x", m.uidroot)
-}
-
-// add lines to the code to be generated.
-func (m *myLexer) addLines(lines ...string) {
-	m.lines = append(m.lines, lines...)
+// Construct new myLexer. If ew is nil, defaults to stdout.
+func NewLexer(name string, data []byte, errorWriter io.Writer) yyLexer {
+	return &myLexer{
+		name: name,
+		data: data,
+		pos:  0,
+		ew:   errorWriter,
+	}
 }
 
 // Error implements yyLexer.
 func (m *myLexer) Error(e string) {
+	if m.ew == nil {
+		m.ew = os.Stdout
+	}
 	windows := 100
 	// write to std error writer lx.ew
 	fmt.Fprintf(m.ew, "\n%s ********* Error in %s :***************%s\n\n", ColRED, m.name, RESET)
@@ -63,11 +56,9 @@ func (m *myLexer) Error(e string) {
 	// print rest of context
 	fmt.Fprintf(m.ew, "%s%s\n", ColYELLOW, strings.Join(afs[1:], "\n"))
 	fmt.Fprintln(m.ew, RESET)
-	// write to data writer e.w
-	fmt.Fprintf(m.w, "\npanic(\"Parsing error in %s : %s\")\n\n", m.name, e)
 }
 
-// utility to format error
+// utility to format error message sent to myLexer.Error()
 func (m *myLexer) errorf(format string, args ...interface{}) {
 	m.Error(fmt.Sprintf(format, args...))
 }
@@ -105,11 +96,11 @@ startLoop:
 	// read strings between " "
 	// You can escape inside " by adding one more.
 	if loc := regexp.MustCompile(`(?s)^"(""+|[^"])*"`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])     // remove external quotes
-		lval.value.v = strings.Replace(lval.value.v, `""`, `"`, -1) // replace all doubled quotes escaped inside.
-		lval.value.v = fmt.Sprintf(`%q`, lval.value.v)              // store as a quoted string
-		lval.value.t = "string"
-		lval.value.c = STRING
+		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
+		lval.tok.v = strings.Replace(lval.tok.v, `""`, `"`, -1) // replace all doubled quotes escaped inside.
+		lval.tok.v = fmt.Sprintf(`%q`, lval.tok.v)              // store as a quoted string
+		lval.tok.t = "string"
+		lval.tok.c = STRING
 		m.pos += loc[1]
 		return STRING
 	}
@@ -117,20 +108,20 @@ startLoop:
 	// read strings between ' '
 	// You can escape inside ' by adding one more.
 	if loc := regexp.MustCompile(`(?s)^'(''+|[^'])*'`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])     // remove external quotes
-		lval.value.v = strings.Replace(lval.value.v, `''`, `'`, -1) // replace all doubled quotes escaped inside.
-		lval.value.v = fmt.Sprintf(`%q`, lval.value.v)              // stored as a back-quoted string
-		lval.value.t = "string"
-		lval.value.c = STRING
+		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
+		lval.tok.v = strings.Replace(lval.tok.v, `''`, `'`, -1) // replace all doubled quotes escaped inside.
+		lval.tok.v = fmt.Sprintf(`%q`, lval.tok.v)              // stored as a back-quoted string
+		lval.tok.t = "string"
+		lval.tok.c = STRING
 		m.pos += loc[1]
 		return STRING
 	}
 
 	// read positive integer number.
 	if loc := regexp.MustCompile(`^[0-9]+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
-		lval.value.t = "int"
-		lval.value.c = NUMBER
+		lval.tok.v = string(m.data[m.pos : m.pos+loc[1]])
+		lval.tok.t = "int"
+		lval.tok.c = NUMBER
 		m.pos += loc[1]
 		return NUMBER
 	}
@@ -138,19 +129,19 @@ startLoop:
 	// read symbols or operators
 	err = m.tryAllOperators(lval)
 	if err == nil {
-		return lval.value.c // operator found
+		return lval.tok.c // operator found
 	}
 
 	// keywords
 	err = m.tryAllKeywords(lval)
 	if err == nil {
-		return lval.value.c // keyword found
+		return lval.tok.c // keyword found
 	}
 
 	if loc := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9]*`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.value.v = string(m.data[m.pos : m.pos+loc[1]])
-		lval.value.t = "IDENTIFIER"
-		lval.value.c = IDENTIFIER
+		lval.tok.v = string(m.data[m.pos : m.pos+loc[1]])
+		lval.tok.t = "IDENTIFIER"
+		lval.tok.c = IDENTIFIER
 		m.pos += loc[1]
 		return IDENTIFIER
 	}
@@ -163,6 +154,7 @@ startLoop:
 func (m *myLexer) tryAllKeywords(lval *yySymType) error {
 
 	// special care taken to ensure INPUT is never recognized as IN
+	// by testing longer keywords first !
 	size := 0
 	for _, t := range yyToknames {
 		size = max(size, len(t))
@@ -174,9 +166,9 @@ func (m *myLexer) tryAllKeywords(lval *yySymType) error {
 			// only look at s-sized token
 			if len(k) == s && m.try(k) { // Keywords are always upperCase
 				// fmt.Printf("Returning %d for %q\n", i+yyPrivate-1, k)
-				lval.value.t = k
-				lval.value.c = i + yyPrivate - 1
-				lval.value.v = k
+				lval.tok.t = k
+				lval.tok.c = i + yyPrivate - 1
+				lval.tok.v = k
 				return nil
 			}
 		}
@@ -195,10 +187,10 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		// special values
 		{"true", BOOL},
 		{"false", BOOL},
-		{"int", INTTYPE},
-		{"bool", BOOLTYPE},
-		{"string", STRINGTYPE},
-		{"bin", BINTYPE},
+		// {"int", INTTYPE},
+		// {"bool", BOOLTYPE},
+		// {"string", STRINGTYPE},
+		// {"bin", BINTYPE},
 		//{"nil", NIL},
 
 		// multi bytes
@@ -210,9 +202,9 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"&&", AND},
 		{"||", OR},
 		{"..", DOTDOT},
-		{"::", NAMESPACESEPARATOR},
-		{"!~", REGEXNOTMATCH},
-		{"=~", REGEXMATCH},
+		// {"::", NAMESPACESEPARATOR},
+		// {"!~", REGEXNOTMATCH},
+		// {"=~", REGEXMATCH},
 		// single bytes
 		{":", COLON},
 		{";", SEMICOLON},
@@ -238,9 +230,9 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 	for _, k := range opeTable {
 		// fmt.Printf("Trying %d %q\n", i, k)
 		if m.try(k.ope) {
-			lval.value.t = TokenAsString(k.code)
-			lval.value.c = k.code
-			lval.value.v = k.ope
+			lval.tok.t = TokenAsString(k.code)
+			lval.tok.c = k.code
+			lval.tok.v = k.ope
 			return nil
 		}
 	}
@@ -256,5 +248,15 @@ func (m *myLexer) try(what string) bool {
 		return true
 	} else {
 		return false
+	}
+}
+
+// Prints a token defined by its constant value as a string.
+func TokenAsString(t int) string {
+	idx := t - yyPrivate + 1 // yyPrivate points to error
+	if idx < len(yyToknames) && idx >= 0 {
+		return yyToknames[idx]
+	} else {
+		return fmt.Sprintf("TOK-%d", t)
 	}
 }

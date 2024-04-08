@@ -9,11 +9,14 @@ import (
 	"strings"
 )
 
+// myLexer maintains context needed to parse the data into a Node.
 type myLexer struct {
-	name string    // name of the lexer source, user defined
-	data []byte    // entire data to be lexed
-	pos  int       // next position to process
-	ew   io.Writer // where shall lexer errors be written to ?
+	name   string    // name of the lexer source, user defined
+	data   []byte    // entire data to be lexed
+	pos    int       // next position to process
+	ew     io.Writer // where shall lexer errors be written to ?
+	root   Node      // root node for the parsed tree
+	params []string  // list of declared input parameters
 }
 
 // Construct new myLexer. If ew is nil, defaults to stdout.
@@ -205,6 +208,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		// {"::", NAMESPACESEPARATOR},
 		// {"!~", REGEXNOTMATCH},
 		// {"=~", REGEXMATCH},
+
 		// single bytes
 		{":", COLON},
 		{";", SEMICOLON},
@@ -226,6 +230,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"=", ASSIGN},
 		{"?", QUESTION},
 		{"@", AT},
+		{"!", BANG},
 	}
 	for _, k := range opeTable {
 		// fmt.Printf("Trying %d %q\n", i, k)

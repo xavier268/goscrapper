@@ -1,0 +1,81 @@
+Test name : TestLexer
+Reference : TestLexer
+
+// test for lexer
+/* block 
+comment */
+BOOL
+NUMBER
+STRING 
+IDENTIFIER
+
+ASSIGN SEMICOLON CLICK INPUT IN 
+PRINT SLOW LEFT RIGHT MIDDLE 
+RETURN COMMA FOR
+SELECT AS FROM
+WHERE LIMIT
+LPAREN RPAREN
+LBRACKET RBRACKET
+LBRACE RBRACE
+DOT LEN 
+PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS
+NOT AND OR XOR
+EQ NEQ LT LTE GT GTE
+CONTAINS
+FIND PATH WITH JOIN PAGE
+COLON TEXT ATTR OF
+DISTINCT 
+AT /* @ */
+DOTDOT /* .. */
+QUESTION
+()[]{}
+123 c56 5de
+2.56
+
+++ + - -- . .. ...  =  <= >= < > 
+= != @ !
+
+&& || ;:%
+
+EndOfTest
+	
+&parser.yySymType{yys:0, tok:parser.tok{v:"QUESTION", t:"QUESTION", c:57407}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"(", t:"LPAREN", c:57368}}
+&parser.yySymType{yys:0, tok:parser.tok{v:")", t:"RPAREN", c:57369}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"[", t:"LBRACKET", c:57370}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"]", t:"RBRACKET", c:57371}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"{", t:"LBRACE", c:57372}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"}", t:"RBRACE", c:57373}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"123", t:"int", c:57347}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"c56", t:"IDENTIFIER", c:57349}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"5", t:"int", c:57347}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"de", t:"IDENTIFIER", c:57349}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"2", t:"int", c:57347}}
+&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57374}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"56", t:"int", c:57347}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"++", t:"PLUSPLUS", c:57378}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"+", t:"PLUS", c:57376}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"-", t:"MINUS", c:57377}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"-", t:"MINUS", c:57377}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"-", t:"MINUS", c:57377}}
+&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57374}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"..", t:"DOTDOT", c:57406}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"..", t:"DOTDOT", c:57406}}
+&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57374}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"=", t:"ASSIGN", c:57350}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"<=", t:"LTE", c:57391}}
+&parser.yySymType{yys:0, tok:parser.tok{v:">=", t:"GTE", c:57393}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"<", t:"LT", c:57390}}
+&parser.yySymType{yys:0, tok:parser.tok{v:">", t:"GT", c:57392}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"=", t:"ASSIGN", c:57350}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"!=", t:"NEQ", c:57389}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"@", t:"AT", c:57405}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"!", t:"BANG", c:57408}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"&&", t:"AND", c:57385}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"||", t:"OR", c:57386}}
+&parser.yySymType{yys:0, tok:parser.tok{v:";", t:"SEMICOLON", c:57351}}
+&parser.yySymType{yys:0, tok:parser.tok{v:":", t:"COLON", c:57400}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"%", t:"MOD", c:57382}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"EndOfTest", t:"IDENTIFIER", c:57349}}
+&parser.yySymType{yys:0, tok:parser.tok{v:"", t:"", c:0}}
+

@@ -9,24 +9,19 @@
     var _ = fmt.Println
 
     type tok struct {
-        v string
-        t string
-        c int // lexer/parser constant code
+        v string    // token cvalue
+        t string    // token type
+        c int       // lexer/parser constant code
     } 
 
-    type id struct {
-        v string // identifier name
-        c int // lexer code
-    }
-
-
+   
 
     var lx *myLexer // shorthand for lx
 
 %}
       
 %union {            
-    tok tok // token read from lexer
+    tok tok  // token read from lexer
 }
 
 %token <tok>  
@@ -54,7 +49,8 @@ COLON TEXT ATTR OF
 DISTINCT 
 AT /* @ */
 DOTDOT /* .. */
-QUESTION
+QUESTION /*?*/
+BANG /*!*/
 
 
 

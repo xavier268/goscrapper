@@ -21,7 +21,8 @@
 %}
       
 %union {            
-    tok tok  // token read from lexer
+    tok tok         // token read from lexer
+    nodeLitteral  nodeLitteral // default for statements and expression
 }
 
 %token <tok>  
@@ -52,7 +53,7 @@ DOTDOT /* .. */
 QUESTION /*?*/
 BANG /*!*/
 
-
+%type <nodeLitteral> litteral
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
@@ -200,7 +201,7 @@ atomExpression
     ;
 
 litteral 
-    : STRING  {/*todo*/} 
+    : STRING  {$$ = lx.newNodeLitteral($1.v)} 
     | NUMBER {/*todo*/} 
     | BOOL {/*todo*/} 
     | litteralArray {/*todo*/} 

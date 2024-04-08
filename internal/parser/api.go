@@ -8,11 +8,6 @@ import (
 
 // =============== compiling a request ===========================
 
-// a Node (and the whole parsed tree) should always evaluate to something.
-type Node interface {
-	eval(*Interpreter) (any, error)
-}
-
 func Compile(name string, content string) (rootTree Node, invars []string, err error) {
 	buff := new(strings.Builder) // error writer
 	lx := NewLexer(name, []byte(content), buff)

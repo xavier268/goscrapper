@@ -25,8 +25,9 @@ var lx *myLexer // shorthand for lx
 
 //line grammar.y:23
 type yySymType struct {
-	yys int
-	tok tok // token read from lexer
+	yys          int
+	tok          tok          // token read from lexer
+	nodeLitteral nodeLitteral // default for statements and expression
 }
 
 const BOOL = 57346
@@ -170,7 +171,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line grammar.y:271
+//line grammar.y:272
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -199,11 +200,11 @@ var yyAct = [...]uint8{
 	44, 45, 46, 52, 57, 125, 47, 49, 100, 132,
 	133, 134, 27, 26, 25, 30, 3, 54, 58, 60,
 	65, 6, 5, 62, 29, 34, 17, 16, 31, 27,
-	26, 25, 30, 28, 24, 22, 32, 51, 33, 42,
-	41, 48, 43, 44, 45, 46, 82, 79, 23, 47,
-	49, 24, 127, 32, 9, 33, 126, 10, 11, 8,
-	12, 13, 18, 71, 70, 7, 4, 14, 15, 2,
-	1, 31, 0, 0, 0, 0, 0, 0, 0, 0,
+	26, 25, 30, 28, 24, 51, 32, 42, 33, 41,
+	82, 48, 43, 44, 45, 46, 79, 23, 127, 47,
+	49, 24, 126, 32, 9, 33, 8, 10, 11, 18,
+	12, 13, 71, 70, 4, 7, 2, 14, 15, 1,
+	22, 31, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 31,
 }
 
@@ -225,22 +226,22 @@ var yyPact = [...]int16{
 }
 
 var yyPgo = [...]uint8{
-	0, 190, 189, 136, 186, 142, 141, 0, 6, 184,
-	183, 13, 182, 104, 179, 3, 176, 172, 1, 168,
-	4, 167, 7, 166, 5, 160, 159, 157, 155, 153,
+	0, 190, 189, 186, 136, 184, 142, 141, 0, 6,
+	183, 182, 13, 179, 104, 176, 3, 172, 168, 1,
+	167, 4, 166, 7, 160, 5, 159, 157, 155, 153,
 	144, 143, 140, 2,
 }
 
 var yyR1 = [...]int8{
-	0, 1, 2, 3, 3, 4, 4, 6, 6, 6,
-	6, 6, 9, 9, 10, 10, 11, 11, 11, 11,
-	5, 5, 5, 12, 12, 13, 13, 14, 14, 15,
-	16, 16, 17, 17, 18, 18, 19, 19, 20, 7,
-	7, 22, 22, 24, 24, 26, 26, 8, 8, 8,
-	28, 28, 28, 28, 28, 27, 27, 29, 29, 31,
-	31, 30, 30, 32, 32, 33, 25, 25, 25, 25,
-	25, 25, 25, 23, 23, 23, 23, 23, 23, 23,
-	23, 23, 23, 23, 23, 21, 21,
+	0, 2, 3, 4, 4, 5, 5, 7, 7, 7,
+	7, 7, 10, 10, 11, 11, 12, 12, 12, 12,
+	6, 6, 6, 13, 13, 14, 14, 15, 15, 16,
+	17, 17, 18, 18, 19, 19, 20, 20, 21, 8,
+	8, 23, 23, 25, 25, 27, 27, 9, 9, 9,
+	1, 1, 1, 1, 1, 28, 28, 29, 29, 31,
+	31, 30, 30, 32, 32, 33, 26, 26, 26, 26,
+	26, 26, 26, 24, 24, 24, 24, 24, 24, 24,
+	24, 24, 24, 24, 24, 22, 22,
 }
 
 var yyR2 = [...]int8{
@@ -256,20 +257,20 @@ var yyR2 = [...]int8{
 }
 
 var yyChk = [...]int16{
-	-1000, -1, -2, -3, -4, -5, -6, 18, -14, 7,
-	10, 11, 13, 14, 20, 21, -5, -6, -12, 62,
-	-13, -8, -28, -19, 26, 6, 5, 4, -29, -30,
-	7, 63, 28, 30, -3, 8, -8, -8, -7, -22,
-	-24, -25, -26, 34, 35, 36, 37, 41, 33, 42,
-	-8, -27, 9, -15, 7, -7, 9, -13, 19, -7,
-	7, 29, -31, -7, 31, -32, -33, -20, 7, -7,
-	-9, -10, -11, 15, 16, 17, -8, 12, 9, -21,
-	43, 44, -23, 34, 35, 38, 39, 40, 67, 46,
-	47, 50, 51, 48, 49, -24, 28, 32, 12, 22,
-	9, -8, 27, 29, 19, 31, 19, 58, 9, 9,
-	-11, -8, -22, -24, -7, -20, -7, -15, -7, -33,
-	-7, 9, 29, 9, 23, -7, -16, -17, -18, 24,
-	25, 9, -18, -7, -7,
+	-1000, -2, -3, -4, -5, -6, -7, 18, -15, 7,
+	10, 11, 13, 14, 20, 21, -6, -7, -13, 62,
+	-14, -9, -1, -20, 26, 6, 5, 4, -29, -30,
+	7, 63, 28, 30, -4, 8, -9, -9, -8, -23,
+	-25, -26, -27, 34, 35, 36, 37, 41, 33, 42,
+	-9, -28, 9, -16, 7, -8, 9, -14, 19, -8,
+	7, 29, -31, -8, 31, -32, -33, -21, 7, -8,
+	-10, -11, -12, 15, 16, 17, -9, 12, 9, -22,
+	43, 44, -24, 34, 35, 38, 39, 40, 67, 46,
+	47, 50, 51, 48, 49, -25, 28, 32, 12, 22,
+	9, -9, 27, 29, 19, 31, 19, 58, 9, 9,
+	-12, -9, -23, -25, -8, -21, -8, -16, -8, -33,
+	-8, 9, 29, 9, 23, -8, -17, -18, -19, 24,
+	25, 9, -19, -8, -8,
 }
 
 var yyDef = [...]int8{
@@ -646,423 +647,424 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:79
+//line grammar.y:80
 		{ /*todo*/
 		}
 	case 2:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line grammar.y:83
+//line grammar.y:84
 		{
 			lx = yylex.(*myLexer)
 		}
 	case 3:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:87
+//line grammar.y:88
 		{
 		}
 	case 4:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:88
+//line grammar.y:89
 		{
 		}
 	case 5:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:92
+//line grammar.y:93
 		{ /* todo */
 		}
 	case 6:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:93
+//line grammar.y:94
 		{ /* todo */
 		}
 	case 7:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line grammar.y:97
+//line grammar.y:98
 		{ /*todo*/
 		}
 	case 8:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line grammar.y:98
+//line grammar.y:99
 		{ /*todo*/
 		}
 	case 9:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line grammar.y:99
+//line grammar.y:100
 		{ /*todo*/
 		}
 	case 10:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:102
+//line grammar.y:103
 		{ /*todo*/
 		}
 	case 11:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:103
+//line grammar.y:104
 		{ /*todo*/
 		}
 	case 12:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line grammar.y:107
+//line grammar.y:108
 		{ /*todo*/
 		}
 	case 13:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:108
+//line grammar.y:109
 		{ /*todo*/
 		}
 	case 14:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:112
+//line grammar.y:113
 		{ /*todo*/
 		}
 	case 15:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:113
+//line grammar.y:114
 		{ /*todo*/
 		}
 	case 16:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:117
+//line grammar.y:118
 		{ /*todo*/
 		}
 	case 17:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:118
+//line grammar.y:119
 		{ /*todo*/
 		}
 	case 18:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:119
+//line grammar.y:120
 		{ /*todo*/
 		}
 	case 19:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:120
+//line grammar.y:121
 		{ /*todo*/
 		}
 	case 20:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:124
+//line grammar.y:125
 		{ /*todo*/
 		}
 	case 21:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line grammar.y:125
+//line grammar.y:126
 		{ /*todo*/
 		}
 	case 22:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:126
+//line grammar.y:127
 		{ /*todo*/
 		}
 	case 23:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line grammar.y:130
+//line grammar.y:131
 		{ /*todo*/
 		}
 	case 24:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:131
+//line grammar.y:132
 		{ /*todo*/
 		}
 	case 25:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:135
+//line grammar.y:136
 		{ /*todo*/
 		}
 	case 26:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:136
+//line grammar.y:137
 		{ /*todo*/
 		}
 	case 27:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line grammar.y:139
+//line grammar.y:140
 		{ /*todo*/
 		}
 	case 28:
 		yyDollar = yyS[yypt-8 : yypt+1]
-//line grammar.y:140
+//line grammar.y:141
 		{ /*todo*/
 		}
 	case 29:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:144
+//line grammar.y:145
 		{ /*todo*/
 		}
 	case 30:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line grammar.y:148
+//line grammar.y:149
 		{ /*todo*/
 		}
 	case 31:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:149
+//line grammar.y:150
 		{ /*todo*/
 		}
 	case 32:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:153
+//line grammar.y:154
 		{ /*todo*/
 		}
 	case 33:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:154
+//line grammar.y:155
 		{ /*todo*/
 		}
 	case 34:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:158
+//line grammar.y:159
 		{ /*todo*/
 		}
 	case 35:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:159
+//line grammar.y:160
 		{ /*todo*/
 		}
 	case 36:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:163
+//line grammar.y:164
 		{ /*todo*/
 		}
 	case 37:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:164
+//line grammar.y:165
 		{ /*todo*/
 		}
 	case 38:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:168
+//line grammar.y:169
 		{ /*todo*/
 		}
 	case 39:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:177
+//line grammar.y:178
 		{ /*todo*/
 		}
 	case 40:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:178
+//line grammar.y:179
 		{ /*todo*/
 		}
 	case 43:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:187
+//line grammar.y:188
 		{ /*todo*/
 		}
 	case 44:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:188
+//line grammar.y:189
 		{ /*todo*/
 		}
 	case 45:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:192
+//line grammar.y:193
 		{ /*todo*/
 		}
 	case 46:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:193
+//line grammar.y:194
 		{ /*todo*/
 		}
 	case 47:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:197
+//line grammar.y:198
 		{ /*todo*/
 		}
 	case 48:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:198
+//line grammar.y:199
 		{ /*todo*/
 		}
 	case 49:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:199
+//line grammar.y:200
 		{ /*todo*/
 		}
 	case 50:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:203
-		{ /*todo*/
+//line grammar.y:204
+		{
+			yyVAL.nodeLitteral = lx.newNodeLitteral(yyDollar[1].tok.v)
 		}
 	case 51:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:204
-		{ /*todo*/
-		}
-	case 52:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:205
 		{ /*todo*/
 		}
-	case 53:
+	case 52:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:206
 		{ /*todo*/
 		}
-	case 54:
+	case 53:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:207
 		{ /*todo*/
 		}
+	case 54:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line grammar.y:208
+		{ /*todo*/
+		}
 	case 55:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line grammar.y:211
+//line grammar.y:212
 		{ /*todo*/
 		}
 	case 56:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:212
+//line grammar.y:213
 		{ /*todo*/
 		}
 	case 57:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:216
+//line grammar.y:217
 		{ /*todo*/
 		}
 	case 58:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:217
+//line grammar.y:218
 		{ /*todo*/
 		}
 	case 59:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:221
+//line grammar.y:222
 		{ /*todo*/
 		}
 	case 60:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:222
+//line grammar.y:223
 		{ /*todo*/
 		}
 	case 61:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line grammar.y:226
+//line grammar.y:227
 		{ /*todo*/
 		}
 	case 62:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:227
+//line grammar.y:228
 		{ /*todo*/
 		}
 	case 63:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:231
+//line grammar.y:232
 		{ /*todo*/
 		}
 	case 64:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:232
+//line grammar.y:233
 		{ /*todo*/
 		}
 	case 65:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line grammar.y:236
+//line grammar.y:237
 		{ /*todo*/
 		}
 	case 66:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:240
+//line grammar.y:241
 		{ /*todo*/
 		}
 	case 67:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:241
+//line grammar.y:242
 		{ /*todo*/
 		}
 	case 68:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:242
+//line grammar.y:243
 		{ /*todo*/
 		}
 	case 69:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:243
+//line grammar.y:244
 		{ /*todo*/
 		}
 	case 70:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:244
+//line grammar.y:245
 		{ /*todo*/
 		}
 	case 71:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:245
+//line grammar.y:246
 		{ /*todo*/
 		}
 	case 72:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:246
+//line grammar.y:247
 		{ /*todo*/
 		}
 	case 73:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:251
+//line grammar.y:252
 		{ /*todo*/
 		}
 	case 74:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:252
+//line grammar.y:253
 		{ /*todo*/
 		}
 	case 75:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:253
+//line grammar.y:254
 		{ /*todo*/
 		}
 	case 76:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:254
+//line grammar.y:255
 		{ /*todo*/
 		}
 	case 77:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:255
+//line grammar.y:256
 		{ /*todo*/
 		}
 	case 78:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:256
+//line grammar.y:257
 		{ /*todo*/
 		}
 	case 79:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:257
+//line grammar.y:258
 		{ /*todo*/
 		}
 	case 80:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:258
+//line grammar.y:259
 		{ /*todo*/
 		}
 	case 81:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:259
+//line grammar.y:260
 		{ /*todo*/
 		}
 	case 82:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:260
+//line grammar.y:261
 		{ /*todo*/
 		}
 	case 83:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:261
+//line grammar.y:262
 		{ /*todo*/
 		}
 	case 84:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:262
+//line grammar.y:263
 		{ /*todo*/
 		}
 	case 85:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:266
+//line grammar.y:267
 		{ /*todo*/
 		}
 	case 86:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:267
+//line grammar.y:268
 		{ /*todo*/
 		}
 	}

@@ -7,49 +7,17 @@ High level tool for generating scrapping helper functions in go.
 
 ## How to use this tool 
 
-### 1.Install the gsc tool
-````
-$> go install github.com/xavier268/goscrapper/gsc@latest
-
-# verify, by calling
-$> gsc
-````
-
-### 2.Write a small script, describing what should be fetched from a web page
-   
-*See the e2e test package for examples*
-
-### 3. Compile your script into a go function
-
-Example, to compile call1.sc into the mypackage package :
-````
-$> gsc -o mypackage call1.sc
-````
-
-There are many options to compile the script.
-
-In particular, it can be compiled either :
-* in synchroneous mode (loop as requested, and return an array of structs for each loop)
-* in asynchroneous mode (loop as requested, each capture value is emitted to the provided channel, function return when finished)
-
-### 4. Use the generated function(s) from your code
-   
-The function is contained in a file with the same name as the script. This files also contains the structs for input/output.
-Functions are provided a context.Context to allow for extarnal cancelation or timeout.
-
-
+( to do )
 
 ## Langage reference
 
 
 ### Script structure
 
-A script starts with the declaration of the input variables, then a list of statements, then a unique return statement.
+A script starts with interpreter settings, then a list of statements, then a unique return statement.
 
 Some statements are loop statements, that will generate a result for each loop. See FOR ... and SELECT ...
 Loop statements are always nested. Results are always captured from the inner most loop.
-
-The go compiler will eliminate redundant code generated to keep the linter happy.
 
 Line and block comments are available, using // and /* or */. Whitespace and returns are not significant, except when they separate a symbol name (eg <= is not the same as < =).
 

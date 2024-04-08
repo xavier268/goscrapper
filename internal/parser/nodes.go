@@ -11,10 +11,8 @@ type nodeLitteral struct {
 	value any
 }
 
-func (m *myLexer) newNodeLitteral(value any) nodeLitteral {
-	return nodeLitteral{
-		value: value,
-	}
+func (m *myLexer) newNodeLitteral(value tok) nodeLitteral {
+	panic("todo - switch on token type to create correct nodeLitteral..")
 }
 
 func (n nodeLitteral) eval(i *Interpreter) (any, error) {

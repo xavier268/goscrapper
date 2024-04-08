@@ -885,17 +885,19 @@ yydefault:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:204
 		{
-			yyVAL.nodeLitteral = lx.newNodeLitteral(yyDollar[1].tok.v)
+			yyVAL.nodeLitteral = lx.newNodeLitteral(yyDollar[1].tok)
 		}
 	case 51:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:205
-		{ /*todo*/
+		{
+			yyVAL.nodeLitteral = lx.newNodeLitteral(yyDollar[1].tok)
 		}
 	case 52:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:206
-		{ /*todo*/
+		{
+			yyVAL.nodeLitteral = lx.newNodeLitteral(yyDollar[1].tok)
 		}
 	case 53:
 		yyDollar = yyS[yypt-1 : yypt+1]

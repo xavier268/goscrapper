@@ -201,9 +201,9 @@ atomExpression
     ;
 
 litteral 
-    : STRING  {$$ = lx.newNodeLitteral($1.v)} 
-    | NUMBER {/*todo*/} 
-    | BOOL {/*todo*/} 
+    : STRING  {$$ = lx.newNodeLitteral($1)} 
+    | NUMBER {$$ = lx.newNodeLitteral($1)} 
+    | BOOL {$$ = lx.newNodeLitteral($1)} 
     | litteralArray {/*todo*/} 
     | litteralObject {/*todo*/} 
     ;

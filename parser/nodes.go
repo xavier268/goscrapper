@@ -10,10 +10,18 @@ type Node interface {
 	eval(*Interpreter) (any, error)
 }
 
-// A list of Node is also a Node.
-type Nodes []Node
+var _ Node = tok{}
+
+// eval implements Node for token.
+// Should never be called. Always eval to nil.
+func (t tok) eval(*Interpreter) (any, error) {
+	return nil, fmt.Errorf("tok.eval should never be called")
+}
 
 // ===== Nodes =====
+
+// A list of Node is also a Node.
+type Nodes []Node
 
 func (ns Nodes) eval(i *Interpreter) (any, error) {
 	var ret = make([]any, 0, len(ns))
@@ -147,6 +155,7 @@ type nodePrint struct {
 // eval implements Node.
 func (n nodePrint) eval(it *Interpreter) (any, error) {
 	var err error
+	fmt.Print("PRINT: ")
 	for _, nn := range n.nodes {
 		var nne any
 		if nn != nil {
@@ -157,11 +166,12 @@ func (n nodePrint) eval(it *Interpreter) (any, error) {
 			return nil, err
 		}
 		if n.raw {
-			fmt.Printf("PRINT : %#v\n", nne)
+			fmt.Printf("%#v ", nne)
 		} else {
-			fmt.Printf("PRINT : %v\n", nne)
+			fmt.Printf("%v ", nne)
 		}
 	}
+	fmt.Println()
 	return nil, nil
 }
 

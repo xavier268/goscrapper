@@ -106,8 +106,9 @@ The following are also valid expressions :
 * **variable = expression** : 
 *Assign an expression to a variable. The variable is declared, and its type derived from the expression.*
   
-* **PRINT expression** : 
-*Prints expression to stdout.*
+* **PRINT [expression, expression ...]** : 
+* **PRINT RAW [expression, expression ...]** : 
+*Prints expression to stdout. Using RAW will print a detailled view of the types, using %#v formatting.*
   
 * **CLICK element** : 
 *assume LEFT click, once*.

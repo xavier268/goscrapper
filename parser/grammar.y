@@ -21,15 +21,17 @@
 %}
       
 %union {            
-    tok tok         // token read from lexer
+    tok tok         // token read from lexer, implements Node.
     node Node       // default for statements and expression
-    nodes Nodes     // default for lists of expressions or statements
-    nodemap NodeMap // default set of Node, with string keys, using valid id syntax.
+    nodes Nodes     // default for lists of expressions or statements, implements Node.
+    nodemap NodeMap // default set of Node, with string keys, using valid id syntax, implements Node.
 }
 
-%type<node> litteral litteralArray expression statement variable keyValue key
+%type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
+%type<node> statement variable keyValue key
 %type<nodes> expressionList program body statements returnStatements 
 %type<nodemap> keyValueSet litteralObject
+%type<tok> ope1 ope2 ope2Bool
 
 %token <tok>  
 
@@ -47,7 +49,7 @@ LPAREN RPAREN
 LBRACKET RBRACKET
 LBRACE RBRACE
 DOT LEN 
-PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS
+PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS RANGE
 NOT AND OR XOR
 EQ NEQ LT LTE GT GTE
 CONTAINS
@@ -181,28 +183,28 @@ variable
 
 expression  
     : expression ope2Bool expression1 {/*todo*/} 
-    | expression1 {/*todo*/} 
+    | expression1
     ;
 
 expression1
-    : expression1 ope2 expression2
+    : expression1 ope2 expression2 {/*todo*/}
     | expression2
     ;
 
 expression2
-    : ope1 expression2{/*todo*/} 
-    | expression3{/*todo*/} 
+    : ope1 expression2{$$ = lx.newNodeOpe1($1, $2)} 
+    | expression3
     ;
 
 expression3
-    : atomExpression{/*todo*/} 
+    : atomExpression
     | accessExpression{/*todo*/} 
     ;
 
 atomExpression
-    : litteral {/*todo*/} 
-    | variable {/*todo*/}    
-    | LPAREN expression RPAREN {/*todo*/} 
+    : litteral 
+    | variable    
+    | LPAREN expression RPAREN {$$ = $2} 
     ;
 
 litteral 
@@ -242,35 +244,35 @@ keyValue
     : key COLON expression {$$ = lx.newNodeKeyValue($1, $3)}
     ;
 
-ope1
-    : PLUS{/*todo*/} 
-    | MINUS {/*todo*/} 
-    | PLUSPLUS {/*todo*/} 
-    | MINUSMINUS {/*todo*/} 
-    | ABS {/*todo*/} 
-    | LEN  {/*todo*/} 
-    | NOT  {/*todo*/} 
+ope1 // unary operators. Action depends on argument type.
+    : PLUS
+    | MINUS 
+    | PLUSPLUS  
+    | MINUSMINUS  
+    | ABS 
+    | LEN  
+    | NOT 
     ;
 
 
-ope2
-    : PLUS {/*todo*/} 
-    | MINUS{/*todo*/} 
-    | MULTI {/*todo*/} 
-    | DIV {/*todo*/} 
-    | MOD {/*todo*/} 
-    | RANGE  {/*todo*/} 
-    | EQ{/*todo*/} 
-    | NEQ{/*todo*/} 
-    | GT{/*todo*/} 
-    | GTE{/*todo*/} 
-    | LT{/*todo*/} 
-    | LTE{/*todo*/} 
+ope2 // binary operators. Action preformed depends of argument types.
+    : PLUS 
+    | MINUS
+    | MULTI  
+    | DIV
+    | MOD 
+    | RANGE
+    | EQ
+    | NEQ
+    | GT 
+    | GTE 
+    | LT 
+    | LTE
     ;
 
 ope2Bool // lazily implemented
-    : AND{/*todo*/} 
-    | OR{/*todo*/} 
+    : AND 
+    | OR
     ;
 
 key

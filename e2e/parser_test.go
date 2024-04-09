@@ -49,6 +49,31 @@ func TestParserFull(t *testing.T) {
 			RETURN ;
 			`,
 			params: nil,
+		}, {
+			req: `
+			// combined data structures
+			x = {a:1, b:2};
+			y = ["a a", "bb", true, 66, x];
+			z = {x:x, y:y};
+			PRINT x, y,z;
+			RETURN ;
+			`,
+			params: nil,
+		}, {
+			req: `
+			// unary tests
+			a=1;
+			b = "deux";
+			c = true;
+			d = false;
+			e = [1,2,3];
+			f = {a:1, b:2};
+			g = {a:e, b:f};
+			h = [g,g,g];
+			PRINT a, +a,-a,++a,--a;
+			RETURN ;
+			`,
+			params: nil,
 		},
 	}
 
@@ -74,17 +99,28 @@ func TestParserFull(t *testing.T) {
 
 }
 
-func TestParserCompile(t *testing.T) {
+func TestParserLab(t *testing.T) {
 
 	data := `
-			// objects - BUGGY !
-			x = {a:1, b:2};
-			PRINT x;
-			RETURN ;
+	// unary tests
+	a=100;
+	b = "deux";
+	c = true;
+	d = false;
+	e = [1,2,3];
+	f = {a:1, b:2};
+	g = {a:e, b:f};
+	h = [g,g,g];
+	PRINT a, +a,-a,++a,--a;
+	RETURN ;
 			`
 	root, ins, err := parser.Compile(t.Name(), data)
 	fmt.Printf("compiled reqst : %#v\nparams : %v\nerr : %v\n", root, ins, err)
 	if err != nil {
 		t.Fatal(err)
 	}
+	it := parser.NewInterpreter(context.Background())
+	res, err := it.Eval(root)
+	fmt.Printf("result : %#v\nerr :%v\n", res, err)
+	it.DumpVars(os.Stdout, "--- Dumping vars "+t.Name())
 }

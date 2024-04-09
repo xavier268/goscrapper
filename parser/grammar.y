@@ -23,11 +23,13 @@
 %union {            
     tok tok         // token read from lexer
     node Node       // default for statements and expression
-    nodes Nodes    // default for lists of expressions or statements
+    nodes Nodes     // default for lists of expressions or statements
+    nodemap NodeMap // default set of Node, with string keys, using valid id syntax.
 }
 
-%type<node> litteral litteralArray expression statement variable
+%type<node> litteral litteralArray expression statement variable keyValue key
 %type<nodes> expressionList program body statements returnStatements 
+%type<nodemap> keyValueSet litteralObject
 
 %token <tok>  
 
@@ -37,7 +39,7 @@ STRING
 IDENTIFIER
 
 ASSIGN SEMICOLON CLICK INPUT IN 
-PRINT SLOW LEFT RIGHT MIDDLE 
+PRINT RAW SLOW LEFT RIGHT MIDDLE 
 RETURN COMMA FOR
 SELECT AS FROM
 WHERE LIMIT
@@ -104,7 +106,8 @@ statement // statements are always followed by a semi-colon !
     | INPUT atomExpression /*text*/ IN atomExpression /*element*/ SEMICOLON {/*todo*/} // input text in element
 
     // debug only !
-    | PRINT expressionList SEMICOLON {$$ = nodePrint{ $2}} // print %v content of expression in expressionList
+    | PRINT expressionList SEMICOLON {$$ = nodePrint{ nodes:$2, raw:false}} // print %#v content of expression in expressionList
+    | PRINT RAW expressionList SEMICOLON {$$ = nodePrint{ nodes:$3, raw : true}} // print %v content of expression in expressionList
     | SLOW SEMICOLON {/*todo*/} // wait for a few seconds
     ;
 
@@ -165,13 +168,11 @@ selectOption
     ;
 
 variable
-    : IDENTIFIER {$$ = lx.newNodeVariable($1, false)} // access current variable
-    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true)} // input variable
+    : IDENTIFIER {$$ = lx.newNodeVariable($1, false)} // get normal variable
+    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true)} // get input variable
     ;
 
-key
-    : IDENTIFIER {/*todo*/} 
-    ;
+
 
 
 // ==============
@@ -209,7 +210,7 @@ litteral
     | NUMBER {$$ = lx.newNodeLitteral($1)} 
     | BOOL {$$ = lx.newNodeLitteral($1)} 
     | litteralArray {$$ = $1} 
-    | litteralObject {/*todo*/} 
+    | litteralObject {$$=$1} 
     ;
 
 accessExpression
@@ -228,17 +229,17 @@ expressionList
     ;
 
 litteralObject
-    : LBRACE RBRACE {/*todo*/} // ok to be empty
-    | LBRACE keyValueList RBRACE {/*todo*/}
+    : LBRACE RBRACE {$$ = lx.newNodeMap(nil, nil)} // ok to be empty
+    | LBRACE keyValueSet RBRACE {$$ = $2}
     ;
 
-keyValueList
-    : keyValue {/*todo*/}
-    | keyValueList COMMA keyValue {/*todo*/}
+keyValueSet
+    : keyValue {$$ = lx.newNodeMap(nil, $1)}
+    | keyValueSet COMMA keyValue {$$ = lx.newNodeMap($1, $3)}
     ;
 
 keyValue
-    : key COLON expression {/*todo*/}
+    : key COLON expression {$$ = lx.newNodeKeyValue($1, $3)}
     ;
 
 ope1
@@ -272,5 +273,7 @@ ope2Bool // lazily implemented
     | OR{/*todo*/} 
     ;
 
+key
+    : IDENTIFIER {$$ = lx.newNodeKey($1)}
 
 %%

@@ -121,7 +121,6 @@ startLoop:
 	if loc := regexp.MustCompile(`(?s)^"(""+|[^"])*"`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
 		lval.tok.v = strings.Replace(lval.tok.v, `""`, `"`, -1) // replace all doubled quotes escaped inside.
-		lval.tok.v = fmt.Sprintf(`%q`, lval.tok.v)              // store as a quoted string
 		lval.tok.t = "string"
 		lval.tok.c = STRING
 		m.pos += loc[1]
@@ -133,7 +132,6 @@ startLoop:
 	if loc := regexp.MustCompile(`(?s)^'(''+|[^'])*'`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
 		lval.tok.v = strings.Replace(lval.tok.v, `''`, `'`, -1) // replace all doubled quotes escaped inside.
-		lval.tok.v = fmt.Sprintf(`%q`, lval.tok.v)              // stored as a back-quoted string
 		lval.tok.t = "string"
 		lval.tok.c = STRING
 		m.pos += loc[1]

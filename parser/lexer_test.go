@@ -19,7 +19,7 @@ STRING
 IDENTIFIER
 
 ASSIGN SEMICOLON CLICK INPUT IN 
-PRINT SLOW LEFT RIGHT MIDDLE 
+PRINT RAW SLOW LEFT RIGHT MIDDLE 
 RETURN COMMA FOR
 SELECT AS FROM
 WHERE LIMIT
@@ -46,8 +46,16 @@ QUESTION
 
 && || ;:%
 
-// testing strings
-" double quote, 
+// testing simple strings
+"un"
+"  un  "
+'deux'
+' deux '
+"trois & quatre"
+'cinq et six'
+
+// testing complex strings
+"double quote, 
 multi-line,
 string with """ escaped double quotes and 'single quotes'"
 

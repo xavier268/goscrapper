@@ -18,7 +18,6 @@ func Compile(name string, content string) (tree Node, invars []string, err error
 		err = fmt.Errorf(buff.String())
 	}
 	return lx.(*myLexer).root, lx.(*myLexer).ParamsList(), err
-
 }
 
 // =============== interpreting a compiled request ===========================

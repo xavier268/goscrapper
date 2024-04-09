@@ -57,7 +57,7 @@ tasks:
     desc: run all tests
     deps: [build]
     cmds:
-      - go test ./internal/parser # unit tests
+      - go test ./parser # unit tests
       - go test -v -count=1 ./e2e # end-to-end tests
 
   clean: 
@@ -72,7 +72,7 @@ tasks:
     ignore_error: true # ignore error if not found
     cmds:    
       - rm -rf .task/
-      - rm internal/parser/y.output
+      - rm parser/y.output
     #  - rm -rf e2e/e2epack/
 
   clean-windows:
@@ -81,7 +81,7 @@ tasks:
     ignore_error: true # ignore error if not found
     cmds:    
       - Powershell Remove-Item .task -Recurse 
-      - Powershell Remove-Item internal/parser/y.output
+      - Powershell Remove-Item parser/y.output
     #  - Powershell Remove-Item e2e/e2epack -Recurse
 
   generate:

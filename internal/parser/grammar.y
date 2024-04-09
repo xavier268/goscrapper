@@ -22,8 +22,12 @@
       
 %union {            
     tok tok         // token read from lexer
-    nodeLitteral  nodeLitteral // default for statements and expression
+    node Node       // default for statements and expression
+    nodes Nodes    // default for lists of expressions or statements
 }
+
+%type<node> litteral litteralArray expression statement
+%type<nodes> expressionList program body statements returnStatements 
 
 %token <tok>  
 
@@ -53,7 +57,7 @@ DOTDOT /* .. */
 QUESTION /*?*/
 BANG /*!*/
 
-%type <nodeLitteral> litteral
+
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
@@ -77,7 +81,7 @@ BANG /*!*/
 
 
 program
-    : beforeProgram  body { /*todo*/ }
+    : beforeProgram  body {$$ = $2 ; lx.root = $$}
     ;
 
 beforeProgram
@@ -85,13 +89,13 @@ beforeProgram
     ;
 
 body
-    : statements returnStatements {  }
-    | returnStatements { }
+    : statements returnStatements { $$ = append($1, $2 ...) }
+    | returnStatements { $$ = $1 }
     ;
 
 statements
-    : statement  { /* todo */}
-    | statements  statement { /* todo */}
+    : statement  { $$ = Nodes{$1}}
+    | statements  statement { $$ = append($1, $2)}
     ;
 
 statement // statements are always followed by a semi-colon !
@@ -100,7 +104,7 @@ statement // statements are always followed by a semi-colon !
     | INPUT atomExpression /*text*/ IN atomExpression /*element*/ SEMICOLON {/*todo*/} // input text in element
 
     // debug only !
-    | PRINT expression SEMICOLON {/*todo*/} // print %v content of expression
+    | PRINT expressionList SEMICOLON {$$ = nodePrint{ $2}} // print %v content of expression in expressionList
     | SLOW SEMICOLON {/*todo*/} // wait for a few seconds
     ;
 
@@ -204,7 +208,7 @@ litteral
     : STRING  {$$ = lx.newNodeLitteral($1)} 
     | NUMBER {$$ = lx.newNodeLitteral($1)} 
     | BOOL {$$ = lx.newNodeLitteral($1)} 
-    | litteralArray {/*todo*/} 
+    | litteralArray {$$ = $1} 
     | litteralObject {/*todo*/} 
     ;
 
@@ -213,18 +217,18 @@ accessExpression
     | atomExpression DOT key {/*todo*/} 
     ;
 
-litteralArray
-    : LBRACKET RBRACKET {/*todo*/}
-    | LBRACKET expressionList RBRACKET {/*todo*/}
+litteralArray 
+    : LBRACKET expressionList RBRACKET {$$ = $2}
+    | LBRACKET RBRACKET { $$ = Nodes(nil)}
     ;
 
 expressionList
-    : expression {/*todo*/}
-    | expressionList COMMA expression  {/*todo*/}
+    : expression {$$ = Nodes{$1}}
+    | expressionList COMMA expression  {$$ = append($1, $3)}
     ;
 
 litteralObject
-    : LBRACE RBRACE {/*todo*/}
+    : LBRACE RBRACE {/*todo*/} // ok to be empty
     | LBRACE keyValueList RBRACE {/*todo*/}
     ;
 

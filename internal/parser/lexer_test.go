@@ -46,6 +46,14 @@ QUESTION
 
 && || ;:%
 
+// testing strings
+" double quote, 
+multi-line,
+string with """ escaped double quotes and 'single quotes'"
+
+'single quote
+with escaped single ''' quotes and "double" quotes'
+
 EndOfTest
 	`
 	buff := new(strings.Builder)

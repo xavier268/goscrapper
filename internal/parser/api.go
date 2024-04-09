@@ -28,19 +28,21 @@ type Interpreter struct {
 	invars []string         // named input variables, declared in the request.
 }
 
-// start a new interpreter, passing input variables.
-// it is ok to pass more or less input variables as declared in the request.
-// extra will be ignored, others will be nil.
-func NewInterpreter(ctx context.Context, params map[string]any) *Interpreter {
+// start a new interpreter
+func NewInterpreter(ctx context.Context) *Interpreter {
 	it := &Interpreter{
 		ctx:    ctx,
-		vars:   make([]map[string]any, len(params)),
-		invars: make([]string, len(params)),
+		vars:   make([]map[string]any, 0, 1),
+		invars: make([]string, 0, 4),
 	}
 	it.pushFrame()
-	// initialize input in global frame
+
+	return it
+}
+
+// Set input parameters to interpreter.
+func (it *Interpreter) With(params map[string]any) *Interpreter {
 	for k, v := range params {
-		it.invars = append(it.invars, k)
 		it.vars[0][k] = v
 	}
 	return it

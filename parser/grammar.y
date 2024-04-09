@@ -26,7 +26,7 @@
     nodes Nodes    // default for lists of expressions or statements
 }
 
-%type<node> litteral litteralArray expression statement
+%type<node> litteral litteralArray expression statement variable
 %type<nodes> expressionList program body statements returnStatements 
 
 %token <tok>  
@@ -99,7 +99,7 @@ statements
     ;
 
 statement // statements are always followed by a semi-colon !
-    : IDENTIFIER ASSIGN expression SEMICOLON{ /*todo*/}
+    : IDENTIFIER ASSIGN expression SEMICOLON{ $$ = lx.newNodeAssign($1,  $3)}
     | CLICK  atomExpression /*element*/  clickOptions0 SEMICOLON{ /*todo*/} // click on element    
     | INPUT atomExpression /*text*/ IN atomExpression /*element*/ SEMICOLON {/*todo*/} // input text in element
 
@@ -165,8 +165,8 @@ selectOption
     ;
 
 variable
-    : IDENTIFIER {/*todo*/} 
-    | AT IDENTIFIER {/*todo*/} // input variable
+    : IDENTIFIER {$$ = lx.newNodeVariable($1, false)} // access current variable
+    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true)} // input variable
     ;
 
 key

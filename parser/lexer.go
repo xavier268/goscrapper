@@ -6,17 +6,29 @@ import (
 	"io"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
 // myLexer maintains context needed to parse the data into a Node.
 type myLexer struct {
-	name   string    // name of the lexer source, user defined
-	data   []byte    // entire data to be lexed
-	pos    int       // next position to process
-	ew     io.Writer // where shall lexer errors be written to ?
-	root   Node      // root node for the parsed tree
-	params []string  // list of declared input parameters
+	name   string          // name of the lexer source, user defined
+	data   []byte          // entire data to be lexed
+	pos    int             // next position to process
+	ew     io.Writer       // where shall lexer errors be written to ?
+	root   Node            // root node for the parsed tree
+	params map[string]bool // set of declared input parameters
+	vars   map[string]bool // set of declared variables, excluding input variables/params
+}
+
+// Get a sorted list of params input variables.
+func (m *myLexer) ParamsList() []string {
+	var list = make([]string, 0, len(m.params))
+	for k := range m.params {
+		list = append(list, k)
+	}
+	sort.Strings(list)
+	return list
 }
 
 // Minimal Lexer interface.
@@ -27,10 +39,13 @@ type Lexer = yyLexer
 // If nil, errors will appear on stdout.
 func NewLexer(name string, data []byte, errorWriter io.Writer) Lexer {
 	return &myLexer{
-		name: name,
-		data: data,
-		pos:  0,
-		ew:   errorWriter,
+		name:   name,
+		data:   data,
+		pos:    0,
+		ew:     errorWriter,
+		root:   nil,
+		params: map[string]bool{},
+		vars:   map[string]bool{},
 	}
 }
 

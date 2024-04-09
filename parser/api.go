@@ -17,7 +17,7 @@ func Compile(name string, content string) (tree Node, invars []string, err error
 	if buff.Len() > 0 {
 		err = fmt.Errorf(buff.String())
 	}
-	return lx.(*myLexer).root, lx.(*myLexer).params, err
+	return lx.(*myLexer).root, lx.(*myLexer).ParamsList(), err
 
 }
 

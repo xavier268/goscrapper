@@ -2,9 +2,27 @@ package parser
 
 import (
 	"fmt"
+	"io"
 	"regexp"
 	"slices"
 )
+
+// Write all known variables to the given writer.
+// Input parameters.
+func (it *Interpreter) DumpVars(w io.Writer, title string) {
+	fmt.Fprintln(w, title)
+	for lev, stack := range it.vars {
+		fmt.Fprintf(w, "\nLevel %d :\n", lev)
+		for k, v := range stack {
+			if it.isInputVar(k) {
+				fmt.Fprintf(w, "\t%s (input param) = %#v \n", k, v)
+			} else {
+				fmt.Fprintf(w, "\t%s = %#v\n", k, v)
+			}
+		}
+	}
+	fmt.Fprintln(w)
+}
 
 // push a new stack frame
 func (it *Interpreter) pushFrame() {
@@ -38,13 +56,13 @@ func (it *Interpreter) assignVar(varName string, value any) error {
 // Retrieve the value for the var.
 // Local values shadow the more global values, even if assigned to nil.
 // Works for both interanl or input vars.
-func (it *Interpreter) getVar(varName string) (value any, ok bool) {
+func (it *Interpreter) getVar(varName string) (value any, err error) {
 	for i := len(it.vars) - 1; i >= 0; i-- {
 		if v, ok := it.vars[i][varName]; ok {
-			return v, true
+			return v, nil
 		}
 	}
-	return nil, false
+	return nil, fmt.Errorf("unknown var: %s", varName)
 }
 
 // check if name was declared as input var name.

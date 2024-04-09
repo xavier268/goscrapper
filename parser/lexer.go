@@ -19,8 +19,13 @@ type myLexer struct {
 	params []string  // list of declared input parameters
 }
 
-// Construct new myLexer. If ew is nil, defaults to stdout.
-func NewLexer(name string, data []byte, errorWriter io.Writer) yyLexer {
+// Minimal Lexer interface.
+type Lexer = yyLexer
+
+// Construct new myLexer.
+// Use errorWriter to capture detailled error messages.
+// If nil, errors will appear on stdout.
+func NewLexer(name string, data []byte, errorWriter io.Writer) Lexer {
 	return &myLexer{
 		name: name,
 		data: data,

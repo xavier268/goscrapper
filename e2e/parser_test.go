@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/xavier268/goscrapper/internal/parser"
+	"github.com/xavier268/goscrapper/parser"
 )
 
 func TestParser(t *testing.T) {

@@ -8,7 +8,9 @@ import (
 
 // =============== compiling a request ===========================
 
-func Compile(name string, content string) (rootTree Node, invars []string, err error) {
+// Compile a request into an abstract syntax tree,
+// invars contains the names of declared input parameters for the request.
+func Compile(name string, content string) (tree Node, invars []string, err error) {
 	buff := new(strings.Builder) // error writer
 	lx := NewLexer(name, []byte(content), buff)
 	yyParse(lx)
@@ -28,7 +30,7 @@ type Interpreter struct {
 	invars []string         // named input variables, declared in the request.
 }
 
-// start a new interpreter
+// Start a new interpreter
 func NewInterpreter(ctx context.Context) *Interpreter {
 	it := &Interpreter{
 		ctx:    ctx,
@@ -40,7 +42,7 @@ func NewInterpreter(ctx context.Context) *Interpreter {
 	return it
 }
 
-// Set input parameters to interpreter.
+// Set input parameters for the request to interprete.
 func (it *Interpreter) With(params map[string]any) *Interpreter {
 	for k, v := range params {
 		it.vars[0][k] = v
@@ -48,6 +50,7 @@ func (it *Interpreter) With(params map[string]any) *Interpreter {
 	return it
 }
 
+// Evaluate a compiled request.
 func (it *Interpreter) Eval(node Node) (any, error) {
 	if node == nil {
 		return nil, fmt.Errorf("cannot evaluate nil node")

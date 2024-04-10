@@ -43,13 +43,13 @@ IDENTIFIER
 ASSIGN SEMICOLON CLICK INPUT IN 
 PRINT RAW SLOW LEFT RIGHT MIDDLE 
 RETURN COMMA FOR
-SELECT AS FROM
+SELECT AS FROM TO STEP
 WHERE LIMIT
 LPAREN RPAREN
 LBRACKET RBRACKET
 LBRACE RBRACE
 DOT LEN 
-PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS RANGE
+PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS
 NOT AND OR XOR NAND
 EQ NEQ LT LTE GT GTE
 CONTAINS
@@ -145,7 +145,9 @@ returnList
     | returnList COMMA atomExpression  {/*todo*/} 
 
 loopStatement
-    : FOR loopVariable IN expression SEMICOLON  {/*todo*/} 
+    : FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array
+    | FOR loopVariable ASSIGN expression TO expression SEMICOLON  {/*todo*/} // numerical range
+    | FOR loopVariable ASSIGN expression TO expression STEP expression SEMICOLON  {/*todo*/} // numerical range
     | SELECT expression /*css*/ AS loopVariable FROM expression selectOptions0 SEMICOLON {/*todo*/} 
     ;
 
@@ -221,7 +223,7 @@ accessExpression
 
 litteralArray 
     : LBRACKET expressionList RBRACKET {$$ = $2}
-    | LBRACKET RBRACKET { $$ = Nodes(nil)}
+    | LBRACKET RBRACKET { $$ = Nodes(nil)} // empty array is ok.
     ;
 
 expressionList
@@ -254,13 +256,12 @@ ope1 // unary operators. Action depends on argument type.
     ;
 
 
-ope2 // binary operators. Action preformed depends of argument types.
+ope2 // binary operators. Action performed depends of argument types.
     : PLUS 
     | MINUS
     | MULTI  
     | DIV
     | MOD 
-    | RANGE
     | EQ
     | NEQ
     | GT 
@@ -269,9 +270,11 @@ ope2 // binary operators. Action preformed depends of argument types.
     | LTE
     ;
 
-ope2Bool // lazily implemented
+ope2Bool //  binary booleans
     : AND 
     | OR
+    | NAND
+    | XOR
     ;
 
 key

@@ -29,9 +29,9 @@ state 2
 	.  error
 
 	statement  goto 6
+	returnStatement  goto 5
 	body  goto 3
 	statements  goto 4
-	returnStatements  goto 5
 	loopStatement  goto 8
 
 state 3
@@ -41,7 +41,7 @@ state 3
 
 
 state 4
-	body:  statements.returnStatements 
+	body:  statements.returnStatement 
 	statements:  statements.statement 
 
 	IDENTIFIER  shift 9
@@ -55,11 +55,11 @@ state 4
 	.  error
 
 	statement  goto 17
-	returnStatements  goto 16
+	returnStatement  goto 16
 	loopStatement  goto 8
 
 state 5
-	body:  returnStatements.    (4)
+	body:  returnStatement.    (4)
 
 	.  reduce 4 (src line 96)
 
@@ -71,7 +71,7 @@ state 6
 
 
 state 7
-	returnStatements:  RETURN.returnList0 SEMICOLON 
+	returnStatement:  RETURN.returnList0 SEMICOLON 
 	returnList0: .    (23)
 
 	BOOL  shift 26
@@ -88,12 +88,12 @@ state 7
 	litteralArray  goto 27
 	atomExpression  goto 20
 	variable  goto 22
-	litteralObject  goto 28
-	returnList0  goto 18
 	returnList  goto 19
+	returnList0  goto 18
+	litteralObject  goto 28
 
 state 8
-	returnStatements:  loopStatement.body 
+	returnStatement:  loopStatement.body 
 
 	IDENTIFIER  shift 9
 	CLICK  shift 10
@@ -106,9 +106,9 @@ state 8
 	.  error
 
 	statement  goto 6
+	returnStatement  goto 5
 	body  goto 33
 	statements  goto 4
-	returnStatements  goto 5
 	loopStatement  goto 8
 
 state 9
@@ -241,7 +241,7 @@ state 15
 	accessExpression  goto 52
 
 state 16
-	body:  statements returnStatements.    (3)
+	body:  statements returnStatement.    (3)
 
 	.  reduce 3 (src line 94)
 
@@ -253,7 +253,7 @@ state 17
 
 
 state 18
-	returnStatements:  RETURN returnList0.SEMICOLON 
+	returnStatement:  RETURN returnList0.SEMICOLON 
 
 	SEMICOLON  shift 57
 	.  error
@@ -408,7 +408,7 @@ state 32
 	keyValueSet  goto 64
 
 state 33
-	returnStatements:  loopStatement body.    (22)
+	returnStatement:  loopStatement body.    (22)
 
 	.  reduce 22 (src line 134)
 
@@ -687,7 +687,7 @@ state 56
 	ope2Bool  goto 80
 
 state 57
-	returnStatements:  RETURN returnList0 SEMICOLON.    (21)
+	returnStatement:  RETURN returnList0 SEMICOLON.    (21)
 
 	.  reduce 21 (src line 132)
 
@@ -1693,7 +1693,7 @@ state 143
 90 grammar rules, 144/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 83 working sets used
-memory: parser 461/240000
+memory: parser 426/240000
 39 extra closures
 493 shift entries, 1 exceptions
 66 goto entries

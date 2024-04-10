@@ -311,5 +311,48 @@ func (n nodeProgram) eval(it *Interpreter) (any, error) {
 			return nil, fmt.Errorf("provided parameter %s in not known to this request", v)
 		}
 	}
-	return n.req.eval(it)
+	// evaluate program content
+	_, err := n.req.eval(it)
+	if it.ch != nil {
+		return nil, err // in async mode, results were already sent
+	} else {
+		return it.results, err // in sync mode, results were aggregated
+	}
+}
+
+// ==== RETURN NODE ====
+
+type nodeReturn struct {
+	what Nodes
+}
+
+var _ Node = nodeReturn{}
+
+// evaluating a return will evaluate the return expressionList,
+// and either send it to the channel, or aggregate it for the final result.
+func (n nodeReturn) eval(it *Interpreter) (any, error) {
+
+	if n.what == nil || len(n.what) == 0 {
+		// nothing to send, we're done.
+		return nil, nil
+	}
+
+	// evaluate return expression list
+	res, err := n.what.eval(it)
+	if err != nil {
+		return nil, err
+	}
+	if it.ch != nil {
+		// try to send res to channel while monitoring context cancelation
+		select {
+		case it.ch <- res:
+			return nil, nil
+		case <-it.ctx.Done():
+			return nil, it.ctx.Err()
+		}
+	} else {
+		// aggregate result
+		it.results = append(it.results, res)
+		return nil, it.ctx.Err() // err if ctx cancelled
+	}
 }

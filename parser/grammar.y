@@ -28,8 +28,8 @@
 }
 
 %type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
-%type<node> statement variable keyValue key program
-%type<nodes> expressionList body statements returnStatements 
+%type<node> statement variable keyValue key program returnStatement
+%type<nodes> expressionList body statements returnList returnList0
 %type<nodemap> keyValueSet litteralObject
 %type<tok> ope1 ope2 ope2Bool
 
@@ -92,8 +92,8 @@ beforeProgram
     ;
 
 body
-    : statements returnStatements { $$ = append($1, $2 ...) }
-    | returnStatements { $$ = $1 }
+    : statements returnStatement { $$ = append($1, $2) }
+    | returnStatement { $$ = Nodes{$1}}
     ;
 
 statements
@@ -107,8 +107,8 @@ statement // statements are always followed by a semi-colon !
     | INPUT atomExpression /*text*/ IN atomExpression /*element*/ SEMICOLON {/*todo*/} // input text in element
 
     // debug only !
-    | PRINT expressionList SEMICOLON {$$ = nodePrint{ nodes:$2, raw:false}} // print %#v content of expression in expressionList
-    | PRINT RAW expressionList SEMICOLON {$$ = nodePrint{ nodes:$3, raw : true}} // print %v content of expression in expressionList
+    | PRINT expressionList SEMICOLON {$$ = nodePrint{ nodes:$2, raw:false}} // print %v content of expression in expressionList
+    | PRINT RAW expressionList SEMICOLON {$$ = nodePrint{ nodes:$3, raw : true}} // print %#v content of expression in expressionList
     | SLOW SEMICOLON {/*todo*/} // wait for a few seconds
     ;
 
@@ -129,19 +129,19 @@ clickOption
     | atomExpression  {/*todo*/} // number of clicks
     ;
 
-returnStatements
-    : RETURN returnList0 SEMICOLON {/*todo*/} 
+returnStatement
+    : RETURN returnList0 SEMICOLON {$$ = nodeReturn{$2}} 
     | loopStatement body  { /*todo*/ }
     ;
 
 returnList0
-    : {/*todo*/} // no return arguments
-    | returnList  {/*todo*/} 
+    : {$$ = Nodes{}} // no return arguments provided
+    | returnList 
     ;
 
 returnList
-    : atomExpression  {/*todo*/} 
-    | returnList COMMA atomExpression  {/*todo*/} 
+    : atomExpression  {$$ = Nodes{$1}} 
+    | returnList COMMA atomExpression  {$$ = append($1, $3)} 
 
 loopStatement
     : FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array

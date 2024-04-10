@@ -70,7 +70,10 @@ func TestParserFull(t *testing.T) {
 			f = {a:1, b:2};
 			g = {a:e, b:f};
 			h = [g,g,g];
+			z1 = 2*4+6-5;
+			b1 = (b == "deux") OR false;
 			PRINT a, +a,-a,++a,--a;
+			PRINT z1 == 9; // should be true
 			RETURN ;
 			`,
 			params: nil,

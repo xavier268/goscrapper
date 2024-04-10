@@ -9,19 +9,21 @@ import (
 
 // Interpreter maintains context for running a compiled request.
 type Interpreter struct {
-	ctx    context.Context
-	vars   []map[string]any // stack of frames, containing values for variables.
-	invars []string         // named input variables, passed as input to the interpreter
-	ch     chan<- any       // channel to send results in async mode - nil, means synch mode.
+	ctx     context.Context
+	vars    []map[string]any // stack of frames, containing values for variables.
+	invars  []string         // named input variables, passed as input to the interpreter
+	ch      chan<- any       // channel to send results in async mode - nil, means synch mode.
+	results []any            // aggregated results to be sent at the end in synch mode. Nil in async mode.
 }
 
-// Start a new interpreter
+// Start a new interpreter in default setting.
 func NewInterpreter(ctx context.Context) *Interpreter {
 	it := &Interpreter{
-		ctx:    ctx,
-		vars:   make([]map[string]any, 0, 1),
-		invars: make([]string, 0, 4),
-		ch:     nil,
+		ctx:     ctx,
+		vars:    make([]map[string]any, 0, 1),
+		invars:  make([]string, 0, 4),
+		ch:      nil,
+		results: make([]any, 0, 5),
 	}
 	it.pushFrame()
 
@@ -36,9 +38,22 @@ func (it *Interpreter) With(params map[string]any) *Interpreter {
 	return it
 }
 
-// Set Async mode. Results will be sent to channel for each loop.
-func (it *Interpreter) SetAsync(ch chan<- any) *Interpreter {
+// Set asynchroneous mode. Results will be sent to channel for each loop.
+// If channel is nil, sets to synchroneous mode.
+func (it *Interpreter) SetAsyncMode(ch chan<- any) *Interpreter {
+	if ch == nil {
+		return it.SetSyncMode()
+	}
 	it.ch = ch
+	it.results = nil
+	return it
+}
+
+// Set synchroneous mode. Results will be aggregated and sent at the end.
+// This is the default mode.
+func (it *Interpreter) SetSyncMode() *Interpreter {
+	it.ch = nil
+	it.results = make([]any, 0, 5)
 	return it
 }
 

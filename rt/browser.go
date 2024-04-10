@@ -14,7 +14,7 @@ import (
 
 // singleton instance browser for all calling requests.
 var (
-	browser        *rod.Browser                 // browser singleton instance
+	browser        *Browser                     // browser singleton instance
 	browserDataDir = mustAbs(".browserDataDir") // where browser data is kept
 	headless       bool                         // headless setting
 	ignorePatterns = make(map[string]bool, 5)   // patterns to ignore at browser level. These will never load for performance.
@@ -31,8 +31,8 @@ func mustAbs(s string) string {
 
 // Elementer can provide Elements or Element. Typically, a page or an element.
 type Elementer interface {
-	Elements(string) (rod.Elements, error)
-	Element(string) (*rod.Element, error)
+	Elements(string) (Elements, error)
+	Element(string) (*Element, error)
 }
 
 // Set browser in headless mode.
@@ -77,7 +77,7 @@ func SetBrowserDataDir(dir string) (err error) {
 }
 
 // Threadsafe and lazy access to the browser singleton.
-func GetBrowser() *rod.Browser {
+func GetBrowser() *Browser {
 	browserLock.Lock()
 	defer browserLock.Unlock()
 
@@ -114,7 +114,7 @@ func GetBrowser() *rod.Browser {
 // Get a new page. Use empty string for empty page.
 // Browser is started if not already available.
 // todo - think about implementing PagePool ?
-func GetPage(ctx context.Context, url string) *rod.Page {
+func GetPage(ctx context.Context, url string) *Page {
 	p, err := GetBrowser().Page(proto.TargetCreateTarget{URL: url})
 	if err != nil {
 		Errorf("Error getting page %s : %v", url, err)
@@ -126,7 +126,7 @@ func GetPage(ctx context.Context, url string) *rod.Page {
 
 // close page, set page pointer to nil on success.
 // // todo - think about implementing PagePool ?
-func ClosePage(page *rod.Page) error {
+func ClosePage(page *Page) error {
 	browserLock.Lock()
 	defer browserLock.Unlock()
 	if page == nil {
@@ -142,7 +142,7 @@ func ClosePage(page *rod.Page) error {
 
 // Retrieve text from a *rod.Element.
 // Return empty string if not found.
-func GetText(el *rod.Element) string {
+func GetText(el *Element) string {
 	if el == nil {
 		return ""
 	}
@@ -155,7 +155,7 @@ func GetText(el *rod.Element) string {
 
 // Retrieve attribute from element.
 // Return empty string on error.
-func GetAttribute(el *rod.Element, att string) string {
+func GetAttribute(el *Element, att string) string {
 	a, err := el.Attribute(att)
 	if err != nil || a == nil {
 		return ""
@@ -166,7 +166,7 @@ func GetAttribute(el *rod.Element, att string) string {
 
 // Click on an element. Use which to choose from "left", "right" or "middle" (default left).
 // Use count to specify number of clicks (defaults 1).
-func Click(el *rod.Element, which proto.InputMouseButton, count int) {
+func Click(el *Element, which InputMouseButton, count int) {
 	if which == "" {
 		which = proto.InputMouseButtonLeft
 	}
@@ -190,7 +190,7 @@ func Click(el *rod.Element, which proto.InputMouseButton, count int) {
 
 // Same as Click, but element is defined by css and pageOrElement.
 // Only the first element found will be clicked.
-func ClickFrom(css string, pageOrElement Elementer, which proto.InputMouseButton, count int) {
+func ClickFrom(css string, pageOrElement Elementer, which InputMouseButton, count int) {
 	if pageOrElement != nil {
 		els, err := pageOrElement.Elements(css)
 		if err == nil && len(els) > 0 {
@@ -202,7 +202,7 @@ func ClickFrom(css string, pageOrElement Elementer, which proto.InputMouseButton
 }
 
 // Input a txt in an element, after selecting and focusing on it.
-func Input(el *rod.Element, txt string) {
+func Input(el *Element, txt string) {
 	if el != nil {
 		err := el.SelectAllText()
 		if err == nil {

@@ -31,8 +31,8 @@ func TestParserLab(t *testing.T) {
 
 	buff.WriteString(data)
 
-	root, ins, err := Compile(t.Name(), data)
-	fmt.Fprintf(buff, "compiled reqst : %#v\nparams : %v\nerr : %v\n", root, ins, err)
+	root, err := Compile(t.Name(), data)
+	fmt.Fprintf(buff, "compiled reqst : %#v\nerr : %v\n", root, err)
 	if err != nil {
 		t.Fatal(err)
 	}

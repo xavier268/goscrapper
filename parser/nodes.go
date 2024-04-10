@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 )
 
@@ -289,4 +290,26 @@ func (m *myLexer) newNodeKeyValue(key Node, node Node) nodeKeyValue {
 		m.errorf("key %v is not a valid nodeKey node", key)
 	}
 	return nodeKeyValue{}
+}
+
+// ===  top level program node ===
+
+type nodeProgram struct {
+	req    Node
+	invars []string // list of externally provided variables, also called parameters.
+}
+
+var _ Node = nodeProgram{}
+
+func (n nodeProgram) eval(it *Interpreter) (any, error) {
+	if n.req == nil {
+		return nil, fmt.Errorf("cannot evaluate a nil request")
+	}
+	// check that all params provided to the interpreter are knwown to the request
+	for _, v := range it.invars {
+		if !slices.Contains(n.invars, v) {
+			return nil, fmt.Errorf("provided parameter %s in not known to this request", v)
+		}
+	}
+	return n.req.eval(it)
 }

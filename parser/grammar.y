@@ -28,8 +28,8 @@
 }
 
 %type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
-%type<node> statement variable keyValue key
-%type<nodes> expressionList program body statements returnStatements 
+%type<node> statement variable keyValue key program
+%type<nodes> expressionList body statements returnStatements 
 %type<nodemap> keyValueSet litteralObject
 %type<tok> ope1 ope2 ope2Bool
 
@@ -84,7 +84,7 @@ QUESTION /*?*/
 
 
 program
-    : beforeProgram  body {$$ = $2 ; lx.root = $$}
+    : beforeProgram  body {$$ = nodeProgram{req : $2, invars : lx.ParamsList()}; lx.root = $$}
     ;
 
 beforeProgram
@@ -131,7 +131,6 @@ clickOption
 
 returnStatements
     : RETURN returnList0 SEMICOLON {/*todo*/} 
-    | RETURN DISTINCT returnList SEMICOLON {/*todo*/} 
     | loopStatement body  { /*todo*/ }
     ;
 
@@ -146,8 +145,8 @@ returnList
 
 loopStatement
     : FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array
-    | FOR loopVariable ASSIGN expression TO expression SEMICOLON  {/*todo*/} // numerical range
-    | FOR loopVariable ASSIGN expression TO expression STEP expression SEMICOLON  {/*todo*/} // numerical range
+    | FOR loopVariable FROM expression TO expression SEMICOLON  {/*todo*/} // numerical range
+    | FOR loopVariable FROM expression TO expression STEP expression SEMICOLON  {/*todo*/} // numerical range
     | SELECT expression /*css*/ AS loopVariable FROM expression selectOptions0 SEMICOLON {/*todo*/} 
     ;
 

@@ -3,22 +3,7 @@ package parser
 import (
 	"context"
 	"fmt"
-	"strings"
 )
-
-// =============== compiling a request ===========================
-
-// Compile a request into an abstract syntax tree,
-// invars contains the names of declared input parameters for the request.
-func Compile(name string, content string) (tree Node, invars []string, err error) {
-	buff := new(strings.Builder) // error writer
-	lx := NewLexer(name, []byte(content), buff)
-	yyParse(lx)
-	if buff.Len() > 0 {
-		err = fmt.Errorf(buff.String())
-	}
-	return lx.(*myLexer).root, lx.(*myLexer).ParamsList(), err
-}
 
 // =============== interpreting a compiled request ===========================
 

@@ -82,8 +82,8 @@ func TestParserFull(t *testing.T) {
 		fmt.Println("--- Testing", rs)
 		fmt.Println(req.req)
 		fmt.Println("--- Compiling", rs)
-		root, ins, err := parser.Compile(rs, req.req)
-		fmt.Printf("compiled reqst : %#v\nparams : %v\nerr : %v\n", root, ins, err)
+		root, err := parser.Compile(rs, req.req)
+		fmt.Printf("compiled reqst : %#v\nerr : %v\n", root, err)
 		if err != nil {
 			t.Fatal(err)
 		}

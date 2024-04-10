@@ -50,7 +50,7 @@ LBRACKET RBRACKET
 LBRACE RBRACE
 DOT LEN 
 PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS RANGE
-NOT AND OR XOR
+NOT AND OR XOR NAND
 EQ NEQ LT LTE GT GTE
 CONTAINS
 FIND PATH WITH JOIN PAGE
@@ -59,7 +59,6 @@ DISTINCT
 AT /* @ */
 DOTDOT /* .. */
 QUESTION /*?*/
-BANG /*!*/
 
 
 
@@ -67,7 +66,7 @@ BANG /*!*/
 // les opérateurs definis en dernier ont la précedence la plus élevée.
 %nonassoc ASSIGN FOR
 %left OR XOR
-%left AND
+%left AND NAND
 %left NOT
 %left IN RANGE
 %left PAGE PRINT ATTR TEXT 
@@ -182,12 +181,12 @@ variable
 //===============
 
 expression  
-    : expression ope2Bool expression1 {/*todo*/} 
+    : expression ope2Bool expression1 {$$ = lx.newNodeOpe2Bool($1, $2, $3)} 
     | expression1
     ;
 
 expression1
-    : expression1 ope2 expression2 {/*todo*/}
+    : expression1 ope2 expression2 {$$ = lx.newNodeOpe2($1,$2, $3)}
     | expression2
     ;
 

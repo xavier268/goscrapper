@@ -26,7 +26,7 @@ func Compile(name string, content string) (tree Node, invars []string, err error
 type Interpreter struct {
 	ctx    context.Context
 	vars   []map[string]any // stack of frames, containing values for variables.
-	invars []string         // named input variables, declared in the request.
+	invars []string         // named input variables, passed as input to the interpreter
 }
 
 // Start a new interpreter

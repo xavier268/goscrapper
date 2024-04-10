@@ -249,7 +249,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"=", ASSIGN},
 		{"?", QUESTION},
 		{"@", AT},
-		{"!", BANG},
+		{"!", NOT},
 	}
 	for _, k := range opeTable {
 		// fmt.Printf("Trying %d %q\n", i, k)

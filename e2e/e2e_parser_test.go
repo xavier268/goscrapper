@@ -98,29 +98,3 @@ func TestParserFull(t *testing.T) {
 	}
 
 }
-
-func TestParserLab(t *testing.T) {
-
-	data := `
-	// unary tests
-	a=100;
-	b = "deux";
-	c = true;
-	d = false;
-	e = [1,2,3];
-	f = {a:1, b:2};
-	g = {a:e, b:f};
-	h = [g,g,g];
-	PRINT a, +a,-a,++a,--a;
-	RETURN ;
-			`
-	root, ins, err := parser.Compile(t.Name(), data)
-	fmt.Printf("compiled reqst : %#v\nparams : %v\nerr : %v\n", root, ins, err)
-	if err != nil {
-		t.Fatal(err)
-	}
-	it := parser.NewInterpreter(context.Background())
-	res, err := it.Eval(root)
-	fmt.Printf("result : %#v\nerr :%v\n", res, err)
-	it.DumpVars(os.Stdout, "--- Dumping vars "+t.Name())
-}

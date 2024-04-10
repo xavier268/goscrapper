@@ -5,15 +5,26 @@ import (
 	"io"
 	"regexp"
 	"slices"
+	"sort"
 )
 
 // Write all known variables to the given writer.
-// Input parameters.
+// Input parameters. Sorted for test stability.
 func (it *Interpreter) DumpVars(w io.Writer, title string) {
 	fmt.Fprintln(w, title)
 	for lev, stack := range it.vars {
 		fmt.Fprintf(w, "\nLevel %d :\n", lev)
-		for k, v := range stack {
+
+		// collect sorted keys
+		kk := make([]string, 0, len(stack))
+		for k := range stack {
+			kk = append(kk, k)
+		}
+		sort.Strings(kk)
+
+		// print stack level dump
+		for _, k := range kk {
+			v := stack[k]
 			if it.isInputVar(k) {
 				fmt.Fprintf(w, "\t%s (input param) = %#v \n", k, v)
 			} else {

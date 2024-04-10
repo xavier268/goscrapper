@@ -12,13 +12,13 @@ import (
 	"github.com/go-rod/rod/lib/proto"
 )
 
-// singleton instance browser for the whole program.
+// singleton instance browser for all calling requests.
 var (
 	browser        *rod.Browser                 // browser singleton instance
 	browserDataDir = mustAbs(".browserDataDir") // where browser data is kept
 	headless       bool                         // headless setting
 	ignorePatterns = make(map[string]bool, 5)   // patterns to ignore at browser level. These will never load for performance.
-	browserLock    sync.Mutex                   // threadsafety.
+	browserLock    sync.Mutex                   // threadsafety lock
 )
 
 func mustAbs(s string) string {
@@ -29,6 +29,14 @@ func mustAbs(s string) string {
 	return ss
 }
 
+// Elementer can provide Elements or Element. Typically, a page or an element.
+type Elementer interface {
+	Elements(string) (rod.Elements, error)
+	Element(string) (*rod.Element, error)
+}
+
+// Set browser in headless mode.
+// Browser should not have started already.
 func SetHeadless(h bool) error {
 	browserLock.Lock()
 	defer browserLock.Unlock()
@@ -39,6 +47,7 @@ func SetHeadless(h bool) error {
 	return fmt.Errorf("cannot set headless mode after browser is created")
 }
 
+// Which requests patterns will always be ignored. Eg : ".jpeg", ".png", ...
 func SetIgnore(patt ...string) error {
 	browserLock.Lock()
 	defer browserLock.Unlock()
@@ -51,6 +60,7 @@ func SetIgnore(patt ...string) error {
 	return fmt.Errorf("cannot set ignore list after browser is created")
 }
 
+// The directory to save brawser internal states into (cookies, etc ...)
 func SetBrowserDataDir(dir string) (err error) {
 	dir, err = filepath.Abs(dir)
 	if err != nil {
@@ -66,8 +76,7 @@ func SetBrowserDataDir(dir string) (err error) {
 	return fmt.Errorf("cannot set browser data directory after browser is created")
 }
 
-// threadsafe construction/access to  browser singleton.
-// Use this, to guarantee lazy, threadsafe browser initialization.
+// Threadsafe and lazy access to the browser singleton.
 func GetBrowser() *rod.Browser {
 	browserLock.Lock()
 	defer browserLock.Unlock()
@@ -102,8 +111,8 @@ func GetBrowser() *rod.Browser {
 	return browser
 }
 
-// return a new page. Use empty string for empty page.
-// browser is started if not already available.
+// Get a new page. Use empty string for empty page.
+// Browser is started if not already available.
 // todo - think about implementing PagePool ?
 func GetPage(ctx context.Context, url string) *rod.Page {
 	p, err := GetBrowser().Page(proto.TargetCreateTarget{URL: url})
@@ -131,14 +140,90 @@ func ClosePage(page *rod.Page) error {
 	return nil
 }
 
-// retrieve text from a *rod.Element.
+// Retrieve text from a *rod.Element.
+// Return empty string if not found.
 func GetText(el *rod.Element) string {
 	if el == nil {
 		return ""
 	}
 	s, err := el.Text()
 	if err != nil {
-		Errorf("cannot retieve text from element")
+		Errorf("cannot retrieve text from element")
 	}
 	return s
+}
+
+// Retrieve attribute from element.
+// Return empty string on error.
+func GetAttribute(el *rod.Element, att string) string {
+	a, err := el.Attribute(att)
+	if err != nil || a == nil {
+		return ""
+	} else {
+		return *a
+	}
+}
+
+// Click on an element. Use which to choose from "left", "right" or "middle" (default left).
+// Use count to specify number of clicks (defaults 1).
+func Click(el *rod.Element, which proto.InputMouseButton, count int) {
+	if which == "" {
+		which = proto.InputMouseButtonLeft
+	}
+	if count <= 0 {
+		count = 1
+	}
+	if el != nil {
+		switch which {
+		case proto.InputMouseButtonLeft,
+			proto.InputMouseButtonRight,
+			proto.InputMouseButtonMiddle:
+			err := el.Click(which, count)
+			if err != nil {
+				Errorf(err.Error())
+			}
+		default:
+			Errorf("Click: unknown button %s", which)
+		}
+	}
+}
+
+// Same as Click, but element is defined by css and pageOrElement.
+// Only the first element found will be clicked.
+func ClickFrom(css string, pageOrElement Elementer, which proto.InputMouseButton, count int) {
+	if pageOrElement != nil {
+		els, err := pageOrElement.Elements(css)
+		if err == nil && len(els) > 0 {
+			Click(els[0], which, count)
+		} else {
+			Errorf("Could not find a clickable element %s : %s", css, err)
+		}
+	}
+}
+
+// Input a txt in an element, after selecting and focusing on it.
+func Input(el *rod.Element, txt string) {
+	if el != nil {
+		err := el.SelectAllText()
+		if err == nil {
+			err = el.Input(txt)
+			if err != nil {
+				Errorf(err.Error())
+			}
+		} else {
+			Errorf(err.Error())
+		}
+	}
+}
+
+// Select an element and input a txt in it.
+func InputFrom(css string, txt string, pageOrElement Elementer) {
+	if pageOrElement != nil {
+		els, err := pageOrElement.Elements(css)
+		if err == nil && len(els) > 0 {
+			Input(els[0], txt)
+		} else {
+			Errorf("Could not find a input element %s : %s", css, err)
+		}
+	}
 }

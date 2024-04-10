@@ -27,8 +27,7 @@ type Interpreter struct {
 	ctx    context.Context
 	vars   []map[string]any // stack of frames, containing values for variables.
 	invars []string         // named input variables, passed as input to the interpreter
-	ch     chan<- any       // channel to send results in async mode
-	driver rt.Browser       //
+	ch     chan<- any       // channel to send results in async mode - nil, means synch mode.
 }
 
 // Start a new interpreter

@@ -129,8 +129,12 @@ func TestParserFull(t *testing.T) {
 					`,
 			params: nil,
 		}, {
-			req: `// Reserved
-			RETURN;
+			req: `// test empty array and objects
+			a = [];
+			b = {};
+			// c = a[0]; // should fail "out of bound" at execution if uncommented
+			d = b.two ; // should not fail, justr null/nil
+			RETURN a, b, b.six; // should not fail
 					`,
 			params: nil,
 		}, {

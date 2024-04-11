@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strconv"
+	"time"
 
 	"github.com/xavier268/goscrapper/rt"
 )
@@ -599,4 +600,48 @@ func (n nodeArrayAccess) eval(it *Interpreter) (any, error) {
 	}
 	// Access array content
 	return aa[ii], nil
+}
+
+// ==== NODE SLOW ====
+
+type nodeSlow struct {
+	m Node // duration in milliseconds
+}
+
+var _ Node = nodeSlow{}
+
+// eval Node
+func (n nodeSlow) eval(it *Interpreter) (any, error) {
+	// default millis duration
+	dur := rt.SLOW_DELAY
+
+	// evaluate duration
+	if n.m != nil {
+		d, err := n.m.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		if d != nil { // if d is nil, use default dur ...
+			// verify d is an int
+			dd, ok := d.(int)
+			if !ok {
+				return nil, fmt.Errorf("expected an int millis duration, but got a %T", d)
+			}
+			if dd > 0 {
+				dur = time.Duration(dd) * time.Millisecond // only set for valid, strictly positive values.
+			}
+		}
+	}
+	// sleep until duration has expired or context is cancelled
+	timer := time.NewTimer(dur)
+	select {
+	case <-it.ctx.Done():
+		if !timer.Stop() {
+			<-timer.C // drain the channel if the timer had already expired.
+			return nil, it.ctx.Err()
+		}
+		return nil, it.ctx.Err()
+	case <-timer.C:
+		return nil, nil
+	}
 }

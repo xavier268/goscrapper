@@ -138,13 +138,22 @@ func TestParserFull(t *testing.T) {
 					`,
 			params: nil,
 		}, {
-			req: `// Reserved
-			RETURN;
+			req: `
+			// test PAGE & TEXT
+			wk = PAGE "http://www.wikipedia.fr";
+			empty = PAGE "";
+			t = TEXT wk;
+			RETURN t ;
 					`,
 			params: nil,
 		}, {
-			req: `// Reserved
-			RETURN;
+			req: `
+			// test VERSION , SLOW & NOW
+			t = NOW;
+			v = "Version is " + VERSION;
+			s = "File separator is " + FILE_SEPARATOR;
+			SLOW;
+			RETURN t, v, NOW ; // both time should slightly differ
 					`,
 			params: nil,
 		}, {

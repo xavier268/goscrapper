@@ -2,6 +2,8 @@
 package rt
 
 import (
+	"fmt"
+
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/proto"
 )
@@ -20,3 +22,9 @@ const (
 	MouseRight  = InputMouseButton(proto.InputMouseButtonRight)
 	MouseMiddle = InputMouseButton(proto.InputMouseButtonMiddle)
 )
+
+const VERSION = "0.1.0"
+
+func init() {
+	fmt.Println("Runtime version : " + VERSION)
+}

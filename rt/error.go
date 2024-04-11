@@ -2,9 +2,14 @@ package rt
 
 import "fmt"
 
-// Set this hook to capture runtime browser related errors.
+// Set these hooks to capture runtime errors orlog messages.
 // If not set, will report to stdout.
 var Errorf func(format string, args ...any)
+var Logf func(format string, args ...any)
+
+type RuntimeError struct {
+	Message string
+}
 
 func init() {
 	Errorf = // set default error reporting function
@@ -13,4 +18,9 @@ func init() {
 			fmt.Printf(format, args...)
 			fmt.Println()
 		}
+	Logf = func(format string, args ...any) {
+		fmt.Printf("Runtime log : ")
+		fmt.Printf(format, args...)
+		fmt.Println()
+	}
 }

@@ -2,8 +2,32 @@ package parser
 
 import (
 	"fmt"
+	"path/filepath"
 	"reflect"
+	"time"
+
+	"github.com/xavier268/goscrapper"
+	"github.com/xavier268/goscrapper/rt"
 )
+
+// ==== No argument operators ====
+type nodeOpe0 tok
+
+var _ Node = nodeOpe0{}
+
+// eval implements Node.
+func (n nodeOpe0) eval(it *Interpreter) (rv any, err error) {
+	switch n.c {
+	case NOW:
+		return time.Now(), nil
+	case VERSION:
+		return goscrapper.VERSION, nil
+	case FILE_SEPARATOR:
+		return string(filepath.Separator), nil
+	default:
+		return nil, fmt.Errorf("unknown zero-ary operator %s", TokenAsString(n.c))
+	}
+}
 
 // ==== Unary operators ====
 
@@ -101,6 +125,22 @@ func (n nodeOpe1) eval(it *Interpreter) (rv any, err error) {
 			return v, nil
 		default:
 			return nil, fmt.Errorf("cannot apply unary %s to %T", TokenAsString(n.operator), rv)
+		}
+	case PAGE:
+		switch url := rv.(type) {
+		case string:
+			return rt.GetPage(it.ctx, url), nil
+		default:
+			return nil, fmt.Errorf("cannot apply unary %s to %T, expected string", TokenAsString(n.operator), rv)
+		}
+	case TEXT:
+		switch elem := rv.(type) {
+		case *rt.Element:
+			return rt.GetElemText(elem), nil
+		case *rt.Page:
+			return rt.GetPageText(elem), nil
+		default:
+			return nil, fmt.Errorf("cannot apply unary %s to %T, expected *rt.Element", TokenAsString(n.operator), rv)
 		}
 	default:
 		return nil, fmt.Errorf("unknown unary operator: %d", n.operator)

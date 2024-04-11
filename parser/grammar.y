@@ -28,7 +28,7 @@
     nodeWithBody NodeWithBody // a node that incorporates a set of nodes
     }
 
-%type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
+%type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression ope0
 %type<node> statement variable  keyValue key program returnStatement accessExpression
 %type<nodes> expressionList body statements returnList returnList0
 %type<nodemap> keyValueSet litteralObject
@@ -64,11 +64,13 @@ AT /* @ */
 DOTDOT /* .. */
 QUESTION /*?*/
 
+NOW VERSION FILE_SEPARATOR
+
 
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc ASSIGN FOR 
+%nonassoc ASSIGN FOR NOW VERSION
 %left OR XOR
 %left AND NAND
 %left NOT
@@ -104,14 +106,15 @@ statements
     | statements  statement { $$ = append($1, $2)}
     ;
 
-statement // statements are always followed by a semi-colon !
+statement // statements are ALWAYS followed by a semi-colon
     : IDENTIFIER ASSIGN expression SEMICOLON{ $$ = lx.newNodeAssign($1,  $3)}
-    | CLICK  expression /*element*/  clickOptions0 SEMICOLON{ /*todo*/} // click on element    
-    | INPUT expression /*text*/ IN expression /*element*/ SEMICOLON {/*todo*/} // input text in element
+    | CLICK  expression /*element*/  clickOptions0 SEMICOLON{ /*todo*/} // click on element - make sure you select it first !  
+    | INPUT expression /*text*/ IN expression /*element*/ SEMICOLON {/*todo*/} // input text in element - make sure you select it first !
 
     // debug only !
     | PRINT printOption0 expressionList SEMICOLON {$$ = nodePrint{ nodes:$3, raw:($2.c == RAW)}} // print %v content of expression in expressionList
-    | SLOW SEMICOLON {/*todo*/} // wait for a few seconds
+    | SLOW SEMICOLON {$$ = nodeSlow{m:nil}} // wait for a short delay, using SLOW_DELAY from runtime. STop waiting if context is cancelled.
+    | SLOW expression SEMICOLON {$$ = nodeSlow{m:$1}} // wait for specified millis, falling back on SLOW_DELAY if millis <=0. STop waiting if context is cancelled.
     ;
 
 printOption0
@@ -196,9 +199,6 @@ variable
     | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true, false)}  // get input variable
     ;
 
-
-
-
 // ==============
 // expressions
 //===============
@@ -220,7 +220,7 @@ expression2 // unary ops
 
 expression3 // manage access and compound litteral expressions
     : atomExpression
-    | accessExpression{/*todo*/} 
+    | accessExpression
     | litteralArray {$$ = $1} 
     | litteralObject {$$ = $1} 
     ;
@@ -228,6 +228,7 @@ expression3 // manage access and compound litteral expressions
 atomExpression
     : litteral 
     | variable    
+    | ope0 
     | LPAREN expression RPAREN {$$ = $2} 
     ;
 
@@ -266,6 +267,12 @@ keyValue
     : key COLON expression {$$ = lx.newNodeKeyValue($1, $3)}
     ;
 
+ope0 // no argument operator, ie, read-only system values.
+    : NOW { $$ = nodeOpe0($1)}// time stamp
+    | VERSION { $$ = nodeOpe0($1)}// this version
+    | FILE_SEPARATOR { $$ = nodeOpe0($1)} // file separator for current system
+    ;
+
 ope1 // unary operators. Action depends on argument type.
     : PLUS
     | MINUS 
@@ -274,6 +281,9 @@ ope1 // unary operators. Action depends on argument type.
     | ABS 
     | LEN  
     | NOT 
+    
+    | PAGE // PAGE url -> page object
+    | TEXT // TEXT ele -> text content of element
     ;
 
 
@@ -289,6 +299,8 @@ ope2 // binary operators. Action performed depends of argument types.
     | GTE 
     | LT 
     | LTE
+
+    | ATTR // el ATTR at -> value of at attribute in el
     ;
 
 ope2Bool //  binary booleans

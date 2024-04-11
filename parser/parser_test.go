@@ -5,15 +5,18 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestParserVisual(t *testing.T) {
 
 	data := `
-	// test array access
-	b = [1+2,5];
-	c = b[0];
-	RETURN ;
+	// test VERSION , SLOW & NOW
+	t = NOW;
+	v = "Version is " + VERSION;
+	s = "File separator is " + FILE_SEPARATOR;
+	SLOW;
+	RETURN t, v, NOW ; // both time should slightly differ
 			`
 	buff := new(strings.Builder)
 
@@ -34,4 +37,5 @@ func TestParserVisual(t *testing.T) {
 
 	// for non regression control
 	// mytest.Verify(t, buff.String(), t.Name())
+	time.Sleep(5 * time.Second)
 }

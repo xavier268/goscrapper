@@ -86,6 +86,8 @@ func GetBrowser() *Browser {
 		return browser
 	}
 
+	Logf("initializing browser ...")
+
 	// else, create it
 	u := launcher.
 		New().
@@ -226,4 +228,29 @@ func InputFrom(css string, txt string, pageOrElement Elementer) {
 			Errorf("Could not find a input element %s : %s", css, err)
 		}
 	}
+}
+
+// Return string content of the html element in page, or "" if error.
+// Never abort, never wait.
+func GetPageText(page *Page) string {
+	if page == nil {
+		return ""
+	}
+	els, err := page.Elements("html")
+	if err != nil || len(els) < 1 {
+		return ""
+	}
+	return GetElemText(els[0])
+}
+
+// Get text for element. Never wait, never fail. Return "" if error.
+func GetElemText(elem *Element) string {
+	if elem == nil {
+		return ""
+	}
+	tt, err := elem.Text()
+	if err != nil {
+		return ""
+	}
+	return tt
 }

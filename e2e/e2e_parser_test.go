@@ -96,6 +96,15 @@ func TestParserFull(t *testing.T) {
 			RETURN {first: a,second:a+3} ; 
 			`,
 			params: nil,
+		}, {
+			req: `
+			a=1;	
+			FOR b FROM 4 TO 10 STEP 3;
+				FOR c FROM -1 TO -3 STEP -1;
+					PRINT b,c;
+					RETURN {first: a,second:b, third :c} ; 
+					`,
+			params: nil,
 		},
 	}
 
@@ -103,20 +112,21 @@ func TestParserFull(t *testing.T) {
 		rs := fmt.Sprintf("%s-req#%d", t.Name(), i)
 		fmt.Println("--- Testing", rs)
 		fmt.Println(req.req)
-		fmt.Println("--- Compiling", rs)
+		fmt.Println("\n--- Compiling", rs)
 		root, err := parser.Compile(rs, req.req)
-		fmt.Printf("COMPILED : \n%#v\nCompilation error : %s%v%s\n", root, parser.ColRED, err, parser.RESET)
+		fmt.Printf("COMPILED : \n%#v\n\nCompilation error : %s%v%s\n", root, parser.ColRED, err, parser.AnsiRESET)
 		if err != nil {
 			t.Fatal(err)
 		}
-		fmt.Println("--- Executing", rs, "with", req.params)
+		fmt.Println("\n--- Executing", rs, "with", req.params)
 		it := parser.NewInterpreter(context.Background()).With(req.params)
 		res, err := it.Eval(root)
-		fmt.Printf("EXECUTION RESULT : %s%s%s\nExecution error :%v\n", parser.ColGREEN, parser.PrettyJson(res), parser.RESET, err)
+		fmt.Printf("EXECUTION RESULT : %s%s%s\n\nExecution error :%s%v%s\n",
+			parser.ColGREEN, parser.PrettyJson(res), parser.AnsiRESET, parser.ColRED, err, parser.AnsiRESET)
 		if err != nil {
 			t.Fatal(err)
 		}
-		it.DumpVars(os.Stdout, "--- Dumping vars "+rs)
+		it.DumpVars(os.Stdout, "\n--- Dumping vars "+rs)
 	}
 
 }

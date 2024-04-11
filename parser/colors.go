@@ -37,5 +37,5 @@ const (
 	ClearLineBeforeCursor = csi + "1K"
 
 	// Reset all settings
-	RESET = csi + "0m"
+	AnsiRESET = csi + "0m"
 )

@@ -56,7 +56,7 @@ func (m *myLexer) Error(e string) {
 	}
 	windows := 100
 	// write to std error writer lx.ew
-	fmt.Fprintf(m.ew, "\n%s ********* Error in %s :***************%s\n\n", ColRED, m.name, RESET)
+	fmt.Fprintf(m.ew, "\n%s ********* Error in %s :***************%s\n\n", ColRED, m.name, AnsiRESET)
 	bef := max(0, m.pos-windows)
 	bfs := strings.Split(string(m.data[bef:m.pos]), "\n")
 	if len(bfs) > 1 {
@@ -75,10 +75,10 @@ func (m *myLexer) Error(e string) {
 	fmt.Fprintf(m.ew, "%s%s\n", ColYELLOW, afs[0])
 	// last points to error position
 	last = max(0, last-2)
-	fmt.Fprintf(m.ew, " %s%s^ %s %s\n", ColRED, strings.Repeat(" ", last), e, RESET)
+	fmt.Fprintf(m.ew, " %s%s^ %s %s\n", ColRED, strings.Repeat(" ", last), e, AnsiRESET)
 	// print rest of context
 	fmt.Fprintf(m.ew, "%s%s\n", ColYELLOW, strings.Join(afs[1:], "\n"))
-	fmt.Fprintln(m.ew, RESET)
+	fmt.Fprintln(m.ew, AnsiRESET)
 }
 
 // utility to format error message sent to myLexer.Error()

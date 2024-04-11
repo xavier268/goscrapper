@@ -29,7 +29,7 @@
     }
 
 %type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
-%type<node> statement variable  keyValue key program returnStatement 
+%type<node> statement variable  keyValue key program returnStatement accessExpression
 %type<nodes> expressionList body statements returnList returnList0
 %type<nodemap> keyValueSet litteralObject
 %type<nodeWithBody> loopStatement
@@ -238,8 +238,8 @@ litteral
     ;
 
 accessExpression
-    : atomExpression LBRACKET expression RBRACKET  {/*todo*/} 
-    | atomExpression DOT key {/*todo*/} 
+    : atomExpression LBRACKET expression RBRACKET { $$ = nodeArrayAccess{a:$1, i:$3}} 
+    | atomExpression DOT key {$$ = nodeMapAccess{m:$1,k:$3}} 
     ;
 
 litteralArray 

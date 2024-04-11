@@ -105,6 +105,69 @@ func TestParserFull(t *testing.T) {
 					RETURN {first: a,second:b, third :c} ; 
 					`,
 			params: nil,
+		}, {
+			req: `
+			// test map access
+			a = {un:1, deux:"dd", trois:true};
+			RETURN a.un, a.deux, a.trois, a.quatre; // a.quatre should give nil/null with no error
+					`,
+			params: nil,
+		}, {
+			req: `
+			// test map access on non map
+			b = [1,5];
+			// c = b.trois; // should fail at execution if uncommented
+			RETURN ;
+					`,
+			params: nil,
+		}, {
+			req: `
+			// test array access
+			a = "xxx";
+			b = [1+2,5,a+a];
+			RETURN b[0], b[1], b[1+1] ;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
+		}, {
+			req: `// Reserved
+			RETURN;
+					`,
+			params: nil,
 		},
 	}
 

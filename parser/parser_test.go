@@ -10,11 +10,10 @@ import (
 func TestParserVisual(t *testing.T) {
 
 	data := `
-	a=1;	
-	FOR b FROM 4 TO 10 STEP 3;
-		FOR c FROM -1 TO -3 STEP -1;
-			PRINT b,c;
-			RETURN {first: a,second:b} ; 
+	// test array access
+	b = [1+2,5];
+	c = b[0];
+	RETURN ;
 			`
 	buff := new(strings.Builder)
 

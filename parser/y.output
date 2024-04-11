@@ -99,11 +99,11 @@ state 7
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	returnList  goto 19
 	returnList0  goto 18
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 8
 	returnStatement:  loopStatement.body 
@@ -159,9 +159,9 @@ state 10
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 11
 	statement:  INPUT.expression IN expression SEMICOLON 
@@ -191,9 +191,9 @@ state 11
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 12
 	statement:  PRINT.printOption0 expressionList SEMICOLON 
@@ -257,9 +257,9 @@ state 15
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 16
 	body:  statements returnStatement.    (3)
@@ -351,9 +351,9 @@ state 23
 	expression2  goto 78
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 24
 	expression2:  expression3.    (51)
@@ -471,9 +471,9 @@ state 38
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 39
 	litteralArray:  LBRACKET.expressionList RBRACKET 
@@ -505,10 +505,10 @@ state 39
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	expressionList  goto 82
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 40
 	litteralObject:  LBRACE.RBRACE 
@@ -587,9 +587,9 @@ state 47
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 48
 	statement:  CLICK expression.clickOptions0 SEMICOLON 
@@ -660,10 +660,10 @@ state 50
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	expressionList  goto 100
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 51
 	printOption0:  RAW.    (13)
@@ -722,9 +722,9 @@ state 55
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 56
 	loopStatement:  FOR IN.expression SEMICOLON 
@@ -754,9 +754,9 @@ state 56
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 57
 	loopVariable:  IDENTIFIER.    (37)
@@ -813,9 +813,9 @@ state 60
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 61
 	expression:  expression ope2Bool.expression1 
@@ -844,9 +844,9 @@ state 61
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 62
 	ope2Bool:  AND.    (91)
@@ -898,9 +898,9 @@ state 66
 	expression2  goto 109
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 67
 	ope2:  PLUS.    (80)
@@ -1002,9 +1002,9 @@ state 79
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 80
 	accessExpression:  atomExpression DOT.key 
@@ -1192,9 +1192,9 @@ state 99
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 100
 	statement:  PRINT printOption0 expressionList.SEMICOLON 
@@ -1234,9 +1234,9 @@ state 101
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 102
 	loopStatement:  FOR loopVariable IN.expression SEMICOLON 
@@ -1266,9 +1266,9 @@ state 102
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 103
 	loopStatement:  FOR FROM expression.TO expression STEP expression SEMICOLON SEMICOLON 
@@ -1333,9 +1333,9 @@ state 106
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 107
 	returnList:  returnList COMMA expression.    (27)
@@ -1433,9 +1433,9 @@ state 114
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 115
 	litteralObject:  LBRACE keyValueSet RBRACE.    (69)
@@ -1480,9 +1480,9 @@ state 117
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 118
 	statement:  IDENTIFIER ASSIGN expression SEMICOLON.    (7)
@@ -1577,9 +1577,9 @@ state 125
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 126
 	loopStatement:  FOR IN expression SEMICOLON.    (34)
@@ -1683,9 +1683,9 @@ state 134
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 135
 	loopStatement:  FOR loopVariable IN expression SEMICOLON.    (33)
@@ -1736,9 +1736,9 @@ state 137
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 138
 	loopStatement:  SELECT expression FROM expression selectOptions0.SEMICOLON 
@@ -1791,9 +1791,9 @@ state 141
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 142
 	selectOption:  LIMIT.expression 
@@ -1823,9 +1823,9 @@ state 142
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 143
 	loopStatement:  FOR loopVariable FROM expression TO expression.STEP expression SEMICOLON 
@@ -1870,9 +1870,9 @@ state 144
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 145
 	loopStatement:  FOR FROM expression TO expression SEMICOLON.    (32)
@@ -1962,9 +1962,9 @@ state 151
 	expression2  goto 22
 	expression3  goto 24
 	variable  goto 37
+	accessExpression  goto 33
 	litteralObject  goto 35
 	ope1  goto 23
-	accessExpression  goto 33
 
 state 152
 	loopStatement:  FOR loopVariable FROM expression TO expression SEMICOLON.    (31)
@@ -2034,7 +2034,7 @@ state 159
 96 grammar rules, 160/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 84 working sets used
-memory: parser 661/240000
+memory: parser 635/240000
 38 extra closures
 635 shift entries, 1 exceptions
 72 goto entries

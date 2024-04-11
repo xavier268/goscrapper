@@ -2,13 +2,15 @@ package rt
 
 import "fmt"
 
-// Hook to capture runtime browser related errors. Change as needed.
-var Errorf func(format string, args ...any) = defaultErrorf
+// Set this hook to capture runtime browser related errors.
+// If not set, will report to stdout.
+var Errorf func(format string, args ...any)
 
-// default error reporting
-func defaultErrorf(format string, args ...any) {
-
-	fmt.Println("Runtime : ")
-	fmt.Printf(format, args...)
-	fmt.Println()
+func init() {
+	Errorf = // set default error reporting function
+		func(format string, args ...any) {
+			fmt.Println("Runtime error : ")
+			fmt.Printf(format, args...)
+			fmt.Println()
+		}
 }

@@ -35,7 +35,7 @@
 %type<nodeWithBody> loopStatement
 
 
-%type<tok> ope1 ope2 ope2Bool loopVariable
+%type<tok> ope1 ope2 ope2Bool loopVariable printOption0
 
 %token <tok>  
 
@@ -68,7 +68,7 @@ QUESTION /*?*/
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc ASSIGN FOR
+%nonassoc ASSIGN FOR 
 %left OR XOR
 %left AND NAND
 %left NOT
@@ -79,8 +79,7 @@ QUESTION /*?*/
 %left MINUS
 %left MULTI DIV MOD
 %left PLUSPLUS 
-%left LBRACKET  
-%left DOT 
+%left LBRACKET  DOT 
 
 %%
 
@@ -107,13 +106,17 @@ statements
 
 statement // statements are always followed by a semi-colon !
     : IDENTIFIER ASSIGN expression SEMICOLON{ $$ = lx.newNodeAssign($1,  $3)}
-    | CLICK  atomExpression /*element*/  clickOptions0 SEMICOLON{ /*todo*/} // click on element    
-    | INPUT atomExpression /*text*/ IN atomExpression /*element*/ SEMICOLON {/*todo*/} // input text in element
+    | CLICK  expression /*element*/  clickOptions0 SEMICOLON{ /*todo*/} // click on element    
+    | INPUT expression /*text*/ IN expression /*element*/ SEMICOLON {/*todo*/} // input text in element
 
     // debug only !
-    | PRINT expressionList SEMICOLON {$$ = nodePrint{ nodes:$2, raw:false}} // print %v content of expression in expressionList
-    | PRINT RAW expressionList SEMICOLON {$$ = nodePrint{ nodes:$3, raw : true}} // print %#v content of expression in expressionList
+    | PRINT printOption0 expressionList SEMICOLON {$$ = nodePrint{ nodes:$3, raw:($2.c == RAW)}} // print %v content of expression in expressionList
     | SLOW SEMICOLON {/*todo*/} // wait for a few seconds
+    ;
+
+printOption0
+    : {$$ = tok{}} // print using %v
+    | RAW {$$ = $1} // print using %#v
     ;
 
 clickOptions0
@@ -150,9 +153,6 @@ returnList
 loopStatement
     : FOR  SEMICOLON  {$$ = lx.newNodeForLoop(nil, nil, nil, nil)} //infinite loop
 
-    | FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array
-    | FOR IN expression SEMICOLON  {/*todo*/} //loop over array, no loop variable
-
     | FOR loopVariable FROM expression TO expression STEP expression SEMICOLON  
         {$$ = lx.newNodeForLoop($2, $4, $6, $8)} // numerical range
     | FOR  FROM expression TO expression STEP expression SEMICOLON SEMICOLON 
@@ -163,8 +163,13 @@ loopStatement
     | FOR FROM expression TO expression SEMICOLON  
         {$$ = lx.newNodeForLoop(nil, $3, $5, nil)} //     numerical range
     
-    | SELECT expression /*css*/ AS loopVariable FROM expression selectOptions0 SEMICOLON {/*todo*/} // select css elements
-    | SELECT expression /*css*/ FROM expression selectOptions0 SEMICOLON {/*todo*/} // select css elements, no loop variable
+    | FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array
+    | FOR IN expression SEMICOLON  {/*todo*/} //loop over array, no loop variable
+
+    | SELECT expression /*css*/ AS loopVariable FROM expression /*Elementer*/ selectOptions0 SEMICOLON 
+        {/*todo*/} // select css elements
+    | SELECT expression /*css*/ FROM expression /*Elementer*/ selectOptions0 SEMICOLON 
+        {/*todo*/} // select css elements, no loop variable
     ;
 
 loopVariable
@@ -187,8 +192,8 @@ selectOption
     ;
 
 variable
-    : IDENTIFIER {$$ = lx.newNodeVariable($1, false, true)} // get normal variable, check already declared
-    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true, false)} // get input variable
+    : IDENTIFIER {$$ = lx.newNodeVariable($1, false, true)}     // get normal variable, check already declared
+    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true, false)}  // get input variable
     ;
 
 

@@ -187,8 +187,8 @@ selectOption
     ;
 
 variable
-    : IDENTIFIER {$$ = lx.newNodeVariable($1, false)} // get normal variable
-    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true)} // get input variable
+    : IDENTIFIER {$$ = lx.newNodeVariable($1, false, true)} // get normal variable, check already declared
+    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true, false)} // get input variable
     ;
 
 

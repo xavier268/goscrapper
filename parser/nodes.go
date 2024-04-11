@@ -232,9 +232,10 @@ func (n nodeVariable) eval(it *Interpreter) (any, error) {
 	return it.getVar(n.id)
 }
 
-// newInputVar creates a new nodeVariable node to GET the variable contanet later,
+// newInputVar creates a new nodeVariable node to GET the variable content later,
 // either registering variable as an input var if input is set to true, or as a normal variable.
-func (m *myLexer) newNodeVariable(tok tok, input bool) nodeVariable {
+// if exists is set, verify the variable was already declared (not for input)
+func (m *myLexer) newNodeVariable(tok tok, input bool, exists bool) nodeVariable {
 	if !isValidId(tok.v) || tok.c != IDENTIFIER {
 		m.errorf("variable %s is not a valid variable", tok.v)
 	}
@@ -247,14 +248,22 @@ func (m *myLexer) newNodeVariable(tok tok, input bool) nodeVariable {
 		m.params[tok.v] = true
 		return nodeVariable{id: tok.v}
 	} else {
-		// register normal var access
-		if m.params[tok.v] {
-			m.errorf("variable %s is already an input variable", tok.v)
+		if !exists {
+			// register normal var access
+			if m.params[tok.v] {
+				m.errorf("variable %s is already an input variable", tok.v)
+				return nodeVariable{id: tok.v}
+			}
+			m.vars[tok.v] = true
+		} else {
+			// variable is supposed to be already declared
+			if !m.vars[tok.v] {
+				m.errorf("variable %s is not yet declared", tok.v)
+			}
 			return nodeVariable{id: tok.v}
 		}
-		m.vars[tok.v] = true
-		return nodeVariable{id: tok.v}
 	}
+	return nodeVariable{id: tok.v}
 }
 
 // ===== nodeKey ========

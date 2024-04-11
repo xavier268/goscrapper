@@ -898,13 +898,13 @@ yydefault:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line grammar.y:190
 		{
-			yyVAL.node = lx.newNodeVariable(yyDollar[1].tok, false)
+			yyVAL.node = lx.newNodeVariable(yyDollar[1].tok, false, true)
 		}
 	case 44:
 		yyDollar = yyS[yypt-2 : yypt+1]
 //line grammar.y:191
 		{
-			yyVAL.node = lx.newNodeVariable(yyDollar[2].tok, true)
+			yyVAL.node = lx.newNodeVariable(yyDollar[2].tok, true, false)
 		}
 	case 45:
 		yyDollar = yyS[yypt-3 : yypt+1]

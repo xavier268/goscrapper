@@ -10,22 +10,21 @@ import (
 func TestParserLab(t *testing.T) {
 
 	data := `
-	a=1;b=2;c=3;d=4;e=5;
-	
-	RETURN {first: a,second:b} ;
+	a=1;	
+	RETURN {first: a,second:5+a} ; 
 			`
 	buff := new(strings.Builder)
 
 	buff.WriteString(data)
 
 	root, err := Compile(t.Name(), data)
-	fmt.Fprintf(buff, "compiled reqst : %#v\nerr : %v\n", root, err)
+	fmt.Fprintf(buff, "\nCOMPILING : %#v\nCompilation error : %s%v%s\n", root, ColRED, err, RESET)
 	if err != nil {
 		t.Fatal(err)
 	}
 	it := NewInterpreter(context.Background())
 	res, err := it.Eval(root)
-	fmt.Fprintf(buff, "interpreted reqst : %s\nerr :%v\n", PrettyJson(res), err)
+	fmt.Fprintf(buff, "\nEXECUTING : %s%s%s\nExecution error :%s%v%s\n", ColGREEN, PrettyJson(res), RESET, ColRED, err, RESET)
 	it.DumpVars(buff, "--- Dumping vars "+t.Name())
 
 	// for visual control

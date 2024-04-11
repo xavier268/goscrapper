@@ -77,6 +77,19 @@ func TestParserFull(t *testing.T) {
 			RETURN ;
 			`,
 			params: nil,
+		}, {
+			req: `
+			// returning values
+			a=1;
+			b = "deux";
+			c = true;
+			d = [1,2,3];
+			e = {a:1, b:2};
+			f = {a:e, b:d};
+			g =  [a,f];
+			RETURN a,b,c,d,e,f,g,5*6+4,"fin du test";
+			`,
+			params: nil,
 		},
 	}
 
@@ -93,7 +106,7 @@ func TestParserFull(t *testing.T) {
 		fmt.Println("--- Executing", rs, "with", req.params)
 		it := parser.NewInterpreter(context.Background()).With(req.params)
 		res, err := it.Eval(root)
-		fmt.Printf("result : %#v\nerr :%v\n", res, err)
+		fmt.Printf("result : %s\nerr :%v\n", parser.PrettyJson(res), err)
 		if err != nil {
 			t.Fatal(err)
 		}

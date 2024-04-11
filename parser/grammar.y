@@ -25,13 +25,17 @@
     node Node       // default for statements and expression
     nodes Nodes     // default for lists of expressions or statements, implements Node.
     nodemap NodeMap // default set of Node, with string keys, using valid id syntax, implements Node.
-}
+    nodeWithBody NodeWithBody // a node that incorporates a set of nodes
+    }
 
 %type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
-%type<node> statement variable keyValue key program returnStatement
+%type<node> statement variable  keyValue key program returnStatement 
 %type<nodes> expressionList body statements returnList returnList0
 %type<nodemap> keyValueSet litteralObject
-%type<tok> ope1 ope2 ope2Bool
+%type<nodeWithBody> loopStatement
+
+
+%type<tok> ope1 ope2 ope2Bool loopVariable
 
 %token <tok>  
 
@@ -131,7 +135,7 @@ clickOption
 
 returnStatement
     : RETURN returnList0 SEMICOLON {$$ = nodeReturn{$2}} 
-    | loopStatement body  { /*todo*/ }
+    | loopStatement body  { $$ = $1.appendBody($2)  }
     ;
 
 returnList0
@@ -140,18 +144,31 @@ returnList0
     ;
 
 returnList
-    : atomExpression  {$$ = Nodes{$1}} 
-    | returnList COMMA atomExpression  {$$ = append($1, $3)} 
+    : expression  {$$ = Nodes{$1}} 
+    | returnList COMMA expression  {$$ = append($1, $3)} 
 
 loopStatement
-    : FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array
-    | FOR loopVariable FROM expression TO expression SEMICOLON  {/*todo*/} // numerical range
-    | FOR loopVariable FROM expression TO expression STEP expression SEMICOLON  {/*todo*/} // numerical range
-    | SELECT expression /*css*/ AS loopVariable FROM expression selectOptions0 SEMICOLON {/*todo*/} 
+    : FOR  SEMICOLON  {$$ = lx.newNodeForLoop(nil, nil, nil, nil)} //infinite loop
+
+    | FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array
+    | FOR IN expression SEMICOLON  {/*todo*/} //loop over array, no loop variable
+
+    | FOR loopVariable FROM expression TO expression STEP expression SEMICOLON  
+        {$$ = lx.newNodeForLoop($2, $4, $6, $8)} // numerical range
+    | FOR  FROM expression TO expression STEP expression SEMICOLON SEMICOLON 
+        {$$ = lx.newNodeForLoop(nil, $3, $5, $7)} // numerical range, no loop variable
+
+    | FOR loopVariable FROM expression TO expression SEMICOLON  
+        {$$ = lx.newNodeForLoop($2, $4, $6, nil)} // numerical range // numerical range
+    | FOR FROM expression TO expression SEMICOLON  
+        {$$ = lx.newNodeForLoop(nil, $3, $5, nil)} //     numerical range
+    
+    | SELECT expression /*css*/ AS loopVariable FROM expression selectOptions0 SEMICOLON {/*todo*/} // select css elements
+    | SELECT expression /*css*/ FROM expression selectOptions0 SEMICOLON {/*todo*/} // select css elements, no loop variable
     ;
 
 loopVariable
-    : IDENTIFIER  {/*todo*/} 
+    : IDENTIFIER  
     ;
 
 selectOptions0

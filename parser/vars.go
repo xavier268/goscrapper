@@ -49,6 +49,15 @@ func (it *Interpreter) popFrame() error {
 	return nil
 }
 
+// reset just pop and push a new frame.
+func (it *Interpreter) resetFrame() error {
+	if err := it.popFrame(); err != nil {
+		return err
+	}
+	it.pushFrame()
+	return nil
+}
+
 // Assign (and declare if needed) a var in the current stack frame.
 // Local value will shadow the more global value.
 // Multiple reassignements are ok.

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"slices"
 	"strconv"
+
+	"github.com/xavier268/goscrapper/rt"
 )
 
 // Node for the abstract syntax tree.
@@ -19,6 +21,12 @@ func (t tok) eval(*Interpreter) (any, error) {
 	return nil, fmt.Errorf("tok.eval should never be called")
 }
 
+// Node with a body (eg : loop statement)
+type NodeWithBody interface {
+	Node
+	appendBody(nodes ...Node) NodeWithBody // return a copy of the node, with selected nodes added to body
+}
+
 // ===== Nodes =====
 
 // A list of Node is also a Node.
@@ -29,6 +37,9 @@ func (ns Nodes) eval(i *Interpreter) (any, error) {
 	for _, v := range ns {
 		if v == nil {
 			continue
+		}
+		if i.ctx.Err() != nil {
+			return nil, i.ctx.Err()
 		}
 		r, err := v.eval(i)
 		if err != nil {
@@ -355,4 +366,136 @@ func (n nodeReturn) eval(it *Interpreter) (any, error) {
 		it.results = append(it.results, res)
 		return nil, it.ctx.Err() // err if ctx cancelled
 	}
+}
+
+// ====== LOOP NODE ======
+
+type nodeForLoop struct {
+	from, to, step Node
+	loopVar        string
+	body           Nodes
+}
+
+var _ Node = nodeForLoop{}
+var _ NodeWithBody = nodeForLoop{}
+
+// body will be set later
+func (m *myLexer) newNodeForLoop(loopVar Node, from Node, to Node, step Node) nodeForLoop {
+	ret := nodeForLoop{}
+	if loopVar != nil { // loopVariable can possibly be nil, represented as empty string in nodeForLoop
+		//check loopVariable, and register it
+		lv, ok := loopVar.(tok)
+		if !ok || lv.c != IDENTIFIER || !isValidId(lv.v) {
+			m.errorf("loop variable %s is not a valid identifier", loopVar)
+		}
+		if m.vars[lv.v] {
+			m.errorf("loop variable %s is already declared as a variable or parameter", lv.v)
+		}
+		m.vars[lv.v] = true
+		ret.loopVar = lv.v
+	}
+	ret.from = from
+	ret.to = to
+	ret.step = step
+	ret.body = Nodes{}
+	return ret
+}
+
+// make a copy of the node with updated body.
+func (n nodeForLoop) appendBody(nodes ...Node) NodeWithBody {
+	return nodeForLoop{
+		from:    n.from,
+		to:      n.to,
+		step:    n.step,
+		loopVar: n.loopVar,
+		body:    append(n.body, nodes...),
+	}
+}
+
+// eval implements Node.
+func (n nodeForLoop) eval(it *Interpreter) (any, error) {
+	// check context
+	if it.ctx.Err() != nil {
+		return nil, it.ctx.Err()
+	}
+
+	// defaults
+	var from, to int
+	step := 1
+
+	// set from
+	if n.from != nil {
+		v, err := n.from.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		if v != nil {
+			if i, ok := v.(int); ok {
+				from = i
+			} else {
+				return nil, fmt.Errorf("expected an int as a loop limit, but got a %T", v)
+			}
+		}
+	}
+	// set to
+	if n.to != nil {
+		v, err := n.to.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		if v != nil {
+			if i, ok := v.(int); ok {
+				to = i
+			} else {
+				return nil, fmt.Errorf("expected an int as a loop limit, but got a %T", v)
+			}
+		}
+	}
+
+	// set step
+	if n.step != nil {
+		v, err := n.step.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		if v != nil {
+			if i, ok := v.(int); ok {
+				step = i
+			} else {
+				return nil, fmt.Errorf("expected an int as a loop step, but got a %T", v)
+			}
+		}
+	}
+
+	// trigger iteration
+	iter := rt.NewForLoopIterator(from, to, step)
+
+	// create a stack frame
+	it.pushFrame()
+	defer it.popFrame()
+
+	// do the actual looping
+	for i, ok := iter.Next(); ok; i, ok = iter.Next() {
+		// check context
+		if it.ctx.Err() != nil {
+			return nil, it.ctx.Err()
+		}
+		// assign loopVar
+		err := it.assignVar(n.loopVar, i)
+		if err != nil {
+			return nil, err
+		}
+		// run loop
+		_, err = n.body.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		// reset stack frame and iterate
+		err = it.resetFrame()
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return nil, nil
 }

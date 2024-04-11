@@ -203,24 +203,26 @@ variable
 // expressions
 //===============
 
-expression  
+expression  // logical binary op
     : expression ope2Bool expression1 {$$ = lx.newNodeOpe2Bool($1, $2, $3)} 
     | expression1
     ;
 
-expression1
+expression1 // binary ops
     : expression1 ope2 expression2 {$$ = lx.newNodeOpe2($1,$2, $3)}
     | expression2
     ;
 
-expression2
+expression2 // unary ops
     : ope1 expression2{$$ = lx.newNodeOpe1($1, $2)} 
     | expression3
     ;
 
-expression3
+expression3 // manage access and compound litteral expressions
     : atomExpression
     | accessExpression{/*todo*/} 
+    | litteralArray {$$ = $1} 
+    | litteralObject {$$ = $1} 
     ;
 
 atomExpression
@@ -232,9 +234,7 @@ atomExpression
 litteral 
     : STRING  {$$ = lx.newNodeLitteral($1)} 
     | NUMBER {$$ = lx.newNodeLitteral($1)} 
-    | BOOL {$$ = lx.newNodeLitteral($1)} 
-    | litteralArray {$$ = $1} 
-    | litteralObject {$$=$1} 
+    | BOOL {$$ = lx.newNodeLitteral($1)}     
     ;
 
 accessExpression

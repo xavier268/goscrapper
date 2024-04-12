@@ -378,7 +378,7 @@ func (n nodeReturn) eval(it *Interpreter) (any, error) {
 	}
 }
 
-// ====== LOOP NODE ======
+// ====== FOR LOOP NODE ======
 
 type nodeForLoop struct {
 	from, to, step Node
@@ -508,6 +508,48 @@ func (n nodeForLoop) eval(it *Interpreter) (any, error) {
 	}
 
 	return nil, nil
+}
+
+// FOR ARRAY LOOP NODE
+
+type nodeForArray struct {
+	array   Node
+	loopVar string
+	body    Nodes
+}
+
+var _ NodeWithBody = nodeForArray{}
+var _ Node = nodeForArray{}
+
+func (m *myLexer) newNodeForArray(loopVar Node, array Node) nodeForArray {
+	ret := nodeForArray{}
+	if loopVar != nil { // loopVariable can possibly be nil, represented as empty string in nodeForLoop
+		//check loopVariable, and register it
+		lv, ok := loopVar.(tok)
+		if !ok || lv.c != IDENTIFIER || !isValidId(lv.v) {
+			m.errorf("loop variable %s is not a valid identifier", loopVar)
+		}
+		if m.vars[lv.v] {
+			m.errorf("loop variable %s is already declared as a variable or parameter", lv.v)
+		}
+		m.vars[lv.v] = true
+		ret.loopVar = lv.v
+	}
+	ret.array = array
+	ret.body = Nodes{}
+	return ret
+}
+
+func (n nodeForArray) appendBody(nodes ...Node) NodeWithBody {
+	return nodeForArray{
+		array:   n.array,
+		loopVar: n.loopVar,
+		body:    append(n.body, nodes...),
+	}
+}
+
+func (n nodeForArray) eval(it *Interpreter) (any, error) {
+	panic("todo")
 }
 
 // === NODE MAP ACCESS ===

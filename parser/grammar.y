@@ -28,14 +28,14 @@
     nodeWithBody NodeWithBody // a node that incorporates a set of nodes
     }
 
-%type<node> litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression ope0
-%type<node> statement variable  keyValue key program returnStatement accessExpression
-%type<nodes> expressionList body statements returnList returnList0
-%type<nodemap> keyValueSet litteralObject
-%type<nodeWithBody> loopStatement
-
-
-%type<tok> ope1 ope2 ope2Bool loopVariable printOption0
+%type<node>             litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
+                        statement variable  keyValue key program returnStatement accessExpression 
+                        ope0
+                        nonIfStatement
+%type<nodes>            expressionList body statements returnList returnList0
+%type<nodemap>          keyValueSet litteralObject
+%type<nodeWithBody>     loopStatement
+%type<tok>              ope1 ope2 ope2Bool loopVariable printOption0
 
 %token <tok>  
 
@@ -66,11 +66,15 @@ QUESTION /*?*/
 
 NOW VERSION FILE_SEPARATOR
 
+IF THEN ELSE
+
 
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
-%nonassoc ASSIGN FOR NOW VERSION
+%nonassoc ASSIGN FOR NOW VERSION 
+
+%left ELSE
 %left OR XOR
 %left AND NAND
 %left NOT
@@ -106,7 +110,23 @@ statements
     | statements  statement SEMICOLON { $$ = append($1, $2)}
     ;
 
-statement // statements are ALWAYS followed by a semi-colon
+statement // statements 
+    : nonIfStatement {/*todo*/}
+    | matchedIfStatement {/*todo*/}
+    | openIfStatement {/*todo*/}
+    ;
+
+openIfStatement
+    : IF expression THEN nonIfStatement {/*todo*/}
+    | IF expression THEN matchedIfStatement {/*todo*/}
+    ;
+
+matchedIfStatement
+    : IF expression THEN nonIfStatement ELSE matchedIfStatement {/*todo*/}
+    | IF expression THEN nonIfStatement ELSE nonIfStatement {/*todo*/}
+    ;
+
+nonIfStatement 
     : IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3)}
     | CLICK  expression /*element*/  clickOptions0 { /*todo*/} // click on element - make sure you select it first !  
     | INPUT expression /*text*/ IN expression /*element*/  {/*todo*/} // input text in element - make sure you select it first !

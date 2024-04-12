@@ -102,19 +102,19 @@ body
     ;
 
 statements
-    : statement  { $$ = Nodes{$1}}
-    | statements  statement { $$ = append($1, $2)}
+    : statement SEMICOLON { $$ = Nodes{$1}}
+    | statements  statement SEMICOLON { $$ = append($1, $2)}
     ;
 
 statement // statements are ALWAYS followed by a semi-colon
-    : IDENTIFIER ASSIGN expression SEMICOLON{ $$ = lx.newNodeAssign($1,  $3)}
-    | CLICK  expression /*element*/  clickOptions0 SEMICOLON{ /*todo*/} // click on element - make sure you select it first !  
-    | INPUT expression /*text*/ IN expression /*element*/ SEMICOLON {/*todo*/} // input text in element - make sure you select it first !
+    : IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3)}
+    | CLICK  expression /*element*/  clickOptions0 { /*todo*/} // click on element - make sure you select it first !  
+    | INPUT expression /*text*/ IN expression /*element*/  {/*todo*/} // input text in element - make sure you select it first !
 
     // debug only !
-    | PRINT printOption0 expressionList SEMICOLON {$$ = nodePrint{ nodes:$3, raw:($2.c == RAW)}} // print %v content of expression in expressionList
-    | SLOW SEMICOLON {$$ = nodeSlow{m:nil}} // wait for a short delay, using SLOW_DELAY from runtime. STop waiting if context is cancelled.
-    | SLOW expression SEMICOLON {$$ = nodeSlow{m:$1}} // wait for specified millis, falling back on SLOW_DELAY if millis <=0. STop waiting if context is cancelled.
+    | PRINT printOption0 expressionList  {$$ = nodePrint{ nodes:$3, raw:($2.c == RAW)}} // print %v content of expression in expressionList
+    | SLOW  {$$ = nodeSlow{m:nil}} // wait for a short delay, using SLOW_DELAY from runtime. STop waiting if context is cancelled.
+    | SLOW expression  {$$ = nodeSlow{m:$1}} // wait for specified millis, falling back on SLOW_DELAY if millis <=0. STop waiting if context is cancelled.
     ;
 
 printOption0
@@ -141,7 +141,7 @@ clickOption
 
 returnStatement
     : RETURN returnList0 SEMICOLON {$$ = nodeReturn{$2}} 
-    | loopStatement body  { $$ = $1.appendBody($2)  }
+    | loopStatement SEMICOLON  body  { $$ = $1.appendBody($3)  }
     ;
 
 returnList0
@@ -154,24 +154,24 @@ returnList
     | returnList COMMA expression  {$$ = append($1, $3)} 
 
 loopStatement
-    : FOR  SEMICOLON  {$$ = lx.newNodeForLoop(nil, nil, nil, nil)} //infinite loop
+    : FOR    {$$ = lx.newNodeForLoop(nil, nil, nil, nil)} //infinite loop
 
-    | FOR loopVariable FROM expression TO expression STEP expression SEMICOLON  
+    | FOR loopVariable FROM expression TO expression STEP expression   
         {$$ = lx.newNodeForLoop($2, $4, $6, $8)} // numerical range
-    | FOR  FROM expression TO expression STEP expression SEMICOLON SEMICOLON 
+    | FOR  FROM expression TO expression STEP expression   
         {$$ = lx.newNodeForLoop(nil, $3, $5, $7)} // numerical range, no loop variable
 
-    | FOR loopVariable FROM expression TO expression SEMICOLON  
+    | FOR loopVariable FROM expression TO expression   
         {$$ = lx.newNodeForLoop($2, $4, $6, nil)} // numerical range // numerical range
-    | FOR FROM expression TO expression SEMICOLON  
+    | FOR FROM expression TO expression   
         {$$ = lx.newNodeForLoop(nil, $3, $5, nil)} //     numerical range
     
-    | FOR loopVariable IN expression SEMICOLON  {/*todo*/} //loop over array
-    | FOR IN expression SEMICOLON  {/*todo*/} //loop over array, no loop variable
+    | FOR loopVariable IN expression   {/*todo*/} //loop over array
+    | FOR IN expression   {/*todo*/} //loop over array, no loop variable
 
-    | SELECT expression /*css*/ AS loopVariable FROM expression /*Elementer*/ selectOptions0 SEMICOLON 
+    | SELECT expression /*css*/ AS loopVariable FROM expression /*Elementer*/ selectOptions0  
         {/*todo*/} // select css elements
-    | SELECT expression /*css*/ FROM expression /*Elementer*/ selectOptions0 SEMICOLON 
+    | SELECT expression /*css*/ FROM expression /*Elementer*/ selectOptions0  
         {/*todo*/} // select css elements, no loop variable
     ;
 
@@ -228,7 +228,7 @@ expression3 // manage access and compound litteral expressions
 atomExpression
     : litteral 
     | variable    
-    | ope0 
+    | ope0 // special variables are zero-ary operators ...
     | LPAREN expression RPAREN {$$ = $2} 
     ;
 

@@ -139,8 +139,10 @@ nonIfStatement
     | FAIL expression {$$ = nodeFail{$2}} // abort with error message
     | ASSERT expression { $$ = nodeAssert {$2}} // assume expression is true, or fail
 
-    // debug only !
+   
     | PRINT printOption0 expressionList  {$$ = nodePrint{ nodes:$3, raw:($2.c == RAW)}} // print %v content of expression in expressionList
+    
+     // debug only !
     | SLOW  {$$ = nodeSlow{m:nil}} // wait for a short delay, using SLOW_DELAY from runtime. STop waiting if context is cancelled.
     | SLOW expression  {$$ = nodeSlow{m:$1}} // wait for specified millis, falling back on SLOW_DELAY if millis <=0. STop waiting if context is cancelled.
     ;

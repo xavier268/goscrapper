@@ -168,7 +168,7 @@ type nodePrint struct {
 // eval implements Node.
 func (n nodePrint) eval(it *Interpreter) (any, error) {
 	var err error
-	fmt.Print("PRINT: ")
+	// fmt.Print("PRINT: ")
 	for _, nn := range n.nodes {
 		var nne any
 		if nn != nil {

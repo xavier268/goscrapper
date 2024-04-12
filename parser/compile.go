@@ -1,7 +1,10 @@
 package parser
 
 import (
+	"context"
 	"fmt"
+	"io"
+	"os"
 	"strings"
 )
 
@@ -17,4 +20,30 @@ func Compile(name string, content string) (compiledReq Node, err error) {
 		err = fmt.Errorf(buff.String())
 	}
 	return lx.(*myLexer).root, err
+}
+
+// =============== compile and evaluate at once ===========================
+
+// Compile a request, create a defalt interpreter, and evaluate the request.
+func Eval(name string, content string) (result any, err error) {
+	compiledReq, err := Compile(name, content)
+	if err != nil {
+		return nil, err
+	}
+	it := NewInterpreter(context.Background())
+	return it.Eval(compiledReq)
+}
+
+// Same a Eval, but read request from fileName.
+func EvalFile(fname string) (result any, err error) {
+	f, err := os.Open(fname)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	content, err := io.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+	return Eval(fname, string(content))
 }

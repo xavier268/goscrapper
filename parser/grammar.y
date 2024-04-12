@@ -196,8 +196,8 @@ loopStatement
     | FOR FROM expression TO expression   
         {$$ = lx.newNodeForLoop(nil, $3, $5, nil)} //  numerical range, no loop variable
     
-    | FOR loopVariable IN expression   {/*todo*/} //loop over array
-    | FOR IN expression   {/*todo*/} //loop over array, no loop variable
+    | FOR loopVariable IN expression   {$$ = lx.newNodeForArray($2, $4)} //loop over array
+    | FOR IN expression   {$$ = lx.newNodeForArray(nil, $3)} //loop over array, no loop variable
 
     | SELECT expression /*css*/ AS loopVariable FROM expression /*Elementer*/ selectOptions0  
         {/*todo*/} // select css elements

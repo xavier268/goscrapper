@@ -510,7 +510,7 @@ func (n nodeForLoop) eval(it *Interpreter) (any, error) {
 	return nil, nil
 }
 
-// FOR ARRAY LOOP NODE
+// ==== FOR ARRAY LOOP NODE ====
 
 type nodeForArray struct {
 	array   Node
@@ -549,7 +549,54 @@ func (n nodeForArray) appendBody(nodes ...Node) NodeWithBody {
 }
 
 func (n nodeForArray) eval(it *Interpreter) (any, error) {
-	panic("todo")
+	// check context
+	if it.ctx.Err() != nil {
+		return nil, it.ctx.Err()
+	}
+
+	// evaluate array
+	a, err := n.array.eval(it)
+	if err != nil {
+		return nil, err
+	}
+	if a == nil {
+		return nil, nil
+	}
+	// verify a is an array
+	aa, ok := a.([]any)
+	if !ok {
+		return nil, fmt.Errorf("expected an array, but got a %T", a)
+	}
+
+	// prepare a new loop frame
+	it.pushFrame()
+	defer it.popFrame()
+
+	// iterate over array elements
+	for _, ae := range aa {
+
+		// check context
+		if it.ctx.Err() != nil {
+			return nil, it.ctx.Err()
+		}
+
+		// assign loopVar
+		err := it.assignVar(n.loopVar, ae)
+		if err != nil {
+			return nil, err
+		}
+		// run loop
+		_, err = n.body.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		// reset stack frame and iterate
+		err = it.resetFrame()
+		if err != nil {
+			return nil, err
+		}
+	}
+	return nil, nil
 }
 
 // === NODE MAP ACCESS ===

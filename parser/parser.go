@@ -937,12 +937,14 @@ yydefault:
 	case 45:
 		yyDollar = yyS[yypt-4 : yypt+1]
 //line grammar.y:199
-		{ /*todo*/
+		{
+			yyVAL.nodeWithBody = lx.newNodeForArray(yyDollar[2].tok, yyDollar[4].node)
 		}
 	case 46:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:200
-		{ /*todo*/
+		{
+			yyVAL.nodeWithBody = lx.newNodeForArray(nil, yyDollar[3].node)
 		}
 	case 47:
 		yyDollar = yyS[yypt-7 : yypt+1]

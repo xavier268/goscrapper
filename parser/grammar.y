@@ -68,6 +68,8 @@ NOW VERSION FILE_SEPARATOR
 
 IF THEN ELSE
 
+ASSERT FAIL
+
 
 
 // definition des precedences et des associativités
@@ -132,6 +134,10 @@ nonIfStatement
     | IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3)}
     | CLICK  expression /*element*/  clickOptions0 { /*todo*/} // click on element - make sure you select it first !  
     | INPUT expression /*text*/ IN expression /*element*/  {/*todo*/} // input text in element - make sure you select it first !
+
+    | FAIL {$$ = nodeFail{}} // abort with error messagge
+    | FAIL expression {$$ = nodeFail{$2}} // abort with error message
+    | ASSERT expression { $$ = nodeAssert {$2}} // assume expression is true, or fail
 
     // debug only !
     | PRINT printOption0 expressionList  {$$ = nodePrint{ nodes:$3, raw:($2.c == RAW)}} // print %v content of expression in expressionList

@@ -171,8 +171,14 @@ func TestParserFull(t *testing.T) {
 					`,
 			params: nil,
 		}, {
-			req: `// Reserved
-			RETURN;
+			req: `
+			// test ASSERT and FAIL
+			// ASSERT 1 == 2; 	// should fail
+			// ASSERT 30 ; 	// should fail
+			ASSERT 1 == 1; 	// should not fail
+			// FAIL "user message";	// should fail
+			// FAIL ;			// should fail
+			RETURN ;
 					`,
 			params: nil,
 		}, {

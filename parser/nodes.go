@@ -696,3 +696,53 @@ func (n nodeIf) eval(it *Interpreter) (any, error) {
 	}
 	return nil, nil // do noting if did not evaluate either then or else
 }
+
+// === NODE FAIL ===
+
+type nodeFail struct {
+	what Node
+}
+
+var _ Node = nodeFail{}
+
+func (n nodeFail) eval(it *Interpreter) (any, error) {
+	if n.what != nil {
+		v, err := n.what.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		if v != nil {
+			if vv, ok := v.(string); ok {
+				return nil, fmt.Errorf("fail message : %s", vv)
+			}
+		}
+	}
+	return nil, fmt.Errorf("fail requested")
+}
+
+// === NODE ASSERT ===
+type nodeAssert struct {
+	cond Node
+}
+
+var _ Node = nodeAssert{}
+
+func (n nodeAssert) eval(it *Interpreter) (any, error) {
+	// evaluate condition
+	if n.cond != nil {
+
+		v, err := n.cond.eval(it)
+		if err != nil {
+			return nil, err
+		}
+		if v != nil {
+
+			// verify v is a bool
+			vv, ok := v.(bool)
+			if ok && vv {
+				return nil, nil // assertion success
+			}
+		}
+	}
+	return nil, fmt.Errorf(fmt.Sprintf("assertion %#v failed", n.cond))
+}

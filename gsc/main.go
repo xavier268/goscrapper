@@ -66,9 +66,9 @@ func main() {
 			} else {
 				jc, err := json.MarshalIndent(res, "", "\t")
 				if err != nil {
-					fmt.Printf("\n%s%s : %v%s\n", parser.ColYELLOW, fn, parser.AnsiRESET, res)
+					fmt.Printf("\n%s%s : %v%s\n", parser.ColYELLOW, fn, res, parser.AnsiRESET)
 				} else {
-					fmt.Printf("\n%s%s : %v%s\n", parser.ColGREEN, fn, parser.AnsiRESET, jc)
+					fmt.Printf("\n%s%s : %v%s\n", parser.ColGREEN, fn, jc, parser.AnsiRESET)
 				}
 			}
 		}

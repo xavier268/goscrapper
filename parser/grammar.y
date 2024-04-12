@@ -318,7 +318,8 @@ ope1 // unary operators. Action depends on argument type.
 
 
 ope2 // binary operators. Action performed depends of argument types.
-    : PLUS 
+    : PLUS      // add numbers, concatenate strings, add element to array
+    | PLUSPLUS  // merge two arrays
     | MINUS
     | MULTI  
     | DIV

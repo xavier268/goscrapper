@@ -206,6 +206,20 @@ func (n nodeOpe2) eval(it *Interpreter) (any, error) {
 			default:
 				return nil, fmt.Errorf("cannot apply binary %s to %T and %T", TokenAsString(n.operator), v, w)
 			}
+		case []any: // add element to array
+			return append(v, right), nil
+		default:
+			return nil, fmt.Errorf("cannot apply binary %s to %T", TokenAsString(n.operator), v)
+		}
+	case PLUSPLUS:
+		switch v := left.(type) {
+		case []any:
+			switch w := right.(type) {
+			case []any:
+				return append(v, w...), nil
+			default:
+				return nil, fmt.Errorf("expected two arrays, cannot apply binary %s to %T and %T", TokenAsString(n.operator), v, w)
+			}
 		default:
 			return nil, fmt.Errorf("cannot apply binary %s to %T", TokenAsString(n.operator), v)
 		}

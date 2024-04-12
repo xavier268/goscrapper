@@ -29,9 +29,9 @@
     }
 
 %type<node>             litteral litteralArray atomExpression expression expression1 expression2 expression3 atomExpression
-                        statement variable  keyValue key program returnStatement accessExpression 
+                        variable  keyValue key program returnStatement accessExpression 
                         ope0
-                        nonIfStatement
+                        statement nonIfStatement matchedIfStatement openIfStatement
 %type<nodes>            expressionList body statements returnList returnList0
 %type<nodemap>          keyValueSet litteralObject
 %type<nodeWithBody>     loopStatement
@@ -111,23 +111,25 @@ statements
     ;
 
 statement // statements 
-    : nonIfStatement {/*todo*/}
-    | matchedIfStatement {/*todo*/}
-    | openIfStatement {/*todo*/}
+    : nonIfStatement 
+    | matchedIfStatement 
+    | openIfStatement 
     ;
 
 openIfStatement
-    : IF expression THEN nonIfStatement {/*todo*/}
-    | IF expression THEN matchedIfStatement {/*todo*/}
+    : IF expression THEN nonIfStatement {$$ = nodeIf{cond: $2, t: $4}}
+  //  | IF expression THEN nonIfStatement ELSE nonIfStatement {$$ = nodeIf{cond: $2, t: $4, e:$6}}
+    | IF expression THEN matchedIfStatement {$$ = nodeIf {cond: $2, t: $4}}
     ;
 
 matchedIfStatement
-    : IF expression THEN nonIfStatement ELSE matchedIfStatement {/*todo*/}
-    | IF expression THEN nonIfStatement ELSE nonIfStatement {/*todo*/}
+    : IF expression THEN nonIfStatement ELSE matchedIfStatement {$$ = nodeIf {cond: $2, t: $4, e: $6}}
+    | IF expression THEN nonIfStatement ELSE nonIfStatement {$$ = nodeIf {cond: $2, t: $4, e: $6}}
     ;
 
 nonIfStatement 
-    : IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3)}
+    : LPAREN statements RPAREN { $$ = $2 }
+    | IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3)}
     | CLICK  expression /*element*/  clickOptions0 { /*todo*/} // click on element - make sure you select it first !  
     | INPUT expression /*text*/ IN expression /*element*/  {/*todo*/} // input text in element - make sure you select it first !
 

@@ -17,14 +17,14 @@ func TestParserFull(t *testing.T) {
 	}{
 		{
 			req: `
-			// basic arithm & var playing
+		// basic arithm & var playing
 		// z = 5; // this should fail later, when z will be (re)declared as input variable
 		x = 3 + @z;
 		// z = 5; // this would fail now, since z is already an input variable
 		PRINT 1 ;
 		PRINT RAW 1;
 		PRINT 2, x , @z ; // note that z should remain the input variable
-		RETURN ;
+		RETURN x ; // 69
 		`,
 			params: map[string]any{"z": 66},
 		},
@@ -35,7 +35,7 @@ func TestParserFull(t *testing.T) {
 			y = [x,x];
 			PRINT x, y;
 			PRINT RAW x,y;
-			RETURN ;
+			RETURN x , y;
 			`,
 			params: nil,
 		},
@@ -56,7 +56,7 @@ func TestParserFull(t *testing.T) {
 			y = ["a a", "bb", true, 66, x];
 			z = {x:x, y:y};
 			PRINT x, y,z;
-			RETURN ;
+			RETURN x, y,z; // {a:1, b:2}, ["a a", "bb", true, 66, {a:1, b:2}] , {x:{a:1, b:2}, y:["a a", "bb", true, 66, {a:1, b:2}]}
 			`,
 			params: nil,
 		}, {
@@ -153,12 +153,21 @@ func TestParserFull(t *testing.T) {
 			v = "Version is " + VERSION;
 			s = "File separator is " + FILE_SEPARATOR;
 			SLOW;
-			RETURN t, v, NOW ; // both time should slightly differ
+			RETURN t != NOW , t == NOW , t == t ; // true, false, true
 					`,
 			params: nil,
 		}, {
-			req: `// Reserved
-			RETURN;
+			req: `
+			// test IF THEN ELSE
+			IF true THEN a=1 ELSE a=2 ;
+			IF false THEN b=1 ELSE b=2 ;
+			IF true THEN (IF true THEN c=3 ELSE c=4; ) ELSE c=5 ;		
+			IF true THEN 
+				IF true THEN d=4 ELSE d=5  ;		
+			IF false THEN e=4 ELSE ( IF true THEN e=5 ELSE e=6 ;);
+			IF false THEN f=5 ELSE  
+				IF true THEN f=6 ELSE f=7 ;
+			RETURN a , b, c , d , e , f; // 1 2 3 4 5 6
 					`,
 			params: nil,
 		}, {

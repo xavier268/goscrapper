@@ -190,9 +190,9 @@ loopStatement
         {$$ = lx.newNodeForLoop(nil, $3, $5, $7)} // numerical range, no loop variable
 
     | FOR loopVariable FROM expression TO expression   
-        {$$ = lx.newNodeForLoop($2, $4, $6, nil)} // numerical range // numerical range
+        {$$ = lx.newNodeForLoop($2, $4, $6, nil)} // numerical range
     | FOR FROM expression TO expression   
-        {$$ = lx.newNodeForLoop(nil, $3, $5, nil)} //     numerical range
+        {$$ = lx.newNodeForLoop(nil, $3, $5, nil)} //  numerical range, no loop variable
     
     | FOR loopVariable IN expression   {/*todo*/} //loop over array
     | FOR IN expression   {/*todo*/} //loop over array, no loop variable

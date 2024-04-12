@@ -275,6 +275,18 @@ func (n nodeOpe2) eval(it *Interpreter) (any, error) {
 	case GTE:
 		i, err := CompareAny(left, right)
 		return i >= 0, err
+
+	case ATTR: // elem ATTR att
+		if left == nil || right == nil {
+			return nil, fmt.Errorf("invalid nil argument to %s operator", TokenAsString(n.operator))
+		}
+		if v, ok := left.(*rt.Element); ok {
+			if w, ok := right.(string); ok {
+				return rt.GetAttribute(v, w), nil
+			}
+		}
+		return nil, fmt.Errorf("cannot apply binary %s to %T and %T", TokenAsString(n.operator), left, right)
+
 	default:
 		return nil, fmt.Errorf("unkown binary operator %s", TokenAsString(n.operator))
 	}

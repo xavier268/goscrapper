@@ -139,7 +139,7 @@ func TestParserFull(t *testing.T) {
 			params: nil,
 		}, {
 			req: `
-			// test PAGE & TEXT
+			// test PAGE,  TEXT
 			wk = PAGE "http://www.wikipedia.fr";
 			empty = PAGE "";
 			t = TEXT wk;

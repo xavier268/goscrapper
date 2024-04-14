@@ -15,6 +15,7 @@ import (
 func Serialize(a any) (string, error) {
 	sb := new(strings.Builder)
 	err := serialize(sb, a)
+	// fmt.Println("DEBUG SERIALIZE :", sb.String())
 	return sb.String(), err
 }
 

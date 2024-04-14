@@ -11,6 +11,7 @@ import (
 
 	"github.com/xavier268/goscrapper"
 	"github.com/xavier268/goscrapper/parser"
+	"github.com/xavier268/goscrapper/rt"
 )
 
 //TODO : Add flags to provide input parameters ?
@@ -19,6 +20,7 @@ var (
 	flagVersion = flag.Bool("version", false, "print version and exit")
 	flagInfo    = flag.Bool("info", false, "print info and exit")
 	flagHelp    = flag.Bool("help", false, "print help and exit")
+	flagFormat  = flag.String("format", "gsc", "output format (gsc, json, go, raw)")
 )
 
 func main() {
@@ -27,6 +29,7 @@ func main() {
 	flag.BoolVar(flagVersion, "v", false, "")
 	flag.BoolVar(flagInfo, "i", false, "")
 	flag.BoolVar(flagHelp, "h", false, "")
+	flag.StringVar(flagFormat, "f", "gsc", "")
 
 	// redefine Usage function to print default values.
 	flag.Usage = func() {
@@ -64,11 +67,27 @@ func main() {
 			if err != nil {
 				fmt.Printf("\n%s%s : %v%s\n", parser.ColRED, fn, parser.AnsiRESET, err)
 			} else {
-				jc, err := json.MarshalIndent(res, "", "\t")
-				if err != nil {
-					fmt.Printf("\n%s%s : %v%s\n", parser.ColYELLOW, fn, res, parser.AnsiRESET)
-				} else {
-					fmt.Printf("\n%s%s : %v%s\n", parser.ColGREEN, fn, jc, parser.AnsiRESET)
+				switch *flagFormat {
+				case "gsc":
+					out, err := rt.Serialize(res)
+					if err != nil {
+						fmt.Println(parser.ColRED, "could not serialize result using gsc format :", err, parser.AnsiRESET)
+					} else {
+						fmt.Println(parser.ColGREEN, out, parser.AnsiRESET)
+					}
+				case "json":
+					b, err := json.MarshalIndent(res, "", "  ")
+					if err != nil {
+						fmt.Println(parser.ColRED, "could not serialize result using json format :", err, parser.AnsiRESET)
+					} else {
+						fmt.Println(parser.ColGREEN, string(b), parser.AnsiRESET)
+					}
+				case "go":
+					fmt.Println(parser.ColGREEN, res, parser.AnsiRESET)
+				case "raw":
+					fmt.Printf("%s%#v%s", parser.ColGREEN, res, parser.AnsiRESET)
+				default:
+					fmt.Println(parser.ColRED, "Unknown format", *flagFormat, parser.AnsiRESET)
 				}
 			}
 		}

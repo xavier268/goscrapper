@@ -34,7 +34,7 @@ func TestParserVisual(t *testing.T) {
 		// Json format : {"a":[1,"deux",false,null],"b":{"b":"deux","c":false,"d":null,"z":1},"c":[[1,"deux",false,null],{"b":"deux","c":false,"d":null,"z":1}]}
 	PRINT "Go format : ",GO c; 		
 		// Go format : map[a:[1 deux false <nil>] b:map[b:deux c:false d:<nil> z:1] c:[[1 deux false <nil>] map[b:deux c:false d:<nil> z:1]]]
-	// PRINT "GSC format : ", GSC c ;
+	PRINT "GSC format : ", GSC c ;
 
 	RETURN ;
 			`
@@ -43,13 +43,13 @@ func TestParserVisual(t *testing.T) {
 	buff.WriteString(data)
 
 	root, err := Compile(t.Name(), data)
-	fmt.Fprintf(buff, "\nCOMPILING :\nRoot : %#v\nRoot : %s\nCompilation error : %s%v%s\n", root, rt.Pretty(root), ColRED, err, AnsiRESET)
+	fmt.Fprintf(buff, "\nCOMPILING :\nRoot : %#v\nCompilation error : %s%v%s\n", root, ColRED, err, AnsiRESET)
 	if err != nil {
 		t.Fatal(err)
 	}
 	it := NewInterpreter(context.Background())
 	res, err := it.Eval(root)
-	fmt.Fprintf(buff, "\nEXECUTING :\nResult :%#v\nResult :%s%s%s\nExecution error :%s%v%s\n", res, ColGREEN, rt.Pretty(res), AnsiRESET, ColRED, err, AnsiRESET)
+	fmt.Fprintf(buff, "\nEXECUTING :\nResult :%#v\nResult :%s%s%s\nExecution error :%s%v%s\n", res, ColGREEN, rt.MustSerialize(res), AnsiRESET, ColRED, err, AnsiRESET)
 	it.DumpVars(buff, "--- Dumping vars "+t.Name())
 
 	// for visual control

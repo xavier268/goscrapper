@@ -9,6 +9,15 @@ import (
 	"time"
 )
 
+// See Serialize. Panic on error.
+func MustSerialize(a any) string {
+	s, err := Serialize(a)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
 // Serialize a value to string, suing the GSC syntax.
 // Only values produced by GSC itself can be serialized.
 // Non recognized values will trigger an error.

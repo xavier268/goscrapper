@@ -3,7 +3,7 @@ state 0
 	$accept: .program $end 
 	beforeProgram: .    (2)
 
-	.  reduce 2 (src line 101)
+	.  reduce 2 (src line 106)
 
 	program  goto 1
 	beforeProgram  goto 2
@@ -21,7 +21,6 @@ state 2
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	RETURN  shift 7
 	FOR  shift 12
@@ -30,6 +29,7 @@ state 2
 	IF  shift 22
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
 	returnStatement  goto 5
@@ -44,7 +44,7 @@ state 2
 state 3
 	program:  beforeProgram body.    (1)
 
-	.  reduce 1 (src line 97)
+	.  reduce 1 (src line 102)
 
 
 state 4
@@ -54,7 +54,6 @@ state 4
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	RETURN  shift 7
 	FOR  shift 12
@@ -63,6 +62,7 @@ state 4
 	IF  shift 22
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
 	returnStatement  goto 23
@@ -75,7 +75,7 @@ state 4
 state 5
 	body:  returnStatement.    (4)
 
-	.  reduce 4 (src line 107)
+	.  reduce 4 (src line 112)
 
 
 state 6
@@ -87,15 +87,15 @@ state 6
 
 state 7
 	returnStatement:  RETURN.returnList0 SEMICOLON 
-	returnList0: .    (36)
+	returnList0: .    (35)
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -105,54 +105,60 @@ state 7
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  reduce 36 (src line 177)
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  reduce 35 (src line 177)
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
 	expression  goto 28
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
 	returnList  goto 27
 	returnList0  goto 26
-	litteralObject  goto 45
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 8
 	returnStatement:  loopStatement.SEMICOLON body 
 
-	SEMICOLON  shift 60
+	SEMICOLON  shift 66
 	.  error
 
 
 state 9
 	statement:  nonIfStatement.    (7)
 
-	.  reduce 7 (src line 115)
+	.  reduce 7 (src line 120)
 
 
 state 10
 	statement:  matchedIfStatement.    (8)
 
-	.  reduce 8 (src line 117)
+	.  reduce 8 (src line 122)
 
 
 state 11
 	statement:  openIfStatement.    (9)
 
-	.  reduce 9 (src line 118)
+	.  reduce 9 (src line 123)
 
 
 state 12
-	loopStatement:  FOR.    (40)
+	loopStatement:  FOR.    (39)
 	loopStatement:  FOR.loopVariable FROM expression TO expression STEP expression 
 	loopStatement:  FOR.FROM expression TO expression STEP expression 
 	loopStatement:  FOR.loopVariable FROM expression TO expression 
@@ -160,24 +166,24 @@ state 12
 	loopStatement:  FOR.loopVariable IN expression 
 	loopStatement:  FOR.IN expression 
 
-	IDENTIFIER  shift 64
-	IN  shift 63
-	FROM  shift 62
-	.  reduce 40 (src line 186)
+	IDENTIFIER  shift 70
+	IN  shift 69
+	FROM  shift 68
+	.  reduce 39 (src line 186)
 
-	loopVariable  goto 61
+	loopVariable  goto 67
 
 state 13
 	loopStatement:  SELECT.expression AS loopVariable FROM expression selectOptions0 
 	loopStatement:  SELECT.expression FROM expression selectOptions0 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -187,23 +193,29 @@ state 13
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 65
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 71
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 14
@@ -212,37 +224,37 @@ state 14
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	LPAREN  shift 14
 	IF  shift 22
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
 	statement  goto 6
 	nonIfStatement  goto 9
 	matchedIfStatement  goto 10
 	openIfStatement  goto 11
-	statements  goto 66
+	statements  goto 72
 
 state 15
 	nonIfStatement:  IDENTIFIER.ASSIGN expression 
 
-	ASSIGN  shift 67
+	ASSIGN  shift 73
 	.  error
 
 
 state 16
 	nonIfStatement:  CLICK.expression clickOptions0 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -252,35 +264,41 @@ state 16
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 68
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 74
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 17
 	nonIfStatement:  INPUT.expression IN expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -290,36 +308,42 @@ state 17
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 69
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 75
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 18
 	nonIfStatement:  FAIL.    (18)
 	nonIfStatement:  FAIL.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -329,35 +353,41 @@ state 18
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  reduce 18 (src line 138)
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  reduce 18 (src line 143)
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 70
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 76
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 19
 	nonIfStatement:  ASSERT.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -367,45 +397,42 @@ state 19
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 71
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 77
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 20
-	nonIfStatement:  PRINT.printOption0 expressionList 
-	printOption0: .    (24)
+	nonIfStatement:  PRINT.    (21)
+	nonIfStatement:  PRINT.expressionList 
 
-	RAW  shift 73
-	.  reduce 24 (src line 150)
-
-	printOption0  goto 72
-
-state 21
-	nonIfStatement:  SLOW.    (22)
-	nonIfStatement:  SLOW.expression 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -415,23 +442,75 @@ state 21
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  reduce 22 (src line 146)
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  reduce 21 (src line 147)
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 74
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 79
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	expressionList  goto 78
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 21
+	nonIfStatement:  SLOW.    (23)
+	nonIfStatement:  SLOW.expression 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  reduce 23 (src line 151)
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 80
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 22
@@ -440,13 +519,13 @@ state 22
 	matchedIfStatement:  IF.expression THEN nonIfStatement ELSE matchedIfStatement 
 	matchedIfStatement:  IF.expression THEN nonIfStatement ELSE nonIfStatement 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -456,108 +535,115 @@ state 22
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 75
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 81
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 23
 	body:  statements returnStatement.    (3)
 
-	.  reduce 3 (src line 105)
+	.  reduce 3 (src line 110)
 
 
 state 24
 	statements:  statements statement.SEMICOLON 
 
-	SEMICOLON  shift 76
+	SEMICOLON  shift 82
 	.  error
 
 
 state 25
 	statements:  statement SEMICOLON.    (5)
 
-	.  reduce 5 (src line 110)
+	.  reduce 5 (src line 115)
 
 
 state 26
 	returnStatement:  RETURN returnList0.SEMICOLON 
 
-	SEMICOLON  shift 77
+	SEMICOLON  shift 83
 	.  error
 
 
 state 27
-	returnList0:  returnList.    (37)
+	returnList0:  returnList.    (36)
 	returnList:  returnList.COMMA expression 
 
-	COMMA  shift 78
-	.  reduce 37 (src line 179)
+	COMMA  shift 84
+	.  reduce 36 (src line 179)
 
 
 state 28
-	returnList:  expression.    (38)
+	returnList:  expression.    (37)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 38 (src line 182)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 37 (src line 182)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
 state 29
-	expression:  expression1.    (59)
+	expression:  expression1.    (58)
 	expression1:  expression1.ope2 expression2 
 
-	PLUS  shift 85
-	MINUS  shift 87
-	PLUSPLUS  shift 86
-	MULTI  shift 88
-	DIV  shift 89
-	MOD  shift 90
-	EQ  shift 91
-	NEQ  shift 92
-	LT  shift 95
-	LTE  shift 96
-	GT  shift 93
-	GTE  shift 94
-	ATTR  shift 97
-	.  reduce 59 (src line 238)
+	PLUS  shift 91
+	MINUS  shift 93
+	PLUSPLUS  shift 92
+	MULTI  shift 94
+	DIV  shift 95
+	MOD  shift 96
+	EQ  shift 97
+	NEQ  shift 98
+	LT  shift 101
+	LTE  shift 102
+	GT  shift 99
+	GTE  shift 100
+	ATTR  shift 103
+	FORMAT  shift 104
+	.  reduce 58 (src line 238)
 
-	ope2  goto 84
+	ope2  goto 90
 
 state 30
-	expression1:  expression2.    (61)
+	expression1:  expression2.    (60)
 
-	.  reduce 61 (src line 243)
+	.  reduce 60 (src line 243)
 
 
 state 31
 	expression2:  ope1.expression2 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -567,276 +653,329 @@ state 31
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression2  goto 98
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression2  goto 105
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 32
-	expression2:  expression3.    (63)
+	expression2:  expression3.    (62)
 
-	.  reduce 63 (src line 248)
+	.  reduce 62 (src line 248)
 
 
 state 33
-	ope1:  PLUS.    (89)
-
-	.  reduce 89 (src line 306)
-
-
-state 34
-	ope1:  MINUS.    (90)
+	ope1:  PLUS.    (90)
 
 	.  reduce 90 (src line 308)
 
 
-state 35
-	ope1:  PLUSPLUS.    (91)
+state 34
+	ope1:  MINUS.    (91)
 
-	.  reduce 91 (src line 309)
+	.  reduce 91 (src line 310)
+
+
+state 35
+	ope1:  PLUSPLUS.    (92)
+
+	.  reduce 92 (src line 311)
 
 
 state 36
-	ope1:  MINUSMINUS.    (92)
+	ope1:  MINUSMINUS.    (93)
 
-	.  reduce 92 (src line 310)
+	.  reduce 93 (src line 312)
 
 
 state 37
-	ope1:  ABS.    (93)
+	ope1:  ABS.    (94)
 
-	.  reduce 93 (src line 311)
+	.  reduce 94 (src line 313)
 
 
 state 38
-	ope1:  LEN.    (94)
+	ope1:  LEN.    (95)
 
-	.  reduce 94 (src line 312)
+	.  reduce 95 (src line 314)
 
 
 state 39
-	ope1:  NOT.    (95)
-
-	.  reduce 95 (src line 313)
-
-
-state 40
-	ope1:  PAGE.    (96)
+	ope1:  NOT.    (96)
 
 	.  reduce 96 (src line 315)
 
 
-state 41
-	ope1:  TEXT.    (97)
+state 40
+	ope1:  PAGE.    (97)
 
-	.  reduce 97 (src line 316)
+	.  reduce 97 (src line 317)
+
+
+state 41
+	ope1:  TEXT.    (98)
+
+	.  reduce 98 (src line 318)
 
 
 state 42
-	expression3:  atomExpression.    (64)
-	accessExpression:  atomExpression.LBRACKET expression RBRACKET 
-	accessExpression:  atomExpression.DOT key 
+	ope1:  RAW.    (99)
 
-	LBRACKET  shift 99
-	DOT  shift 100
-	.  reduce 64 (src line 251)
+	.  reduce 99 (src line 321)
 
 
 state 43
-	expression3:  accessExpression.    (65)
+	ope1:  GO.    (100)
 
-	.  reduce 65 (src line 253)
+	.  reduce 100 (src line 322)
 
 
 state 44
-	expression3:  litteralArray.    (66)
+	ope1:  GSC.    (101)
 
-	.  reduce 66 (src line 254)
+	.  reduce 101 (src line 323)
 
 
 state 45
-	expression3:  litteralObject.    (67)
+	ope1:  JSON.    (102)
 
-	.  reduce 67 (src line 255)
+	.  reduce 102 (src line 324)
 
 
 state 46
-	atomExpression:  litteral.    (68)
+	expression3:  atomExpression.    (63)
+	accessExpression:  atomExpression.LBRACKET expression RBRACKET 
+	accessExpression:  atomExpression.DOT key 
 
-	.  reduce 68 (src line 258)
+	LBRACKET  shift 106
+	DOT  shift 107
+	.  reduce 63 (src line 251)
 
 
 state 47
-	atomExpression:  variable.    (69)
+	expression3:  accessExpression.    (64)
 
-	.  reduce 69 (src line 260)
+	.  reduce 64 (src line 253)
 
 
 state 48
-	atomExpression:  ope0.    (70)
+	expression3:  litteralArray.    (65)
 
-	.  reduce 70 (src line 261)
+	.  reduce 65 (src line 254)
 
 
 state 49
-	atomExpression:  LPAREN.expression RPAREN 
+	expression3:  litteralObject.    (66)
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
+	.  reduce 66 (src line 255)
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 101
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
 
 state 50
-	litteralArray:  LBRACKET.expressionList RBRACKET 
-	litteralArray:  LBRACKET.RBRACKET 
+	atomExpression:  litteral.    (67)
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	RBRACKET  shift 103
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
+	.  reduce 67 (src line 258)
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 104
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	expressionList  goto 102
-	litteralObject  goto 45
-	ope1  goto 31
 
 state 51
-	litteralObject:  LBRACE.RBRACE 
-	litteralObject:  LBRACE.keyValueSet RBRACE 
+	atomExpression:  variable.    (68)
 
-	IDENTIFIER  shift 109
-	RBRACE  shift 105
-	.  error
+	.  reduce 68 (src line 260)
 
-	keyValue  goto 107
-	key  goto 108
-	keyValueSet  goto 106
 
 state 52
-	litteral:  STRING.    (72)
+	atomExpression:  ope0.    (69)
 
-	.  reduce 72 (src line 265)
+	.  reduce 69 (src line 261)
 
 
 state 53
-	litteral:  NUMBER.    (73)
+	atomExpression:  LPAREN.expression RPAREN 
 
-	.  reduce 73 (src line 267)
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
 
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 108
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
 
 state 54
-	litteral:  BOOL.    (74)
+	litteralArray:  LBRACKET.expressionList RBRACKET 
+	litteralArray:  LBRACKET.RBRACKET 
 
-	.  reduce 74 (src line 268)
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	RBRACKET  shift 110
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
 
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 79
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	expressionList  goto 109
+	litteralObject  goto 49
+	ope1  goto 31
 
 state 55
-	variable:  IDENTIFIER.    (56)
+	litteralObject:  LBRACE.RBRACE 
+	litteralObject:  LBRACE.keyValueSet RBRACE 
 
-	.  reduce 56 (src line 227)
+	IDENTIFIER  shift 115
+	RBRACE  shift 111
+	.  error
 
+	keyValue  goto 113
+	key  goto 114
+	keyValueSet  goto 112
 
 state 56
-	variable:  AT.IDENTIFIER 
+	litteral:  STRING.    (71)
 
-	IDENTIFIER  shift 110
-	.  error
+	.  reduce 71 (src line 265)
 
 
 state 57
-	ope0:  NOW.    (86)
+	litteral:  NUMBER.    (72)
 
-	.  reduce 86 (src line 300)
+	.  reduce 72 (src line 267)
 
 
 state 58
-	ope0:  VERSION.    (87)
+	litteral:  BOOL.    (73)
 
-	.  reduce 87 (src line 302)
+	.  reduce 73 (src line 268)
 
 
 state 59
-	ope0:  FILE_SEPARATOR.    (88)
+	variable:  IDENTIFIER.    (55)
 
-	.  reduce 88 (src line 303)
+	.  reduce 55 (src line 227)
 
 
 state 60
+	variable:  AT.IDENTIFIER 
+
+	IDENTIFIER  shift 116
+	.  error
+
+
+state 61
+	ope0:  NOW.    (85)
+
+	.  reduce 85 (src line 300)
+
+
+state 62
+	ope0:  VERSION.    (86)
+
+	.  reduce 86 (src line 302)
+
+
+state 63
+	ope0:  FILE_SEPARATOR.    (87)
+
+	.  reduce 87 (src line 303)
+
+
+state 64
+	ope0:  NL.    (88)
+
+	.  reduce 88 (src line 304)
+
+
+state 65
+	ope0:  NIL.    (89)
+
+	.  reduce 89 (src line 305)
+
+
+state 66
 	returnStatement:  loopStatement SEMICOLON.body 
 
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	RETURN  shift 7
 	FOR  shift 12
@@ -845,6 +984,7 @@ state 60
 	IF  shift 22
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
 	returnStatement  goto 5
@@ -852,31 +992,31 @@ state 60
 	nonIfStatement  goto 9
 	matchedIfStatement  goto 10
 	openIfStatement  goto 11
-	body  goto 111
+	body  goto 117
 	statements  goto 4
 	loopStatement  goto 8
 
-state 61
+state 67
 	loopStatement:  FOR loopVariable.FROM expression TO expression STEP expression 
 	loopStatement:  FOR loopVariable.FROM expression TO expression 
 	loopStatement:  FOR loopVariable.IN expression 
 
-	IN  shift 113
-	FROM  shift 112
+	IN  shift 119
+	FROM  shift 118
 	.  error
 
 
-state 62
+state 68
 	loopStatement:  FOR FROM.expression TO expression STEP expression 
 	loopStatement:  FOR FROM.expression TO expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -886,35 +1026,41 @@ state 62
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 114
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 120
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 63
+state 69
 	loopStatement:  FOR IN.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -924,60 +1070,66 @@ state 63
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 115
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 121
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 64
-	loopVariable:  IDENTIFIER.    (49)
+state 70
+	loopVariable:  IDENTIFIER.    (48)
 
-	.  reduce 49 (src line 208)
+	.  reduce 48 (src line 208)
 
 
-state 65
+state 71
 	loopStatement:  SELECT expression.AS loopVariable FROM expression selectOptions0 
 	loopStatement:  SELECT expression.FROM expression selectOptions0 
 	expression:  expression.ope2Bool expression1 
 
-	AS  shift 116
-	FROM  shift 117
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
+	AS  shift 122
+	FROM  shift 123
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
 	.  error
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 66
+state 72
 	statements:  statements.statement SEMICOLON 
 	nonIfStatement:  LPAREN statements.RPAREN 
 
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	LPAREN  shift 14
-	RPAREN  shift 118
+	RPAREN  shift 124
 	IF  shift 22
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
 	statement  goto 24
@@ -985,16 +1137,16 @@ state 66
 	matchedIfStatement  goto 10
 	openIfStatement  goto 11
 
-state 67
+state 73
 	nonIfStatement:  IDENTIFIER ASSIGN.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -1004,189 +1156,172 @@ state 67
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 119
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 125
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 68
+state 74
 	nonIfStatement:  CLICK expression.clickOptions0 
 	expression:  expression.ope2Bool expression1 
-	clickOptions0: .    (26)
+	clickOptions0: .    (25)
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LEFT  shift 123
-	RIGHT  shift 124
-	MIDDLE  shift 125
-	LPAREN  shift 49
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  reduce 26 (src line 155)
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LEFT  shift 129
+	RIGHT  shift 130
+	MIDDLE  shift 131
+	LPAREN  shift 53
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	NL  shift 64
+	NIL  shift 65
+	.  reduce 25 (src line 155)
 
-	litteral  goto 46
-	atomExpression  goto 126
-	variable  goto 47
-	ope0  goto 48
-	ope2Bool  goto 79
-	clickOptions0  goto 120
-	clickOptions  goto 121
-	clickOption  goto 122
+	litteral  goto 50
+	atomExpression  goto 132
+	variable  goto 51
+	ope0  goto 52
+	ope2Bool  goto 85
+	clickOptions0  goto 126
+	clickOptions  goto 127
+	clickOption  goto 128
 
-state 69
+state 75
 	nonIfStatement:  INPUT expression.IN expression 
 	expression:  expression.ope2Bool expression1 
 
-	IN  shift 127
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
+	IN  shift 133
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
 	.  error
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 70
+state 76
 	nonIfStatement:  FAIL expression.    (19)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 19 (src line 139)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 19 (src line 144)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 71
+state 77
 	nonIfStatement:  ASSERT expression.    (20)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 20 (src line 140)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 20 (src line 145)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 72
-	nonIfStatement:  PRINT printOption0.expressionList 
+state 78
+	nonIfStatement:  PRINT expressionList.    (22)
+	expressionList:  expressionList.COMMA expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 104
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	expressionList  goto 128
-	litteralObject  goto 45
-	ope1  goto 31
-
-state 73
-	printOption0:  RAW.    (25)
-
-	.  reduce 25 (src line 152)
+	COMMA  shift 134
+	.  reduce 22 (src line 148)
 
 
-state 74
-	nonIfStatement:  SLOW expression.    (23)
+state 79
+	expression:  expression.ope2Bool expression1 
+	expressionList:  expression.    (78)
+
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 78 (src line 281)
+
+	ope2Bool  goto 85
+
+state 80
+	nonIfStatement:  SLOW expression.    (24)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 23 (src line 147)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 24 (src line 152)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 75
+state 81
 	openIfStatement:  IF expression.THEN nonIfStatement 
 	openIfStatement:  IF expression.THEN matchedIfStatement 
 	matchedIfStatement:  IF expression.THEN nonIfStatement ELSE matchedIfStatement 
 	matchedIfStatement:  IF expression.THEN nonIfStatement ELSE nonIfStatement 
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	THEN  shift 129
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	THEN  shift 135
 	.  error
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 76
+state 82
 	statements:  statements statement SEMICOLON.    (6)
 
-	.  reduce 6 (src line 112)
+	.  reduce 6 (src line 117)
 
 
-state 77
-	returnStatement:  RETURN returnList0 SEMICOLON.    (34)
+state 83
+	returnStatement:  RETURN returnList0 SEMICOLON.    (33)
 
-	.  reduce 34 (src line 172)
+	.  reduce 33 (src line 172)
 
 
-state 78
+state 84
 	returnList:  returnList COMMA.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -1196,35 +1331,41 @@ state 78
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 130
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 136
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 79
+state 85
 	expression:  expression ope2Bool.expression1 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -1234,311 +1375,323 @@ state 79
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression1  goto 131
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression1  goto 137
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 80
-	ope2Bool:  AND.    (111)
+state 86
+	ope2Bool:  AND.    (117)
+
+	.  reduce 117 (src line 347)
+
+
+state 87
+	ope2Bool:  OR.    (118)
+
+	.  reduce 118 (src line 349)
+
+
+state 88
+	ope2Bool:  NAND.    (119)
+
+	.  reduce 119 (src line 350)
+
+
+state 89
+	ope2Bool:  XOR.    (120)
+
+	.  reduce 120 (src line 351)
+
+
+state 90
+	expression1:  expression1 ope2.expression2 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression2  goto 138
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 91
+	ope2:  PLUS.    (103)
+
+	.  reduce 103 (src line 328)
+
+
+state 92
+	ope2:  PLUSPLUS.    (104)
+
+	.  reduce 104 (src line 330)
+
+
+state 93
+	ope2:  MINUS.    (105)
+
+	.  reduce 105 (src line 331)
+
+
+state 94
+	ope2:  MULTI.    (106)
+
+	.  reduce 106 (src line 332)
+
+
+state 95
+	ope2:  DIV.    (107)
+
+	.  reduce 107 (src line 333)
+
+
+state 96
+	ope2:  MOD.    (108)
+
+	.  reduce 108 (src line 334)
+
+
+state 97
+	ope2:  EQ.    (109)
+
+	.  reduce 109 (src line 335)
+
+
+state 98
+	ope2:  NEQ.    (110)
+
+	.  reduce 110 (src line 336)
+
+
+state 99
+	ope2:  GT.    (111)
 
 	.  reduce 111 (src line 337)
 
 
-state 81
-	ope2Bool:  OR.    (112)
-
-	.  reduce 112 (src line 339)
-
-
-state 82
-	ope2Bool:  NAND.    (113)
-
-	.  reduce 113 (src line 340)
-
-
-state 83
-	ope2Bool:  XOR.    (114)
-
-	.  reduce 114 (src line 341)
-
-
-state 84
-	expression1:  expression1 ope2.expression2 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression2  goto 132
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
-
-state 85
-	ope2:  PLUS.    (98)
-
-	.  reduce 98 (src line 320)
-
-
-state 86
-	ope2:  PLUSPLUS.    (99)
-
-	.  reduce 99 (src line 322)
-
-
-state 87
-	ope2:  MINUS.    (100)
-
-	.  reduce 100 (src line 323)
-
-
-state 88
-	ope2:  MULTI.    (101)
-
-	.  reduce 101 (src line 324)
-
-
-state 89
-	ope2:  DIV.    (102)
-
-	.  reduce 102 (src line 325)
-
-
-state 90
-	ope2:  MOD.    (103)
-
-	.  reduce 103 (src line 326)
-
-
-state 91
-	ope2:  EQ.    (104)
-
-	.  reduce 104 (src line 327)
-
-
-state 92
-	ope2:  NEQ.    (105)
-
-	.  reduce 105 (src line 328)
-
-
-state 93
-	ope2:  GT.    (106)
-
-	.  reduce 106 (src line 329)
-
-
-state 94
-	ope2:  GTE.    (107)
-
-	.  reduce 107 (src line 330)
-
-
-state 95
-	ope2:  LT.    (108)
-
-	.  reduce 108 (src line 331)
-
-
-state 96
-	ope2:  LTE.    (109)
-
-	.  reduce 109 (src line 332)
-
-
-state 97
-	ope2:  ATTR.    (110)
-
-	.  reduce 110 (src line 334)
-
-
-state 98
-	expression2:  ope1 expression2.    (62)
-
-	.  reduce 62 (src line 246)
-
-
-state 99
-	accessExpression:  atomExpression LBRACKET.expression RBRACKET 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 133
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
-
 state 100
-	accessExpression:  atomExpression DOT.key 
+	ope2:  GTE.    (112)
 
-	IDENTIFIER  shift 109
-	.  error
+	.  reduce 112 (src line 338)
 
-	key  goto 134
 
 state 101
-	expression:  expression.ope2Bool expression1 
-	atomExpression:  LPAREN expression.RPAREN 
+	ope2:  LT.    (113)
 
-	RPAREN  shift 135
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  error
+	.  reduce 113 (src line 339)
 
-	ope2Bool  goto 79
 
 state 102
-	litteralArray:  LBRACKET expressionList.RBRACKET 
-	expressionList:  expressionList.COMMA expression 
+	ope2:  LTE.    (114)
 
-	COMMA  shift 137
-	RBRACKET  shift 136
-	.  error
+	.  reduce 114 (src line 340)
 
 
 state 103
-	litteralArray:  LBRACKET RBRACKET.    (78)
+	ope2:  ATTR.    (115)
 
-	.  reduce 78 (src line 278)
+	.  reduce 115 (src line 342)
 
 
 state 104
-	expression:  expression.ope2Bool expression1 
-	expressionList:  expression.    (79)
+	ope2:  FORMAT.    (116)
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 79 (src line 281)
+	.  reduce 116 (src line 344)
 
-	ope2Bool  goto 79
 
 state 105
-	litteralObject:  LBRACE RBRACE.    (81)
+	expression2:  ope1 expression2.    (61)
 
-	.  reduce 81 (src line 286)
+	.  reduce 61 (src line 246)
 
 
 state 106
-	litteralObject:  LBRACE keyValueSet.RBRACE 
-	keyValueSet:  keyValueSet.COMMA keyValue 
+	accessExpression:  atomExpression LBRACKET.expression RBRACKET 
 
-	COMMA  shift 139
-	RBRACE  shift 138
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 139
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
 
 state 107
-	keyValueSet:  keyValue.    (83)
+	accessExpression:  atomExpression DOT.key 
 
-	.  reduce 83 (src line 291)
-
-
-state 108
-	keyValue:  key.COLON expression 
-
-	COLON  shift 140
+	IDENTIFIER  shift 115
 	.  error
 
+	key  goto 140
+
+state 108
+	expression:  expression.ope2Bool expression1 
+	atomExpression:  LPAREN expression.RPAREN 
+
+	RPAREN  shift 141
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  error
+
+	ope2Bool  goto 85
 
 state 109
-	key:  IDENTIFIER.    (115)
+	litteralArray:  LBRACKET expressionList.RBRACKET 
+	expressionList:  expressionList.COMMA expression 
 
-	.  reduce 115 (src line 344)
+	COMMA  shift 134
+	RBRACKET  shift 142
+	.  error
 
 
 state 110
-	variable:  AT IDENTIFIER.    (57)
+	litteralArray:  LBRACKET RBRACKET.    (77)
 
-	.  reduce 57 (src line 229)
+	.  reduce 77 (src line 278)
 
 
 state 111
-	returnStatement:  loopStatement SEMICOLON body.    (35)
+	litteralObject:  LBRACE RBRACE.    (80)
 
-	.  reduce 35 (src line 174)
+	.  reduce 80 (src line 286)
 
 
 state 112
+	litteralObject:  LBRACE keyValueSet.RBRACE 
+	keyValueSet:  keyValueSet.COMMA keyValue 
+
+	COMMA  shift 144
+	RBRACE  shift 143
+	.  error
+
+
+state 113
+	keyValueSet:  keyValue.    (82)
+
+	.  reduce 82 (src line 291)
+
+
+state 114
+	keyValue:  key.COLON expression 
+
+	COLON  shift 145
+	.  error
+
+
+state 115
+	key:  IDENTIFIER.    (121)
+
+	.  reduce 121 (src line 354)
+
+
+state 116
+	variable:  AT IDENTIFIER.    (56)
+
+	.  reduce 56 (src line 229)
+
+
+state 117
+	returnStatement:  loopStatement SEMICOLON body.    (34)
+
+	.  reduce 34 (src line 174)
+
+
+state 118
 	loopStatement:  FOR loopVariable FROM.expression TO expression STEP expression 
 	loopStatement:  FOR loopVariable FROM.expression TO expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -1548,223 +1701,41 @@ state 112
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 141
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 146
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
-
-state 113
-	loopStatement:  FOR loopVariable IN.expression 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 142
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
-
-state 114
-	loopStatement:  FOR FROM expression.TO expression STEP expression 
-	loopStatement:  FOR FROM expression.TO expression 
-	expression:  expression.ope2Bool expression1 
-
-	TO  shift 143
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  error
-
-	ope2Bool  goto 79
-
-state 115
-	loopStatement:  FOR IN expression.    (46)
-	expression:  expression.ope2Bool expression1 
-
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 46 (src line 200)
-
-	ope2Bool  goto 79
-
-state 116
-	loopStatement:  SELECT expression AS.loopVariable FROM expression selectOptions0 
-
-	IDENTIFIER  shift 64
-	.  error
-
-	loopVariable  goto 144
-
-state 117
-	loopStatement:  SELECT expression FROM.expression selectOptions0 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 145
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
-
-state 118
-	nonIfStatement:  LPAREN statements RPAREN.    (14)
-
-	.  reduce 14 (src line 132)
-
 
 state 119
-	nonIfStatement:  IDENTIFIER ASSIGN expression.    (15)
-	expression:  expression.ope2Bool expression1 
+	loopStatement:  FOR loopVariable IN.expression 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 15 (src line 134)
-
-	ope2Bool  goto 79
-
-state 120
-	nonIfStatement:  CLICK expression clickOptions0.    (16)
-
-	.  reduce 16 (src line 135)
-
-
-state 121
-	clickOptions0:  clickOptions.    (27)
-	clickOptions:  clickOptions.clickOption 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LEFT  shift 123
-	RIGHT  shift 124
-	MIDDLE  shift 125
-	LPAREN  shift 49
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  reduce 27 (src line 157)
-
-	litteral  goto 46
-	atomExpression  goto 126
-	variable  goto 47
-	ope0  goto 48
-	clickOption  goto 146
-
-state 122
-	clickOptions:  clickOption.    (28)
-
-	.  reduce 28 (src line 160)
-
-
-state 123
-	clickOption:  LEFT.    (30)
-
-	.  reduce 30 (src line 165)
-
-
-state 124
-	clickOption:  RIGHT.    (31)
-
-	.  reduce 31 (src line 167)
-
-
-state 125
-	clickOption:  MIDDLE.    (32)
-
-	.  reduce 32 (src line 168)
-
-
-state 126
-	clickOption:  atomExpression.    (33)
-
-	.  reduce 33 (src line 169)
-
-
-state 127
-	nonIfStatement:  INPUT expression IN.expression 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -1774,34 +1745,278 @@ state 127
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
 	expression  goto 147
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 128
-	nonIfStatement:  PRINT printOption0 expressionList.    (21)
-	expressionList:  expressionList.COMMA expression 
+state 120
+	loopStatement:  FOR FROM expression.TO expression STEP expression 
+	loopStatement:  FOR FROM expression.TO expression 
+	expression:  expression.ope2Bool expression1 
 
-	COMMA  shift 137
-	.  reduce 21 (src line 143)
+	TO  shift 148
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  error
+
+	ope2Bool  goto 85
+
+state 121
+	loopStatement:  FOR IN expression.    (45)
+	expression:  expression.ope2Bool expression1 
+
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 45 (src line 200)
+
+	ope2Bool  goto 85
+
+state 122
+	loopStatement:  SELECT expression AS.loopVariable FROM expression selectOptions0 
+
+	IDENTIFIER  shift 70
+	.  error
+
+	loopVariable  goto 149
+
+state 123
+	loopStatement:  SELECT expression FROM.expression selectOptions0 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 150
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 124
+	nonIfStatement:  LPAREN statements RPAREN.    (14)
+
+	.  reduce 14 (src line 137)
+
+
+state 125
+	nonIfStatement:  IDENTIFIER ASSIGN expression.    (15)
+	expression:  expression.ope2Bool expression1 
+
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 15 (src line 139)
+
+	ope2Bool  goto 85
+
+state 126
+	nonIfStatement:  CLICK expression clickOptions0.    (16)
+
+	.  reduce 16 (src line 140)
+
+
+state 127
+	clickOptions0:  clickOptions.    (26)
+	clickOptions:  clickOptions.clickOption 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LEFT  shift 129
+	RIGHT  shift 130
+	MIDDLE  shift 131
+	LPAREN  shift 53
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	NL  shift 64
+	NIL  shift 65
+	.  reduce 26 (src line 157)
+
+	litteral  goto 50
+	atomExpression  goto 132
+	variable  goto 51
+	ope0  goto 52
+	clickOption  goto 151
+
+state 128
+	clickOptions:  clickOption.    (27)
+
+	.  reduce 27 (src line 160)
 
 
 state 129
+	clickOption:  LEFT.    (29)
+
+	.  reduce 29 (src line 165)
+
+
+state 130
+	clickOption:  RIGHT.    (30)
+
+	.  reduce 30 (src line 167)
+
+
+state 131
+	clickOption:  MIDDLE.    (31)
+
+	.  reduce 31 (src line 168)
+
+
+state 132
+	clickOption:  atomExpression.    (32)
+
+	.  reduce 32 (src line 169)
+
+
+state 133
+	nonIfStatement:  INPUT expression IN.expression 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 152
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 134
+	expressionList:  expressionList COMMA.expression 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 153
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 135
 	openIfStatement:  IF expression THEN.nonIfStatement 
 	openIfStatement:  IF expression THEN.matchedIfStatement 
 	matchedIfStatement:  IF expression THEN.nonIfStatement ELSE matchedIfStatement 
@@ -1810,150 +2025,113 @@ state 129
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	LPAREN  shift 14
-	IF  shift 150
+	IF  shift 156
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
-	nonIfStatement  goto 148
-	matchedIfStatement  goto 149
-
-state 130
-	returnList:  returnList COMMA expression.    (39)
-	expression:  expression.ope2Bool expression1 
-
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 39 (src line 184)
-
-	ope2Bool  goto 79
-
-state 131
-	expression:  expression ope2Bool expression1.    (58)
-	expression1:  expression1.ope2 expression2 
-
-	PLUS  shift 85
-	MINUS  shift 87
-	PLUSPLUS  shift 86
-	MULTI  shift 88
-	DIV  shift 89
-	MOD  shift 90
-	EQ  shift 91
-	NEQ  shift 92
-	LT  shift 95
-	LTE  shift 96
-	GT  shift 93
-	GTE  shift 94
-	ATTR  shift 97
-	.  reduce 58 (src line 236)
-
-	ope2  goto 84
-
-state 132
-	expression1:  expression1 ope2 expression2.    (60)
-
-	.  reduce 60 (src line 241)
-
-
-state 133
-	expression:  expression.ope2Bool expression1 
-	accessExpression:  atomExpression LBRACKET expression.RBRACKET 
-
-	RBRACKET  shift 151
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  error
-
-	ope2Bool  goto 79
-
-state 134
-	accessExpression:  atomExpression DOT key.    (76)
-
-	.  reduce 76 (src line 273)
-
-
-state 135
-	atomExpression:  LPAREN expression RPAREN.    (71)
-
-	.  reduce 71 (src line 262)
-
+	nonIfStatement  goto 154
+	matchedIfStatement  goto 155
 
 state 136
-	litteralArray:  LBRACKET expressionList RBRACKET.    (77)
+	returnList:  returnList COMMA expression.    (38)
+	expression:  expression.ope2Bool expression1 
 
-	.  reduce 77 (src line 276)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 38 (src line 184)
 
+	ope2Bool  goto 85
 
 state 137
-	expressionList:  expressionList COMMA.expression 
+	expression:  expression ope2Bool expression1.    (57)
+	expression1:  expression1.ope2 expression2 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
+	PLUS  shift 91
+	MINUS  shift 93
+	PLUSPLUS  shift 92
+	MULTI  shift 94
+	DIV  shift 95
+	MOD  shift 96
+	EQ  shift 97
+	NEQ  shift 98
+	LT  shift 101
+	LTE  shift 102
+	GT  shift 99
+	GTE  shift 100
+	ATTR  shift 103
+	FORMAT  shift 104
+	.  reduce 57 (src line 236)
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 152
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
+	ope2  goto 90
 
 state 138
-	litteralObject:  LBRACE keyValueSet RBRACE.    (82)
+	expression1:  expression1 ope2 expression2.    (59)
 
-	.  reduce 82 (src line 288)
+	.  reduce 59 (src line 241)
 
 
 state 139
-	keyValueSet:  keyValueSet COMMA.keyValue 
+	expression:  expression.ope2Bool expression1 
+	accessExpression:  atomExpression LBRACKET expression.RBRACKET 
 
-	IDENTIFIER  shift 109
+	RBRACKET  shift 157
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
 	.  error
 
-	keyValue  goto 153
-	key  goto 108
+	ope2Bool  goto 85
 
 state 140
+	accessExpression:  atomExpression DOT key.    (75)
+
+	.  reduce 75 (src line 273)
+
+
+state 141
+	atomExpression:  LPAREN expression RPAREN.    (70)
+
+	.  reduce 70 (src line 262)
+
+
+state 142
+	litteralArray:  LBRACKET expressionList RBRACKET.    (76)
+
+	.  reduce 76 (src line 276)
+
+
+state 143
+	litteralObject:  LBRACE keyValueSet RBRACE.    (81)
+
+	.  reduce 81 (src line 288)
+
+
+state 144
+	keyValueSet:  keyValueSet COMMA.keyValue 
+
+	IDENTIFIER  shift 115
+	.  error
+
+	keyValue  goto 158
+	key  goto 114
+
+state 145
 	keyValue:  key COLON.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -1963,62 +2141,68 @@ state 140
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 154
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 159
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 141
+state 146
 	loopStatement:  FOR loopVariable FROM expression.TO expression STEP expression 
 	loopStatement:  FOR loopVariable FROM expression.TO expression 
 	expression:  expression.ope2Bool expression1 
 
-	TO  shift 155
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
+	TO  shift 160
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
 	.  error
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 142
-	loopStatement:  FOR loopVariable IN expression.    (45)
+state 147
+	loopStatement:  FOR loopVariable IN expression.    (44)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 45 (src line 199)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 44 (src line 199)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 143
+state 148
 	loopStatement:  FOR FROM expression TO.expression STEP expression 
 	loopStatement:  FOR FROM expression TO.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -2028,94 +2212,112 @@ state 143
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 156
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 161
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 144
+state 149
 	loopStatement:  SELECT expression AS loopVariable.FROM expression selectOptions0 
 
-	FROM  shift 157
+	FROM  shift 162
 	.  error
 
 
-state 145
+state 150
 	loopStatement:  SELECT expression FROM expression.selectOptions0 
 	expression:  expression.ope2Bool expression1 
-	selectOptions0: .    (50)
+	selectOptions0: .    (49)
 
-	WHERE  shift 161
-	LIMIT  shift 162
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 50 (src line 212)
+	WHERE  shift 166
+	LIMIT  shift 167
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 49 (src line 212)
 
-	ope2Bool  goto 79
-	selectOptions0  goto 158
-	selectOptions  goto 159
-	selectOption  goto 160
+	ope2Bool  goto 85
+	selectOptions0  goto 163
+	selectOptions  goto 164
+	selectOption  goto 165
 
-state 146
-	clickOptions:  clickOptions clickOption.    (29)
+state 151
+	clickOptions:  clickOptions clickOption.    (28)
 
-	.  reduce 29 (src line 162)
+	.  reduce 28 (src line 162)
 
 
-state 147
+state 152
 	nonIfStatement:  INPUT expression IN expression.    (17)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 17 (src line 136)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 17 (src line 141)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 148
+state 153
+	expression:  expression.ope2Bool expression1 
+	expressionList:  expressionList COMMA expression.    (79)
+
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 79 (src line 283)
+
+	ope2Bool  goto 85
+
+state 154
 	openIfStatement:  IF expression THEN nonIfStatement.    (10)
 	matchedIfStatement:  IF expression THEN nonIfStatement.ELSE matchedIfStatement 
 	matchedIfStatement:  IF expression THEN nonIfStatement.ELSE nonIfStatement 
 
-	ELSE  shift 163
-	.  reduce 10 (src line 121)
+	ELSE  shift 168
+	.  reduce 10 (src line 126)
 
 
-state 149
+state 155
 	openIfStatement:  IF expression THEN matchedIfStatement.    (11)
 
-	.  reduce 11 (src line 124)
+	.  reduce 11 (src line 129)
 
 
-state 150
+state 156
 	matchedIfStatement:  IF.expression THEN nonIfStatement ELSE matchedIfStatement 
 	matchedIfStatement:  IF.expression THEN nonIfStatement ELSE nonIfStatement 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -2125,222 +2327,66 @@ state 150
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 164
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
-
-state 151
-	accessExpression:  atomExpression LBRACKET expression RBRACKET.    (75)
-
-	.  reduce 75 (src line 271)
-
-
-state 152
-	expression:  expression.ope2Bool expression1 
-	expressionList:  expressionList COMMA expression.    (80)
-
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 80 (src line 283)
-
-	ope2Bool  goto 79
-
-state 153
-	keyValueSet:  keyValueSet COMMA keyValue.    (84)
-
-	.  reduce 84 (src line 293)
-
-
-state 154
-	expression:  expression.ope2Bool expression1 
-	keyValue:  key COLON expression.    (85)
-
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 85 (src line 296)
-
-	ope2Bool  goto 79
-
-state 155
-	loopStatement:  FOR loopVariable FROM expression TO.expression STEP expression 
-	loopStatement:  FOR loopVariable FROM expression TO.expression 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 165
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
-
-state 156
-	loopStatement:  FOR FROM expression TO expression.STEP expression 
-	loopStatement:  FOR FROM expression TO expression.    (44)
-	expression:  expression.ope2Bool expression1 
-
-	STEP  shift 166
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 44 (src line 196)
-
-	ope2Bool  goto 79
-
-state 157
-	loopStatement:  SELECT expression AS loopVariable FROM.expression selectOptions0 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 167
-	expression1  goto 29
-	expression2  goto 30
-	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
-	ope1  goto 31
-
-state 158
-	loopStatement:  SELECT expression FROM expression selectOptions0.    (48)
-
-	.  reduce 48 (src line 204)
-
-
-state 159
-	selectOptions0:  selectOptions.    (51)
-	selectOptions:  selectOptions.selectOption 
-
-	WHERE  shift 161
-	LIMIT  shift 162
-	.  reduce 51 (src line 214)
-
-	selectOption  goto 168
-
-state 160
-	selectOptions:  selectOption.    (52)
-
-	.  reduce 52 (src line 217)
-
-
-state 161
-	selectOption:  WHERE.expression 
-
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
-	LEN  shift 38
-	PLUS  shift 33
-	MINUS  shift 34
-	PLUSPLUS  shift 35
-	MINUSMINUS  shift 36
-	ABS  shift 37
-	NOT  shift 39
-	PAGE  shift 40
-	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
-	.  error
-
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
 	expression  goto 169
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 162
-	selectOption:  LIMIT.expression 
+state 157
+	accessExpression:  atomExpression LBRACKET expression RBRACKET.    (74)
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	.  reduce 74 (src line 271)
+
+
+state 158
+	keyValueSet:  keyValueSet COMMA keyValue.    (83)
+
+	.  reduce 83 (src line 293)
+
+
+state 159
+	expression:  expression.ope2Bool expression1 
+	keyValue:  key COLON expression.    (84)
+
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 84 (src line 296)
+
+	ope2Bool  goto 85
+
+state 160
+	loopStatement:  FOR loopVariable FROM expression TO.expression STEP expression 
+	loopStatement:  FOR loopVariable FROM expression TO.expression 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -2350,81 +2396,255 @@ state 162
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
 	expression  goto 170
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 161
+	loopStatement:  FOR FROM expression TO expression.STEP expression 
+	loopStatement:  FOR FROM expression TO expression.    (43)
+	expression:  expression.ope2Bool expression1 
+
+	STEP  shift 171
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 43 (src line 196)
+
+	ope2Bool  goto 85
+
+state 162
+	loopStatement:  SELECT expression AS loopVariable FROM.expression selectOptions0 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 172
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
 state 163
+	loopStatement:  SELECT expression FROM expression selectOptions0.    (47)
+
+	.  reduce 47 (src line 204)
+
+
+state 164
+	selectOptions0:  selectOptions.    (50)
+	selectOptions:  selectOptions.selectOption 
+
+	WHERE  shift 166
+	LIMIT  shift 167
+	.  reduce 50 (src line 214)
+
+	selectOption  goto 173
+
+state 165
+	selectOptions:  selectOption.    (51)
+
+	.  reduce 51 (src line 217)
+
+
+state 166
+	selectOption:  WHERE.expression 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 174
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 167
+	selectOption:  LIMIT.expression 
+
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
+	LEN  shift 38
+	PLUS  shift 33
+	MINUS  shift 34
+	PLUSPLUS  shift 35
+	MINUSMINUS  shift 36
+	ABS  shift 37
+	NOT  shift 39
+	PAGE  shift 40
+	TEXT  shift 41
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
+	.  error
+
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 175
+	expression1  goto 29
+	expression2  goto 30
+	expression3  goto 32
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
+	ope1  goto 31
+
+state 168
 	matchedIfStatement:  IF expression THEN nonIfStatement ELSE.matchedIfStatement 
 	matchedIfStatement:  IF expression THEN nonIfStatement ELSE.nonIfStatement 
 
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	LPAREN  shift 14
-	IF  shift 150
+	IF  shift 156
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
-	nonIfStatement  goto 172
-	matchedIfStatement  goto 171
+	nonIfStatement  goto 177
+	matchedIfStatement  goto 176
 
-state 164
+state 169
 	matchedIfStatement:  IF expression.THEN nonIfStatement ELSE matchedIfStatement 
 	matchedIfStatement:  IF expression.THEN nonIfStatement ELSE nonIfStatement 
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	THEN  shift 173
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	THEN  shift 178
 	.  error
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 165
+state 170
 	loopStatement:  FOR loopVariable FROM expression TO expression.STEP expression 
-	loopStatement:  FOR loopVariable FROM expression TO expression.    (43)
+	loopStatement:  FOR loopVariable FROM expression TO expression.    (42)
 	expression:  expression.ope2Bool expression1 
 
-	STEP  shift 174
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 43 (src line 194)
+	STEP  shift 179
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 42 (src line 194)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 166
+state 171
 	loopStatement:  FOR FROM expression TO expression STEP.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -2434,111 +2654,117 @@ state 166
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 175
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 180
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 167
+state 172
 	loopStatement:  SELECT expression AS loopVariable FROM expression.selectOptions0 
 	expression:  expression.ope2Bool expression1 
-	selectOptions0: .    (50)
+	selectOptions0: .    (49)
 
-	WHERE  shift 161
-	LIMIT  shift 162
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 50 (src line 212)
+	WHERE  shift 166
+	LIMIT  shift 167
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 49 (src line 212)
 
-	ope2Bool  goto 79
-	selectOptions0  goto 176
-	selectOptions  goto 159
-	selectOption  goto 160
-
-state 168
-	selectOptions:  selectOptions selectOption.    (53)
-
-	.  reduce 53 (src line 219)
-
-
-state 169
-	selectOption:  WHERE expression.    (54)
-	expression:  expression.ope2Bool expression1 
-
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 54 (src line 222)
-
-	ope2Bool  goto 79
-
-state 170
-	selectOption:  LIMIT expression.    (55)
-	expression:  expression.ope2Bool expression1 
-
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 55 (src line 224)
-
-	ope2Bool  goto 79
-
-state 171
-	matchedIfStatement:  IF expression THEN nonIfStatement ELSE matchedIfStatement.    (12)
-
-	.  reduce 12 (src line 127)
-
-
-state 172
-	matchedIfStatement:  IF expression THEN nonIfStatement ELSE nonIfStatement.    (13)
-
-	.  reduce 13 (src line 129)
-
+	ope2Bool  goto 85
+	selectOptions0  goto 181
+	selectOptions  goto 164
+	selectOption  goto 165
 
 state 173
+	selectOptions:  selectOptions selectOption.    (52)
+
+	.  reduce 52 (src line 219)
+
+
+state 174
+	selectOption:  WHERE expression.    (53)
+	expression:  expression.ope2Bool expression1 
+
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 53 (src line 222)
+
+	ope2Bool  goto 85
+
+state 175
+	selectOption:  LIMIT expression.    (54)
+	expression:  expression.ope2Bool expression1 
+
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 54 (src line 224)
+
+	ope2Bool  goto 85
+
+state 176
+	matchedIfStatement:  IF expression THEN nonIfStatement ELSE matchedIfStatement.    (12)
+
+	.  reduce 12 (src line 132)
+
+
+state 177
+	matchedIfStatement:  IF expression THEN nonIfStatement ELSE nonIfStatement.    (13)
+
+	.  reduce 13 (src line 134)
+
+
+state 178
 	matchedIfStatement:  IF expression THEN.nonIfStatement ELSE matchedIfStatement 
 	matchedIfStatement:  IF expression THEN.nonIfStatement ELSE nonIfStatement 
 
 	IDENTIFIER  shift 15
 	CLICK  shift 16
 	INPUT  shift 17
-	PRINT  shift 20
 	SLOW  shift 21
 	LPAREN  shift 14
 	ASSERT  shift 19
 	FAIL  shift 18
+	PRINT  shift 20
 	.  error
 
-	nonIfStatement  goto 177
+	nonIfStatement  goto 182
 
-state 174
+state 179
 	loopStatement:  FOR loopVariable FROM expression TO expression STEP.expression 
 
-	BOOL  shift 54
-	NUMBER  shift 53
-	STRING  shift 52
-	IDENTIFIER  shift 55
-	LPAREN  shift 49
-	LBRACKET  shift 50
-	LBRACE  shift 51
+	BOOL  shift 58
+	NUMBER  shift 57
+	STRING  shift 56
+	IDENTIFIER  shift 59
+	LPAREN  shift 53
+	LBRACKET  shift 54
+	LBRACE  shift 55
 	LEN  shift 38
 	PLUS  shift 33
 	MINUS  shift 34
@@ -2548,72 +2774,78 @@ state 174
 	NOT  shift 39
 	PAGE  shift 40
 	TEXT  shift 41
-	AT  shift 56
-	NOW  shift 57
-	VERSION  shift 58
-	FILE_SEPARATOR  shift 59
+	AT  shift 60
+	NOW  shift 61
+	VERSION  shift 62
+	FILE_SEPARATOR  shift 63
+	RAW  shift 42
+	GO  shift 43
+	JSON  shift 45
+	GSC  shift 44
+	NL  shift 64
+	NIL  shift 65
 	.  error
 
-	litteral  goto 46
-	litteralArray  goto 44
-	atomExpression  goto 42
-	expression  goto 178
+	litteral  goto 50
+	litteralArray  goto 48
+	atomExpression  goto 46
+	expression  goto 183
 	expression1  goto 29
 	expression2  goto 30
 	expression3  goto 32
-	variable  goto 47
-	accessExpression  goto 43
-	ope0  goto 48
-	litteralObject  goto 45
+	variable  goto 51
+	accessExpression  goto 47
+	ope0  goto 52
+	litteralObject  goto 49
 	ope1  goto 31
 
-state 175
-	loopStatement:  FOR FROM expression TO expression STEP expression.    (42)
+state 180
+	loopStatement:  FOR FROM expression TO expression STEP expression.    (41)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 42 (src line 191)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 41 (src line 191)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-state 176
-	loopStatement:  SELECT expression AS loopVariable FROM expression selectOptions0.    (47)
+state 181
+	loopStatement:  SELECT expression AS loopVariable FROM expression selectOptions0.    (46)
 
-	.  reduce 47 (src line 202)
+	.  reduce 46 (src line 202)
 
 
-state 177
+state 182
 	matchedIfStatement:  IF expression THEN nonIfStatement.ELSE matchedIfStatement 
 	matchedIfStatement:  IF expression THEN nonIfStatement.ELSE nonIfStatement 
 
-	ELSE  shift 163
+	ELSE  shift 168
 	.  error
 
 
-state 178
-	loopStatement:  FOR loopVariable FROM expression TO expression STEP expression.    (41)
+state 183
+	loopStatement:  FOR loopVariable FROM expression TO expression STEP expression.    (40)
 	expression:  expression.ope2Bool expression1 
 
-	AND  shift 80
-	OR  shift 81
-	XOR  shift 83
-	NAND  shift 82
-	.  reduce 41 (src line 189)
+	AND  shift 86
+	OR  shift 87
+	XOR  shift 89
+	NAND  shift 88
+	.  reduce 40 (src line 189)
 
-	ope2Bool  goto 79
+	ope2Bool  goto 85
 
-78 terminals, 39 nonterminals
-116 grammar rules, 179/16000 states
+85 terminals, 38 nonterminals
+122 grammar rules, 184/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-88 working sets used
-memory: parser 606/240000
-78 extra closures
-954 shift entries, 1 exceptions
-88 goto entries
+87 working sets used
+memory: parser 605/240000
+79 extra closures
+1157 shift entries, 1 exceptions
+87 goto entries
 404 entries saved by goto default
-Optimizer space used: output 344/240000
-344 table entries, 36 zero
-maximum spread: 77, maximum offset: 174
+Optimizer space used: output 375/240000
+375 table entries, 52 zero
+maximum spread: 84, maximum offset: 179

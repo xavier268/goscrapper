@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"reflect"
@@ -24,6 +25,10 @@ func (n nodeOpe0) eval(it *Interpreter) (rv any, err error) {
 		return goscrapper.VERSION, nil
 	case FILE_SEPARATOR:
 		return string(filepath.Separator), nil
+	case NL:
+		return "\n", nil
+	case NIL:
+		return nil, nil
 	default:
 		return nil, fmt.Errorf("unknown zero-ary operator %s", TokenAsString(n.c))
 	}
@@ -142,6 +147,22 @@ func (n nodeOpe1) eval(it *Interpreter) (rv any, err error) {
 		default:
 			return nil, fmt.Errorf("cannot apply unary %s to %T, expected *rt.Element", TokenAsString(n.operator), rv)
 		}
+	case RAW:
+		return fmt.Sprintf("%#v", rv), nil
+	case GO:
+		return fmt.Sprintf("%v", rv), nil
+	case JSON:
+		bb, err := json.Marshal(rv)
+		if err != nil {
+			return nil, err
+		}
+		return string(bb), nil
+	case GSC:
+		str, err := rt.Serialize(rv)
+		if err != nil {
+			return nil, err
+		}
+		return str, nil
 	default:
 		return nil, fmt.Errorf("unknown unary operator: %d", n.operator)
 	}
@@ -301,6 +322,17 @@ func (n nodeOpe2) eval(it *Interpreter) (any, error) {
 		}
 		return nil, fmt.Errorf("cannot apply binary %s to %T and %T", TokenAsString(n.operator), left, right)
 
+	case FORMAT: // any FORMAT format
+		// check format is a non nil string
+		if right == nil {
+			return nil, fmt.Errorf("invalid nil format argument to %s operator", TokenAsString(n.operator))
+		}
+		ft, ok := right.(string)
+		if !ok {
+			return nil, fmt.Errorf("cannot use a non string format : %#v", right)
+		}
+		// format
+		return rt.SafeSprintf(ft, left)
 	default:
 		return nil, fmt.Errorf("unkown binary operator %s", TokenAsString(n.operator))
 	}

@@ -35,7 +35,7 @@
 %type<nodes>            expressionList body statements returnList returnList0
 %type<nodemap>          keyValueSet litteralObject
 %type<nodeWithBody>     loopStatement
-%type<tok>              ope1 ope2 ope2Bool loopVariable printOption0
+%type<tok>              ope1 ope2 ope2Bool loopVariable
 
 %token <tok>  
 
@@ -45,7 +45,7 @@ STRING
 IDENTIFIER
 
 ASSIGN SEMICOLON CLICK INPUT IN 
-PRINT RAW SLOW LEFT RIGHT MIDDLE 
+SLOW LEFT RIGHT MIDDLE 
 RETURN COMMA FOR
 SELECT AS FROM TO STEP
 WHERE LIMIT
@@ -70,12 +70,17 @@ IF THEN ELSE
 
 ASSERT FAIL
 
+PRINT FORMAT RAW GO JSON GSC NL
+
+DOLLAR NIL
+
 
 
 // definition des precedences et des associativités
 // les opérateurs definis en dernier ont la précedence la plus élevée.
 %nonassoc ASSIGN FOR NOW VERSION 
 
+%left COMMA
 %left ELSE
 %left OR XOR
 %left AND NAND
@@ -139,17 +144,12 @@ nonIfStatement
     | FAIL expression {$$ = nodeFail{$2}} // abort with error message
     | ASSERT expression { $$ = nodeAssert {$2}} // assume expression is true, or fail
 
-   
-    | PRINT printOption0 expressionList  {$$ = nodePrint{ nodes:$3, raw:($2.c == RAW)}} // print %v content of expression in expressionList
+    | PRINT { $$ = nodePrint{nil}} // just print new line
+    | PRINT expressionList  {$$ = nodePrint{$2}} // print content of expressions in expressionList in GO (%v) format
     
      // debug only !
     | SLOW  {$$ = nodeSlow{m:nil}} // wait for a short delay, using SLOW_DELAY from runtime. STop waiting if context is cancelled.
     | SLOW expression  {$$ = nodeSlow{m:$1}} // wait for specified millis, falling back on SLOW_DELAY if millis <=0. STop waiting if context is cancelled.
-    ;
-
-printOption0
-    : {$$ = tok{}} // print using %v
-    | RAW {$$ = $1} // print using %#v
     ;
 
 clickOptions0
@@ -301,6 +301,8 @@ ope0 // no argument operator, ie, read-only system values.
     : NOW { $$ = nodeOpe0($1)}// time stamp
     | VERSION { $$ = nodeOpe0($1)}// this version
     | FILE_SEPARATOR { $$ = nodeOpe0($1)} // file separator for current system
+    | NL { $$ = nodeOpe0($1)} // new line string
+    | NIL { $$ = nodeOpe0($1)} // nil constant
     ;
 
 ope1 // unary operators. Action depends on argument type.
@@ -314,6 +316,12 @@ ope1 // unary operators. Action depends on argument type.
     
     | PAGE // PAGE url -> page object
     | TEXT // TEXT ele -> text content of element
+
+    // format argument as string
+    | RAW       // using %#v
+    | GO        // using %v
+    | GSC       // using GSC syntax
+    | JSON      // JSON formatting
     ;
 
 
@@ -332,6 +340,8 @@ ope2 // binary operators. Action performed depends of argument types.
     | LTE
 
     | ATTR // el ATTR at -> value of at attribute in el
+
+    | FORMAT // any FORMAT format -> string
     ;
 
 ope2Bool //  binary booleans

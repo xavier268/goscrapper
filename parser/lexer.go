@@ -212,7 +212,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		// {"bool", BOOLTYPE},
 		// {"string", STRINGTYPE},
 		// {"bin", BINTYPE},
-		//{"nil", NIL},
+		{"nil", NIL},
 
 		// multi bytes
 		{"<=", LTE},
@@ -250,6 +250,7 @@ func (m *myLexer) tryAllOperators(lval *yySymType) error {
 		{"?", QUESTION},
 		{"@", AT},
 		{"!", NOT},
+		{"$", DOLLAR},
 	}
 	for _, k := range opeTable {
 		// fmt.Printf("Trying %d %q\n", i, k)

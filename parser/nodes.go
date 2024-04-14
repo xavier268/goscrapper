@@ -156,38 +156,6 @@ func (n nodeLitteral) eval(i *Interpreter) (any, error) {
 	return n.value, nil
 }
 
-// ======== PRINT statement ========
-
-var _ Node = &nodePrint{}
-
-type nodePrint struct {
-	nodes Nodes
-	raw   bool // if raw, will print using %#v, otherwise, use %v
-}
-
-// eval implements Node.
-func (n nodePrint) eval(it *Interpreter) (any, error) {
-	var err error
-	// fmt.Print("PRINT: ")
-	for _, nn := range n.nodes {
-		var nne any
-		if nn != nil {
-
-			nne, err = nn.eval(it)
-		}
-		if err != nil {
-			return nil, err
-		}
-		if n.raw {
-			fmt.Printf("%#v ", nne)
-		} else {
-			fmt.Printf("%v ", nne)
-		}
-	}
-	fmt.Println()
-	return nil, nil
-}
-
 // ======= ASSIGN statement =========
 
 var _ Node = &nodeAssign{}
@@ -834,4 +802,27 @@ func (n nodeAssert) eval(it *Interpreter) (any, error) {
 		}
 	}
 	return nil, fmt.Errorf(fmt.Sprintf("assertion %#v failed", n.cond))
+}
+
+// ==== PRINT NODE ===
+
+type nodePrint struct {
+	nodes Nodes
+}
+
+var _ Node = nodePrint{}
+
+func (n nodePrint) eval(it *Interpreter) (any, error) {
+	if n.nodes != nil {
+		// evaluate and print
+		for _, p := range n.nodes {
+			v, err := p.eval(it)
+			if err != nil {
+				return nil, err
+			}
+			fmt.Print(v)
+		}
+	}
+	fmt.Println()
+	return nil, nil
 }

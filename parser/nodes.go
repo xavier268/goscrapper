@@ -161,11 +161,12 @@ func (n nodeLitteral) eval(i *Interpreter) (any, error) {
 var _ Node = &nodeAssign{}
 
 type nodeAssign struct {
-	id   string
-	node Node
+	id     string
+	node   Node
+	global bool
 }
 
-func (m *myLexer) newNodeAssign(tok tok, node Node) nodeAssign {
+func (m *myLexer) newNodeAssign(tok tok, node Node, global bool) nodeAssign {
 	if !isValidId(tok.v) || tok.c != IDENTIFIER {
 		m.errorf("variable %s is not a valid input variable", tok.v)
 	}
@@ -174,7 +175,7 @@ func (m *myLexer) newNodeAssign(tok tok, node Node) nodeAssign {
 	}
 	// register variable as a normal variable.
 	m.vars[tok.v] = true
-	return nodeAssign{id: tok.v, node: node}
+	return nodeAssign{id: tok.v, node: node, global: global}
 }
 
 // eval nodeAssign
@@ -185,7 +186,9 @@ func (n nodeAssign) eval(it *Interpreter) (value any, err error) {
 	if err != nil {
 		return nil, err
 	}
-	err = it.assignVar(n.id, value)
+
+	err = it.assignVar(n.id, value, n.global)
+
 	return value, err
 }
 
@@ -193,18 +196,20 @@ func (n nodeAssign) eval(it *Interpreter) (value any, err error) {
 var _ Node = &nodeVariable{}
 
 type nodeVariable struct {
-	id string
+	id     string
+	global bool
 }
 
 // eval implements Node.
 func (n nodeVariable) eval(it *Interpreter) (any, error) {
-	return it.getVar(n.id)
+	return it.getVar(n.id, n.global)
 }
 
 // newInputVar creates a new nodeVariable node to GET the variable content later,
 // either registering variable as an input var if input is set to true, or as a normal variable.
 // if exists is set, verify the variable was already declared (not for input)
-func (m *myLexer) newNodeVariable(tok tok, input bool, exists bool) nodeVariable {
+// global force a global variable creation
+func (m *myLexer) newNodeVariable(tok tok, input bool, exists bool, global bool) nodeVariable {
 	if !isValidId(tok.v) || tok.c != IDENTIFIER {
 		m.errorf("variable %s is not a valid variable", tok.v)
 	}
@@ -221,7 +226,7 @@ func (m *myLexer) newNodeVariable(tok tok, input bool, exists bool) nodeVariable
 			// register normal var access
 			if m.params[tok.v] {
 				m.errorf("variable %s is already an input variable", tok.v)
-				return nodeVariable{id: tok.v}
+				return nodeVariable{id: tok.v, global: global}
 			}
 			m.vars[tok.v] = true
 		} else {
@@ -229,10 +234,10 @@ func (m *myLexer) newNodeVariable(tok tok, input bool, exists bool) nodeVariable
 			if !m.vars[tok.v] {
 				m.errorf("variable %s is not yet declared", tok.v)
 			}
-			return nodeVariable{id: tok.v}
+			return nodeVariable{id: tok.v, global: global}
 		}
 	}
-	return nodeVariable{id: tok.v}
+	return nodeVariable{id: tok.v, global: global}
 }
 
 // ===== nodeKey ========
@@ -459,7 +464,7 @@ func (n nodeForLoop) eval(it *Interpreter) (any, error) {
 			return nil, it.ctx.Err()
 		}
 		// assign loopVar
-		err := it.assignVar(n.loopVar, i)
+		err := it.assignVar(n.loopVar, i, false)
 		if err != nil {
 			return nil, err
 		}
@@ -549,7 +554,7 @@ func (n nodeForArray) eval(it *Interpreter) (any, error) {
 		}
 
 		// assign loopVar
-		err := it.assignVar(n.loopVar, ae)
+		err := it.assignVar(n.loopVar, ae, false)
 		if err != nil {
 			return nil, err
 		}

@@ -136,7 +136,10 @@ matchedIfStatement
 
 nonIfStatement 
     : LPAREN statements RPAREN { $$ = $2 }
-    | IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3)}
+
+    | IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3, false)} // assign to local scope
+    | DOLLAR IDENTIFIER ASSIGN expression{ $$ = lx.newNodeAssign($2,  $4, true)} // assign to global scope
+    
     | CLICK  expression /*element*/  clickOptions0 { /*todo*/} // click on element - make sure you select it first !  
     | INPUT expression /*text*/ IN expression /*element*/  {/*todo*/} // input text in element - make sure you select it first !
 
@@ -225,8 +228,9 @@ selectOption
     ;
 
 variable
-    : IDENTIFIER {$$ = lx.newNodeVariable($1, false, true)}     // get normal variable, check already declared
-    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true, false)}  // get input variable
+    : IDENTIFIER {$$ = lx.newNodeVariable($1, false, true, false)}     // get normal (local) variable, check already declared
+    | AT IDENTIFIER {$$ = lx.newNodeVariable($2, true, false, false)}  // get input parameter
+    | DOLLAR IDENTIFIER {$$ = lx.newNodeVariable($2, false, true, true)}  // get GLOBAL variable
     ;
 
 // ==============

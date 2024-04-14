@@ -62,27 +62,42 @@ func (it *Interpreter) resetFrame() error {
 // Local value will shadow the more global value.
 // Multiple reassignements are ok.
 // Assigning to a var declared and assigned an input value by NewInterpreter is illegal.
-func (it *Interpreter) assignVar(varName string, value any) error {
+// If the bool flag is set, assign to the root scope (global scope).
+func (it *Interpreter) assignVar(varName string, value any, global bool) error {
 	if !isValidId(varName) {
 		return fmt.Errorf("invalid var identifier: %s", varName)
 	}
 	if it.isInputVar(varName) {
 		return fmt.Errorf("cannot reassign to input parameter: %s", varName)
 	}
-	it.vars[len(it.vars)-1][varName] = value
+	if global {
+		it.vars[0][varName] = value
+	} else {
+		it.vars[len(it.vars)-1][varName] = value
+	}
 	return nil
 }
 
 // Retrieve the value for the var.
 // Local values shadow the more global values, even if assigned to nil.
-// Works for both interanl or input vars.
-func (it *Interpreter) getVar(varName string) (value any, err error) {
-	for i := len(it.vars) - 1; i >= 0; i-- {
-		if v, ok := it.vars[i][varName]; ok {
+// Works for both internal or input vars.
+// If global flag, will only fetch the global scope value.
+func (it *Interpreter) getVar(varName string, global bool) (value any, err error) {
+	if global {
+		// only serach global scope
+		if v, ok := it.vars[0][varName]; ok {
 			return v, nil
 		}
+		return nil, fmt.Errorf("no such global variable : %s", varName)
+	} else {
+		// look through local scopes
+		for i := len(it.vars) - 1; i >= 0; i-- {
+			if v, ok := it.vars[i][varName]; ok {
+				return v, nil
+			}
+		}
+		return nil, fmt.Errorf("no such variable : %s", varName)
 	}
-	return nil, fmt.Errorf("unknown var: %s", varName)
 }
 
 // check if name was declared as input var name.

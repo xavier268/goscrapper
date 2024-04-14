@@ -105,7 +105,7 @@ startLoop:
 	}
 
 	// skip multiline comments
-	if loc := regexp.MustCompile(`(?s)^\/\*.*\*\/+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
+	if loc := regexp.MustCompile(`(?s)^\/\*.*?\*\/+`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
 		m.pos += loc[1] // skip
 		goto startLoop
 	}
@@ -119,8 +119,12 @@ startLoop:
 	// read strings between " "
 	// You can escape inside " by adding one more.
 	if loc := regexp.MustCompile(`(?s)^"(""+|[^"])*"`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
-		lval.tok.v = strings.Replace(lval.tok.v, `""`, `"`, -1) // replace all doubled quotes escaped inside.
+		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1]) // remove external quotes
+		// replace all repeated doubled quotes by removing just one. """ -> ""
+		esc := regexp.MustCompile(`"+`)
+		lval.tok.v = esc.ReplaceAllStringFunc(lval.tok.v, func(match string) string {
+			return strings.Repeat(`"`, len(match)-1)
+		})
 		lval.tok.t = "string"
 		lval.tok.c = STRING
 		m.pos += loc[1]
@@ -130,8 +134,12 @@ startLoop:
 	// read strings between ' '
 	// You can escape inside ' by adding one more.
 	if loc := regexp.MustCompile(`(?s)^'(''+|[^'])*'`).FindIndex(m.data[m.pos:]); len(loc) == 2 {
-		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1])   // remove external quotes
-		lval.tok.v = strings.Replace(lval.tok.v, `''`, `'`, -1) // replace all doubled quotes escaped inside.
+		lval.tok.v = string(m.data[m.pos+1 : m.pos+loc[1]-1]) // remove external quotes
+		// replace all repeated single quotes by removing just one. ''' -> ''
+		esc := regexp.MustCompile(`'+`)
+		lval.tok.v = esc.ReplaceAllStringFunc(lval.tok.v, func(match string) string {
+			return strings.Repeat(`'`, len(match)-1)
+		})
 		lval.tok.t = "string"
 		lval.tok.c = STRING
 		m.pos += loc[1]

@@ -4,35 +4,12 @@ Reference : TestLexer
 // test for lexer
 /* block 
 comment */
-BOOL
-NUMBER
-STRING 
-IDENTIFIER
-
-ASSIGN SEMICOLON CLICK INPUT IN 
-PRINT RAW SLOW LEFT RIGHT MIDDLE 
-RETURN COMMA FOR
-SELECT AS FROM
-WHERE LIMIT
-LPAREN RPAREN
-LBRACKET RBRACKET
-LBRACE RBRACE
-DOT LEN 
-PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS LEN
-NOT AND OR XOR
-EQ NEQ LT LTE GT GTE
-CONTAINS
-FIND PATH WITH JOIN PAGE
-COLON TEXT ATTR OF
-DISTINCT 
-AT /* @ */
-DOTDOT /* .. */
-QUESTION
 ()[]{}
 123 c56 5de
 2.56
+nil
 
-++ + - -- . .. ...  =  <= >= < > 
+++ + - -- . .. ...  =  <= >= < > $
 = != @ !
 
 && || ;:%
@@ -48,57 +25,189 @@ QUESTION
 // testing complex strings
 "double quote, 
 multi-line,
-string with """ escaped double quotes and 'single quotes'"
+string with 2 "" escaped double quotes and 'single quotes'"
+"double quote, 
+multi-line,
+string with 3 """ escaped double quotes and 'single quotes'"
+"double quote, 
+multi-line,
+string with 4 """" escaped double quotes and 'single quotes'"
 
 'single quote
-with escaped single ''' quotes and "double" quotes'
+with 2 single '' quotes and "double" quotes'
+'single quote
+with 3 single ''' quotes and "double" quotes'
+'single quote
+with 4 single '''' quotes and "double" quotes'
+
+
+BOOL
+NUMBER
+STRING 
+IDENTIFIER
+
+ASSIGN SEMICOLON CLICK INPUT IN 
+SLOW LEFT RIGHT MIDDLE 
+RETURN COMMA FOR
+SELECT AS FROM TO STEP
+WHERE LIMIT
+LPAREN RPAREN
+LBRACKET RBRACKET
+LBRACE RBRACE
+DOT LEN 
+PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS
+NOT AND OR XOR NAND
+EQ NEQ LT LTE GT GTE
+CONTAINS
+FIND PATH WITH JOIN PAGE
+COLON TEXT ATTR OF
+DISTINCT 
+AT /* @ */
+DOTDOT /* .. */
+QUESTION /*?*/
+
+NOW VERSION FILE_SEPARATOR
+
+IF THEN ELSE
+
+ASSERT FAIL
+
+PRINT FORMAT RAW GO JSON GSC NL
+
+DOLLAR NIL
 
 EndOfTest
 	
-&parser.yySymType{yys:0, tok:parser.tok{v:"QUESTION", t:"QUESTION", c:57411}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"(", t:"LPAREN", c:57371}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:")", t:"RPAREN", c:57372}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"[", t:"LBRACKET", c:57373}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"]", t:"RBRACKET", c:57374}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"{", t:"LBRACE", c:57375}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"}", t:"RBRACE", c:57376}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"(", t:"LPAREN", c:57369}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:")", t:"RPAREN", c:57370}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"[", t:"LBRACKET", c:57371}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"]", t:"RBRACKET", c:57372}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"{", t:"LBRACE", c:57373}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"}", t:"RBRACE", c:57374}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"123", t:"int", c:57347}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"c56", t:"IDENTIFIER", c:57349}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"5", t:"int", c:57347}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"de", t:"IDENTIFIER", c:57349}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"2", t:"int", c:57347}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57377}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57375}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"56", t:"int", c:57347}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"++", t:"PLUSPLUS", c:57381}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"+", t:"PLUS", c:57379}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"-", t:"MINUS", c:57380}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"--", t:"MINUSMINUS", c:57382}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57377}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"..", t:"DOTDOT", c:57410}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"..", t:"DOTDOT", c:57410}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57377}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"nil", t:"NIL", c:57426}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"++", t:"PLUSPLUS", c:57379}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"+", t:"PLUS", c:57377}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"-", t:"MINUS", c:57378}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"--", t:"MINUSMINUS", c:57380}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57375}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"..", t:"DOTDOT", c:57408}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"..", t:"DOTDOT", c:57408}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:".", t:"DOT", c:57375}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"=", t:"ASSIGN", c:57350}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"<=", t:"LTE", c:57395}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:">=", t:"GTE", c:57397}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"<", t:"LT", c:57394}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:">", t:"GT", c:57396}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"<=", t:"LTE", c:57393}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:">=", t:"GTE", c:57395}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"<", t:"LT", c:57392}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:">", t:"GT", c:57394}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"$", t:"DOLLAR", c:57425}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"=", t:"ASSIGN", c:57350}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"!=", t:"NEQ", c:57393}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"@", t:"AT", c:57409}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"!", t:"NOT", c:57387}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"&&", t:"AND", c:57388}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"||", t:"OR", c:57389}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"!=", t:"NEQ", c:57391}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"@", t:"AT", c:57407}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"!", t:"NOT", c:57385}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"&&", t:"AND", c:57386}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"||", t:"OR", c:57387}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:";", t:"SEMICOLON", c:57351}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:":", t:"COLON", c:57404}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"%", t:"MOD", c:57385}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:":", t:"COLON", c:57402}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"%", t:"MOD", c:57383}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"un", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"  un  ", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"deux", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:" deux ", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"trois & quatre", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"cinq et six", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"double quote, \nmulti-line,\nstring with \"\" escaped double quotes and 'single quotes'", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
-&parser.yySymType{yys:0, tok:parser.tok{v:"single quote\nwith escaped single '' quotes and \"double\" quotes", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"double quote, \nmulti-line,\nstring with 2 \" escaped double quotes and 'single quotes'", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"double quote, \nmulti-line,\nstring with 3 \"\" escaped double quotes and 'single quotes'", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"double quote, \nmulti-line,\nstring with 4 \"\"\" escaped double quotes and 'single quotes'", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"single quote\nwith 2 single ' quotes and \"double\" quotes", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"single quote\nwith 3 single '' quotes and \"double\" quotes", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"single quote\nwith 4 single ''' quotes and \"double\" quotes", t:"string", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"BOOL", t:"BOOL", c:57346}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"NUMBER", t:"NUMBER", c:57347}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"STRING", t:"STRING", c:57348}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"IDENTIFIER", t:"IDENTIFIER", c:57349}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"ASSIGN", t:"ASSIGN", c:57350}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"SEMICOLON", t:"SEMICOLON", c:57351}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"CLICK", t:"CLICK", c:57352}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"INPUT", t:"INPUT", c:57353}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"IN", t:"IN", c:57354}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"SLOW", t:"SLOW", c:57355}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LEFT", t:"LEFT", c:57356}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"RIGHT", t:"RIGHT", c:57357}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"MIDDLE", t:"MIDDLE", c:57358}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"RETURN", t:"RETURN", c:57359}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"COMMA", t:"COMMA", c:57360}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"FOR", t:"FOR", c:57361}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"SELECT", t:"SELECT", c:57362}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"AS", t:"AS", c:57363}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"FROM", t:"FROM", c:57364}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"TO", t:"TO", c:57365}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"STEP", t:"STEP", c:57366}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"WHERE", t:"WHERE", c:57367}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LIMIT", t:"LIMIT", c:57368}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LPAREN", t:"LPAREN", c:57369}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"RPAREN", t:"RPAREN", c:57370}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LBRACKET", t:"LBRACKET", c:57371}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"RBRACKET", t:"RBRACKET", c:57372}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LBRACE", t:"LBRACE", c:57373}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"RBRACE", t:"RBRACE", c:57374}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"DOT", t:"DOT", c:57375}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LEN", t:"LEN", c:57376}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"PLUS", t:"PLUS", c:57377}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"MINUS", t:"MINUS", c:57378}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"PLUSPLUS", t:"PLUSPLUS", c:57379}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"MINUSMINUS", t:"MINUSMINUS", c:57380}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"MULTI", t:"MULTI", c:57381}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"DIV", t:"DIV", c:57382}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"MOD", t:"MOD", c:57383}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"ABS", t:"ABS", c:57384}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"NOT", t:"NOT", c:57385}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"AND", t:"AND", c:57386}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"OR", t:"OR", c:57387}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"XOR", t:"XOR", c:57388}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"NAND", t:"NAND", c:57389}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"EQ", t:"EQ", c:57390}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"NEQ", t:"NEQ", c:57391}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LT", t:"LT", c:57392}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"LTE", t:"LTE", c:57393}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"GT", t:"GT", c:57394}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"GTE", t:"GTE", c:57395}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"CONTAINS", t:"CONTAINS", c:57396}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"FIND", t:"FIND", c:57397}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"PATH", t:"PATH", c:57398}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"WITH", t:"WITH", c:57399}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"JOIN", t:"JOIN", c:57400}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"PAGE", t:"PAGE", c:57401}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"COLON", t:"COLON", c:57402}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"TEXT", t:"TEXT", c:57403}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"ATTR", t:"ATTR", c:57404}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"OF", t:"OF", c:57405}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"DISTINCT", t:"DISTINCT", c:57406}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"AT", t:"AT", c:57407}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"DOTDOT", t:"DOTDOT", c:57408}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"QUESTION", t:"QUESTION", c:57409}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"NOW", t:"NOW", c:57410}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"VERSION", t:"VERSION", c:57411}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"FILE_SEPARATOR", t:"FILE_SEPARATOR", c:57412}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"IF", t:"IF", c:57413}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"THEN", t:"THEN", c:57414}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"ELSE", t:"ELSE", c:57415}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"ASSERT", t:"ASSERT", c:57416}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"FAIL", t:"FAIL", c:57417}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"PRINT", t:"PRINT", c:57418}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"FORMAT", t:"FORMAT", c:57419}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"RAW", t:"RAW", c:57420}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"GO", t:"GO", c:57421}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"JSON", t:"JSON", c:57422}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"GSC", t:"GSC", c:57423}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"NL", t:"NL", c:57424}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"DOLLAR", t:"DOLLAR", c:57425}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
+&parser.yySymType{yys:0, tok:parser.tok{v:"NIL", t:"NIL", c:57426}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"EndOfTest", t:"IDENTIFIER", c:57349}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 &parser.yySymType{yys:0, tok:parser.tok{v:"", t:"", c:0}, node:parser.Node(nil), nodes:parser.Nodes(nil), nodemap:parser.NodeMap(nil), nodeWithBody:parser.NodeWithBody(nil)}
 

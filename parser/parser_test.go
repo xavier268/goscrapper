@@ -17,21 +17,24 @@ func TestParserVisual(t *testing.T) {
 	a = [ 1, "deux", false, nil ];
 	b = { z : 1, b : "deux", c : false, d : nil };
 	c = { a: a, b : b , c:[ a,b]};
-	PRINT ;		// empty line
-	PRINT a;	// [1 deux false <nil>]
-	PRINT a,b;	// [1 deux false <nil>]map[b:deux c:false d:<nil> z:1]
-	PRINT a,b,c;// [1 deux false <nil>]map[b:deux c:false d:<nil> z:1]map[a:[1 deux false <nil>] b:map[b:deux c:false d:<nil> z:1] c:[[1 deux false <nil>] map[b:deux c:false d:<nil> z:1]]]
+	PRINT ;		
+		// empty line
+	PRINT a;	
+		// [1 deux false <nil>]
+	PRINT a,b;	
+		// [1 deux false <nil>]map[b:deux c:false d:<nil> z:1]
+	PRINT a,b,c;
+		// [1 deux false <nil>]map[b:deux c:false d:<nil> z:1]map[a:[1 deux false <nil>] b:map[b:deux c:false d:<nil> z:1] c:[[1 deux false <nil>] map[b:deux c:false d:<nil> z:1]]]
+	
 	PRINT "---";
-	PRINT "Raw format : ",  RAW c ;	// Raw format : map[string]interface {}{"a":[]interface {}{1, "deux", false, interface {}(nil)}, "b":map[string]interface {}{"b":"deux", "c":false, "d":interface {}(nil), "z":1}, "c":[]interface {}{[]interface {}{1, "deux", false, interface {}(nil)}, map[string]interface {}{"b":"deux", "c":false, "d":interface {}(nil), "z":1}}}
-	PRINT "Json format : ", JSON c ;// Json format : {"a":[1,"deux",false,null],"b":{"b":"deux","c":false,"d":null,"z":1},"c":[[1,"deux",false,null],{"b":"deux","c":false,"d":null,"z":1}]}
-	PRINT "Go format : ",GO c; 		// Go format : map[a:[1 deux false <nil>] b:map[b:deux c:false d:<nil> z:1] c:[[1 deux false <nil>] map[b:deux c:false d:<nil> z:1]]]
+	
+	PRINT "Raw format : ",  RAW c ;	
+		// Raw format : map[string]interface {}{"a":[]interface {}{1, "deux", false, interface {}(nil)}, "b":map[string]interface {}{"b":"deux", "c":false, "d":interface {}(nil), "z":1}, "c":[]interface {}{[]interface {}{1, "deux", false, interface {}(nil)}, map[string]interface {}{"b":"deux", "c":false, "d":interface {}(nil), "z":1}}}
+	PRINT "Json format : ", JSON c ;
+		// Json format : {"a":[1,"deux",false,null],"b":{"b":"deux","c":false,"d":null,"z":1},"c":[[1,"deux",false,null],{"b":"deux","c":false,"d":null,"z":1}]}
+	PRINT "Go format : ",GO c; 		
+		// Go format : map[a:[1 deux false <nil>] b:map[b:deux c:false d:<nil> z:1] c:[[1 deux false <nil>] map[b:deux c:false d:<nil> z:1]]]
 	// PRINT "GSC format : ", GSC c ;
-
-
-// ---
-// Raw format : map[string]interface {}{"a":[]interface {}{1, "deux", false, interface {}(nil)}, "b":map[string]interface {}{"b":"deux", "c":false, "d":interface {}(nil), "z":1}, "c":[]interface {}{[]interface {}{1, "deux", false, interface {}(nil)}, map[string]interface {}{"b":"deux", "c":false, "d":interface {}(nil), "z":1}}}
-// Json format : {"a":[1,"deux",false,null],"b":{"b":"deux","c":false,"d":null,"z":1},"c":[[1,"deux",false,null],{"b":"deux","c":false,"d":null,"z":1}]}
-// Go format : map[a:[1 deux false <nil>] b:map[b:deux c:false d:<nil> z:1] c:[[1 deux false <nil>] map[b:deux c:false d:<nil> z:1]]]
 
 	RETURN ;
 			`

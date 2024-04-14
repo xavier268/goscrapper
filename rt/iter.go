@@ -16,13 +16,13 @@ type Iterator[T any] interface {
 
 // iterator implementation
 type selectAllIteratorP struct {
-	source Elementer                            // page or element on which we iterate
-	css    string                               // css selector we use
-	elms   []*rod.Element                       // remaining potential elements
-	done   map[proto.RuntimeRemoteObjectID]bool // ids of objects we have already returned
-	count  int                                  // number of elements returned
-	limit  int                                  // limit of elements to return
-	ctx    context.Context                      // passed on construction
+	source Elementer                          // page or element on which we iterate
+	css    string                             // css selector we use
+	elms   []*rod.Element                     // remaining potential elements
+	done   map[proto.RuntimeRemoteObject]bool // remote objects we have already returned
+	count  int                                // number of elements returned
+	limit  int                                // limit of elements to return
+	ctx    context.Context                    // passed on construction
 }
 
 var _ Iterator[*rod.Element] = &selectAllIteratorP{}
@@ -32,7 +32,7 @@ func NewSelectAllIterator[T Elementer](ctx context.Context, pageOrElement T, css
 		source: pageOrElement,
 		css:    css,
 		elms:   make([]*rod.Element, 0, 5),
-		done:   make(map[proto.RuntimeRemoteObjectID]bool, 5),
+		done:   make(map[proto.RuntimeRemoteObject]bool, 5),
 		limit:  limit,
 		ctx:    ctx,
 	}
@@ -54,12 +54,12 @@ func (it *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
 				return nil, false
 			}
 
-			if it.done[el.Object.ObjectID] {
+			if el == nil || el.Object == nil || it.done[*el.Object] {
 				it.elms = it.elms[i+1:] // remove element from waiting list
 				break loop
 			}
 			// found one, update state and send it
-			it.done[el.Object.ObjectID] = true
+			it.done[*el.Object] = true
 			it.count += 1
 			it.elms = it.elms[i+1:] // remove element from waiting list
 			return el, true
@@ -84,11 +84,12 @@ func (it *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
 
 		// add to waiting list
 		for _, el := range more {
-			if !it.done[el.Object.ObjectID] { // only add elts not already sent
+			if el != nil && el.Object != nil && !it.done[*el.Object] { // only add elts not already sent
 				it.elms = append(it.elms, el)
 			}
 		}
-		// we could not find more elements not already sent
+
+		// despite all our efforts, we could not find more elements not already sent
 		if len(it.elms) == 0 {
 			return nil, false
 		}
@@ -97,6 +98,8 @@ func (it *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
 		if it.ctx.Err() != nil {
 			return nil, false
 		}
+
+		// iterate main loop ...
 	}
 }
 

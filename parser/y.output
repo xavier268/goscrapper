@@ -2489,10 +2489,10 @@ state 161
 	NAND  shift 95
 	.  reduce 52 (src line 218)
 
-	ope2Bool  goto 92
-	selectOptions0  goto 175
 	selectOptions  goto 176
+	selectOptions0  goto 175
 	selectOption  goto 177
+	ope2Bool  goto 92
 
 state 162
 	nonIfStatement:  DOLLAR IDENTIFIER ASSIGN expression.    (16)
@@ -2943,10 +2943,10 @@ state 184
 	NAND  shift 95
 	.  reduce 52 (src line 218)
 
-	ope2Bool  goto 92
-	selectOptions0  goto 193
 	selectOptions  goto 176
+	selectOptions0  goto 193
 	selectOption  goto 177
+	ope2Bool  goto 92
 
 state 185
 	selectOptions:  selectOptions selectOption.    (55)
@@ -3094,7 +3094,7 @@ state 195
 126 grammar rules, 196/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 87 working sets used
-memory: parser 661/240000
+memory: parser 828/240000
 85 extra closures
 1292 shift entries, 1 exceptions
 91 goto entries

@@ -34,7 +34,7 @@
                         statement nonIfStatement matchedIfStatement openIfStatement
 %type<nodes>            expressionList body statements returnList returnList0
 %type<nodemap>          keyValueSet litteralObject
-%type<nodeWithBody>     loopStatement
+%type<nodeWithBody>     loopStatement selectOptions selectOptions0 selectOption
 %type<tok>              ope1 ope2 ope2Bool loopVariable
 
 %token <tok>  
@@ -177,7 +177,7 @@ returnStatement
     : RETURN returnList0 SEMICOLON {$$ = nodeReturn{what:$2}} 
     | RETURN LAST returnList0 SEMICOLON {$$ = nodeReturn{what: $3, last: true}} // only return the value for the last loop iteration
     | RETURN DISTINCT returnList0 SEMICOLON {$$ = nodeReturn{what: $3, distinct: true}}// only return distincts results per loop iteration
-    | loopStatement SEMICOLON  body  { $$ = $1.appendBody($3)  }
+    | loopStatement SEMICOLON  body  { $$ = $1.appendBody($3)  } // shared by all loops
     ;
 
 returnList0
@@ -206,9 +206,9 @@ loopStatement
     | FOR IN expression   {$$ = lx.newNodeForArray(nil, $3)} //loop over array, no loop variable
 
     | SELECT expression /*css*/ AS loopVariable FROM expression /*Elementer*/ selectOptions0  
-        {/*todo*/} // select css elements
+        {$$ = lx.newNodeSelect($4, $2, $6,$7 )} // select css elements
     | SELECT expression /*css*/ FROM expression /*Elementer*/ selectOptions0  
-        {/*todo*/} // select css elements, no loop variable
+        {$$ = lx.newNodeSelect(nil, $2, $4,$5 )} // select css elements, no loop variable
     ;
 
 loopVariable
@@ -216,18 +216,18 @@ loopVariable
     ;
 
 selectOptions0
-    :  {/*todo*/} 
-    | selectOptions {/*todo*/}
+    :  {$$ = nodeSelect{}} 
+    | selectOptions { $$ = $1 }
     ;
 
 selectOptions
-    : selectOption {/*todo*/} 
-    | selectOptions selectOption {/*todo*/} 
+    : selectOption { $$ = $1 }
+    | selectOptions selectOption {$$ = $1.(nodeSelect).mergeOptions($2) }
     ;
 
 selectOption 
-    : WHERE expression {/*todo*/} 
-    | LIMIT expression {/*todo*/} 
+    : WHERE expression {$$ = nodeSelect{where: []Node{$2}}} 
+    | LIMIT expression {$$ = nodeSelect{limit: $2}} 
     ;
 
 variable

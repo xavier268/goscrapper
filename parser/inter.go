@@ -3,6 +3,8 @@ package parser
 import (
 	"context"
 	"fmt"
+
+	"github.com/xavier268/goscrapper/rt"
 )
 
 // =============== interpreting a compiled request ===========================
@@ -14,6 +16,9 @@ type Interpreter struct {
 	invars  []string         // named input variables, passed as input to the interpreter
 	ch      chan<- any       // channel to send results in async mode - nil, means synch mode.
 	results []any            // aggregated results to be sent at the end in synch mode. Nil in async mode.
+	last    bool             // last mode, only care about last result
+	unique  *rt.Unique       // uniqueness filter, when distinct filters are expected
+	err     error            // last error returned by a node.
 }
 
 // Start a new interpreter in default setting.
@@ -24,6 +29,9 @@ func NewInterpreter(ctx context.Context) *Interpreter {
 		invars:  make([]string, 0, 4),
 		ch:      nil,
 		results: make([]any, 0, 5),
+		last:    false,
+		unique:  new(rt.Unique),
+		err:     nil,
 	}
 	it.pushFrame()
 

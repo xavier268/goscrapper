@@ -73,6 +73,7 @@ ASSERT FAIL
 PRINT FORMAT RAW GO JSON GSC NL
 
 DOLLAR NIL
+LAST 
 
 
 
@@ -173,7 +174,9 @@ clickOption
     ;
 
 returnStatement
-    : RETURN returnList0 SEMICOLON {$$ = nodeReturn{$2}} 
+    : RETURN returnList0 SEMICOLON {$$ = nodeReturn{what:$2}} 
+    | RETURN LAST returnList0 SEMICOLON {$$ = nodeReturn{what: $3, last: true}} // only return the value for the last loop iteration
+    | RETURN DISTINCT returnList0 SEMICOLON {$$ = nodeReturn{what: $3, distinct: true}}// only return distincts results per loop iteration
     | loopStatement SEMICOLON  body  { $$ = $1.appendBody($3)  }
     ;
 

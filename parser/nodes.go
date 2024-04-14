@@ -307,17 +307,31 @@ func (n nodeProgram) eval(it *Interpreter) (any, error) {
 	}
 	// evaluate program content
 	_, err := n.req.eval(it)
+
+	// If async mode ...
 	if it.ch != nil {
-		return nil, err // in async mode, results were already sent
+		if it.last {
+			// send last result to channel now, nothing could be sent before ...
+			select {
+			case it.ch <- it.results:
+				return nil, nil
+			case <-it.ctx.Done():
+				return nil, it.ctx.Err()
+			}
+		} else {
+			return nil, err // in async mode without last mode, results were already sent
+		}
 	} else {
-		return it.results, err // in sync mode, results were aggregated
+		return it.results, err // send aggregated results or just last result
 	}
 }
 
 // ==== RETURN NODE ====
 
 type nodeReturn struct {
-	what Nodes
+	what     Nodes
+	distinct bool // only return/send distincts
+	last     bool // only return last
 }
 
 var _ Node = nodeReturn{}
@@ -336,6 +350,23 @@ func (n nodeReturn) eval(it *Interpreter) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// if we only care about last result ...
+	if n.last {
+		it.last = true          // remember last mode fro program finalization
+		it.results = []any{res} // only keep last result
+		return nil, nil
+	}
+
+	// if we only care about distinct, check if we already sent it
+	if n.distinct {
+		if it.unique.Add(res) != nil {
+			// already seen, ignore ...
+			return nil, nil
+		}
+	}
+
+	// send result to channel, or aggregate it for the final result
 	if it.ch != nil {
 		// try to send res to channel while monitoring context cancelation
 		select {
@@ -345,7 +376,7 @@ func (n nodeReturn) eval(it *Interpreter) (any, error) {
 			return nil, it.ctx.Err()
 		}
 	} else {
-		// aggregate result
+		// aggregate result for end of program return
 		it.results = append(it.results, res)
 		return nil, it.ctx.Err() // err if ctx cancelled
 	}

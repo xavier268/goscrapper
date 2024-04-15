@@ -1,147 +1,189 @@
 # goscrapper
 
+Domain specific language for web-scrapping.
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/xavier268/goscrapper.svg)](https://pkg.go.dev/github.com/xavier268/goscrapper) [![Go Report Card](https://goreportcard.com/badge/github.com/xavier268/goscrapper)](https://goreportcard.com/report/github.com/xavier268/goscrapper)
 
-High level tool for generating scrapping helper functions in go.
 
-## How to use this tool 
+- [Introduction](#Introduction)
+- [Language reference](#langaguage-reference)
+  - [Request structure](#request-struture)
+  
+## Introduction
 
-( to do )
+Developping and fine-tuning web-scrappers can be a tedious, error prone task. A lot of repetetive boiler plate code is often needed, and some subtle error checking can easily be forgotten, renderering a hand written scrapper prone to unexpected failures. That where Goscrapper (**gsc** in short) gets in !
 
-## Langage reference
+**gsc** is a domain specific language designed to write easy to understand, easy to debug, but resilient and reasonnably efficient web scrapping requests.
 
+For instance, the following request is designed to capture up to 3 divs from google, and return an array with the text content of these divs :
 
-### Script structure
+````
+	page = PAGE "http://www.google.fr" ;        // load google page
+	SELECT "div" AS x FROM page LIMIT 3 ;       // select the divs we are interested in
+    	RETURN TEXT x ;                         // return the text content for each selected div
+                                                // browser is closed, everything is left in a clean state.
 
-A script starts with interpreter settings, then a list of statements, then a unique return statement.
+````
+This request is available among others in the examples folder.
 
-Some statements are loop statements, that will generate a result for each loop. See FOR ... and SELECT ...
-Loop statements are always nested. Results are always captured from the inner most loop.
+To experiment with this request (and debug it), a small command line utility, named **gsc**, is available :
 
-Line and block comments are available, using // and /* or */. Whitespace and returns are not significant, except when they separate a symbol name (eg <= is not the same as < =).
+````
+$> .\bin\gsc-0.4.7.exe .\examples\google.gsc
+Runtime log : initializing browser ...
+[["GmailImages
+Connexion
+.../...
+Paramètres"], ["GmailImages
+Connexion"], ["GmailImages
+Connexion"]]
+````
 
-### Keywords
+As expected, you got an array of 3 elements, each containing the text content of the first 3 div found on the google home page.
 
-All symbols are case-sensitive, reserved keywords are uppercase.
+Once you are confident your requests behaves as expected, you obviously want to incorporate it into a golang program. That would be the way to do it in your go code :
 
-### Variables
+````go
 
-Available types are *int*, *bool*, *string*, or *bin*. The *bin* type is internally an array of bytes. Types can be combined to create objects, between braces {}, or arrays, between brakets []. Array members must have the same type. Object members types can be different.
+import "github.com/xavier268/goscrapper/parser"
 
-**Input variables** are declared at the start of the script, using @.
+// .../...
 
-*Examples :*
-* @ PASSWORD string // string value
-* @ X23 [ int ] // array of int
-* @ C { one : string, two : bool } // object
-* @ ZZZ { one : int, two : bool, three : [ string ], four : {five : string, six : [ bool ] } } // combined types
+// get the request source
+req := `page = PAGE "http://www.google.fr" ;        // load google page
+	    SELECT "div" AS x FROM page LIMIT 3 ;       // select the divs we are interested in
+    	RETURN TEXT x ;                             // return the text content for each selected div
+                                                    // browser is closed, everything is left in a clean state.`
 
-**Output variables** are listed in the last return statement. There should always be at least ONE return variable.
+// compile it, check there is no error.
+comp, err := parser.Compile("google test", req)     // the request name is used for information only ...
+if err != nil {                                     // check compile errors ...
+   // .../...
 
-*Examples :*
-* RETURN X, X22
-* RETURN ZZZ
+// create an interpreter to execute the compiled request
+int := NewInterpreter(context.Background())         // if the provided context is cancenned, the requests stops immediately
 
-Variables can be upper or lower case. Only upper case variables will be available outside of the package. It is good practice to use upper case variables names for input and output variables, lower case for the other. Variable names should start with a letter, and continue with digits or letters. Underscore ( _ ) is not a valid variable name (reserved for internal variables).
+// provide named parameters for the requests, if needed
+int = int.With(map[string]any{"password" : "myVerySecretPassword"})
 
-Both input and output variables names will be used to creat input structs and output structs, defininng the API of the generated function.
+// Execute, and get the result
+res, err := int.Eval(comp)
 
-**A variable can only be assigned once**. A variable that is neither declared as input variable, nor previously assigned, cannot be used. It is an error to assign to an input variable.
+// The same compiled request (comp) can then be reused with a new Interpreter and different input parameters
+res2, err := NewInterpreter(context.Background()).With(map[string]any{"password" : "anotherParametr"}).Eval(comp)
 
-It costs very little to create as many intermediate variables as needed. Those that are not output variables will be discarded when function returns. 
+````
 
-Number are decimal, signed, integers.
+Note that convenient *function Eval(requestName, requestSource) (any, error)* provides a shortcut when neither customization nor efficiency is critical. The above code becomes :
 
-Strings use double or single quotes. Inside a string, only quotes are escaped by adding one more quotes (see examples).
+````go 
 
-Litteral and array objects are defined using braces or brackets. Keys for objects should be valid identifier (A-Za-z, then A-Za-z0-9). Object keys should never be quoted.
+// compile, and evaluate in one step.
+res, err := parser.Eval("myRequest", req)
 
-Booleans are either *true* or *false*.
+````
 
-Objects members are accessed using the dot (.) operator, followed by a valid key name.
+## Gsc language reference
 
-Array members are accessed using the bracket operatoir and an integer expression as index.
+### Request structure
 
+A request is a list of statements. The last statement should be a single RETURN statement.
+Statements are followed by a mandatory semi-colon (;).
 
-### No argument operators
+Both block  ( /* a block comment */ ) and line comments ( // a line comment ) can appear anywhere in the request. 
+Line breaks and spaces are not significant.
 
-* **NOW** *returns a timeStamp of type time.Time* 
-* **true false** *are in **lower** case, return the corresponding bool values*
+All symbols are case-sensitive, reserved keywords are uppercase (eg : SELECT). Some of the keywords can be written using the usual symbols ( eg : PLUS can also be written + ).
 
-### Unary operators
+### Litteral types
 
-* **-** : *changes sign of integer.*
-* **++**  : *increments an integer.*
-* **LOWER** and **UPPER** : *change case of string expression.*
-* **NOT** or **!** : *applies to bool expressions.*
-* **PAGE** : *applies to a string expression, that represents an URL. It opens a new page (tab) with this url. The url can be empty, in which case a blank page is open. It returns a page object. A page object has an internal ytype, and cannot be returned.*
-* **TEXT** : *applies to an Element (typically obtained as the loop variable of a SELECT statement) or a Page object (obatined with PAGE).*
+Gsc can directly create litterals for the following types from the request source :
 
-### Binary operators
+* nil, written as *NIL* or *nil*.
+* boolean are written as *false* or *true*.
+* numbers are the usual signed integers,
+* strings,
+* arrays,
+* objects.
 
-* **+ - * / %** : *are the usual operations on integers.*
-* **+** : *also applies to string, for concatenation.*
-* **++** : *applies to arrays of same type, and merge them.*
-* **&&** and **||** : *apply to booleans, for AND and OR.*
-* **CONTAINS** : *applies to string expressions, returning a boolean : exp1 CONTAINS exp2.*
-* **== !=** : *are equality/inequality operators, retruning a boolean. Apply to any type.*
-* **< > <= >=** : *are usual compaison operators for integers, returning a boolean.*
-* element **ATTRIBUTE** stringExpr : *returns a string with the value of the requested attribute for the Element.*
+In addition, the langage itself can produce :
 
-### Expressions
+* time.Time (eg : time stamps),
+* Page ( html page)
+* Element (html Element)
+* Hash (a go array, not a slice, of size md5.Size)
+  
+#### string litterals 
 
-Expressions are created by applying the above operators to other expressions.
+String litterals follow a special syntax, to facilitate escaping. 
 
-The following are also valid expressions :
+String litteral are either written between double quotes (") or between single quotes ('). 
 
-* ( expr )
-* expr [indexExpression] : *get an array element.*
-* expr . key : *get an object member value.*
-* [ expr1, exp2, ... ] : *create an array from same type expressions.*
-* { key1 : expr1, key2 : expr2, ...} : *create an object from pairs of keys and expressions.*
+In a string litteral, no caractere is ever escaped (not even "\n"), except for the same quote used to delimit the litteral string. 
+Only single quotes need to be escaped in single quote litterals, and only double quotes in double quotes litterals. 
+
+To escape a sequence of one or more quote inside a string, just add one more to the sequence. 
+To represent a single quote, write 2. To escape a group of 2 quotes, write 3. 
+
+For instance, *'In this single-quoted string, ''internal'' single quotes need to be escaped but not "double" quotes'.* 
+
+### Variables and scope
+
+A variable name starts with a lower or upper case letter (A-Za-z), followed by zero or more letters and digits (A-Za_z0-9). No other character is allowed. A variable name may not be a gsc [keyword](#reserved-keywords).
+
+There are 3 kind of variables :
+* global scope variables can be read from or assigned to.
+* input parameters are globla scope variables that can only be read from.
+* local scope variables only exists in the current scope (eg : a loop variable in a SELECT or FOR loop). They can be read from or assign to. Local scope variables with same names can overshadow each other, or even shadow global variables. A local variable may not have the name of an input parameter.
+
+To remove ambiguity between these kind of variable, a variable prefixed by $ is always global, and a vraiable prefixed by @ is always an input parameter. Reading from a @ variable is actually the only way to declare an input parameter.
+
+There is no formal global/local variable declaration, but a variable must *have a chance* to be assigned to before it can be read. ( If assignement is conditionnal, actual runtime assignement may not occur before variable is used, but that is ok, value will be nil). Compiler will refuse to compile a request that read from a variable that had no prior *chance* of being assigned before.
+
+#### Examples 
+
+* a = "www.google.com"  // declares a as local variable, and assign to it.
+* $a = 23                // assign to the global a value
+* b = a                 // read either the local a, if it exists, or the global a.
+* c = @ b               // declares b as an input parameter and reads from it.
+
+### Expressions and operators
+
+TO DO TO DO TO DO TO DO
+
+TO DO TO DO TO DO TO DO
+
+TO DO TO DO TO DO TO DO
+
+TO DO TO DO TO DO TO DO
+
 
 ### Statements
 
-* **variable = expression** : 
-*Assign an expression to a variable. The variable is declared, and its type derived from the expression.*
-  
-* **PRINT [expression, expression ...]** : 
-* **PRINT RAW [expression, expression ...]** : 
-*Prints expression to stdout. Using RAW will print a detailled view of the types, using %#v formatting.*
-  
-* **CLICK element** : 
-*assume LEFT click, once*.
-* **CLICK element LEFT count**
-* **CLICK element RIGHT count**
-* **CLICK element MIDDLE count** : 
-*Click on selected element, using the specified button, for the count times.*
-  
-* **CLICK css FROM pageOrElement** : 
-*assume LEFT click, once*.
-* **CLICK element LEFT count FROM pageOrElement**
-* **CLICK element RIGHT count FROM pageOrElement**
-* **CLICK element MIDDLE count FROM pageOrElement** : 
-*Same as above, but first select the element from the pageOrElement using the provided css selector.*
-  
-* **INPUT text IN element** : 
-*Input Text in corresponding element. Previous text is first selected, then cleared.*
-* **INPUT text IN css FROM pageOrElement** : 
-*Same as above, but will first select the page using the css selector.*
-  
-* **FOR identifier IN arrayExpression** : 
-*Usual for loop over an arrayExpression. The identifier declares the loop variable, that will sucessively take all the values from the array.*
-  
-* **SELECT FROM pageOrElement ALL cssExpression AS loopVariable WHERE boolExpression LIMIT integerExpression** : 
-*This is a loop statement. Loop statements can be nested. It collects all available Element from the pageOrElement provided, using the cssExpression as the selector. The loopVariable should not be already declared. For each collected Element, it only keep those matching the (optionnal) WHERE condition, and up to the number specified in the optional LIMIT. Setting LIMIT to 0 means no limit. It is possible that no element are collected.* **The loopVariable is set to a *rod.Element.**
+Statements are always followed by a semi -colon.
 
-* **SELECT FROM pageOrElement ONE cssExpression AS loopVariable** : 
-*This is a loop statement. Loop statements can be nested. It collects just one Element avaible for the pageOrElement provided, using the cssExpression as the selector. ONE elemnet is always collected. Loop variable is* **set to a rod.Element**. *Statement will wait until timeout or one element becomes available on page.*
-  
-* **SELECT FROM pageOrElement ANY AS loopVariable CASE css1 : expr1 ; CASE css2 : expr2 ; DEFAULT   : expr3 ;** : 
-*This is a loop statement. Loop statements can be nested. It expects an element to match ANY of the css selectors. It will loop until there is a match, unless a default is provided. When a match is found,* **the loopVariable is assigned the value of the corresponding expression, NOT the matching rod.Element !.** *The expression may not reference the matched element. Note the required semicolon at the end of each expression*
+#### Assignement
 
-* **RETURN var1, var2, ...** :
-*There should be EXACTLY ONE return statement, with at least ONE variable. Return variables should have been declared and assigned to. Expressions are not allowed in return list. Only types that can be provided as input are accepted as return (int, bool, string, bin, arrays and objects). Pages, Elements, and other internal types cannot be returned.*
+a = b ;     // local/global -> local
+$a = b ;    // local/global -> global
+a = $b ;    // global -> local
+a = @c ;    // input param -> local
 
-* **SLOW** : *for debugging purposes mostly, wait a little time before proceeding. See rt SlowDuration to set the duration. Wait stops if function context is cancelled.*.
+Assign an expression to a variable. See [variables and scope](#variables-and-scope).
+
+#### RETURN statement
+
+#### IF construct
+
+#### FOR loops
+
+#### SELECT dom elements
+
+#### DOM access
+
+
+
+
+
+
+### Reserved keywords

@@ -823,7 +823,8 @@ yydefault:
 	case 17:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line grammar.y:145
-		{ /*todo*/
+		{
+			yyVAL.node = lx.mergeNodeClick(nodeClick{element: yyDollar[2].node}, yyDollar[3].node)
 		}
 	case 18:
 		yyDollar = yyS[yypt-4 : yypt+1]
@@ -876,12 +877,8 @@ yydefault:
 	case 26:
 		yyDollar = yyS[yypt-0 : yypt+1]
 //line grammar.y:161
-		{ /*todo*/
-		}
-	case 27:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line grammar.y:162
-		{ /*todo*/
+		{
+			yyVAL.node = nodeClick{}
 		}
 	case 28:
 		yyDollar = yyS[yypt-1 : yypt+1]

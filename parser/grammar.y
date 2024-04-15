@@ -142,7 +142,7 @@ nonIfStatement
     | IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3, false)} // assign to local scope
     | DOLLAR IDENTIFIER ASSIGN expression{ $$ = lx.newNodeAssign($2,  $4, true)} // assign to global scope
     
-    | CLICK  expression /*element*/  clickOptions0 { /*todo*/} // click on element - make sure you select it first !  
+    | CLICK  expression /*element*/  clickOptions0 { $$ = lx.mergeNodeClick(nodeClick{element: $2},$3)} // click on element - make sure you select it first !  
     | INPUT expression /*text*/ IN expression /*element*/  {$$ = nodeInput{$2, $4}} // input text in element - make sure you select element first !
 
     | FAIL {$$ = nodeFail{}} // abort with error messagge
@@ -158,8 +158,8 @@ nonIfStatement
     ;
 
 clickOptions0
-    : {/*todo*/} 
-    | clickOptions  {/*todo*/} 
+    : {$$ = nodeClick{}} 
+    | clickOptions
     ;
 
 clickOptions

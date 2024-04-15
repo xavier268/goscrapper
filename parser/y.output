@@ -3,7 +3,7 @@ state 0
 	$accept: .program $end 
 	beforeProgram: .    (2)
 
-	.  reduce 2 (src line 107)
+	.  reduce 2 (src line 108)
 
 	program  goto 1
 	beforeProgram  goto 2
@@ -45,7 +45,7 @@ state 2
 state 3
 	program:  beforeProgram body.    (1)
 
-	.  reduce 1 (src line 103)
+	.  reduce 1 (src line 104)
 
 
 state 4
@@ -77,7 +77,7 @@ state 4
 state 5
 	body:  returnStatement.    (4)
 
-	.  reduce 4 (src line 113)
+	.  reduce 4 (src line 114)
 
 
 state 6
@@ -122,7 +122,7 @@ state 7
 	DOLLAR  shift 64
 	NIL  shift 69
 	LAST  shift 28
-	.  reduce 38 (src line 183)
+	.  reduce 38 (src line 184)
 
 	litteral  goto 53
 	litteralArray  goto 51
@@ -149,19 +149,19 @@ state 8
 state 9
 	statement:  nonIfStatement.    (7)
 
-	.  reduce 7 (src line 121)
+	.  reduce 7 (src line 122)
 
 
 state 10
 	statement:  matchedIfStatement.    (8)
 
-	.  reduce 8 (src line 123)
+	.  reduce 8 (src line 124)
 
 
 state 11
 	statement:  openIfStatement.    (9)
 
-	.  reduce 9 (src line 124)
+	.  reduce 9 (src line 125)
 
 
 state 12
@@ -176,7 +176,7 @@ state 12
 	IDENTIFIER  shift 74
 	IN  shift 73
 	FROM  shift 72
-	.  reduce 42 (src line 192)
+	.  reduce 42 (src line 193)
 
 	loopVariable  goto 71
 
@@ -382,7 +382,7 @@ state 19
 	NL  shift 68
 	DOLLAR  shift 64
 	NIL  shift 69
-	.  reduce 19 (src line 147)
+	.  reduce 19 (src line 148)
 
 	litteral  goto 53
 	litteralArray  goto 51
@@ -473,7 +473,7 @@ state 21
 	NL  shift 68
 	DOLLAR  shift 64
 	NIL  shift 69
-	.  reduce 22 (src line 151)
+	.  reduce 22 (src line 152)
 
 	litteral  goto 53
 	litteralArray  goto 51
@@ -520,7 +520,7 @@ state 22
 	NL  shift 68
 	DOLLAR  shift 64
 	NIL  shift 69
-	.  reduce 24 (src line 155)
+	.  reduce 24 (src line 156)
 
 	litteral  goto 53
 	litteralArray  goto 51
@@ -586,7 +586,7 @@ state 23
 state 24
 	body:  statements returnStatement.    (3)
 
-	.  reduce 3 (src line 111)
+	.  reduce 3 (src line 112)
 
 
 state 25
@@ -599,7 +599,7 @@ state 25
 state 26
 	statements:  statement SEMICOLON.    (5)
 
-	.  reduce 5 (src line 116)
+	.  reduce 5 (src line 117)
 
 
 state 27
@@ -640,7 +640,7 @@ state 28
 	NL  shift 68
 	DOLLAR  shift 64
 	NIL  shift 69
-	.  reduce 38 (src line 183)
+	.  reduce 38 (src line 184)
 
 	litteral  goto 53
 	litteralArray  goto 51
@@ -688,7 +688,7 @@ state 29
 	NL  shift 68
 	DOLLAR  shift 64
 	NIL  shift 69
-	.  reduce 38 (src line 183)
+	.  reduce 38 (src line 184)
 
 	litteral  goto 53
 	litteralArray  goto 51
@@ -710,7 +710,7 @@ state 30
 	returnList:  returnList.COMMA expression 
 
 	COMMA  shift 91
-	.  reduce 39 (src line 185)
+	.  reduce 39 (src line 186)
 
 
 state 31
@@ -721,7 +721,7 @@ state 31
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 40 (src line 188)
+	.  reduce 40 (src line 189)
 
 	ope2Bool  goto 92
 
@@ -743,14 +743,14 @@ state 32
 	GTE  shift 107
 	ATTR  shift 110
 	FORMAT  shift 111
-	.  reduce 62 (src line 245)
+	.  reduce 62 (src line 246)
 
 	ope2  goto 97
 
 state 33
 	expression1:  expression2.    (64)
 
-	.  reduce 64 (src line 250)
+	.  reduce 64 (src line 251)
 
 
 state 34
@@ -799,85 +799,85 @@ state 34
 state 35
 	expression2:  expression3.    (66)
 
-	.  reduce 66 (src line 255)
+	.  reduce 66 (src line 256)
 
 
 state 36
 	ope1:  PLUS.    (94)
 
-	.  reduce 94 (src line 315)
+	.  reduce 94 (src line 316)
 
 
 state 37
 	ope1:  MINUS.    (95)
 
-	.  reduce 95 (src line 317)
+	.  reduce 95 (src line 318)
 
 
 state 38
 	ope1:  PLUSPLUS.    (96)
 
-	.  reduce 96 (src line 318)
+	.  reduce 96 (src line 319)
 
 
 state 39
 	ope1:  MINUSMINUS.    (97)
 
-	.  reduce 97 (src line 319)
+	.  reduce 97 (src line 320)
 
 
 state 40
 	ope1:  ABS.    (98)
 
-	.  reduce 98 (src line 320)
+	.  reduce 98 (src line 321)
 
 
 state 41
 	ope1:  LEN.    (99)
 
-	.  reduce 99 (src line 321)
+	.  reduce 99 (src line 322)
 
 
 state 42
 	ope1:  NOT.    (100)
 
-	.  reduce 100 (src line 322)
+	.  reduce 100 (src line 323)
 
 
 state 43
 	ope1:  PAGE.    (101)
 
-	.  reduce 101 (src line 324)
+	.  reduce 101 (src line 325)
 
 
 state 44
 	ope1:  TEXT.    (102)
 
-	.  reduce 102 (src line 325)
+	.  reduce 102 (src line 326)
 
 
 state 45
 	ope1:  RAW.    (103)
 
-	.  reduce 103 (src line 328)
+	.  reduce 103 (src line 329)
 
 
 state 46
 	ope1:  GO.    (104)
 
-	.  reduce 104 (src line 329)
+	.  reduce 104 (src line 330)
 
 
 state 47
 	ope1:  GSC.    (105)
 
-	.  reduce 105 (src line 330)
+	.  reduce 105 (src line 331)
 
 
 state 48
 	ope1:  JSON.    (106)
 
-	.  reduce 106 (src line 331)
+	.  reduce 106 (src line 332)
 
 
 state 49
@@ -887,43 +887,43 @@ state 49
 
 	LBRACKET  shift 113
 	DOT  shift 114
-	.  reduce 67 (src line 258)
+	.  reduce 67 (src line 259)
 
 
 state 50
 	expression3:  accessExpression.    (68)
 
-	.  reduce 68 (src line 260)
+	.  reduce 68 (src line 261)
 
 
 state 51
 	expression3:  litteralArray.    (69)
 
-	.  reduce 69 (src line 261)
+	.  reduce 69 (src line 262)
 
 
 state 52
 	expression3:  litteralObject.    (70)
 
-	.  reduce 70 (src line 262)
+	.  reduce 70 (src line 263)
 
 
 state 53
 	atomExpression:  litteral.    (71)
 
-	.  reduce 71 (src line 265)
+	.  reduce 71 (src line 266)
 
 
 state 54
 	atomExpression:  variable.    (72)
 
-	.  reduce 72 (src line 267)
+	.  reduce 72 (src line 268)
 
 
 state 55
 	atomExpression:  ope0.    (73)
 
-	.  reduce 73 (src line 268)
+	.  reduce 73 (src line 269)
 
 
 state 56
@@ -1034,25 +1034,25 @@ state 58
 state 59
 	litteral:  STRING.    (75)
 
-	.  reduce 75 (src line 272)
+	.  reduce 75 (src line 273)
 
 
 state 60
 	litteral:  NUMBER.    (76)
 
-	.  reduce 76 (src line 274)
+	.  reduce 76 (src line 275)
 
 
 state 61
 	litteral:  BOOL.    (77)
 
-	.  reduce 77 (src line 275)
+	.  reduce 77 (src line 276)
 
 
 state 62
 	variable:  IDENTIFIER.    (58)
 
-	.  reduce 58 (src line 233)
+	.  reduce 58 (src line 234)
 
 
 state 63
@@ -1072,31 +1072,31 @@ state 64
 state 65
 	ope0:  NOW.    (89)
 
-	.  reduce 89 (src line 307)
+	.  reduce 89 (src line 308)
 
 
 state 66
 	ope0:  VERSION.    (90)
 
-	.  reduce 90 (src line 309)
+	.  reduce 90 (src line 310)
 
 
 state 67
 	ope0:  FILE_SEPARATOR.    (91)
 
-	.  reduce 91 (src line 310)
+	.  reduce 91 (src line 311)
 
 
 state 68
 	ope0:  NL.    (92)
 
-	.  reduce 92 (src line 311)
+	.  reduce 92 (src line 312)
 
 
 state 69
 	ope0:  NIL.    (93)
 
-	.  reduce 93 (src line 312)
+	.  reduce 93 (src line 313)
 
 
 state 70
@@ -1230,7 +1230,7 @@ state 73
 state 74
 	loopVariable:  IDENTIFIER.    (51)
 
-	.  reduce 51 (src line 214)
+	.  reduce 51 (src line 215)
 
 
 state 75
@@ -1346,16 +1346,16 @@ state 79
 	NL  shift 68
 	DOLLAR  shift 64
 	NIL  shift 69
-	.  reduce 26 (src line 159)
+	.  reduce 26 (src line 160)
 
 	litteral  goto 53
 	atomExpression  goto 141
 	variable  goto 54
 	ope0  goto 55
-	ope2Bool  goto 92
-	clickOptions0  goto 135
-	clickOptions  goto 136
 	clickOption  goto 137
+	clickOptions  goto 136
+	clickOptions0  goto 135
+	ope2Bool  goto 92
 
 state 80
 	nonIfStatement:  INPUT expression.IN expression 
@@ -1378,7 +1378,7 @@ state 81
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 20 (src line 148)
+	.  reduce 20 (src line 149)
 
 	ope2Bool  goto 92
 
@@ -1390,7 +1390,7 @@ state 82
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 21 (src line 149)
+	.  reduce 21 (src line 150)
 
 	ope2Bool  goto 92
 
@@ -1399,7 +1399,7 @@ state 83
 	expressionList:  expressionList.COMMA expression 
 
 	COMMA  shift 143
-	.  reduce 23 (src line 152)
+	.  reduce 23 (src line 153)
 
 
 state 84
@@ -1410,7 +1410,7 @@ state 84
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 82 (src line 288)
+	.  reduce 82 (src line 289)
 
 	ope2Bool  goto 92
 
@@ -1422,7 +1422,7 @@ state 85
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 25 (src line 156)
+	.  reduce 25 (src line 157)
 
 	ope2Bool  goto 92
 
@@ -1445,13 +1445,13 @@ state 86
 state 87
 	statements:  statements statement SEMICOLON.    (6)
 
-	.  reduce 6 (src line 118)
+	.  reduce 6 (src line 119)
 
 
 state 88
 	returnStatement:  RETURN returnList0 SEMICOLON.    (34)
 
-	.  reduce 34 (src line 176)
+	.  reduce 34 (src line 177)
 
 
 state 89
@@ -1560,25 +1560,25 @@ state 92
 state 93
 	ope2Bool:  AND.    (121)
 
-	.  reduce 121 (src line 354)
+	.  reduce 121 (src line 355)
 
 
 state 94
 	ope2Bool:  OR.    (122)
 
-	.  reduce 122 (src line 356)
+	.  reduce 122 (src line 357)
 
 
 state 95
 	ope2Bool:  NAND.    (123)
 
-	.  reduce 123 (src line 357)
+	.  reduce 123 (src line 358)
 
 
 state 96
 	ope2Bool:  XOR.    (124)
 
-	.  reduce 124 (src line 358)
+	.  reduce 124 (src line 359)
 
 
 state 97
@@ -1627,91 +1627,91 @@ state 97
 state 98
 	ope2:  PLUS.    (107)
 
-	.  reduce 107 (src line 335)
+	.  reduce 107 (src line 336)
 
 
 state 99
 	ope2:  PLUSPLUS.    (108)
 
-	.  reduce 108 (src line 337)
+	.  reduce 108 (src line 338)
 
 
 state 100
 	ope2:  MINUS.    (109)
 
-	.  reduce 109 (src line 338)
+	.  reduce 109 (src line 339)
 
 
 state 101
 	ope2:  MULTI.    (110)
 
-	.  reduce 110 (src line 339)
+	.  reduce 110 (src line 340)
 
 
 state 102
 	ope2:  DIV.    (111)
 
-	.  reduce 111 (src line 340)
+	.  reduce 111 (src line 341)
 
 
 state 103
 	ope2:  MOD.    (112)
 
-	.  reduce 112 (src line 341)
+	.  reduce 112 (src line 342)
 
 
 state 104
 	ope2:  EQ.    (113)
 
-	.  reduce 113 (src line 342)
+	.  reduce 113 (src line 343)
 
 
 state 105
 	ope2:  NEQ.    (114)
 
-	.  reduce 114 (src line 343)
+	.  reduce 114 (src line 344)
 
 
 state 106
 	ope2:  GT.    (115)
 
-	.  reduce 115 (src line 344)
+	.  reduce 115 (src line 345)
 
 
 state 107
 	ope2:  GTE.    (116)
 
-	.  reduce 116 (src line 345)
+	.  reduce 116 (src line 346)
 
 
 state 108
 	ope2:  LT.    (117)
 
-	.  reduce 117 (src line 346)
+	.  reduce 117 (src line 347)
 
 
 state 109
 	ope2:  LTE.    (118)
 
-	.  reduce 118 (src line 347)
+	.  reduce 118 (src line 348)
 
 
 state 110
 	ope2:  ATTR.    (119)
 
-	.  reduce 119 (src line 349)
+	.  reduce 119 (src line 350)
 
 
 state 111
 	ope2:  FORMAT.    (120)
 
-	.  reduce 120 (src line 351)
+	.  reduce 120 (src line 352)
 
 
 state 112
 	expression2:  ope1 expression2.    (65)
 
-	.  reduce 65 (src line 253)
+	.  reduce 65 (src line 254)
 
 
 state 113
@@ -1792,13 +1792,13 @@ state 116
 state 117
 	litteralArray:  LBRACKET RBRACKET.    (81)
 
-	.  reduce 81 (src line 285)
+	.  reduce 81 (src line 286)
 
 
 state 118
 	litteralObject:  LBRACE RBRACE.    (84)
 
-	.  reduce 84 (src line 293)
+	.  reduce 84 (src line 294)
 
 
 state 119
@@ -1813,7 +1813,7 @@ state 119
 state 120
 	keyValueSet:  keyValue.    (86)
 
-	.  reduce 86 (src line 298)
+	.  reduce 86 (src line 299)
 
 
 state 121
@@ -1826,25 +1826,25 @@ state 121
 state 122
 	key:  IDENTIFIER.    (125)
 
-	.  reduce 125 (src line 361)
+	.  reduce 125 (src line 362)
 
 
 state 123
 	variable:  AT IDENTIFIER.    (59)
 
-	.  reduce 59 (src line 235)
+	.  reduce 59 (src line 236)
 
 
 state 124
 	variable:  DOLLAR IDENTIFIER.    (60)
 
-	.  reduce 60 (src line 236)
+	.  reduce 60 (src line 237)
 
 
 state 125
 	returnStatement:  loopStatement SEMICOLON body.    (37)
 
-	.  reduce 37 (src line 180)
+	.  reduce 37 (src line 181)
 
 
 state 126
@@ -1960,7 +1960,7 @@ state 129
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 48 (src line 206)
+	.  reduce 48 (src line 207)
 
 	ope2Bool  goto 92
 
@@ -2020,7 +2020,7 @@ state 131
 state 132
 	nonIfStatement:  LPAREN statements RPAREN.    (14)
 
-	.  reduce 14 (src line 138)
+	.  reduce 14 (src line 139)
 
 
 state 133
@@ -2031,7 +2031,7 @@ state 133
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 15 (src line 141)
+	.  reduce 15 (src line 142)
 
 	ope2Bool  goto 92
 
@@ -2083,7 +2083,7 @@ state 134
 state 135
 	nonIfStatement:  CLICK expression clickOptions0.    (17)
 
-	.  reduce 17 (src line 144)
+	.  reduce 17 (src line 145)
 
 
 state 136
@@ -2105,7 +2105,7 @@ state 136
 	NL  shift 68
 	DOLLAR  shift 64
 	NIL  shift 69
-	.  reduce 27 (src line 161)
+	.  reduce 27 (src line 162)
 
 	litteral  goto 53
 	atomExpression  goto 141
@@ -2116,31 +2116,31 @@ state 136
 state 137
 	clickOptions:  clickOption.    (28)
 
-	.  reduce 28 (src line 164)
+	.  reduce 28 (src line 165)
 
 
 state 138
 	clickOption:  LEFT.    (30)
 
-	.  reduce 30 (src line 169)
+	.  reduce 30 (src line 170)
 
 
 state 139
 	clickOption:  RIGHT.    (31)
 
-	.  reduce 31 (src line 171)
+	.  reduce 31 (src line 172)
 
 
 state 140
 	clickOption:  MIDDLE.    (32)
 
-	.  reduce 32 (src line 172)
+	.  reduce 32 (src line 173)
 
 
 state 141
 	clickOption:  atomExpression.    (33)
 
-	.  reduce 33 (src line 173)
+	.  reduce 33 (src line 174)
 
 
 state 142
@@ -2257,13 +2257,13 @@ state 144
 state 145
 	returnStatement:  RETURN LAST returnList0 SEMICOLON.    (35)
 
-	.  reduce 35 (src line 178)
+	.  reduce 35 (src line 179)
 
 
 state 146
 	returnStatement:  RETURN DISTINCT returnList0 SEMICOLON.    (36)
 
-	.  reduce 36 (src line 179)
+	.  reduce 36 (src line 180)
 
 
 state 147
@@ -2274,7 +2274,7 @@ state 147
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 41 (src line 190)
+	.  reduce 41 (src line 191)
 
 	ope2Bool  goto 92
 
@@ -2296,14 +2296,14 @@ state 148
 	GTE  shift 107
 	ATTR  shift 110
 	FORMAT  shift 111
-	.  reduce 61 (src line 243)
+	.  reduce 61 (src line 244)
 
 	ope2  goto 97
 
 state 149
 	expression1:  expression1 ope2 expression2.    (63)
 
-	.  reduce 63 (src line 248)
+	.  reduce 63 (src line 249)
 
 
 state 150
@@ -2322,25 +2322,25 @@ state 150
 state 151
 	accessExpression:  atomExpression DOT key.    (79)
 
-	.  reduce 79 (src line 280)
+	.  reduce 79 (src line 281)
 
 
 state 152
 	atomExpression:  LPAREN expression RPAREN.    (74)
 
-	.  reduce 74 (src line 269)
+	.  reduce 74 (src line 270)
 
 
 state 153
 	litteralArray:  LBRACKET expressionList RBRACKET.    (80)
 
-	.  reduce 80 (src line 283)
+	.  reduce 80 (src line 284)
 
 
 state 154
 	litteralObject:  LBRACE keyValueSet RBRACE.    (85)
 
-	.  reduce 85 (src line 295)
+	.  reduce 85 (src line 296)
 
 
 state 155
@@ -2419,7 +2419,7 @@ state 158
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 47 (src line 205)
+	.  reduce 47 (src line 206)
 
 	ope2Bool  goto 92
 
@@ -2487,7 +2487,7 @@ state 161
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 52 (src line 218)
+	.  reduce 52 (src line 219)
 
 	selectOptions  goto 176
 	selectOptions0  goto 175
@@ -2502,14 +2502,14 @@ state 162
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 16 (src line 142)
+	.  reduce 16 (src line 143)
 
 	ope2Bool  goto 92
 
 state 163
 	clickOptions:  clickOptions clickOption.    (29)
 
-	.  reduce 29 (src line 166)
+	.  reduce 29 (src line 167)
 
 
 state 164
@@ -2520,7 +2520,7 @@ state 164
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 18 (src line 145)
+	.  reduce 18 (src line 146)
 
 	ope2Bool  goto 92
 
@@ -2532,7 +2532,7 @@ state 165
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 83 (src line 290)
+	.  reduce 83 (src line 291)
 
 	ope2Bool  goto 92
 
@@ -2542,13 +2542,13 @@ state 166
 	matchedIfStatement:  IF expression THEN nonIfStatement.ELSE nonIfStatement 
 
 	ELSE  shift 180
-	.  reduce 10 (src line 127)
+	.  reduce 10 (src line 128)
 
 
 state 167
 	openIfStatement:  IF expression THEN matchedIfStatement.    (11)
 
-	.  reduce 11 (src line 130)
+	.  reduce 11 (src line 131)
 
 
 state 168
@@ -2600,13 +2600,13 @@ state 168
 state 169
 	accessExpression:  atomExpression LBRACKET expression RBRACKET.    (78)
 
-	.  reduce 78 (src line 278)
+	.  reduce 78 (src line 279)
 
 
 state 170
 	keyValueSet:  keyValueSet COMMA keyValue.    (87)
 
-	.  reduce 87 (src line 300)
+	.  reduce 87 (src line 301)
 
 
 state 171
@@ -2617,7 +2617,7 @@ state 171
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 88 (src line 303)
+	.  reduce 88 (src line 304)
 
 	ope2Bool  goto 92
 
@@ -2677,7 +2677,7 @@ state 173
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 46 (src line 202)
+	.  reduce 46 (src line 203)
 
 	ope2Bool  goto 92
 
@@ -2729,7 +2729,7 @@ state 174
 state 175
 	loopStatement:  SELECT expression FROM expression selectOptions0.    (50)
 
-	.  reduce 50 (src line 210)
+	.  reduce 50 (src line 211)
 
 
 state 176
@@ -2738,14 +2738,14 @@ state 176
 
 	WHERE  shift 178
 	LIMIT  shift 179
-	.  reduce 53 (src line 220)
+	.  reduce 53 (src line 221)
 
 	selectOption  goto 185
 
 state 177
 	selectOptions:  selectOption.    (54)
 
-	.  reduce 54 (src line 223)
+	.  reduce 54 (src line 224)
 
 
 state 178
@@ -2881,7 +2881,7 @@ state 182
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 45 (src line 200)
+	.  reduce 45 (src line 201)
 
 	ope2Bool  goto 92
 
@@ -2941,7 +2941,7 @@ state 184
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 52 (src line 218)
+	.  reduce 52 (src line 219)
 
 	selectOptions  goto 176
 	selectOptions0  goto 193
@@ -2951,7 +2951,7 @@ state 184
 state 185
 	selectOptions:  selectOptions selectOption.    (55)
 
-	.  reduce 55 (src line 225)
+	.  reduce 55 (src line 226)
 
 
 state 186
@@ -2962,7 +2962,7 @@ state 186
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 56 (src line 228)
+	.  reduce 56 (src line 229)
 
 	ope2Bool  goto 92
 
@@ -2974,20 +2974,20 @@ state 187
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 57 (src line 230)
+	.  reduce 57 (src line 231)
 
 	ope2Bool  goto 92
 
 state 188
 	matchedIfStatement:  IF expression THEN nonIfStatement ELSE matchedIfStatement.    (12)
 
-	.  reduce 12 (src line 133)
+	.  reduce 12 (src line 134)
 
 
 state 189
 	matchedIfStatement:  IF expression THEN nonIfStatement ELSE nonIfStatement.    (13)
 
-	.  reduce 13 (src line 135)
+	.  reduce 13 (src line 136)
 
 
 state 190
@@ -3060,14 +3060,14 @@ state 192
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 44 (src line 197)
+	.  reduce 44 (src line 198)
 
 	ope2Bool  goto 92
 
 state 193
 	loopStatement:  SELECT expression AS loopVariable FROM expression selectOptions0.    (49)
 
-	.  reduce 49 (src line 208)
+	.  reduce 49 (src line 209)
 
 
 state 194
@@ -3086,7 +3086,7 @@ state 195
 	OR  shift 94
 	XOR  shift 96
 	NAND  shift 95
-	.  reduce 43 (src line 195)
+	.  reduce 43 (src line 196)
 
 	ope2Bool  goto 92
 
@@ -3094,7 +3094,7 @@ state 195
 126 grammar rules, 196/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 87 working sets used
-memory: parser 828/240000
+memory: parser 721/240000
 85 extra closures
 1292 shift entries, 1 exceptions
 91 goto entries

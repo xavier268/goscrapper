@@ -32,6 +32,7 @@
                         variable  keyValue key program returnStatement accessExpression 
                         ope0
                         statement nonIfStatement matchedIfStatement openIfStatement
+                        clickOption clickOptions clickOptions0
 %type<nodes>            expressionList body statements returnList returnList0
 %type<nodemap>          keyValueSet litteralObject
 %type<nodeWithBody>     loopStatement selectOptions selectOptions0 selectOption
@@ -142,7 +143,7 @@ nonIfStatement
     | DOLLAR IDENTIFIER ASSIGN expression{ $$ = lx.newNodeAssign($2,  $4, true)} // assign to global scope
     
     | CLICK  expression /*element*/  clickOptions0 { /*todo*/} // click on element - make sure you select it first !  
-    | INPUT expression /*text*/ IN expression /*element*/  {/*todo*/} // input text in element - make sure you select it first !
+    | INPUT expression /*text*/ IN expression /*element*/  {$$ = nodeInput{$2, $4}} // input text in element - make sure you select element first !
 
     | FAIL {$$ = nodeFail{}} // abort with error messagge
     | FAIL expression {$$ = nodeFail{$2}} // abort with error message
@@ -162,15 +163,15 @@ clickOptions0
     ;
 
 clickOptions
-    : clickOption   {/*todo*/} 
-    | clickOptions clickOption   {/*todo*/} 
+    : clickOption   {$$ = $1} 
+    | clickOptions clickOption   { $$ = lx.mergeNodeClick($1, $2) }
     ;
 
 clickOption
-    : LEFT  {/*todo*/} 
-    | RIGHT  {/*todo*/} 
-    | MIDDLE  {/*todo*/} 
-    | atomExpression  {/*todo*/} // number of clicks
+    : LEFT  {$$ = nodeClick{}} 
+    | RIGHT  {$$ = nodeClick{right: true}} 
+    | MIDDLE  {$$ = nodeClick{middle: true}} 
+    | atomExpression  {$$ = nodeClick{count: $1}} // number of clicks
     ;
 
 returnStatement

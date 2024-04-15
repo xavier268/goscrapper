@@ -192,19 +192,6 @@ func Click(el *Element, which InputMouseButton, count int) {
 	}
 }
 
-// Same as Click, but element is defined by css and pageOrElement.
-// Only the first element found will be clicked.
-func ClickFrom(css string, pageOrElement Elementer, which InputMouseButton, count int) {
-	if pageOrElement != nil {
-		els, err := pageOrElement.Elements(css)
-		if err == nil && len(els) > 0 {
-			Click(els[0], which, count)
-		} else {
-			Errorf("Could not find a clickable element %s : %s", css, err)
-		}
-	}
-}
-
 // Input a txt in an element, after selecting and focusing on it.
 func Input(el *Element, txt string) {
 	if el != nil {

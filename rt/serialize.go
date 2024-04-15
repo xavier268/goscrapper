@@ -18,8 +18,9 @@ func MustSerialize(a any) string {
 	return s
 }
 
-// Serialize a value to string, suing the GSC syntax.
+// Serialize a value to string, using the GSC syntax.
 // Only values produced by GSC itself can be serialized.
+// Maps keys are sorted to garantee determistic serialization.
 // Non recognized values will trigger an error.
 func Serialize(a any) (string, error) {
 	sb := new(strings.Builder)
@@ -117,6 +118,7 @@ func serialize(sb *strings.Builder, a any) error {
 		fmt.Fprintf(sb, "hash{%x}", v)
 		return nil
 	default:
+		fmt.Fprintf(sb, "???%#v???", a) // default to golang raw value.
 		return fmt.Errorf("cannot serialize value of type %T", a)
 	}
 }

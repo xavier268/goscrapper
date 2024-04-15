@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 	"reflect"
+	"slices"
+	"strings"
 	"time"
 
 	"github.com/xavier268/goscrapper"
@@ -333,9 +335,28 @@ func (n nodeOpe2) eval(it *Interpreter) (any, error) {
 		}
 		// format
 		return rt.SafeSprintf(ft, left)
+
+	// nil CONTAINS nil (but nothing else)
+	// string CONTAINS substring
+	// array CONTAINS any
+	case CONTAINS:
+		if left == nil {
+			return (right == nil), nil
+		}
+		if v, ok := left.(string); ok {
+			if w, ok := right.(string); ok {
+				return strings.Contains(v, w), nil
+			}
+		}
+		if v, ok := left.([]any); ok {
+			return slices.Contains(v, right), nil
+		}
+		return nil, fmt.Errorf("cannot apply binary %s to %T and %T", TokenAsString(n.operator), left, right)
+
 	default:
 		return nil, fmt.Errorf("unkown binary operator %s", TokenAsString(n.operator))
 	}
+
 }
 
 // === binary bool operator ===

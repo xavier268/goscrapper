@@ -350,6 +350,8 @@ ope2 // binary operators. Action performed depends of argument types.
     | ATTR // el ATTR at -> value of at attribute in el
 
     | FORMAT // any FORMAT format -> string
+
+    | CONTAINS // array CONTAINS element ; string CONTAINS substring
     ;
 
 ope2Bool //  binary booleans

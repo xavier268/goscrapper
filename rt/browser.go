@@ -32,7 +32,9 @@ func mustAbs(s string) string {
 // Elementer can provide Elements or Element. Typically, a page or an element.
 type Elementer interface {
 	Elements(string) (Elements, error)
+	ElementsX(string) (Elements, error)
 	Element(string) (*Element, error)
+	ElementX(string) (*Element, error)
 }
 
 // Set browser in headless mode.

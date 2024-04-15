@@ -18,6 +18,7 @@ type Iterator[T any] interface {
 type selectAllIteratorP struct {
 	source Elementer                          // page or element on which we iterate
 	css    string                             // css selector we use
+	xpath  bool                               // use xpath instead of css
 	elms   []*rod.Element                     // remaining potential elements
 	done   map[proto.RuntimeRemoteObject]bool // remote objects we have already returned
 	count  int                                // number of elements returned
@@ -27,75 +28,86 @@ type selectAllIteratorP struct {
 
 var _ Iterator[*rod.Element] = &selectAllIteratorP{}
 
-func NewSelectAllIterator[T Elementer](ctx context.Context, pageOrElement T, css string, limit int) *selectAllIteratorP {
+func NewSelectAllIterator[T Elementer](ctx context.Context, pageOrElement T, css string, limit int, xpath bool) *selectAllIteratorP {
 	return &selectAllIteratorP{
 		source: pageOrElement,
 		css:    css,
+		xpath:  xpath,
 		elms:   make([]*rod.Element, 0, 5),
 		done:   make(map[proto.RuntimeRemoteObject]bool, 5),
+		count:  0,
 		limit:  limit,
 		ctx:    ctx,
 	}
 }
 
-func (it *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
+func (sit *selectAllIteratorP) Next() (next *rod.Element, ok bool) {
+	var err error
 
+	if sit.source == nil {
+		return nil, false
+	}
 	for {
 		// check limit - negative or zero means no limit
-		if it.limit > 0 && it.count >= it.limit {
+		if sit.limit > 0 && sit.count >= sit.limit {
 			return nil, false
 		}
 
 	loop: // try to send an element from waiting list
-		for i, el := range it.elms {
+		for i, el := range sit.elms {
 
 			// check context
-			if it.ctx.Err() != nil {
+			if sit.ctx.Err() != nil {
 				return nil, false
 			}
 
-			if el == nil || el.Object == nil || it.done[*el.Object] {
-				it.elms = it.elms[i+1:] // remove element from waiting list
+			if el == nil || el.Object == nil || sit.done[*el.Object] {
+				sit.elms = sit.elms[i+1:] // remove element from waiting list
 				break loop
 			}
 			// found one, update state and send it
-			it.done[*el.Object] = true
-			it.count += 1
-			it.elms = it.elms[i+1:] // remove element from waiting list
+			sit.done[*el.Object] = true
+			sit.count += 1
+			sit.elms = sit.elms[i+1:] // remove element from waiting list
 			return el, true
 		}
 
 		// check context
-		if it.ctx.Err() != nil {
+		if sit.ctx.Err() != nil {
 			return nil, false
 		}
 
 		// nothing was sent - can we load more ?
-		more, err := it.source.Elements(it.css)
+		var more rod.Elements
+		if sit.xpath {
+			more, err = sit.source.ElementsX(sit.css)
+		} else {
+			more, err = sit.source.Elements(sit.css)
+		}
 		if err != nil {
-			Errorf("error trying to retrieve elements with %s : %v", it.css, err)
+			Errorf("error trying to retrieve elements with %s : %v", sit.css, err)
 			return nil, false
 		}
 
 		// check context
-		if it.ctx.Err() != nil {
+		if sit.ctx.Err() != nil {
 			return nil, false
 		}
 
 		// add to waiting list
 		for _, el := range more {
-			if el != nil && el.Object != nil && !it.done[*el.Object] { // only add elts not already sent
-				it.elms = append(it.elms, el)
+			if el != nil && el.Object != nil && !sit.done[*el.Object] { // only add elts not already sent
+				sit.elms = append(sit.elms, el)
 			}
 		}
 
 		// despite all our efforts, we could not find more elements not already sent
-		if len(it.elms) == 0 {
+		if len(sit.elms) == 0 {
 			return nil, false
 		}
 
 		// check context
-		if it.ctx.Err() != nil {
+		if sit.ctx.Err() != nil {
 			return nil, false
 		}
 

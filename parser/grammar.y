@@ -78,6 +78,8 @@ LAST
 
 RED GREEN YELLOW BLUE CYAN MAGENTA NORMAL 
 
+XPATH
+
 
 
 // definition des precedences et des associativités
@@ -209,10 +211,17 @@ loopStatement
     | FOR loopVariable IN expression   {$$ = lx.newNodeForArray($2, $4)} //loop over array
     | FOR IN expression   {$$ = lx.newNodeForArray(nil, $3)} //loop over array, no loop variable
 
+    // default is to select with CSS
     | SELECT expression /*css*/ AS loopVariable FROM expression /*Elementer*/ selectOptions0  
-        {$$ = lx.newNodeSelect($4, $2, $6,$7 )} // select css elements
+        {$$ = lx.newNodeSelect($4, $2, $6,$7, false )} // select css elements
     | SELECT expression /*css*/ FROM expression /*Elementer*/ selectOptions0  
-        {$$ = lx.newNodeSelect(nil, $2, $4,$5 )} // select css elements, no loop variable
+        {$$ = lx.newNodeSelect(nil, $2, $4,$5 , false)} // select css elements, no loop variable
+    
+    // same, using XPATH instead of CSS
+    | SELECT XPATH expression /*css*/ AS loopVariable FROM expression /*Elementer*/ selectOptions0  
+        {$$ = lx.newNodeSelect($5, $3, $7,$8, true )} // select css elements
+    | SELECT XPATH expression /*css*/ FROM expression /*Elementer*/ selectOptions0  
+        {$$ = lx.newNodeSelect(nil, $3, $5,$6, true )} // select css elements, no loop variable
     ;
 
 loopVariable

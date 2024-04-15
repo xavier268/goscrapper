@@ -242,7 +242,7 @@ func TestParserFull(t *testing.T) {
 		fmt.Println("\n--- Executing", rs, "with", req.params)
 		it := parser.NewInterpreter(context.Background()).With(req.params)
 		res, err := it.Eval(root)
-		fmt.Printf("EXECUTION RESULT : %s%s%s\n", parser.ColGREEN, parser.PrettyJson(res), parser.AnsiRESET)
+		fmt.Printf("EXECUTION RESULT : %s%s%s\n", parser.ColGREEN, prettyJson(res), parser.AnsiRESET)
 		if err != nil {
 			fmt.Printf("Execution error :%s%v%s\n", parser.ColRED, err, parser.AnsiRESET)
 			t.Fatal(err)

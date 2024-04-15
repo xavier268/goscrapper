@@ -1,7 +1,8 @@
-// Select specific elements in a page
 
-page = PAGE "http://www.wikipedia.fr" ;
-$i = 0 ;
-SELECT "a" AS loop FROM page LIMIT 5;
-    $i = $i + 1 ;
-    RETURN $i, TEXT loop ;
+	// Select specific elements in a page
+
+	page = PAGE "http://www.wikipedia.fr" ;
+	SELECT "div" AS loop FROM page LIMIT 5;    
+		PRINT "**** looping ...*****" , NL, "Captured text : ",  TEXT loop ;
+    	RETURN LAST "done" ;
+	

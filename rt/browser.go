@@ -115,19 +115,21 @@ func GetBrowser() *Browser {
 
 // Get a new page. Use empty string for empty page.
 // Browser is started if not already available.
-// todo - think about implementing PagePool ?
 func GetPage(ctx context.Context, url string) *Page {
 	p, err := GetBrowser().Page(proto.TargetCreateTarget{URL: url})
 	if err != nil {
 		Errorf("Error getting page %s : %v", url, err)
 		return nil
 	}
+	err = p.WaitLoad()
+	if err != nil {
+		Errorf("Error while waiting for page %s to load : %v", url, err)
+	}
 	p = p.Context(ctx)
 	return p
 }
 
 // close page, set page pointer to nil on success.
-// // todo - think about implementing PagePool ?
 func ClosePage(page *Page) error {
 	browserLock.Lock()
 	defer browserLock.Unlock()

@@ -13,14 +13,13 @@ import (
 func TestParserVisual(t *testing.T) {
 
 	data := `
-	// RETURN LAST or DISTINCT ...
-	$a = 10;
-	FOR i FROM 1 TO 10 ;
-		$a = $a + i;
-		// RETURN  $a%4;				// [[3], [1], [0], [0], [1], [3], [2], [2], [3], [1]]
-		// RETURN DISTINCT $a%4;		// [[3], [1], [0], [2]]
-		RETURN LAST a%4;				// [[1]]
-		`
+	// Select specific elements in a page
+
+	page = PAGE "http://www.wikipedia.fr" ;
+	SELECT "div" AS loop FROM page LIMIT 5;    
+		PRINT "**** looping ...*****" , NL, "Captured text : ",  TEXT loop ;
+    	RETURN LAST "done" ;
+	`
 	buff := new(strings.Builder)
 
 	buff.WriteString(data)

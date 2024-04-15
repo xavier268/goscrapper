@@ -25,13 +25,17 @@ func TestParserVisual(t *testing.T) {
 	buff.WriteString(data)
 
 	root, err := Compile(t.Name(), data)
-	fmt.Fprintf(buff, "\nCOMPILING :\nRoot : %#v\nCompilation error : %s%v%s\n", root, ColRED, err, AnsiRESET)
+	fmt.Fprintf(buff, "\nCOMPILING :\nRoot : %#v\n", root)
 	if err != nil {
+		fmt.Fprintf(buff, "\nCompilation error :%s%v%s\n", ColRED, err, AnsiRESET)
 		t.Fatal(err)
 	}
 	it := NewInterpreter(context.Background())
 	res, err := it.Eval(root)
-	fmt.Fprintf(buff, "\nEXECUTING :\nResult :%#v\nResult :%s%s%s\nExecution error :%s%v%s\n", res, ColGREEN, rt.MustSerialize(res), AnsiRESET, ColRED, err, AnsiRESET)
+	fmt.Fprintf(buff, "\nEXECUTING :\nResult :%#v\nResult :%s%s%s\n", res, ColGREEN, rt.MustSerialize(res), AnsiRESET)
+	if err != nil {
+		fmt.Fprintf(buff, "\nExecution error :%s%v%s\n", ColRED, err, AnsiRESET)
+	}
 	it.DumpVars(buff, "--- Dumping vars "+t.Name())
 
 	// for visual control

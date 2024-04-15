@@ -234,16 +234,17 @@ func TestParserFull(t *testing.T) {
 		fmt.Println(req.req)
 		fmt.Println("\n--- Compiling", rs)
 		root, err := parser.Compile(rs, req.req)
-		fmt.Printf("COMPILED : \n%#v\n\nCompilation error : %s%v%s\n", root, parser.ColRED, err, parser.AnsiRESET)
+		fmt.Printf("COMPILED : \n%#v\n", root)
 		if err != nil {
+			fmt.Printf("Compilation error : %s%v%s\n", parser.ColRED, err, parser.AnsiRESET)
 			t.Fatal(err)
 		}
 		fmt.Println("\n--- Executing", rs, "with", req.params)
 		it := parser.NewInterpreter(context.Background()).With(req.params)
 		res, err := it.Eval(root)
-		fmt.Printf("EXECUTION RESULT : %s%s%s\n\nExecution error :%s%v%s\n",
-			parser.ColGREEN, parser.PrettyJson(res), parser.AnsiRESET, parser.ColRED, err, parser.AnsiRESET)
+		fmt.Printf("EXECUTION RESULT : %s%s%s\n", parser.ColGREEN, parser.PrettyJson(res), parser.AnsiRESET)
 		if err != nil {
+			fmt.Printf("Execution error :%s%v%s\n", parser.ColRED, err, parser.AnsiRESET)
 			t.Fatal(err)
 		}
 		it.DumpVars(os.Stdout, "\n--- Dumping vars "+rs)

@@ -76,6 +76,8 @@ PRINT FORMAT RAW GO JSON GSC NL
 DOLLAR NIL
 LAST 
 
+RED GREEN YELLOW BLUE CYAN MAGENTA NORMAL 
+
 
 
 // definition des precedences et des associativités
@@ -87,6 +89,7 @@ LAST
 %left OR XOR
 %left AND NAND
 %left NOT
+%left CONTAINS
 %left IN RANGE
 %left PAGE PRINT ATTR TEXT 
 %left LT LTE GT GTE EQ NEQ
@@ -306,11 +309,21 @@ keyValue
     ;
 
 ope0 // no argument operator, ie, read-only system values.
-    : NOW { $$ = nodeOpe0($1)}// time stamp
+    : NOW { $$ = nodeOpe0($1)} // time stamp as time.Time object.
     | VERSION { $$ = nodeOpe0($1)}// this version
     | FILE_SEPARATOR { $$ = nodeOpe0($1)} // file separator for current system
+
     | NL { $$ = nodeOpe0($1)} // new line string
     | NIL { $$ = nodeOpe0($1)} // nil constant
+
+    // ansi codes
+    | RED { $$ = nodeOpe0($1)}
+    | GREEN { $$ = nodeOpe0($1)}
+    | YELLOW { $$ = nodeOpe0($1)}
+    | BLUE { $$ = nodeOpe0($1)}
+    | CYAN { $$ = nodeOpe0($1)}
+    | MAGENTA { $$ = nodeOpe0($1)}
+    | NORMAL { $$ = nodeOpe0($1)}
     ;
 
 ope1 // unary operators. Action depends on argument type.

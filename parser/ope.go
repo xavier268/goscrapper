@@ -31,6 +31,20 @@ func (n nodeOpe0) eval(it *Interpreter) (rv any, err error) {
 		return "\n", nil
 	case NIL:
 		return nil, nil
+	case RED:
+		return ColRED, nil
+	case GREEN:
+		return ColGREEN, nil
+	case BLUE:
+		return ColBLUE, nil
+	case YELLOW:
+		return ColYELLOW, nil
+	case CYAN:
+		return ColCYAN, nil
+	case MAGENTA:
+		return ColMAGENTA, nil
+	case NORMAL:
+		return AnsiRESET, nil
 	default:
 		return nil, fmt.Errorf("unknown zero-ary operator %s", TokenAsString(n.c))
 	}

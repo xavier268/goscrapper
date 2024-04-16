@@ -131,21 +131,47 @@ For instance, *'In this single-quoted string, ''internal'' single quotes need to
 
 A variable name starts with a lower or upper case letter (A-Za-z), followed by zero or more letters and digits (A-Za_z0-9). No other character is allowed. A variable name may not be a gsc [keyword](#reserved-keywords).
 
-There are 3 kind of variables :
-* global scope variables can be read from or assigned to.
-* input parameters are globla scope variables that can only be read from.
-* local scope variables only exists in the current scope (eg : a loop variable in a SELECT or FOR loop). They can be read from or assign to. Local scope variables with same names can overshadow each other, or even shadow global variables. A local variable may not have the name of an input parameter.
+Variable values depends on the scope. A new scope is used inside each loop. When retrieving a variable value, the interpreter attemps to return the inner most scope. Prefixing a variable with $ forces the global scope.
 
-To remove ambiguity between these kind of variable, a variable prefixed by $ is always global, and a vraiable prefixed by @ is always an input parameter. Reading from a @ variable is actually the only way to declare an input parameter.
+A variable prefixed by @ is an input parameter. Reading from a @ variable is actually the only way to declare an input parameter. An input parameter may never be assigned to. No local or glbal variable can be read from or assigned to with the same name as a named parameter.
 
-There is no formal global/local variable declaration, but a variable must *have a chance* to be assigned to before it can be read. ( If assignement is conditionnal, actual runtime assignement may not occur before variable is used, but that is ok, value will be nil). Compiler will refuse to compile a request that read from a variable that had no prior *chance* of being assigned before.
+There is no formal global/local variable declaration, but a variable must *have a chance* to be assigned to before it can be read. 
+* A compile time error will happen if a request reads from a variable that had no prior *chance* of being assigned before.
+* A runtime error will happen if :
+  * assignement is conditionnal, actual runtime assignement may not occur before variable is used, and a runtime error will happen,
+  * an input parameter is used, but no value was given to it when launching request execution, a runtime error will happen.
+
+#### Compile time checks on variables
+
+When a source request is compiled, a variable on the left hand side :
+* must have a legal name,
+* must not be a known named parameter,
+* is registered as a declared.
+
+At compile time, a variable on the right hand side :
+* must have a legal name,
+* if it is prefixed with @ (param),
+  *  is rejected if already declared as a global/local variable,
+  *  is declared as an named input parameter,
+* else,
+  *  is rejected if not already seen on a left hand side.
+
+#### Runtime checks on variables
+
+At runtime, a variable on the left hand side :
+* may not be a known input parameter,
+* can be assigned multiple times, with different values,
+* is assigned in the current scope, unless the global specifier ($) is used,
+
+At runtime, a variable on the right hand side :
+* returns the specified named parameter if it is an input parameter, (@ is implicit if it was already declared as input parameter)
+* returns its current assigned value, reading from the inner most scope, or,
+* returns its global scoped value if prefixed with $,
+* if no value can be found, return an error.
 
 #### Examples 
 
-* a = "www.google.com"  // declares a as local variable, and assign to it.
-* $a = 23                // assign to the global a value
-* b = a                 // read either the local a, if it exists, or the global a.
-* c = @ b               // declares b as an input parameter and reads from it.
+TO DO TO DO TO DO
 
 ### Expressions and operators
 

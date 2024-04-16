@@ -47,3 +47,27 @@ func EvalFile(fname string) (result any, err error) {
 	}
 	return Eval(fname, string(content))
 }
+
+// Same a Eval, but with parameters map
+func EvalWithParams(name string, content string, params map[string]any) (result any, err error) {
+	compiledReq, err := Compile(name, content)
+	if err != nil {
+		return nil, err
+	}
+	it := NewInterpreter(context.Background()).With(params)
+	return it.Eval(compiledReq)
+}
+
+// Eval from file with parameter map
+func EvalFileWithParams(fname string, params map[string]any) (result any, err error) {
+	f, err := os.Open(fname)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	content, err := io.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+	return EvalWithParams(fname, string(content), params)
+}

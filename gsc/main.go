@@ -21,15 +21,19 @@ var (
 	flagInfo    = flag.Bool("info", false, "print info and exit")
 	flagHelp    = flag.Bool("help", false, "print help and exit")
 	flagFormat  = flag.String("format", "gsc", "output format (gsc, json, go, raw)")
+	flagParam   = flag.String("param", "", "provide map of input paramaters in gsc litteral format")
 )
 
 func main() {
+
+	var params map[string]any
 
 	// define shorter flags
 	flag.BoolVar(flagVersion, "v", false, "")
 	flag.BoolVar(flagInfo, "i", false, "")
 	flag.BoolVar(flagHelp, "h", false, "")
 	flag.StringVar(flagFormat, "f", "gsc", "")
+	flag.StringVar(flagParam, "p", "", "")
 
 	// redefine Usage function to print default values.
 	flag.Usage = func() {
@@ -41,7 +45,7 @@ func main() {
 	// Parse
 	flag.Parse()
 
-	switch {
+	switch { // handle special immediate action flags
 	case *flagVersion:
 		// simple version for use in build pipeline.
 		fmt.Println(goscrapper.VERSION)
@@ -61,34 +65,54 @@ func main() {
 		flag.Usage()
 		return
 
-	default:
-		for _, fn := range flag.Args() {
-			res, err := parser.EvalFile(fn)
-			if err != nil {
-				fmt.Printf("\n%s%s : %v%s\n", parser.ColRED, fn, parser.AnsiRESET, err)
-			} else {
-				switch *flagFormat {
-				case "gsc":
-					out, err := rt.Serialize(res)
-					if err != nil {
-						fmt.Println(parser.ColRED, "could not serialize result using gsc format :", err, parser.AnsiRESET)
-					} else {
-						fmt.Println(parser.ColGREEN, out, parser.AnsiRESET)
-					}
-				case "json":
-					b, err := json.MarshalIndent(res, "", "  ")
-					if err != nil {
-						fmt.Println(parser.ColRED, "could not serialize result using json format :", err, parser.AnsiRESET)
-					} else {
-						fmt.Println(parser.ColGREEN, string(b), parser.AnsiRESET)
-					}
-				case "go":
-					fmt.Println(parser.ColGREEN, res, parser.AnsiRESET)
-				case "raw":
-					fmt.Printf("%s%#v%s", parser.ColGREEN, res, parser.AnsiRESET)
-				default:
-					fmt.Println(parser.ColRED, "Unknown format", *flagFormat, parser.AnsiRESET)
+	}
+
+	// set parameters from flag
+	if flagParam != nil && *flagParam != "" {
+		// fmt.Printf("Read parameters : %q\n", *flagParam)
+		pp, err := parser.ParseLitteral(*flagParam)
+		if err != nil {
+			fmt.Println(parser.ColRED, "could not parse provided input parameters :", err, parser.AnsiRESET)
+			return
+		}
+		switch pp := pp.(type) {
+		case nil:
+			params = nil
+		case map[string]any:
+			params = pp
+		default:
+			fmt.Println(parser.ColRED, "could not parse provided input parameters into a map[string]any :", err, parser.AnsiRESET)
+			return
+		}
+	}
+
+	for _, fn := range flag.Args() {
+		// fmt.Println("Using parameters : ", params)
+		res, err := parser.EvalFileWithParams(fn, params)
+		if err != nil {
+			fmt.Printf("\n%s%s : %v%s\n", parser.ColRED, fn, parser.AnsiRESET, err)
+		} else {
+			switch *flagFormat {
+			case "gsc":
+				out, err := rt.Serialize(res)
+				if err != nil {
+					fmt.Println(parser.ColRED, "could not serialize result using gsc format :", err, parser.AnsiRESET)
+				} else {
+					fmt.Println(parser.ColGREEN, out, parser.AnsiRESET)
 				}
+			case "json":
+				b, err := json.MarshalIndent(res, "", "  ")
+				if err != nil {
+					fmt.Println(parser.ColRED, "could not serialize result using json format :", err, parser.AnsiRESET)
+				} else {
+					fmt.Println(parser.ColGREEN, string(b), parser.AnsiRESET)
+				}
+			case "go":
+				fmt.Println(parser.ColGREEN, res, parser.AnsiRESET)
+			case "raw":
+				fmt.Printf("%s%#v%s", parser.ColGREEN, res, parser.AnsiRESET)
+			default:
+				fmt.Println(parser.ColRED, "Unknown format", *flagFormat, parser.AnsiRESET)
 			}
 		}
 	}

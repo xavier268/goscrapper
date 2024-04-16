@@ -14,16 +14,25 @@ Domain specific language for web-scrapping.
   - [Variables and scope](#variables-and-scope)
     - [Compile time checks on variables](#compile-time-checks-on-variables)
     - [Runtime checks on variables](#runtime-checks-on-variables)
-    - [Examples](#examples)
+    - [Example](#example)
   - [Expressions and operators](#expressions-and-operators)
+    - [Constants](#constants)
+    - [Numerical operators](#numerical-operators)
+    - [String operators](#string-operators)
+    - [Array and element operators](#array-and-element-operators)
+    - [Boolean operators](#boolean-operators)
+    - [Pages and elements](#pages-and-elements)
+    - [Time](#time)
   - [Statements](#statements)
     - [Assignement](#assignement)
+    - [IF THEN ELSE](#if-then-else)
     - [RETURN statement](#return-statement)
-    - [IF construct](#if-construct)
-    - [FOR loops](#for-loops)
-    - [SELECT dom elements](#select-dom-elements)
-    - [DOM access](#dom-access)
+    - [FOR](#for)
+    - [SELECT](#select)
   - [Reserved keywords](#reserved-keywords)
+- [Interpreter settings](#interpreter-settings)
+  - [Using context](#using-context)
+  - [Sync or Async modes](#sync-or-async-modes)
 - [GSC command line tool](#gsc-command-line-tool)
   
 # Introduction
@@ -100,6 +109,8 @@ res, err := parser.Eval("myRequest", req)
 
 ````
 
+[top](#goscrapper)
+
 # Gsc language reference
 
 ## Request structure
@@ -144,6 +155,8 @@ To represent a single quote, write 2. To escape a group of 2 quotes, write 3.
 
 For instance, *'In this single-quoted string, ''internal'' single quotes need to be escaped but not "double" quotes'.* 
 
+[top](#goscrapper)
+
 ## Variables and scope
 
 A variable name starts with a lower or upper case letter (A-Za-z), followed by zero or more letters and digits (A-Za_z0-9). No other character is allowed. A variable name may not be a gsc [keyword](#reserved-keywords).
@@ -186,24 +199,130 @@ At runtime, a variable on the right hand side :
 * returns its global scoped value if prefixed with $,
 * if no value can be found, return an error.
 
-### Examples 
+### Example 
 
-TO DO TO DO TO DO
+See  : [variables.gsc](/examples/variables.gsc)
+
+[top](#goscrapper)
 
 ## Expressions and operators
 
-TO DO TO DO TO DO TO DO
+Expressions can use parenthesis () to enforce precedence.
 
-TO DO TO DO TO DO TO DO
+Object members are accessed by appending a dot (.) and a key to the object. The key starts with a letter, and contains letter and digits. There are no quotes around a key. Keys are never evaluated. Accessing a non existant key returns nil.
 
-TO DO TO DO TO DO TO DO
+Array elements are accessed using the usual bracket notation. Bounds are checked at runtime.
 
-TO DO TO DO TO DO TO DO
+[top](#goscrapper)
 
+### Constants
+
+- NIL // same as nil
+  
+Ansi codes :
+
+- RED
+- GREEN
+- YELLOW
+- BLUE
+- CYAN
+- MAGENTA
+- NORMAL
+
+System constants :
+
+- VERSION // Version string  : vx.y.z
+- FILE_SEPARATOR // / or \, depending on os
+
+[top](#goscrapper)
+
+### Numerical operators
+
+Returning a number :
+
+- int + int
+- int - int
+- int * int
+- int / int
+- int % int // modulo
+
+- ++ int  // int + 1
+- -- int  // int - 1
+- ABS int // absolute value of int
+  
+- LEN array // length
+- LEN string // length
+
+[top](#goscrapper)
+
+### String operators
+
+Returning a string :
+
+- string + string // concatenate strings
+  
+- any FORMAT fmt  // format any value, using the format fmt
+- RAW any // return a detailed golang string representation , see fmt.Sprintf("%#v",any)
+- GO any // return a golang representation, see fmt.Sprint(any)
+- JSON any // return a json representation of any
+- GSC any // return a GSC representation of any
+- NL // new line
+    
+[top](#goscrapper)
+
+### Array and element operators
+
+Returning an array :
+
+- array + element // append element
+- array ++ array // merge both arrays into one
+
+[top](#goscrapper)
+
+### Boolean operators
+
+Returning a bool value :
+
+- a <= b  // a and b same type, and comparable
+- a < b // a and b same type, and comparable
+- a > b // a and b same type, and comparable
+- a >= b // a and b same type, and comparable
+- a == b  // works with any value
+- a != b // works with any value
+  
+- string CONTAINS substring // true or false
+- array CONTAINS element // true or false
+
+- bool && bool // AND
+- bool || bool // OR
+- ! bool // NOT
+- bool != bool // XOR
+
+[top](#goscrapper)
+
+### Pages and elements
+
+Expressions to create or manipulate DOM elements :
+
+- PAGE url ; // creates a new page (tab), loading specified url. The returned expression is of type *rt.Page.
+- TEXT elemnt // return the TEXT content of element as a string value
+- element ATTR att // return string value of attribute att in element
+
+[top](#goscrapper)
+
+### Time 
+
+- NOW // returns a time.Time object, use as a time stamp
+
+[top](#goscrapper)
 
 ## Statements
 
 Statements are always followed by a semi -colon.
+
+Statements can be grouped between parenthesis.
+
+[top](#goscrapper)
 
 ### Assignement
 
@@ -212,20 +331,109 @@ $a = b ;    // local/global -> global
 a = $b ;    // global -> local
 a = @c ;    // input param -> local
 
-Assign an expression to a variable. See [variables and scope](#variables-and-scope).
+Assign an expression to a variable. See [variables and scope](#variables-and-scope) for more detail.
+
+[top](#goscrapper)
+
+### IF THEN ELSE
+
+The traditionnal IF THEN ELSE contruct is available. IF THEN ELSE can be nested. Beware of dangling ELSE, prefer using parenthesis to group statement sequences. Expression must evaluate to a boolean value.
+
+- IF expression THEN statement ;
+- IF expression THEN  statement ELSE statement ;
+
+[top](#goscrapper)
 
 ### RETURN statement
 
-### IF construct
+The last request statement must be a RETURN statement. There can be only one RETURN statement per request.
 
-### FOR loops
+- RETURN ; // no argument, just return error status.
+- RETURN a, b , c ; // return a comma separated list of expressions as arguments.
 
-### SELECT dom elements
+The return expression arguments are evaluated for each innermost loop and gathered into an array. If the interpreter is in [Async Mode](#sync-or-async-modes), this array is sent immediately and forgotten. If interpreter is in [Sync Mode](#sync-or-async-modes), results are aggregated into a large array, and will be returned together at the end of the request.
 
-### DOM access
+RETURN can be limited to only distinct values, or only to the last computed value :
 
+- RETURN DISTINCT a,b ; // will only return [a,b] pairs which are disctincts
+- RETURN LAST a,b ; // will only retrun a single [a,b] value, the last one computed.
 
+See [examples](./examples/loopOverArray.gsc). 
+
+[top](#goscrapper)
+
+### FOR
+
+Integer loops can move in either direction.
+
+- FOR ; // start an infinite loop until the RETURN statement
+- FOR  FROM intExpression TO intExpression ; // loop over ints
+- FOR  FROM intExpression TO intExpression STEP intExpression ; // loop over ints, with steps
+
+A loop variable can be specified, that will be instantiated within each loop. The loopVariable follows the same rules and scoping as a local variable assignement.
+
+- FOR loopVariable FROM intExpression TO intExpression ; // loop over ints
+- FOR loopVariable FROM intExpression TO intExpression STEP intExpression ; // loop over ints, with steps
+
+It is also possible to loop over arrays :
+
+FOR loopVariable IN array ; // loop over array elements.
+FOR IN array ; // same, without loopVariable assignement.
+
+[top](#goscrapper)
+
+### SELECT
+
+Selecting elements from the DOM tree should be done using a SELECT loop. Selection uses css by default, using the XPATh qaulifier uses xpath intead. 
+SELECT can loop either over an entire page, or over a DOM element.
+
+- SELECT css AS loopVariable FROM pageOrElement ;
+- SELECT XPATH xpath AS loopVariable FROM pageOrElement ;
+
+You do not ghave to declare a loopVariable :
+
+- SELECT css FROM pageOrElement ;
+- SELECT XPATH xpath FROM pageOrElement ;
+  
+You may limit the selected space, using LIMIT or WHERE clauses. WHERE clauses can use the loopVariable.
+For instance :
+
+- SELECT css AS loopVariable FROM pageOrElement WHERE (TEXT loopVariable) WHERE ( loopVariable ATTR href == "/") LIMIT 5 ;
+
+SELECT is never blocking. If page loads dynamically, selects will keep track of elements already seen, and try to load more new unseen elements.
+
+[top](#goscrapper)
 
 ## Reserved keywords
 
+[top](#goscrapper)
+
+# Interpreter settings
+
+[top](#goscrapper)
+
+## Using context
+
+A context.Context is passed when creating an Interpreter. 
+
+This context is check by all non trivial operations, and gsc ensures that context cancelation is handled almost immediately by any running request.
+
+[top](#goscrapper)
+
+## Sync or Async modes
+
+A request running in its own interpreter is thread safe. Multiple requests can run on different interpreters, using the same compiled request tree.
+
+Interpreters can either run in **Async** or in **Sync** Mode. 
+
+In **Sync** Mode, the full result set is returned to the calling thread when the requests finishes execution, together with an error status. This is the default mode.
+
+In **Async** Mode, the interpreter is passed a channel when this mode is set. During request executions, RETURN results are sent though this channel as soon as they are evaluated. When the request terminates, only the error status is return to the calling thread.
+In Async Mode, if the channel is blocking because its capacity was reached, the request execution will block (but context cancelation is still monitored).
+
+
+[top](#goscrapper)
+
 # GSC command line tool
+
+[top](#goscrapper)

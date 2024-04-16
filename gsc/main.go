@@ -1,4 +1,4 @@
-// command line client for running goscrapper scripts
+// command line client for running gsc scripts
 package main
 
 import (
@@ -13,8 +13,6 @@ import (
 	"github.com/xavier268/goscrapper/parser"
 	"github.com/xavier268/goscrapper/rt"
 )
-
-//TODO : Add flags to provide input parameters ?
 
 var (
 	flagVersion = flag.Bool("version", false, "print version and exit")

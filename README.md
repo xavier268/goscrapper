@@ -37,7 +37,7 @@ Domain specific language for web-scrapping.
   
 # Introduction
 
-Developping and fine-tuning web-scrappers can be a tedious, error prone task. A lot of repetetive boiler plate code is often needed, and some subtle error checking can easily be forgotten, renderering a hand written scrapper prone to unexpected failures. That where Goscrapper (**gsc** in short) gets in !
+Developing and fine-tuning web-scrappers can be a tedious, error prone task. A lot of repetetive boiler plate code is often needed, and some subtle error checking can easily be forgotten, renderering a hand written scrapper prone to unexpected failures. That where Goscrapper (**gsc** in short) gets in !
 
 **gsc** is a domain specific language designed to write easy to understand, easy to debug, but resilient and reasonnably efficient web scrapping requests.
 
@@ -377,8 +377,8 @@ A loop variable can be specified, that will be instantiated within each loop. Th
 
 It is also possible to loop over arrays :
 
-FOR loopVariable IN array ; // loop over array elements.
-FOR IN array ; // same, without loopVariable assignement.
+- FOR loopVariable IN array ; // loop over array elements.
+- FOR IN array ; // same, without loopVariable assignement.
 
 [top](#goscrapper)
 

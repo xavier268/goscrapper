@@ -18,7 +18,7 @@ A domain-specific language for web scraping.
       - [Example](#example)
     - [Expressions and Operators](#expressions-and-operators)
       - [Constants](#constants)
-      - [Numer](#numer)
+      - [Numerical Operators](#numerical-operators)
       - [String Operators](#string-operators)
       - [Array and Element Operators](#array-and-element-operators)
       - [Boolean Operators](#boolean-operators)
@@ -225,9 +225,7 @@ System constants:
 - `VERSION` // Version string: `vx.y.z`
 - `FILE_SEPARATOR` // `/` or `\`, depending on OS
 
-#### Numer
-
-ical Operators
+#### Numerical Operators
 
 Returning a number:
 

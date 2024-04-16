@@ -7,10 +7,6 @@ import "fmt"
 var Errorf func(format string, args ...any)
 var Logf func(format string, args ...any)
 
-type RuntimeError struct {
-	Message string
-}
-
 func init() {
 	Errorf = // set default error reporting function
 		func(format string, args ...any) {

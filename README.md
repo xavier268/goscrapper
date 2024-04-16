@@ -5,11 +5,28 @@ Domain specific language for web-scrapping.
 [![Go Reference](https://pkg.go.dev/badge/github.com/xavier268/goscrapper.svg)](https://pkg.go.dev/github.com/xavier268/goscrapper) [![Go Report Card](https://goreportcard.com/badge/github.com/xavier268/goscrapper)](https://goreportcard.com/report/github.com/xavier268/goscrapper)
 
 
-- [Introduction](#Introduction)
-- [Language reference](#langaguage-reference)
-  - [Request structure](#request-struture)
+- [goscrapper](#goscrapper)
+- [Introduction](#introduction)
+- [Gsc language reference](#gsc-language-reference)
+  - [Request structure](#request-structure)
+  - [Litteral types](#litteral-types)
+    - [String litterals](#string-litterals)
+  - [Variables and scope](#variables-and-scope)
+    - [Compile time checks on variables](#compile-time-checks-on-variables)
+    - [Runtime checks on variables](#runtime-checks-on-variables)
+    - [Examples](#examples)
+  - [Expressions and operators](#expressions-and-operators)
+  - [Statements](#statements)
+    - [Assignement](#assignement)
+    - [RETURN statement](#return-statement)
+    - [IF construct](#if-construct)
+    - [FOR loops](#for-loops)
+    - [SELECT dom elements](#select-dom-elements)
+    - [DOM access](#dom-access)
+  - [Reserved keywords](#reserved-keywords)
+- [GSC command line tool](#gsc-command-line-tool)
   
-## Introduction
+# Introduction
 
 Developping and fine-tuning web-scrappers can be a tedious, error prone task. A lot of repetetive boiler plate code is often needed, and some subtle error checking can easily be forgotten, renderering a hand written scrapper prone to unexpected failures. That where Goscrapper (**gsc** in short) gets in !
 
@@ -83,9 +100,9 @@ res, err := parser.Eval("myRequest", req)
 
 ````
 
-## Gsc language reference
+# Gsc language reference
 
-### Request structure
+## Request structure
 
 A request is a list of statements. The last statement should be a single RETURN statement.
 Statements are followed by a mandatory semi-colon (;).
@@ -95,7 +112,7 @@ Line breaks and spaces are not significant.
 
 All symbols are case-sensitive, reserved keywords are uppercase (eg : SELECT). Some of the keywords can be written using the usual symbols ( eg : PLUS can also be written + ).
 
-### Litteral types
+## Litteral types
 
 Gsc can directly create litterals for the following types from the request source :
 
@@ -113,7 +130,7 @@ In addition, the langage itself can produce :
 * Element (html Element)
 * Hash (a go array, not a slice, of size md5.Size)
   
-#### string litterals 
+### String litterals 
 
 String litterals follow a special syntax, to facilitate escaping. 
 
@@ -127,7 +144,7 @@ To represent a single quote, write 2. To escape a group of 2 quotes, write 3.
 
 For instance, *'In this single-quoted string, ''internal'' single quotes need to be escaped but not "double" quotes'.* 
 
-### Variables and scope
+## Variables and scope
 
 A variable name starts with a lower or upper case letter (A-Za-z), followed by zero or more letters and digits (A-Za_z0-9). No other character is allowed. A variable name may not be a gsc [keyword](#reserved-keywords).
 
@@ -141,7 +158,7 @@ There is no formal global/local variable declaration, but a variable must *have 
   * assignement is conditionnal, actual runtime assignement may not occur before variable is used, and a runtime error will happen,
   * an input parameter is used, but no value was given to it when launching request execution, a runtime error will happen.
 
-#### Compile time checks on variables
+### Compile time checks on variables
 
 When a source request is compiled, a variable on the left hand side :
 * must have a legal name,
@@ -156,7 +173,7 @@ At compile time, a variable on the right hand side :
 * else,
   *  is rejected if not already seen on a left hand side.
 
-#### Runtime checks on variables
+### Runtime checks on variables
 
 At runtime, a variable on the left hand side :
 * may not be a known input parameter,
@@ -169,11 +186,11 @@ At runtime, a variable on the right hand side :
 * returns its global scoped value if prefixed with $,
 * if no value can be found, return an error.
 
-#### Examples 
+### Examples 
 
 TO DO TO DO TO DO
 
-### Expressions and operators
+## Expressions and operators
 
 TO DO TO DO TO DO TO DO
 
@@ -184,11 +201,11 @@ TO DO TO DO TO DO TO DO
 TO DO TO DO TO DO TO DO
 
 
-### Statements
+## Statements
 
 Statements are always followed by a semi -colon.
 
-#### Assignement
+### Assignement
 
 a = b ;     // local/global -> local
 $a = b ;    // local/global -> global
@@ -197,19 +214,18 @@ a = @c ;    // input param -> local
 
 Assign an expression to a variable. See [variables and scope](#variables-and-scope).
 
-#### RETURN statement
+### RETURN statement
 
-#### IF construct
+### IF construct
 
-#### FOR loops
+### FOR loops
 
-#### SELECT dom elements
+### SELECT dom elements
 
-#### DOM access
-
-
+### DOM access
 
 
 
+## Reserved keywords
 
-### Reserved keywords
+# GSC command line tool

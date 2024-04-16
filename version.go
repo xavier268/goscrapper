@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	VERSION   = "0.4.9"
+	VERSION   = "0.4.10"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
 )
 

@@ -20,7 +20,7 @@ func MustSerialize(a any) string {
 
 // Serialize a value to string, using the GSC syntax.
 // Only values produced by GSC itself can be serialized.
-// Maps keys are sorted to garantee determistic serialization.
+// Maps keys are sorted to guarantee determistic serialization.
 // Non recognized values will trigger an error.
 func Serialize(a any) (string, error) {
 	sb := new(strings.Builder)

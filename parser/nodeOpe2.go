@@ -193,7 +193,7 @@ func (n nodeOpe2) eval(it *Interpreter) (any, error) {
 		return nil, fmt.Errorf("cannot apply binary %s to %T and %T", TokenAsString(n.operator), left, right)
 
 	default:
-		return nil, fmt.Errorf("unkown binary operator %s", TokenAsString(n.operator))
+		return nil, fmt.Errorf("unknown binary operator %s", TokenAsString(n.operator))
 	}
 
 }

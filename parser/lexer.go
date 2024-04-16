@@ -35,7 +35,7 @@ func (m *myLexer) ParamsList() []string {
 type Lexer = yyLexer
 
 // Construct new myLexer.
-// Use errorWriter to capture detailled error messages.
+// Use errorWriter to capture detailed error messages.
 // If nil, errors will appear on stdout.
 func NewLexer(name string, data []byte, errorWriter io.Writer) Lexer {
 	return &myLexer{

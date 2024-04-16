@@ -21,7 +21,7 @@ var (
 	flagInfo    = flag.Bool("info", false, "print info and exit")
 	flagHelp    = flag.Bool("help", false, "print help and exit")
 	flagFormat  = flag.String("format", "gsc", "output format (gsc, json, go, raw)")
-	flagParam   = flag.String("param", "", "provide map of input paramaters in gsc litteral format")
+	flagParam   = flag.String("param", "", "provide map of input parameters in gsc litteral format")
 )
 
 func main() {

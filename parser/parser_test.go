@@ -19,7 +19,7 @@ func TestParserVisual(t *testing.T) {
 	
 	ii = 3 ;                // ERROR : ii is declared and assigned to,
 	// wrong = @ ii ;       // ii being alrerady a known variable, cannot be declared as an input parameter
-	$a = 100 + @ inp ;      // a is forced to global scope ; inp is registerd as input parameter
+	$a = 100 + @ inp ;      // a is forced to global scope ; inp is registered as input parameter
 	// inp = 23 ;           // ERROR : assigning to an input parameter
 	// b = a + inp ;        // ERROR : inp was never declared as a "normal" variable
 	b = a + @inp ;          // OK : inp was declared as an input parameter

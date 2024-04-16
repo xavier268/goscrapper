@@ -30,7 +30,7 @@ func (m *myLexer) newNodeLitteral(tok tok) nodeLitteral {
 	case NUMBER:
 		i, err := strconv.Atoi(tok.v)
 		if err != nil {
-			m.errorf("cannot convertr number %s to int", tok.v)
+			m.errorf("cannot convert number %s to int", tok.v)
 		}
 		return nodeLitteral{value: i}
 	default:

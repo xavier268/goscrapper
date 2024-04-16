@@ -1,8 +1,12 @@
+// Select Specific Elements from a Web Page
 
-	// Select specific elements in a page
+// Load the Wikipedia France home page into 'page'
+page = PAGE "http://www.wikipedia.fr";
 
-	page = PAGE "http://www.wikipedia.fr" ;
-	SELECT "div" AS loop FROM page LIMIT 5;    
-		PRINT "**** looping ...*****" , NL, "Captured text : ",  TEXT loop ;
-    	RETURN LAST "done" ;
-	
+// Begin a loop to iterate over the first five <div> elements found on the page
+SELECT "div" AS loop FROM page LIMIT 5;    
+    // Print a separator and the text content of the current <div> element
+    PRINT "**** Looping... *****", NL, "Captured text: ", TEXT loop;
+
+	// After completing the loop, return "done" to indicate successful completion
+	RETURN LAST "done";

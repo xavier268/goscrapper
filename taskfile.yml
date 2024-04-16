@@ -59,6 +59,8 @@ tasks:
     cmds:
       - go test ./parser # unit tests
       - go test -v -count=1 ./e2e # end-to-end tests
+      - go test -v ./examples # examples folder
+
 
   clean: 
     desc: clean caches and binaries, and test dirs

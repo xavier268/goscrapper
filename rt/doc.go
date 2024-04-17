@@ -1,4 +1,4 @@
-// browser related globals and utilities.
+// runtime globals and utilities.
 package rt
 
 import (

@@ -1,4 +1,4 @@
-// lexer, grammar, and parser generation tools
+// compile and execute GSC requests
 package parser
 
 //go:generate go install golang.org/x/tools/cmd/goyacc@latest

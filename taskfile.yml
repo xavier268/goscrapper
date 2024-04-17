@@ -93,3 +93,10 @@ tasks:
       - ./**/parser/parser.go
     cmds:
       - go generate ./...
+
+  gsc:
+    desc: call the gsc command line (arguments after -- will be passed to gsc)
+    deps: [build]
+    method: "none"  # always run the task, even if it's up-to-date
+    cmds:
+      - bin/gsc-{{.VERSION}}{{.EXE}} {{.CLI_ARGS}}

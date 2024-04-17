@@ -58,7 +58,7 @@ PLUS MINUS PLUSPLUS MINUSMINUS MULTI DIV MOD ABS
 NOT AND OR XOR NAND
 EQ NEQ LT LTE GT GTE
 CONTAINS
-FIND PATH WITH JOIN PAGE
+FIND PATH WITH JOIN PAGE CLOSE PAGES
 COLON TEXT ATTR OF
 DISTINCT 
 AT /* @ */
@@ -147,6 +147,7 @@ nonIfStatement
     | IDENTIFIER ASSIGN expression { $$ = lx.newNodeAssign($1,  $3, false)} // assign to local scope
     | DOLLAR IDENTIFIER ASSIGN expression{ $$ = lx.newNodeAssign($2,  $4, true)} // assign to global scope
     
+    | CLOSE expression { $$ = nodeClose{$2}} // Close page
     | CLICK  expression /*element*/  clickOptions0 { $$ = lx.mergeNodeClick(nodeClick{element: $2},$3)} // click on element - make sure you select it first !  
     | INPUT expression /*text*/ IN expression /*element*/  {$$ = nodeInput{$2, $4}} // input text in element - make sure you select element first !
 
@@ -157,7 +158,6 @@ nonIfStatement
     | PRINT { $$ = nodePrint{nil}} // just print new line
     | PRINT expressionList  {$$ = nodePrint{$2}} // print content of expressions in expressionList in GO (%v) format
     
-     // debug only !
     | SLOW  {$$ = nodeSlow{m:nil}} // wait for a short delay, using SLOW_DELAY from runtime. STop waiting if context is cancelled.
     | SLOW expression  {$$ = nodeSlow{m:$1}} // wait for specified millis, falling back on SLOW_DELAY if millis <=0. STop waiting if context is cancelled.
     ;
@@ -333,6 +333,9 @@ ope0 // no argument operator, ie, read-only system values.
     | CYAN { $$ = nodeOpe0($1)}
     | MAGENTA { $$ = nodeOpe0($1)}
     | NORMAL { $$ = nodeOpe0($1)}
+
+    // DOM
+    | PAGES { $$ = nodeOpe0($1)}
     ;
 
 ope1 // unary operators. Action depends on argument type.

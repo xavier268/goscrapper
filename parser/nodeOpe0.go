@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/xavier268/goscrapper"
+	"github.com/xavier268/goscrapper/rt"
 )
 
 // ==== No argument operators ====
@@ -40,6 +41,8 @@ func (n nodeOpe0) eval(it *Interpreter) (rv any, err error) {
 		return ColMAGENTA, nil
 	case NORMAL:
 		return AnsiRESET, nil
+	case PAGES:
+		return rt.Pages()
 	default:
 		return nil, fmt.Errorf("unknown zero-ary operator %s", TokenAsString(n.c))
 	}

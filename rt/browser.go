@@ -131,6 +131,20 @@ func GetPage(ctx context.Context, url string) *Page {
 	return p
 }
 
+// Get the array of opened pages.
+// Note : returns a GSC array ([]any), not a []*rod.Page array.
+func Pages() ([]any, error) {
+	pp, err := GetBrowser().Pages()
+	if err != nil {
+		return nil, err
+	}
+	res := make([]any, 0, len(pp))
+	for _, p := range pp {
+		res = append(res, p)
+	}
+	return res, nil
+}
+
 // close page, set page pointer to nil on success.
 func ClosePage(page *Page) error {
 	browserLock.Lock()

@@ -30,6 +30,9 @@ A domain-specific language for web scraping.
       - [RETURN Statement](#return-statement)
       - [FOR](#for)
       - [SELECT](#select)
+      - [CLOSE](#close)
+      - [FAIL and ASSERT](#fail-and-assert)
+      - [SLOW](#slow)
   - [Reserved Keywords](#reserved-keywords)
   - [Interpreter Settings](#interpreter-settings)
     - [Using context](#using-context)
@@ -285,9 +288,13 @@ Returning a bool value:
 
 Expressions to create or manipulate DOM elements:
 
-- `PAGE url` ; // creates a new page (tab), loading specified URL. The returned expression is of type `*rt.Page`.
+- `PAGE url`  // creates a new page (tab), loading specified URL. The returned expression is of type `*rt.Page`.
+- `PAGES`  // return an array of opened pages.
+
 - `TEXT element` // return the TEXT content of element as a string value
 - `element ATTR att` // return string value of attribute `att` in element
+
+Use the [`CLOSE`](#close) statement to close a page.
 
 #### Time 
 
@@ -310,12 +317,16 @@ Statements can be grouped between parentheses.
 
 Assign an expression to a variable. See [Variables and Scope](#variables-and-scope) for more detail.
 
+[Back to top](#goscrapper)
+
 #### IF THEN ELSE
 
 The traditional IF THEN ELSE construct is available. IF THEN ELSE can be nested. Beware of dangling ELSE, prefer using parentheses to group statement sequences. The expression must evaluate to a boolean value.
 
 - `IF expression THEN statement;`
 - `IF expression THEN statement ELSE statement;`
+
+[Back to top](#goscrapper)
 
 #### RETURN Statement
 
@@ -332,6 +343,8 @@ RETURN can be limited to only distinct values, or only to the last computed valu
 - `RETURN LAST a, b;` // will only return a single `[a, b]` value, the last one computed.
 
 See [examples](./examples/loopOverArray.gsc). 
+
+[Back to top](#goscrapper)
 
 #### FOR
 
@@ -353,6 +366,8 @@ It is also possible to loop over arrays:
 - `FOR loopVariable IN array;` // loop over array elements.
 - `FOR IN array;` // same, without loopVariable assignment.
 
+[Back to top](#goscrapper)
+
 #### SELECT
 
 Selecting elements from the DOM tree should be done using a SELECT loop. Selection uses CSS by default, using the XPath qualifier uses XPath instead. SELECT can loop either over an entire page, or over a DOM element.
@@ -370,6 +385,28 @@ You may limit the selected space, using LIMIT or WHERE clauses. WHERE clauses ca
 - `SELECT css AS loopVariable FROM pageOrElement WHERE (TEXT loopVariable) WHERE (loopVariable ATTR href == "/") LIMIT 5;`
 
 SELECT is never blocking. If the page loads dynamically, selects will keep track of elements already seen, and try to load more new unseen elements.
+
+[Back to top](#goscrapper)
+
+#### CLOSE
+
+- `CLOSE page ;`  // if page evaluates to a page, close it. If nil, ignore. Else, fail.
+
+[Back to top](#goscrapper)
+
+#### FAIL and ASSERT
+
+- `FAIL message ;` // abort the request, sending the specified message as an error.
+- `FAIL  ;` // abort the request, with a standard message as an error.
+
+- `ASSERT expression ;` // if expression does not evaluate to true, abort.
+  
+[Back to top](#goscrapper)
+
+#### SLOW
+
+- `SLOW millisExpr ;` // evaluate millisExpr to a number, and wait for millisExpr milliseconds.
+- `SLOW ;` // wait for the default delay
 
 [Back to top](#goscrapper)
 

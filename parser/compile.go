@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -20,6 +21,21 @@ func Compile(name string, content string) (compiledReq Node, err error) {
 		err = fmt.Errorf(buff.String())
 	}
 	return lx.(*myLexer).root, err
+}
+
+// Extracts the (sorted) list of parameters a compiled requests expects.
+func GetParamsList(compiledRequest Node) []string {
+
+	switch cr := compiledRequest.(type) {
+	case nil:
+		return []string{}
+	case nodeProgram:
+		ret := cr.invars
+		sort.Strings(ret)
+		return ret
+	default:
+		return []string{}
+	}
 }
 
 // =============== compile and evaluate at once ===========================

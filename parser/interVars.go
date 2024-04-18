@@ -8,8 +8,8 @@ import (
 	"sort"
 )
 
-// Write all known variables to the given writer.
-// Input parameters. Sorted for test stability.
+// Write all known variables to the given writer,
+// including input parameters. Sorted for test stability.
 func (it *Interpreter) DumpVars(w io.Writer, title string) {
 	fmt.Fprintln(w, title)
 	for lev, stack := range it.vars {
@@ -25,11 +25,7 @@ func (it *Interpreter) DumpVars(w io.Writer, title string) {
 		// print stack level dump
 		for _, k := range kk {
 			v := stack[k]
-			if it.isInputVar(k) {
-				fmt.Fprintf(w, "\t%s (input param) = %#v \n", k, v)
-			} else {
-				fmt.Fprintf(w, "\t%s = %#v\n", k, v)
-			}
+			fmt.Fprintf(w, "\t%s = %#v\n", k, v)
 		}
 	}
 	fmt.Fprintln(w)
@@ -61,14 +57,11 @@ func (it *Interpreter) resetFrame() error {
 // Assign (and declare if needed) a var in the current stack frame.
 // Local value will shadow the more global value.
 // Multiple reassignements are ok.
-// Assigning to a var declared and assigned an input value by NewInterpreter is illegal.
+// Assigning to a var declared and assigned an input value by NewInterpreter is illegal, and should be prevented at compile time.
 // If the bool flag is set, assign to the root scope (global scope).
 func (it *Interpreter) assignVar(varName string, value any, global bool) error {
 	if !isValidId(varName) {
 		return fmt.Errorf("invalid var identifier: %s", varName)
-	}
-	if it.isInputVar(varName) {
-		return fmt.Errorf("cannot reassign to input parameter: %s", varName)
 	}
 	if global {
 		it.vars[0][varName] = value
@@ -98,11 +91,6 @@ func (it *Interpreter) getVar(varName string, global bool) (value any, err error
 		}
 		return nil, fmt.Errorf("no such variable : %s", varName)
 	}
-}
-
-// check if name was declared as input var name.
-func (it *Interpreter) isInputVar(varName string) bool {
-	return slices.Contains(it.invars, varName)
 }
 
 // verify valid identifier - exclude all known tokens.

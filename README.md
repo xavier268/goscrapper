@@ -155,11 +155,14 @@ For instance, `'In this single-quoted string, ''internal'' single quotes need to
 
 ### Variables and Scope
 
-A variable name starts with a lower or upper case letter (`A-Z`, `a-z`), followed by zero or more letters and digits (`A-Za-z0-9`). No other character is allowed. A variable name may not be a [reserved keyword](#reserved-keywords).
+A variable name starts with a lower or upper case letter (`A-Z`, `a-z`), followed by zero or more letters and digits (`A-Za-z0-9`). 
+No other character is allowed. A variable name may not be a [reserved keyword](#reserved-keywords).
 
 Variable values depend on the scope. A new scope is used inside each loop. When retrieving a variable value, the interpreter attempts to return the innermost scope. Prefixing a variable with `$` forces the global scope.
 
-A variable prefixed by `@` is an input parameter. Reading from an `@` variable is the only way to declare an input parameter. An input parameter may never be assigned to. No local or global variable can be read from or assigned to with the same name as a named parameter.
+A variable prefixed by `@` is an input parameter. Reading from an `@` variable is the only way to declare an input parameter. 
+An input parameter may never be assigned to, and this is enforced by compiler.
+No local or global variable can be read from or assigned to with the same name as a named parameter.
 
 There is no formal global/local variable declaration, but a variable must *have a chance* to be assigned to before it can be read. 
 * A compile-time error will occur if a request reads from a variable that had no prior *chance* of being assigned.
@@ -171,7 +174,7 @@ There is no formal global/local variable declaration, but a variable must *have 
 
 When a source request is compiled, a variable on the left-hand side:
 * Must have a legal name,
-* Must not be a known named parameter,
+* Must NOT be a known named parameter,
 * Is registered as declared.
 
 At compile time, a variable on the right-hand side:
@@ -184,8 +187,13 @@ At compile time, a variable on the right-hand side:
 
 #### Runtime Checks on Variables
 
+
+
+Interpreter will ensure, before starting, that it has been provided values for all expected named parameters. 
+Then, there will no more difference between an input parameter and a variable.
+
 At runtime, a variable on the left-hand side:
-* May not be a known input parameter,
+* Could in theory be a known input parameter, but compiler will prevent it,
 * Can be assigned multiple times, with different values,
 * Is assigned in the current scope, unless the global specifier (`$`) is used,
 
@@ -197,7 +205,7 @@ At runtime, a variable on the right-hand side:
 
 #### Example
 
-See: [variables.gsc](/examples/variables.gsc)
+See: [variables.gsc](/examples/variables.input.gsc)
 
 [Back to top](#goscrapper)
 

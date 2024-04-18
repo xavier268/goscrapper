@@ -3,6 +3,7 @@ package parser
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/xavier268/goscrapper/rt"
 )
@@ -13,7 +14,6 @@ import (
 type Interpreter struct {
 	ctx     context.Context
 	vars    []map[string]any // stack of frames, containing values for variables.
-	invars  []string         // named input variables, passed as input to the interpreter
 	ch      chan<- any       // channel to send results in async mode - nil, means synch mode.
 	results []any            // aggregated results to be sent at the end in synch mode. Nil in async mode.
 	last    bool             // last mode, only care about last result
@@ -26,7 +26,6 @@ func NewInterpreter(ctx context.Context) *Interpreter {
 	it := &Interpreter{
 		ctx:     ctx,
 		vars:    make([]map[string]any, 0, 1),
-		invars:  make([]string, 0, 4),
 		ch:      nil,
 		results: make([]any, 0, 5),
 		last:    false,
@@ -68,7 +67,25 @@ func (it *Interpreter) SetSyncMode() *Interpreter {
 // Evaluate a compiled request.
 func (it *Interpreter) Eval(node Node) (any, error) {
 	if node == nil {
-		return nil, fmt.Errorf("cannot evaluate nil node")
+		return nil, fmt.Errorf("cannot evaluate nil as a compiled request")
 	}
-	return node.eval(it)
+
+	// check expected input vars have been set
+	missing := []string{}
+	if np, ok := node.(nodeProgram); ok {
+		for _, v := range np.invars {
+			if _, ok := it.vars[0][v]; !ok {
+				missing = append(missing, v)
+			}
+		}
+		if len(missing) > 0 {
+			return nil, fmt.Errorf("missing named input parameters should be provided at execution time : %s", strings.Join(missing, ", "))
+		}
+
+		// do actual evaluation
+		return node.eval(it)
+
+	} else { // not a nodeProgram
+		return nil, fmt.Errorf("not a valid compiled request, cannot evaluate node of type %T", node)
+	}
 }

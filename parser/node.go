@@ -2,7 +2,6 @@ package parser
 
 import (
 	"fmt"
-	"slices"
 )
 
 var _ Node = tok{}
@@ -67,12 +66,7 @@ func (n nodeProgram) eval(it *Interpreter) (any, error) {
 	if n.req == nil {
 		return nil, fmt.Errorf("cannot evaluate a nil request")
 	}
-	// check that all params provided to the interpreter are knwown to the request
-	for _, v := range it.invars {
-		if !slices.Contains(n.invars, v) {
-			return nil, fmt.Errorf("provided parameter %s in not known to this request", v)
-		}
-	}
+
 	// evaluate program content
 	_, err := n.req.eval(it)
 

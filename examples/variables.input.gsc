@@ -1,5 +1,7 @@
 // Variables and Their Scopes
 // Demonstrates how input parameters and variable scoping work in Goscrapper.
+// Set 'inp' named parameter to a value, for instance :
+//    gsc -p "{inp:33}"  .\examples\variables.input.gsc
 
 // To call this request from gsc, providing value for inp, do :
 // $> gsc.exe -p "{inp:33}" .\examples\variables.gsc

@@ -59,6 +59,7 @@ tasks:
       - go test ./parser # unit tests
       - go test -v -count=1 ./e2e # end-to-end tests
       - go test -v ./examples # examples folder
+      - go run ./gsc -p "{inp:33}" ./examples/variables.input.gsc # special example with input variable
 
 
   clean: 

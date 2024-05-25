@@ -17,7 +17,7 @@ func TestAllExamples(t *testing.T) {
 
 	for _, file := range files {
 		t.Logf("Running example %s", file)
-		// skip examples requiring input
+		// skip examples requiring input - should be tested separately, later
 		if strings.Contains(file, ".input.") {
 			t.Logf("%sSkipping example %s%s", parser.ColYELLOW, file, parser.AnsiRESET)
 			continue

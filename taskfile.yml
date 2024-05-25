@@ -4,7 +4,6 @@ env:
   GOOS: # windows or linux ?
     sh: go env GOOS
   VERSION: # program version
-    ignore-error : true
     sh: echo $( go run ./gsc -version) ; if [ $? -ne 0 ]; then echo "0.0.0"; fi 
   EXE: # executable extension (.exe or nothing)
     sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo ".exe"; else echo ""; fi'
